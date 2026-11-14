@@ -11,7 +11,7 @@ Repo code của web quẹt sản phẩm VIVE (kiểu Tinder). Claude = Lead (k�
 ## Quy trình (giống repo vive_poup)
 - Nhận việc: sửa `tasks/Wxxx.md` sang Doing, tạo handoff `nhan-viec` bằng `scripts/new_handoff.sh`, commit, push.
 - Làm trên nhánh `wxxx-mo-ta-ngan`, mở Pull Request vào `main`. Không push thẳng code lên `main`. Tài liệu, task, handoff được push thẳng `main`.
-- Xong: chạy `npm run lint`, `npm run typecheck`, `npm test` (và `npm run e2e` nếu task có giao diện) đều qua; ghi link PR và bản xem thử vào dòng "Đầu ra"; Trạng thái = Review; handoff `bao-xong` nêu đã làm gì, chưa chắc chỗ nào, cách thử.
+- Xong: chạy `npm run lint`, `npm run typecheck`, `npm test` (và `npm run e2e` nếu task có giao diện) đều qua; ghi link PR vào dòng "Đầu ra" (chưa có hosting: ghi cách chạy thử local, docs/02 mục 9); Trạng thái = Review; handoff `bao-xong` nêu đã làm gì, chưa chắc chỗ nào, cách thử.
 - Chỉ Claude đặt QA = Pass và merge PR sau khi QA.
 - Cuối phiên: handoff `trang-thai-phien`.
 - Commit: `[Wxxx] ten-ben: mô tả ngắn`. Không `push --force`. Xung đột: pull --rebase, giữ cả hai thay đổi, hỏi nếu không chắc.

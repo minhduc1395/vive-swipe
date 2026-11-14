@@ -15,6 +15,7 @@ Mục tiêu theo thứ tự của dự án VIVE: (1) tăng người theo dõi, (
 | Khách mua thế nào | Giữ hàng trên web, đến booth trả tiền và nhận hàng (nhân viên tính trên POS KiotViet) |
 | Báo deal qua đâu | Mục "Deal cho bạn" trong web và email |
 | Code ở đâu | Repo riêng `minhduc1395/vive-swipe`. Repo `vive_poup` chỉ giữ task điều phối (T016) |
+| Hosting | Chạy local trên máy trước. Chỉ thuê hosting và tên miền khi web hoàn chỉnh hoặc ít nhất có 1 chức năng dùng được (W024) |
 
 ## 3. Phạm vi bản đầu (ra mắt 26–27/11)
 **Có:**
@@ -35,7 +36,7 @@ Mục tiêu theo thứ tự của dự án VIVE: (1) tăng người theo dõi, (
 - Next.js (App Router, TypeScript) + Tailwind + Framer Motion, chạy tốt trên điện thoại.
 - Supabase: Postgres, khách ẩn danh (anonymous sign-in), RLS, lưu ảnh, lịch chạy việc.
 - Email: Resend (cần tên miền để gửi).
-- Hosting: Vercel Pro hoặc Cloudflare (gói Hobby của Vercel chỉ cho dùng phi thương mại).
+- Giai đoạn đầu chạy local (`npm run dev`), thử trên điện thoại qua cùng Wi-Fi (docs/02 mục 9). Hosting chọn ở W024: Vercel Pro hoặc Cloudflare (gói Hobby của Vercel chỉ cho dùng phi thương mại).
 - Logic giá, deal và gợi ý viết thành hàm thuần trong `lib/`, có unit test, không phụ thuộc giao diện.
 - Khoảng 130 sản phẩm nên deck được chấm điểm ngay trên máy khách; lượt quẹt gửi về server để học và làm số liệu.
 Chi tiết: `docs/02-ky-thuat.md`.
@@ -43,13 +44,14 @@ Chi tiết: `docs/02-ky-thuat.md`.
 ## 5. Lịch (hôm nay CN 15/11; Black Friday T6 27/11; pop-up đến CN 29/11)
 | Giai đoạn | Ngày | Việc chính | Ai |
 |---|---|---|---|
-| 0. Nền | 15–17/11 | Repo, plan, dữ liệu (xong); chủ dự án trả lời mục 8; tạo Supabase, tên miền, hosting; gom ảnh sản phẩm | Claude, Người |
-| 1. Quẹt chạy được | 17–20/11 | Khung app, thương hiệu, 3 câu hỏi, deck, chi tiết, đã thích, giỏ với dữ liệu tĩnh; bản xem thử trên mạng | Antigravity |
-| QA giữa kỳ | 20/11 | Claude rà giá trong giỏ, chữ, trải nghiệm trên điện thoại | Claude |
+| 0. Nền | 15–17/11 | Repo, plan, dữ liệu (xong); chủ dự án trả lời mục 8; tạo Supabase; gom ảnh sản phẩm | Claude, Người |
+| 1. Quẹt chạy được | 17–20/11 | Khung app, thương hiệu, 3 câu hỏi, deck, chi tiết, đã thích, giỏ với dữ liệu tĩnh; chạy local | Antigravity |
+| QA giữa kỳ | 20/11 | Claude chạy bản local, rà giá trong giỏ, chữ, trải nghiệm khung điện thoại | Claude |
+| Quyết định hosting | từ 20/11 | Chủ dự án xem bản local; nếu dùng được thì thuê hosting và tên miền (W024), rồi đưa web lên (W025) | Người, Antigravity |
 | 2. Có server | 20–23/11 | Khách ẩn danh, ghi lượt quẹt, gợi ý v1, giữ hàng, trang nhân viên, email xác nhận | Antigravity |
 | 3. Deal | 23–25/11 | Deal cho bạn, thanh "thêm X để nhận quà", quản trị, đăng ký email, gửi email thủ công | Antigravity |
 | 4. Nghiệm thu | 25–26/11 | Claude QA toàn bộ; thử tại booth với nhân viên; in QR để bàn (task bên vive_poup) | Claude, Người |
-| Ra mắt | 26/11 chạy thử, 27/11 chính thức | | |
+| Ra mắt | 26/11 chạy thử, 27/11 chính thức | Cần web đã lên hosting. Muốn kịp Black Friday thì W024 phải xong trước 24/11; trễ hơn thì dời ngày ra mắt | |
 | Sau pop-up | từ 30/11 | Email deal tự động, gợi ý theo hành vi cộng đồng, tài khoản, đặt online, báo cáo | |
 
 ## 6. Đo lường
@@ -72,9 +74,8 @@ Chỉ tiêu cụ thể đặt sau 3 ngày chạy đầu, khi đã có số thậ
 | Ít thời gian (12 ngày) | Cắt phạm vi theo mục 3, giữ phần lõi |
 
 ## 8. Chủ dự án cần quyết định hoặc cung cấp
-1. **Tên miền** cho web và để gửi email (đã có tên miền VIVE chưa?).
-2. **Hosting:** Vercel Pro (khoảng 20 USD/tháng) hay Cloudflare (miễn phí, cài đặt phức tạp hơn).
-3. **Supabase:** cho Claude tạo project mới `vive-swipe` trong tổ chức Supabase hiện có (gói miễn phí lúc đầu; khi chạy thật nên lên gói trả phí để không bị tạm dừng).
+1. ~~Tên miền~~ và 2. ~~Hosting~~: **để sau** (chốt 15/11). Chạy local đến khi có chức năng dùng được, khi đó làm W024: chọn Vercel Pro (khoảng 20 USD/tháng) hay Cloudflare (miễn phí, cài đặt phức tạp hơn), mua tên miền để chạy web và gửi email.
+3. **Supabase lúc chạy local:** project cloud gói miễn phí (0 đồng, Claude tạo qua MCP, Antigravity không cần cài thêm) hay Supabase chạy trên máy bằng Docker (cần Docker Desktop trên máy Antigravity). Claude đề xuất cloud miễn phí. Cần trước W013, khoảng 20/11.
 4. **Ảnh sản phẩm** tách nền, đặt tên theo mã vạch (W004).
 5. **Giữ hàng bao lâu:** đề xuất đến 21:00 ngày hôm sau.
 6. **Quà follow (sample):** có được nêu trên web không (hướng dẫn chung đang để nhân viên nói miệng).
@@ -92,4 +93,5 @@ Chỉ tiêu cụ thể đặt sau 3 ngày chạy đầu, khi đã có số thậ
 | `tasks/`, `handoff/` | Việc và tin nhắn giữa Claude và Antigravity (cách dùng: AGENTS.md) |
 
 ## Nhật ký thay đổi
+- 15/11/2026: v1.1. Chủ dự án chốt chạy local trước, thuê hosting và tên miền sau khi có ít nhất 1 chức năng dùng được. Thêm W024 (thuê hosting), W025 (đưa web lên); W023 phụ thuộc W025; email ở local chỉ xem trước, không gửi thật.
 - 15/11/2026: v1.0.

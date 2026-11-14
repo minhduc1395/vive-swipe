@@ -11,10 +11,10 @@ Phiên bản 1.0 · 15/11/2026. Antigravity code theo file này. Muốn đổi k
 | Database | Supabase (Postgres, Auth, Storage, RLS) | Thư viện `@supabase/ssr` |
 | Khách | Supabase anonymous sign-in | Mỗi máy một `khach_id`, không cần đăng nhập |
 | Nhân viên, quản trị | Supabase Auth email + mật khẩu, vai trò trong bảng `nhan_vien` | |
-| Email | Resend + React Email | Cần tên miền đã xác thực |
+| Email | Resend + React Email | Cần tên miền đã xác thực. Ở local: không gửi thật, ghi email ra trang `/dev/email` để xem trước (mục 9) |
 | Việc định kỳ | Vercel Cron hoặc pg_cron gọi route `/api/cron/*` có khóa bí mật | Hết hạn giữ hàng, tính độ phổ biến |
 | Test | Vitest (logic `lib/`), Playwright (luồng chính, khung iPhone 13 và Pixel 7) | |
-| Hosting | Vercel Pro hoặc Cloudflare | Chờ chủ dự án chọn |
+| Hosting | Giai đoạn đầu: chạy local (mục 9). Sau: Vercel Pro hoặc Cloudflare (W024) | Không viết code phụ thuộc riêng một nhà cung cấp hosting; cron gọi qua route `/api/cron/*` để nơi nào cũng gọi được |
 
 Biến môi trường (`.env.example`, không commit khóa thật): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, `EMAIL_FROM`, `CRON_SECRET`, `NEXT_PUBLIC_SITE_URL`, `GIO_MO_CUA` (ví dụ `10:00-21:00`), `GIU_HANG_DEN_GIO` (mặc định `21:00`), `GIU_HANG_SO_NGAY` (mặc định `1`).
 
@@ -233,3 +233,11 @@ Gợi ý "người thích A cũng thích B" từ ma trận cùng thích khi có 
 - Không lưu SĐT, email ở localStorage. localStorage chỉ dùng cho giỏ và đọc ghi trong try/catch.
 - Giữ hàng: chống gửi trùng (khóa nút, khóa idempotency), giới hạn 3 mã đang giữ mỗi SĐT.
 - Mọi số tiền định dạng `186.000` (dấu chấm hàng nghìn), không dùng "đ" sau số trên thẻ; trong giỏ ghi "186.000đ".
+
+## 9. Chạy local (giai đoạn trước khi thuê hosting)
+- `npm install`, sao chép `.env.example` thành `.env.local`, `npm run dev`. Khi chưa có khóa Supabase, app tự dùng dữ liệu tĩnh trong `data/` (W007) và lưu lượt quẹt, giỏ, hồ sơ trên máy; có khóa thì dùng Supabase.
+- **Thử trên điện thoại:** máy tính và điện thoại cùng Wi-Fi, chạy `npm run dev -- -H 0.0.0.0`, mở `http://<IP máy tính>:3000` trên điện thoại. Rung và một số cử chỉ chỉ chạy đủ trên máy thật.
+- **Email ở local:** khi `RESEND_API_KEY` trống hoặc `NODE_ENV=development`, không gửi email; lưu nội dung vào bộ nhớ và hiện ở `/dev/email` (chỉ có ở development). Có Resend nhưng chưa có tên miền thì chỉ gửi thử được tới email chủ tài khoản Resend.
+- **Cron ở local:** gọi tay `curl -H "Authorization: Bearer $CRON_SECRET" http://localhost:3000/api/cron/het-han-giu-hang`.
+- **Trang `/dev/*`** (xem trước email, nạp lại dữ liệu mẫu, xóa hồ sơ khách) chỉ bật khi `NODE_ENV=development`, build production phải trả 404.
+- Khi thuê hosting (W024–W025): đặt biến môi trường trên hosting, đổi `NEXT_PUBLIC_SITE_URL`, xác thực tên miền gửi email, cấu hình cron gọi 2 route ở mục 1. Không cần sửa code.
