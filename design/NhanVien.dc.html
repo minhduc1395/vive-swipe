@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>VIVE Quẹt – Trang nhân viên</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;family=Playfair+Display:ital,wght@1,400;1,600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2B2B2A}a:hover{color:#000000}
+</style>
+</helmet>
+<div style="width: 1024px; height: 768px; box-sizing: border-box; background: #FFFFFF; font-family: 'Be Vietnam Pro', sans-serif; color: #2B2B2A; display: flex; flex-direction: column; overflow: hidden">
+  <header style="height: 72px; box-sizing: border-box; padding: 0 24px; border-bottom: 1px solid #F2E4E0; display: flex; align-items: center; gap: 16px">
+    <img src="/brand/vive-logo-black.png" alt="VIVE" style="width: 52px; height: auto">
+    <h1 style="margin: 0; font-size: 18px; font-weight: 600">Giữ hàng hôm nay</h1>
+    <label for="tim" style="margin-left: auto; height: 44px; width: 320px; box-sizing: border-box; border-radius: 12px; border: 1.5px solid #E8D2CC; display: flex; align-items: center; gap: 8px; padding: 0 12px">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#737373" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <span style="position: absolute; width: 1px; height: 1px; overflow: hidden">Tìm mã hoặc 4 số cuối SĐT</span>
+      <input id="tim" type="search" placeholder="Tìm mã hoặc 4 số cuối SĐT" style="border: none; outline: none; flex-grow: 1; min-width: 0; font-family: inherit; font-size: 15px; color: #2B2B2A">
+    </label>
+    <span style="font-size: 14px; color: #737373">Quầy VIVE</span>
+  </header>
+
+  <div style="flex-grow: 1; display: flex; min-height: 0">
+    <section aria-label="Danh sách giữ hàng" style="width: 612px; box-sizing: border-box; padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; border-right: 1px solid #F2E4E0">
+      <div style="display: flex; gap: 8px; flex-wrap: wrap" role="group" aria-label="Lọc theo trạng thái">
+        <sc-for list="{{tabs}}" as="t" hint-placeholder-count="5">
+          <button type="button" onClick="{{t.pick}}" aria-pressed="{{t.pressed}}" style="{{t.style}}">{{t.label}}</button>
+        </sc-for>
+      </div>
+      <div style="display: grid; grid-template-columns: 116px 1fr 88px 104px 92px; gap: 8px; padding: 0 14px; font-size: 12px; font-weight: 600; letter-spacing: 0.8px; color: #737373">
+        <span>MÃ</span><span>KHÁCH</span><span>NGÀY ĐẾN</span><span style="text-align: right">ƯỚC TÍNH</span><span>TRẠNG THÁI</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <sc-for list="{{rows}}" as="r" hint-placeholder-count="4">
+          <button type="button" onClick="{{r.pick}}" style="{{r.style}}">
+            <strong style="font-size: 15px; font-weight: 700; letter-spacing: 0.5px">{{r.ma}}</strong>
+            <span style="display: flex; flex-direction: column; text-align: left"><span style="font-size: 14px; font-weight: 500">{{r.ten}}</span><span style="font-size: 12px; color: #737373">{{r.sdt}} · {{r.mon}} món</span></span>
+            <span style="font-size: 13px">{{r.ngay}}</span>
+            <span style="font-size: 14px; font-weight: 600; text-align: right">{{r.tong}}</span>
+            <span style="{{r.pill}}">{{r.trangThai}}</span>
+          </button>
+        </sc-for>
+      </div>
+      <sc-if value="{{empty}}" hint-placeholder-val="{{false}}">
+        <p style="margin: 24px 0 0 0; text-align: center; font-size: 14px; color: #737373">Không có mã nào ở trạng thái này.</p>
+      </sc-if>
+      <p style="margin: auto 0 0 0; font-size: 12px; color: #737373">Dữ liệu mẫu. Danh sách tự làm mới mỗi 30 giây.</p>
+    </section>
+
+    <section aria-label="Chi tiết mã giữ hàng" style="flex-grow: 1; box-sizing: border-box; padding: 20px 24px; display: flex; flex-direction: column; gap: 14px; background: #F7EEEB">
+      <div style="display: flex; align-items: center; justify-content: space-between">
+        <span style="font-size: 28px; font-weight: 700; letter-spacing: 2px">{{sel.ma}}</span>
+        <span style="{{sel.pill}}">{{sel.trangThai}}</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; font-size: 13px">
+        <div style="background: #FFFFFF; border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px"><span style="color: #737373">Khách</span><strong style="font-weight: 600">{{sel.ten}} · {{sel.sdt}}</strong></div>
+        <div style="background: #FFFFFF; border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px"><span style="color: #737373">Hạn giữ</span><strong style="font-weight: 600">21:00 {{sel.ngay}}</strong></div>
+      </div>
+      <div style="background: #FFFFFF; border-radius: 16px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; font-size: 14px">
+        <sc-for list="{{sel.items}}" as="i" hint-placeholder-count="3">
+          <div style="display: flex; justify-content: space-between; gap: 8px"><span>{{i.ten}}</span><span style="font-weight: 600; white-space: nowrap">{{i.gia}}</span></div>
+        </sc-for>
+        <div style="height: 1px; background: #F2E4E0"></div>
+        <div style="display: flex; justify-content: space-between; font-weight: 700"><span>Tổng ước tính</span><span>{{sel.tong}}</span></div>
+        <div style="display: flex; justify-content: space-between; color: #5C5C5B; font-size: 13px"><span>Quà dự kiến</span><span>{{sel.qua}}</span></div>
+      </div>
+      <p style="margin: 0; font-size: 12px; line-height: 1.5; color: #5C5C5B">Tính tiền trên POS KiotViet như bình thường. Giá và quà trên đây là ước tính từ web.</p>
+      <div style="margin-top: auto; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+        <button type="button" onClick="{{markSoan}}" style="height: 52px; border-radius: 14px; border: 1.5px solid #2B2B2A; background: #CFE3D5; font-family: inherit; font-size: 15px; font-weight: 600; color: #2B2B2A; cursor: pointer">Đã soạn</button>
+        <button type="button" onClick="{{markLay}}" style="height: 52px; border-radius: 14px; border: none; background: #2B2B2A; font-family: inherit; font-size: 15px; font-weight: 600; color: #FFFFFF; cursor: pointer">Đã lấy</button>
+        <button type="button" onClick="{{markHuy}}" style="height: 52px; border-radius: 14px; border: 1.5px solid #E8D2CC; background: #FFFFFF; font-family: inherit; font-size: 15px; font-weight: 600; color: #2B2B2A; cursor: pointer">Hủy</button>
+      </div>
+      <span style="font-size: 12px; color: #5C5C5B">{{sel.log}}</span>
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1024,"height":768}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      tab: 'moi',
+      selected: 'VIVE-4821',
+      status: { 'VIVE-4821': 'moi', 'VIVE-3307': 'moi', 'VIVE-5190': 'da_soan', 'VIVE-2764': 'da_lay', 'VIVE-6012': 'het_han' },
+      log: {}
+    };
+  }
+  setStatus(st, label) {
+    const ma = this.state.selected;
+    const status = Object.assign({}, this.state.status);
+    status[ma] = st;
+    const log = Object.assign({}, this.state.log);
+    log[ma] = label + ' bởi Quầy VIVE lúc 15:42';
+    this.setState({ status, log });
+  }
+  renderVals() {
+    const data = [
+      { ma: 'VIVE-4821', ten: 'Lan N.', sdt: '***567', mon: 4, ngay: 'ngày mai', tong: '1.235.000', qua: '1 ampoule LOPOE', tao: '14:05', items: [{ ten: 'COMBO PINK PDRN × 1', gia: '999.000' }, { ten: 'Sữa rửa mặt LOPOE × 1', gia: '186.000' }, { ten: 'Mặt nạ Aloe Dermal × 2', gia: '50.000' }] },
+      { ma: 'VIVE-3307', ten: 'Minh T.', sdt: '***112', mon: 2, ngay: 'hôm nay', tong: '395.000', qua: 'Không có', tao: '13:20', items: [{ ten: 'Sữa rửa mặt Rep!el All Day Calming × 1', gia: '209.000' }, { ten: 'Sữa rửa mặt LOPOE × 1', gia: '186.000' }] },
+      { ma: 'VIVE-5190', ten: 'Hà P.', sdt: '***908', mon: 3, ngay: 'hôm nay', tong: '911.000', qua: '1 kem dưỡng LOPOE', tao: '11:48', items: [{ ten: 'Bộ 3 LOPOE × 1', gia: '911.000' }] },
+      { ma: 'VIVE-2764', ten: 'Thảo V.', sdt: '***345', mon: 3, ngay: 'hôm nay', tong: '943.000', qua: '1 sữa rửa mặt LOPOE', tao: '10:32', items: [{ ten: 'Kem dưỡng thể Tiela Pure × 1', gia: '519.000' }, { ten: 'Tẩy da chết Tiela Pure × 1', gia: '399.000' }, { ten: 'Mặt nạ Aloe Dermal × 1', gia: '25.000' }] },
+      { ma: 'VIVE-6012', ten: 'Quân L.', sdt: '***220', mon: 1, ngay: 'hôm qua', tong: '249.000', qua: '1 muối tắm salTherapy', tao: 'hôm qua 18:10', items: [{ ten: 'Sữa rửa mặt LOPOE × 1', gia: '249.000' }] }
+    ];
+    const names = { moi: 'Mới', da_soan: 'Đã soạn', da_lay: 'Đã lấy', huy: 'Hủy', het_han: 'Hết hạn' };
+    const pills = {
+      moi: 'background: #E8D2CC; color: #2B2B2A;',
+      da_soan: 'background: #CFE3D5; color: #2B2B2A;',
+      da_lay: 'background: #2B2B2A; color: #FFFFFF;',
+      huy: 'background: #FFFFFF; color: #5C5C5B; border: 1px solid #E8D2CC;',
+      het_han: 'background: #FFFFFF; color: #5C5C5B; border: 1px solid #E8D2CC;'
+    };
+    const pillBase = 'height: 28px; padding: 0 10px; border-radius: 999px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; justify-self: start; ';
+    const st = this.state.status;
+    const inTab = (ma) => {
+      const s = st[ma];
+      if (this.state.tab === 'tat_ca') return true;
+      if (this.state.tab === 'dong') return s === 'huy' || s === 'het_han';
+      return s === this.state.tab;
+    };
+    const count = (k) => data.filter((d) => (k === 'tat_ca') || (k === 'dong' ? (st[d.ma] === 'huy' || st[d.ma] === 'het_han') : st[d.ma] === k)).length;
+    const tabDefs = [['moi', 'Mới'], ['da_soan', 'Đã soạn'], ['da_lay', 'Đã lấy'], ['dong', 'Hủy, hết hạn'], ['tat_ca', 'Tất cả']];
+    const tabBase = 'height: 40px; padding: 0 14px; border-radius: 999px; font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer; color: #2B2B2A; ';
+    const tabs = tabDefs.map(([k, l]) => {
+      const on = this.state.tab === k;
+      return { label: l + ' (' + count(k) + ')', pressed: on ? 'true' : 'false', style: tabBase + (on ? 'background: #2B2B2A; color: #FFFFFF; border: 1px solid #2B2B2A;' : 'background: #FFFFFF; border: 1px solid #E8D2CC;'), pick: () => this.setState({ tab: k }) };
+    });
+    const rowBase = 'display: grid; grid-template-columns: 116px 1fr 88px 104px 92px; gap: 8px; align-items: center; min-height: 60px; padding: 8px 14px; border-radius: 14px; font-family: inherit; color: #2B2B2A; cursor: pointer; text-align: left; ';
+    const rows = data.filter((d) => inTab(d.ma)).map((d) => ({
+      ...d,
+      trangThai: names[st[d.ma]],
+      pill: pillBase + pills[st[d.ma]],
+      style: rowBase + (this.state.selected === d.ma ? 'background: #F7EEEB; border: 1.5px solid #2B2B2A;' : 'background: #FFFFFF; border: 1px solid #F2E4E0;'),
+      pick: () => this.setState({ selected: d.ma })
+    }));
+    const s = data.find((d) => d.ma === this.state.selected) || data[0];
+    const sel = {
+      ...s,
+      trangThai: names[st[s.ma]],
+      pill: pillBase + pills[st[s.ma]],
+      log: 'Tạo lúc ' + s.tao + (this.state.log[s.ma] ? ' · ' + this.state.log[s.ma] : '')
+    };
+    return {
+      tabs, rows, sel, empty: rows.length === 0,
+      markSoan: () => this.setStatus('da_soan', 'Đã soạn'),
+      markLay: () => this.setStatus('da_lay', 'Đã lấy'),
+      markHuy: () => this.setStatus('huy', 'Hủy')
+    };
+  }
+}
+</script>
+</body>
+</html>

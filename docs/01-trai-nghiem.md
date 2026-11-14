@@ -2,6 +2,7 @@
 
 Phiên bản 1.0 · 15/11/2026. Thiết kế cho điện thoại trước (rộng 360–430px). Trên máy tính hiện một cột rộng tối đa 480px ở giữa.
 Quy tắc chữ, màu, font: `docs/03-thuong-hieu-va-noi-dung.md`.
+**Bản thiết kế (15/11/2026):** canvas https://claude.ai/artifact/RM3NbvY1uZ4pFibYCk1AxG, mã nguồn từng màn trong `design/` (xem `design/README.md`). Khi thiết kế và tài liệu này lệch nhau về chữ hoặc luật, theo tài liệu này; về bố cục và hình thức, theo thiết kế.
 
 ## 1. Hai luồng chính
 

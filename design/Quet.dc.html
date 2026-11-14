@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>VIVE Quẹt – Deck quẹt</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;family=Playfair+Display:ital,wght@1,400;1,600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2B2B2A}a:hover{color:#000000}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #FFFFFF; font-family: 'Be Vietnam Pro', sans-serif; color: #2B2B2A; display: flex; flex-direction: column; overflow: hidden; position: relative">
+  <header style="height: 60px; box-sizing: border-box; padding: 12px 12px 0 20px; display: flex; align-items: center; justify-content: space-between">
+    <img src="/brand/vive-logo-black.png" alt="VIVE" style="width: 56px; height: auto">
+    <a href="Gio.dc.html" aria-label="Giỏ hàng" style="position: relative; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; text-decoration: none">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2B2B2A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <sc-if value="{{hasCart}}" hint-placeholder-val="{{false}}">
+        <span style="position: absolute; top: 4px; right: 2px; min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 999px; background: #2B2B2A; color: #FFFFFF; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center">{{cart}}</span>
+      </sc-if>
+    </a>
+  </header>
+
+  <div style="padding: 4px 20px 12px 20px; display: flex; align-items: center; gap: 6px; font-size: 13px">
+    <span style="color: #737373">Xếp theo</span>
+    <span style="height: 26px; padding: 0 10px; border-radius: 999px; background: #F7EEEB; display: flex; align-items: center">Lỗ chân lông</span>
+    <span style="height: 26px; padding: 0 10px; border-radius: 999px; background: #F7EEEB; display: flex; align-items: center">Cấp ẩm</span>
+    <a href="CauHoi.dc.html" style="margin-left: auto; font-weight: 500; padding: 6px 0">Sửa</a>
+  </div>
+
+  <section style="position: relative; height: 508px; margin: 0 16px" aria-label="Thẻ sản phẩm">
+    <sc-if value="{{notDone}}" hint-placeholder-val="{{true}}">
+      <sc-if value="{{hasNext}}" hint-placeholder-val="{{true}}">
+        <div style="position: absolute; left: 14px; right: 14px; top: 12px; bottom: -8px; border-radius: 28px; background: {{nextBg}}; border: 1px solid #F2E4E0"></div>
+      </sc-if>
+      <article style="position: absolute; inset: 0; border-radius: 28px; background: #FFFFFF; border: 1px solid #F2E4E0; box-shadow: 0 16px 40px rgba(43,43,42,0.12); display: flex; flex-direction: column; overflow: hidden">
+        <div style="position: relative; margin: 8px; height: 292px; border-radius: 22px; background: {{card.bg}}; display: flex; align-items: center; justify-content: center">
+          <img src="{{card.img}}" alt="{{card.name}}" style="width: 236px; height: 236px; object-fit: contain">
+          <a href="ChiTiet.dc.html" aria-label="Xem chi tiết sản phẩm" style="position: absolute; top: 10px; right: 10px; width: 40px; height: 40px; border-radius: 999px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2B2B2A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          </a>
+          <span style="position: absolute; left: 12px; bottom: 12px; height: 28px; padding: 0 12px; border-radius: 999px; background: #FFFFFF; font-size: 12px; font-weight: 500; display: flex; align-items: center; gap: 6px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2B2B2A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>{{card.reason}}
+          </span>
+        </div>
+        <div style="padding: 10px 20px 0 20px; display: flex; flex-direction: column; gap: 4px">
+          <span style="font-size: 12px; font-weight: 600; letter-spacing: 1.4px; color: #737373">{{card.brand}}</span>
+          <h2 style="margin: 0; font-size: 19px; line-height: 1.3; font-weight: 600">{{card.name}}</h2>
+          <span style="font-size: 13px; color: #737373">{{card.spec}}</span>
+        </div>
+        <div style="padding: 10px 20px 0 20px; display: flex; align-items: baseline; gap: 8px">
+          <span style="font-size: 26px; font-weight: 700; letter-spacing: -0.3px">{{card.price}}</span>
+        </div>
+        <div style="padding: 10px 20px 0 20px; display: flex; flex-wrap: wrap; gap: 6px">
+          <sc-for list="{{card.chips}}" as="chip" hint-placeholder-count="3">
+            <span style="height: 28px; padding: 0 12px; border-radius: 999px; background: #F7EEEB; font-size: 13px; display: flex; align-items: center">{{chip}}</span>
+          </sc-for>
+        </div>
+      </article>
+      <sc-if value="{{showToast}}" hint-placeholder-val="{{false}}">
+        <div role="status" style="position: absolute; left: 50%; top: 120px; transform: translateX(-50%); height: 72px; padding: 0 28px; border-radius: 999px; background: #FFFFFF; box-shadow: 0 12px 32px rgba(43,43,42,0.18); display: flex; align-items: center; gap: 12px; white-space: nowrap">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="#2B2B2A" stroke="#2B2B2A" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span style="font-family: 'Playfair Display', serif; font-style: italic; font-weight: 600; font-size: 32px">{{toast}}</span>
+        </div>
+      </sc-if>
+    </sc-if>
+    <sc-if value="{{done}}" hint-placeholder-val="{{false}}">
+      <div style="position: absolute; inset: 0; border-radius: 28px; background: #F7EEEB; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 32px; text-align: center">
+        <span style="font-family: 'Playfair Display', serif; font-style: italic; font-weight: 600; font-size: 30px">Đã xem hết</span>
+        <p style="margin: 0; font-size: 15px; line-height: 1.5; color: #5C5C5B">Bạn đã thích {{liked}} món. Xem lại danh sách hoặc deal hợp với bạn.</p>
+        <a href="Deal.dc.html" style="margin-top: 8px; height: 48px; padding: 0 24px; border-radius: 999px; background: #2B2B2A; color: #FFFFFF; text-decoration: none; display: flex; align-items: center; font-weight: 600">Xem deal cho bạn</a>
+        <a href="DaThich.dc.html" style="font-weight: 500; padding: 8px">Xem món đã thích</a>
+      </div>
+    </sc-if>
+  </section>
+
+  <div style="height: 96px; display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 14px">
+    <button type="button" onClick="{{undo}}" aria-label="Hoàn tác" style="width: 52px; height: 52px; border-radius: 999px; border: 1.5px solid #E8D2CC; background: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2B2B2A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+    </button>
+    <button type="button" onClick="{{skip}}" aria-label="Bỏ qua" style="width: 68px; height: 68px; border-radius: 999px; border: 1.5px solid #2B2B2A; background: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2B2B2A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <button type="button" onClick="{{like}}" aria-label="Thích" style="width: 68px; height: 68px; border-radius: 999px; border: none; background: #2B2B2A; display: flex; align-items: center; justify-content: center; cursor: pointer">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    </button>
+    <button type="button" onClick="{{addCart}}" aria-label="Thêm vào giỏ" style="width: 52px; height: 52px; border-radius: 999px; border: 1.5px solid #E8D2CC; background: #CFE3D5; display: flex; align-items: center; justify-content: center; cursor: pointer">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2B2B2A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+    </button>
+  </div>
+
+  <nav aria-label="Điều hướng chính" style="margin-top: auto; height: 76px; box-sizing: border-box; padding: 8px 8px 14px 8px; border-top: 1px solid #F2E4E0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); background: #FFFFFF">
+    <a href="Quet.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; font-size: 11px; font-weight: 600; color: #2B2B2A">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2B2B2A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3" width="13" height="17" rx="2.5"/><path d="M4 7v12a2 2 0 0 0 2 2h9"/></svg>Quẹt
+    </a>
+    <a href="DaThich.dc.html" style="position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; font-size: 11px; color: #737373">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#737373" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Đã thích {{likedLabel}}
+    </a>
+    <a href="Deal.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; font-size: 11px; color: #737373">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#737373" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><path d="M7 7h.01"/></svg>Deal cho bạn
+    </a>
+    <a href="Gio.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; font-size: 11px; color: #737373">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#737373" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Giỏ {{cartLabel}}
+    </a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { idx: 0, liked: 0, cart: 0, history: [], toast: '' };
+    this.timer = null;
+  }
+  componentWillUnmount() {
+    if (this.timer) clearTimeout(this.timer);
+  }
+  flash(text) {
+    if (this.timer) clearTimeout(this.timer);
+    this.setState({ toast: text });
+    this.timer = setTimeout(() => this.setState({ toast: '' }), 700);
+  }
+  act(kind) {
+    const s = this.state;
+    if (s.idx >= 4) return;
+    const next = { idx: s.idx + 1, history: s.history.concat([kind]) };
+    if (kind === 'like') next.liked = s.liked + 1;
+    if (kind === 'cart') next.cart = s.cart + 1;
+    this.setState(next);
+    if (kind === 'like') this.flash('Hợp da!');
+    if (kind === 'cart') this.flash('Vào giỏ');
+  }
+  undo() {
+    const s = this.state;
+    if (!s.history.length) return;
+    const last = s.history[s.history.length - 1];
+    this.setState({
+      idx: s.idx - 1,
+      history: s.history.slice(0, -1),
+      liked: last === 'like' ? s.liked - 1 : s.liked,
+      cart: last === 'cart' ? s.cart - 1 : s.cart,
+      toast: ''
+    });
+  }
+  renderVals() {
+    const cards = [
+      { brand: 'DERMAL', name: 'Mặt nạ Hyaluronate Collagen Essence Mask', spec: '1 miếng', price: '25.000', img: '/products/8809369850521.webp', bg: '#EAF3ED', chips: ['Hyaluronic', 'Collagen', 'Cấp ẩm'], reason: 'Hợp với: Cấp ẩm' },
+      { brand: 'DERMAL', name: 'Mặt nạ Pearl Collagen Essence Mask', spec: '1 miếng', price: '25.000', img: '/products/8809369850248.webp', bg: '#F7EEEB', chips: ['Collagen', 'Sáng da'], reason: 'Khám phá thêm' },
+      { brand: 'DERMAL', name: 'Mặt nạ Aloe Collagen Essence Mask', spec: '1 miếng', price: '25.000', img: '/products/8809369850354.webp', bg: '#EAF3ED', chips: ['Lô hội', 'Làm dịu', 'Cấp ẩm'], reason: 'Hợp với: Cấp ẩm' },
+      { brand: 'DERMAL', name: 'Mặt nạ Red Ginseng Collagen Essence Mask', spec: '1 miếng', price: '25.000', img: '/products/8809369850262.webp', bg: '#F7EEEB', chips: ['Hồng sâm', 'Collagen', 'Chống lão hóa'], reason: 'Khám phá thêm' }
+    ];
+    const s = this.state;
+    const done = s.idx >= cards.length;
+    const card = done ? cards[cards.length - 1] : cards[s.idx];
+    const nextCard = cards[s.idx + 1];
+    return {
+      card,
+      done,
+      notDone: !done,
+      hasNext: !!nextCard,
+      nextBg: nextCard ? nextCard.bg : '#F7EEEB',
+      liked: s.liked,
+      cart: s.cart,
+      hasCart: s.cart > 0,
+      likedLabel: s.liked > 0 ? '(' + s.liked + ')' : '',
+      cartLabel: s.cart > 0 ? '(' + s.cart + ')' : '',
+      showToast: s.toast !== '',
+      toast: s.toast,
+      like: () => this.act('like'),
+      skip: () => this.act('skip'),
+      addCart: () => this.act('cart'),
+      undo: () => this.undo()
+    };
+  }
+}
+</script>
+</body>
+</html>

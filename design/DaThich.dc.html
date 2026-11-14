@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>VIVE Quẹt – Đã thích</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;family=Playfair+Display:ital,wght@1,400;1,600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2B2B2A}a:hover{color:#000000}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #FFFFFF; font-family: 'Be Vietnam Pro', sans-serif; color: #2B2B2A; display: flex; flex-direction: column; overflow: hidden">
+  <header style="padding: 28px 20px 0 20px; display: flex; align-items: baseline; gap: 8px">
+    <h1 style="margin: 0; font-size: 28px; font-weight: 600">Đã thích</h1>
+    <span style="font-size: 15px; color: #737373">{{count}} món</span>
+  </header>
+
+  <div style="padding: 14px 20px 0 20px; display: flex; gap: 8px; overflow-x: auto" role="group" aria-label="Lọc theo danh mục">
+    <sc-for list="{{filters}}" as="f" hint-placeholder-count="4">
+      <button type="button" onClick="{{f.pick}}" aria-pressed="{{f.pressed}}" style="{{f.style}}">{{f.label}}</button>
+    </sc-for>
+  </div>
+
+  <div style="flex-grow: 1; overflow: hidden; padding: 16px 16px 0 16px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-content: start">
+    <sc-for list="{{items}}" as="it" hint-placeholder-count="6">
+      <article style="display: flex; flex-direction: column; gap: 6px">
+        <div style="position: relative; height: 150px; border-radius: 18px; background: {{it.bg}}; display: flex; align-items: center; justify-content: center">
+          <sc-if value="{{it.hasImg}}" hint-placeholder-val="{{true}}">
+            <img src="{{it.img}}" alt="{{it.name}}" style="width: 128px; height: 128px; object-fit: contain">
+          </sc-if>
+          <sc-if value="{{it.noImg}}" hint-placeholder-val="{{false}}">
+            <span role="img" aria-label="Ảnh sản phẩm chờ bổ sung" style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 22px; color: #5C5C5B">{{it.ph}}</span>
+          </sc-if>
+          <button type="button" onClick="{{it.unlike}}" aria-label="Bỏ thích" style="position: absolute; top: 6px; right: 6px; width: 40px; height: 40px; border-radius: 999px; border: none; background: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#2B2B2A" stroke="#2B2B2A" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+        </div>
+        <span style="font-size: 11px; font-weight: 600; letter-spacing: 1.2px; color: #737373">{{it.brand}}</span>
+        <span style="font-size: 14px; line-height: 1.35; font-weight: 500; height: 38px; overflow: hidden">{{it.name}}</span>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px">
+          <div style="display: flex; flex-direction: column">
+            <span style="font-size: 16px; font-weight: 700">{{it.price}}</span>
+            <span style="font-size: 11px; color: #737373; height: 15px">{{it.note}}</span>
+          </div>
+          <a href="Gio.dc.html" aria-label="Thêm vào giỏ" style="width: 40px; height: 40px; flex-shrink: 0; border-radius: 999px; background: #CFE3D5; display: flex; align-items: center; justify-content: center">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2B2B2A" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          </a>
+        </div>
+      </article>
+    </sc-for>
+  </div>
+
+  <nav aria-label="Điều hướng chính" style="height: 76px; box-sizing: border-box; padding: 8px 8px 14px 8px; border-top: 1px solid #F2E4E0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); background: #FFFFFF">
+    <a href="Quet.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; font-size: 11px; color: #737373">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#737373" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3" width="13" height="17" rx="2.5"/><path d="M4 7v12a2 2 0 0 0 2 2h9"/></svg>Quẹt
+    </a>
+    <a href="DaThich.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; font-size: 11px; font-weight: 600; color: #2B2B2A">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="#2B2B2A" stroke="#2B2B2A" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Đã thích ({{count}})
+    </a>
+    <a href="Deal.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; font-size: 11px; color: #737373">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#737373" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><path d="M7 7h.01"/></svg>Deal cho bạn
+    </a>
+    <a href="Gio.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; font-size: 11px; color: #737373">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#737373" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Giỏ (4)
+    </a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { cat: 'all', removed: [] };
+  }
+  renderVals() {
+    const all = [
+      { id: 'a', cat: 'mat-na', brand: 'DERMAL', name: 'Mặt nạ Hyaluronate Collagen Essence Mask', price: '25.000', note: '', img: '/products/8809369850521.webp', bg: '#EAF3ED' },
+      { id: 'b', cat: 'tinh-chat', brand: 'MEDICUBE', name: 'Tinh chất PDRN Pink Peptide Serum', price: '530.000', note: 'Có trong COMBO PINK', img: '', ph: 'Medicube', bg: '#F7EEEB' },
+      { id: 'c', cat: 'mat-na', brand: 'DERMAL', name: 'Mặt nạ Aloe Collagen Essence Mask', price: '25.000', note: '', img: '/products/8809369850354.webp', bg: '#EAF3ED' },
+      { id: 'd', cat: 'sua-rua-mat', brand: 'LOPOE', name: 'Sữa rửa mặt Better Balance Cleansing Foam', price: '249.000', note: 'Mua kèm: còn 186.000', img: '', ph: 'LOPOE', bg: '#EAF3ED' },
+      { id: 'e', cat: 'tinh-chat', brand: 'MEDICUBE', name: 'Tinh chất Glutathione Glow Serum', price: '420.000', note: '', img: '', ph: 'Medicube', bg: '#F7EEEB' },
+      { id: 'f', cat: 'mat-na', brand: 'DERMAL', name: 'Mặt nạ Red Ginseng Collagen Essence Mask', price: '25.000', note: '', img: '/products/8809369850262.webp', bg: '#F7EEEB' }
+    ];
+    const kept = all.filter((x) => this.state.removed.indexOf(x.id) < 0);
+    const shown = kept.filter((x) => this.state.cat === 'all' || x.cat === this.state.cat);
+    const defs = [['all', 'Tất cả'], ['mat-na', 'Mặt nạ'], ['tinh-chat', 'Tinh chất'], ['sua-rua-mat', 'Sữa rửa mặt']];
+    const base = 'height: 36px; padding: 0 14px; border-radius: 999px; font-family: inherit; font-size: 14px; font-weight: 500; white-space: nowrap; cursor: pointer; color: #2B2B2A; ';
+    const filters = defs.map(([id, label]) => {
+      const on = this.state.cat === id;
+      const n = id === 'all' ? kept.length : kept.filter((x) => x.cat === id).length;
+      return {
+        label: label + ' (' + n + ')',
+        pressed: on ? 'true' : 'false',
+        style: base + (on ? 'background: #2B2B2A; color: #FFFFFF; border: 1px solid #2B2B2A;' : 'background: #FFFFFF; border: 1px solid #E8D2CC;'),
+        pick: () => this.setState({ cat: id })
+      };
+    });
+    const items = shown.map((x) => ({
+      ...x,
+      hasImg: !!x.img,
+      noImg: !x.img,
+      unlike: () => this.setState({ removed: this.state.removed.concat([x.id]) })
+    }));
+    return { items, filters, count: kept.length };
+  }
+}
+</script>
+</body>
+</html>

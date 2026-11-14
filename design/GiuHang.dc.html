@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>VIVE Quẹt – Giữ hàng tại booth</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;family=Playfair+Display:ital,wght@1,400;1,600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2B2B2A}a:hover{color:#000000}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #FFFFFF; font-family: 'Be Vietnam Pro', sans-serif; color: #2B2B2A; display: flex; flex-direction: column; overflow: hidden">
+  <header style="display: flex; align-items: center; gap: 4px; padding: 20px 16px 0 8px">
+    <a href="Gio.dc.html" aria-label="Quay lại giỏ" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2B2B2A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+    </a>
+    <h1 style="margin: 0; font-size: 20px; font-weight: 600">Giữ hàng tại booth</h1>
+  </header>
+
+  <div style="margin: 14px 20px 0 20px; border-radius: 18px; background: #F7EEEB; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; font-size: 13px">
+    <div style="display: flex; flex-direction: column; gap: 2px">
+      <span style="color: #5C5C5B">4 món · tổng ước tính</span>
+      <strong style="font-size: 18px; font-weight: 700">1.235.000đ</strong>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 2px; text-align: right">
+      <span style="color: #5C5C5B">Quà dự kiến</span>
+      <strong style="font-weight: 600">1 ampoule LOPOE</strong>
+    </div>
+  </div>
+
+  <form style="padding: 18px 20px 0 20px; display: flex; flex-direction: column; gap: 14px">
+    <div style="display: flex; flex-direction: column; gap: 6px">
+      <label for="ten" style="font-size: 14px; font-weight: 500">Họ và tên</label>
+      <input id="ten" type="text" autocomplete="name" placeholder="Tên để nhân viên gọi" style="height: 50px; box-sizing: border-box; border-radius: 14px; border: 1.5px solid #E8D2CC; padding: 0 14px; font-family: inherit; font-size: 15px; color: #2B2B2A">
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 6px">
+      <label for="sdt" style="font-size: 14px; font-weight: 500">Số điện thoại</label>
+      <input id="sdt" type="tel" autocomplete="tel" placeholder="09xx xxx xxx" style="height: 50px; box-sizing: border-box; border-radius: 14px; border: 1.5px solid #E8D2CC; padding: 0 14px; font-family: inherit; font-size: 15px; color: #2B2B2A">
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 6px">
+      <label for="email" style="font-size: 14px; font-weight: 500">Email <span style="font-weight: 400; color: #737373">(không bắt buộc, để nhận xác nhận)</span></label>
+      <input id="email" type="email" autocomplete="email" placeholder="ten@email.com" style="height: 50px; box-sizing: border-box; border-radius: 14px; border: 1.5px solid #E8D2CC; padding: 0 14px; font-family: inherit; font-size: 15px; color: #2B2B2A">
+    </div>
+
+    <fieldset style="border: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px">
+      <legend style="font-size: 14px; font-weight: 500; padding: 0; margin-bottom: 6px">Ngày đến lấy</legend>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+        <button type="button" onClick="{{pickToday}}" aria-pressed="{{todayPressed}}" style="{{todayStyle}}">Hôm nay</button>
+        <button type="button" onClick="{{pickTomorrow}}" aria-pressed="{{tomorrowPressed}}" style="{{tomorrowStyle}}">Ngày mai</button>
+      </div>
+      <span style="font-size: 13px; color: #737373">Giữ đến 21:00 {{dayText}}</span>
+    </fieldset>
+
+    <div style="display: flex; flex-direction: column; gap: 10px; padding-top: 2px">
+      <label style="display: flex; align-items: flex-start; gap: 10px; font-size: 14px; line-height: 1.45">
+        <input type="checkbox" style="width: 22px; height: 22px; margin: 0; flex-shrink: 0; accent-color: #2B2B2A">
+        <span>Nhận deal qua email</span>
+      </label>
+      <label style="display: flex; align-items: flex-start; gap: 10px; font-size: 14px; line-height: 1.45">
+        <input type="checkbox" style="width: 22px; height: 22px; margin: 0; flex-shrink: 0; accent-color: #2B2B2A">
+        <span>Tôi đồng ý với <a href="#chinh-sach" style="font-weight: 600">chính sách bảo mật và giữ hàng</a></span>
+      </label>
+    </div>
+  </form>
+
+  <footer style="margin-top: auto; padding: 14px 20px 28px 20px; display: flex; flex-direction: column; gap: 8px; align-items: center">
+    <a href="MaGiuHang.dc.html" style="width: 100%; height: 56px; border-radius: 999px; background: #2B2B2A; color: #FFFFFF; text-decoration: none; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 17px">Xác nhận giữ hàng</a>
+    <span style="font-size: 12px; color: #737373">Mỗi số điện thoại giữ tối đa 3 mã cùng lúc</span>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { day: 'mai' };
+  }
+  renderVals() {
+    const base = 'height: 48px; border-radius: 14px; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer; ';
+    const on = 'background: #2B2B2A; color: #FFFFFF; border: 1.5px solid #2B2B2A;';
+    const off = 'background: #FFFFFF; color: #2B2B2A; border: 1.5px solid #E8D2CC;';
+    const today = this.state.day === 'nay';
+    return {
+      todayStyle: base + (today ? on : off),
+      tomorrowStyle: base + (today ? off : on),
+      todayPressed: today ? 'true' : 'false',
+      tomorrowPressed: today ? 'false' : 'true',
+      dayText: today ? 'hôm nay' : 'ngày mai',
+      pickToday: () => this.setState({ day: 'nay' }),
+      pickTomorrow: () => this.setState({ day: 'mai' })
+    };
+  }
+}
+</script>
+</body>
+</html>

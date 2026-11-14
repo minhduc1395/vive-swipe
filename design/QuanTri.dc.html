@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>VIVE Quẹt – Quản trị deal và tồn</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;family=Playfair+Display:ital,wght@1,400;1,600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2B2B2A}a:hover{color:#000000}
+</style>
+</helmet>
+<div style="width: 100%; min-height: 940px; box-sizing: border-box; background: #FFFFFF; font-family: 'Be Vietnam Pro', sans-serif; color: #2B2B2A; display: flex; flex-wrap: wrap">
+  <nav aria-label="Menu quản trị" style="flex: 1 1 220px; max-width: 260px; box-sizing: border-box; padding: 24px 16px; background: #F7EEEB; display: flex; flex-direction: column; gap: 4px">
+    <img src="/brand/vive-logo-black.png" alt="VIVE" style="width: 64px; height: auto; margin: 0 0 20px 10px">
+    <a href="#tong-quan" style="height: 44px; padding: 0 12px; border-radius: 12px; display: flex; align-items: center; text-decoration: none; font-size: 15px">Tổng quan</a>
+    <a href="#san-pham" style="height: 44px; padding: 0 12px; border-radius: 12px; display: flex; align-items: center; text-decoration: none; font-size: 15px">Sản phẩm</a>
+    <a href="#deal" aria-current="page" style="height: 44px; padding: 0 12px; border-radius: 12px; display: flex; align-items: center; text-decoration: none; font-size: 15px; font-weight: 600; background: #FFFFFF">Deal</a>
+    <a href="#nhap-ton" style="height: 44px; padding: 0 12px; border-radius: 12px; display: flex; align-items: center; text-decoration: none; font-size: 15px">Nhập tồn KiotViet</a>
+    <a href="#giu-hang" style="height: 44px; padding: 0 12px; border-radius: 12px; display: flex; align-items: center; text-decoration: none; font-size: 15px">Giữ hàng</a>
+    <a href="#email" style="height: 44px; padding: 0 12px; border-radius: 12px; display: flex; align-items: center; text-decoration: none; font-size: 15px">Email khách</a>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; box-sizing: border-box; padding: 28px 32px 40px 32px; display: flex; flex-direction: column; gap: 24px">
+    <header style="display: flex; flex-direction: column; gap: 6px">
+      <h1 style="margin: 0; font-size: 28px; font-weight: 600">Deal</h1>
+      <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #737373; max-width: 760px">Khách chỉ thấy chương trình Đang chạy hoặc Đã duyệt có bật "Hiện". Khuyến mại may rủi bị khóa cho đến khi chủ dự án xác nhận đã đăng ký với Sở Công Thương.</p>
+    </header>
+
+    <section aria-label="Số liệu nhanh" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px">
+      <div style="border: 1px solid #F2E4E0; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; color: #737373">Khách mở web hôm nay</span><strong style="font-size: 26px; font-weight: 700">—</strong></div>
+      <div style="border: 1px solid #F2E4E0; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; color: #737373">Tỷ lệ quẹt phải</span><strong style="font-size: 26px; font-weight: 700">—</strong></div>
+      <div style="border: 1px solid #F2E4E0; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; color: #737373">Mã giữ hàng hôm nay</span><strong style="font-size: 26px; font-weight: 700">—</strong></div>
+      <div style="border: 1px solid #F2E4E0; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; color: #737373">Tỷ lệ đến lấy</span><strong style="font-size: 26px; font-weight: 700">—</strong></div>
+    </section>
+
+    <section aria-label="Danh sách deal" style="display: flex; flex-direction: column; gap: 10px">
+      <div style="overflow-x: auto; border: 1px solid #F2E4E0; border-radius: 18px">
+        <div style="min-width: 820px">
+          <div style="display: grid; grid-template-columns: minmax(0, 2.6fr) minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1.3fr) 96px; gap: 12px; padding: 12px 18px; background: #F7EEEB; font-size: 12px; font-weight: 600; letter-spacing: 0.8px; color: #5C5C5B">
+            <span>DEAL</span><span>LOẠI</span><span>TRẠNG THÁI</span><span>QUÀ</span><span>HIỆN</span>
+          </div>
+          <sc-for list="{{deals}}" as="d" hint-placeholder-count="7">
+            <div style="display: grid; grid-template-columns: minmax(0, 2.6fr) minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1.3fr) 96px; gap: 12px; align-items: center; padding: 12px 18px; border-top: 1px solid #F2E4E0; font-size: 14px">
+              <span style="display: flex; flex-direction: column; gap: 2px"><strong style="font-weight: 600">{{d.ten}}</strong><span style="font-size: 12px; color: #737373">{{d.id}}{{d.phu}}</span></span>
+              <span style="color: #5C5C5B">{{d.loai}}</span>
+              <span style="{{d.pill}}">{{d.trangThai}}</span>
+              <span style="display: flex; align-items: center; gap: 8px">
+                <sc-if value="{{d.coQua}}" hint-placeholder-val="{{false}}">
+                  <button type="button" onClick="{{d.toggleQua}}" style="{{d.quaStyle}}">{{d.quaLabel}}</button>
+                </sc-if>
+                <sc-if value="{{d.ghiChu}}" hint-placeholder-val="{{false}}">
+                  <span style="font-size: 12px; color: #5C5C5B">{{d.ghiChu}}</span>
+                </sc-if>
+              </span>
+              <span>
+                <sc-if value="{{d.khoa}}" hint-placeholder-val="{{false}}">
+                  <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #5C5C5B">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5C5C5B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Khóa
+                  </span>
+                </sc-if>
+                <sc-if value="{{d.moKhoa}}" hint-placeholder-val="{{true}}">
+                  <button type="button" role="switch" aria-checked="{{d.checked}}" aria-label="Hiện cho khách" onClick="{{d.toggle}}" style="{{d.track}}"><span style="{{d.knob}}"></span></button>
+                </sc-if>
+              </span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 16px">
+      <section aria-label="Nhập tồn từ KiotViet" style="flex: 1 1 340px; border-radius: 18px; background: #EAF3ED; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+        <h2 style="margin: 0; font-size: 18px; font-weight: 600">Nhập tồn từ KiotViet</h2>
+        <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #5C5C5B">Xuất file tồn kho từ POS rồi tải lên. Web cho xem trước thay đổi trước khi lưu; mã về 0 sẽ tự ẩn khỏi deck.</p>
+        <label for="file-ton" style="align-self: flex-start; height: 46px; padding: 0 18px; border-radius: 999px; background: #2B2B2A; color: #FFFFFF; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; cursor: pointer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>Chọn file CSV
+        </label>
+        <input id="file-ton" type="file" accept=".csv" style="position: absolute; width: 1px; height: 1px; opacity: 0">
+        <span style="font-size: 13px; color: #5C5C5B">Lần nhập gần nhất: POS 12/11, 14:29</span>
+      </section>
+
+      <section aria-label="Sắp hết hàng" style="flex: 1 1 340px; border-radius: 18px; border: 1px solid #F2E4E0; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+        <h2 style="margin: 0; font-size: 18px; font-weight: 600">Sắp hết hàng <span style="font-size: 13px; font-weight: 400; color: #737373">(POS 12/11)</span></h2>
+        <div style="display: flex; justify-content: space-between; font-size: 14px; padding: 6px 0; border-bottom: 1px solid #F2E4E0"><span>Medicube Age-R Booster Pro X2 · Trắng</span><strong style="font-weight: 600">1</strong></div>
+        <div style="display: flex; justify-content: space-between; font-size: 14px; padding: 6px 0; border-bottom: 1px solid #F2E4E0"><span>salTherapy tẩy tế bào chết Woody Breeze</span><strong style="font-weight: 600">1</strong></div>
+        <div style="display: flex; justify-content: space-between; font-size: 14px; padding: 6px 0; border-bottom: 1px solid #F2E4E0"><span>JUNGSAEMMOOL Essential Mool Fitting Mist</span><strong style="font-weight: 600">1</strong></div>
+        <div style="display: flex; justify-content: space-between; font-size: 14px; padding: 6px 0; border-bottom: 1px solid #F2E4E0"><span>Celimax Vita-A Retinol Shot Serum</span><strong style="font-weight: 600">2</strong></div>
+        <div style="display: flex; justify-content: space-between; font-size: 14px; padding: 6px 0"><span>Medicube Age-R Booster Pro X2 · Hồng</span><strong style="font-weight: 600">3</strong></div>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":940}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hien: { 'LOPOE-25': true, 'KM-08': true, 'LOPOE-COMBO-BO3': true, 'COMBO-PINK': true, 'KM-11': true, 'KM-09': false },
+      hetQua: { 'KM-08': false, 'LOPOE-COMBO-BO3': false, 'KM-11': false }
+    };
+  }
+  renderVals() {
+    const rows = [
+      { id: 'LOPOE-25', ten: 'LOPOE giảm 25% khi mua kèm', loai: 'Giảm khi mua kèm', tt: 'DA_DUYET' },
+      { id: 'KM-08', ten: 'Medicube, Celimax, SKINFOOD tặng LOPOE', loai: 'Quà theo mốc', tt: 'DA_DUYET', qua: true, phu: ' · 40 / 20 / 15 suất' },
+      { id: 'LOPOE-COMBO-BO3', ten: 'Bộ 3 LOPOE 911.000', loai: 'Combo', tt: 'DA_DUYET', qua: true, phu: ' · hết quà: 889.000' },
+      { id: 'COMBO-PINK', ten: 'COMBO PINK Medicube 999.000', loai: 'Combo', tt: 'DANG_CHAY' },
+      { id: 'KM-11', ten: 'Combo 2 mặt nạ SKINFOOD tặng LOPOE', loai: 'Quà khi mua', tt: 'DA_DUYET', qua: true, note: 'Lệch giá POS 449K / 500K' },
+      { id: 'KM-09', ten: 'Voucher 15% nhà hàng Union Square', loai: 'Quà cộng thêm', tt: 'DA_DUYET', note: 'Chờ thông tin voucher' },
+      { id: 'KM-12', ten: 'Vòng quay LOPOE', loai: 'May rủi', tt: 'CHO_DANG_KY', khoa: true }
+    ];
+    const ttName = { DA_DUYET: 'Đã duyệt', DANG_CHAY: 'Đang chạy', CHO_DANG_KY: 'Chờ đăng ký' };
+    const pillBase = 'justify-self: start; height: 28px; padding: 0 10px; border-radius: 999px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; ';
+    const ttStyle = { DA_DUYET: 'background: #CFE3D5;', DANG_CHAY: 'background: #2B2B2A; color: #FFFFFF;', CHO_DANG_KY: 'background: #FFFFFF; border: 1px solid #E8D2CC; color: #5C5C5B;' };
+    const deals = rows.map((r) => {
+      const on = !!this.state.hien[r.id];
+      const het = !!this.state.hetQua[r.id];
+      return {
+        id: r.id,
+        ten: r.ten,
+        phu: r.phu || '',
+        loai: r.loai,
+        trangThai: ttName[r.tt],
+        pill: pillBase + ttStyle[r.tt],
+        khoa: !!r.khoa,
+        moKhoa: !r.khoa,
+        checked: on ? 'true' : 'false',
+        track: 'width: 48px; height: 28px; border-radius: 999px; border: none; padding: 3px; box-sizing: border-box; cursor: pointer; display: flex; ' + (on ? 'background: #2B2B2A; justify-content: flex-end;' : 'background: #E8D2CC; justify-content: flex-start;'),
+        knob: 'width: 22px; height: 22px; border-radius: 999px; background: #FFFFFF; display: block;',
+        toggle: () => { const h = Object.assign({}, this.state.hien); h[r.id] = !on; this.setState({ hien: h }); },
+        coQua: !!r.qua,
+        quaLabel: het ? 'Hết quà' : 'Còn quà',
+        quaStyle: 'height: 30px; padding: 0 12px; border-radius: 999px; font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; color: #2B2B2A; ' + (het ? 'background: #FFFFFF; border: 1px solid #2B2B2A;' : 'background: #EAF3ED; border: 1px solid #CFE3D5;'),
+        toggleQua: () => { const q = Object.assign({}, this.state.hetQua); q[r.id] = !het; this.setState({ hetQua: q }); },
+        ghiChu: r.note || ''
+      };
+    });
+    return { deals };
+  }
+}
+</script>
+</body>
+</html>
