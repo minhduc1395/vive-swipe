@@ -94,6 +94,7 @@ Chỉ tiêu cụ thể đặt sau 3 ngày chạy đầu, khi đã có số thậ
 | `tasks/`, `handoff/` | Việc và tin nhắn giữa Claude và Antigravity (cách dùng: AGENTS.md) |
 
 ## Nhật ký thay đổi
+- 15/11/2026: Web chỉ dùng Be Vietnam Pro, bỏ Playfair Display (font có chân) ở mọi màn.
 - 15/11/2026: Thêm trang Danh mục (W026) và tab thứ 5; màn chào đổi tiêu đề "Thích thì quẹt phải", font Be Vietnam Pro.
 - 15/11/2026: v1.1. Chủ dự án chốt chạy local trước, thuê hosting và tên miền sau khi có ít nhất 1 chức năng dùng được. Thêm W024 (thuê hosting), W025 (đưa web lên); W023 phụ thuộc W025; email ở local chỉ xem trước, không gửi thật.
 - 15/11/2026: v1.0.

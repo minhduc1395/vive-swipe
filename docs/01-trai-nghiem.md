@@ -54,7 +54,7 @@ Mỗi câu một màn, chạm để chọn, thanh tiến độ 1/3, nút "Bỏ q
 
 Ngưỡng kéo: hơn 30% chiều rộng thẻ hoặc vuốt nhanh. Thả sớm thì thẻ bật về. Có nút cho mọi cử chỉ. Tôn trọng chế độ giảm chuyển động của máy.
 
-**Phản hồi khi thích:** rung nhẹ nếu máy hỗ trợ, chữ "Hợp da!" (Playfair Display Italic) hiện dưới 0,6 giây. Sản phẩm trang điểm, cơ thể, thiết bị dùng "Ưng ý!".
+**Phản hồi khi thích:** rung nhẹ nếu máy hỗ trợ, chữ "Hợp da!" (Be Vietnam Pro đậm) hiện dưới 0,6 giây. Sản phẩm trang điểm, cơ thể, thiết bị dùng "Ưng ý!".
 
 **Thẻ đặc biệt** chen vào deck, tối đa 1 trên 8 thẻ, không chen 2 thẻ đặc biệt liền nhau:
 - Thẻ deal hợp sở thích: "Bạn thích 2 món Medicube. Mua từ 700K tặng sữa rửa mặt LOPOE" + nút "Xem bộ gợi ý".

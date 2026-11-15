@@ -8,7 +8,7 @@
 <body>
 <x-dc>
 <helmet>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;family=Playfair+Display:ital,wght@1,400;1,600&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap">
 <style>
 body{margin:0}
 a{color:#2B2B2A}a:hover{color:#000000}
@@ -64,13 +64,13 @@ a{color:#2B2B2A}a:hover{color:#000000}
       <sc-if value="{{showToast}}" hint-placeholder-val="{{false}}">
         <div role="status" style="position: absolute; left: 50%; top: 120px; transform: translateX(-50%); height: 72px; padding: 0 28px; border-radius: 999px; background: #FFFFFF; box-shadow: 0 12px 32px rgba(43,43,42,0.18); display: flex; align-items: center; gap: 12px; white-space: nowrap">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="#2B2B2A" stroke="#2B2B2A" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          <span style="font-family: 'Playfair Display', serif; font-style: italic; font-weight: 600; font-size: 32px">{{toast}}</span>
+          <span style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700; letter-spacing: -0.5px; font-size: 28px">{{toast}}</span>
         </div>
       </sc-if>
     </sc-if>
     <sc-if value="{{done}}" hint-placeholder-val="{{false}}">
       <div style="position: absolute; inset: 0; border-radius: 28px; background: #F7EEEB; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 32px; text-align: center">
-        <span style="font-family: 'Playfair Display', serif; font-style: italic; font-weight: 600; font-size: 30px">Đã xem hết</span>
+        <span style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700; letter-spacing: -0.5px; font-size: 26px">Đã xem hết</span>
         <p style="margin: 0; font-size: 15px; line-height: 1.5; color: #5C5C5B">Bạn đã thích {{liked}} món. Xem lại danh sách hoặc deal hợp với bạn.</p>
         <a href="Deal.dc.html" style="margin-top: 8px; height: 48px; padding: 0 24px; border-radius: 999px; background: #2B2B2A; color: #FFFFFF; text-decoration: none; display: flex; align-items: center; font-weight: 600">Xem deal cho bạn</a>
         <a href="DaThich.dc.html" style="font-weight: 500; padding: 8px">Xem món đã thích</a>

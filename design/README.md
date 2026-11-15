@@ -24,8 +24,8 @@ Các file `.dc.html` ở đây là mã nguồn của từng màn, chép ra để
 Quy ước rút ra từ thiết kế (bổ sung docs/03):
 - Thẻ, khối: bo góc 28px (thẻ deck), 22–24px (khối), 14–16px (ô nhập, ô nhỏ). Nút chính: viên thuốc đen cao 56px.
 - Chữ phụ trên nền hồng nhạt hoặc bạc hà nhạt dùng `#5C5C5B` (xám `#737373` chỉ dùng trên nền trắng để đủ độ tương phản 4.5:1).
-- Chỗ chưa có ảnh: ô màu nhạt ghi tên thương hiệu bằng Playfair Display Italic.
+- Chỗ chưa có ảnh: ô màu nhạt ghi tên thương hiệu bằng chữ in hoa nhỏ.
 - Biểu tượng: nét mảnh 1.8px (bộ Feather), không dùng emoji.
 - Thanh tab 5 mục: Quẹt · Danh mục · Đã thích · Deal · Giỏ.
-- Tiêu đề màn chào dùng Be Vietnam Pro 700 (chủ dự án không chọn Playfair cho tiêu đề này, 15/11).
+- Toàn bộ web chỉ dùng Be Vietnam Pro, không font có chân (chủ dự án chốt 15/11). Chữ nhấn dùng vệt hồng thay cho chữ nghiêng.
 - Giỏ mẫu trong Gio.dc.html khớp đúng luật giá (docs/02 mục 4); dùng làm test giao diện cho W012.

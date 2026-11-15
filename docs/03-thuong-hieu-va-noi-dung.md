@@ -1,6 +1,6 @@
 # VIVE Quẹt: thương hiệu, nội dung và pháp lý
 
-Phiên bản 1.0 · 15/11/2026. Nguồn gốc: hướng dẫn chung của dự án VIVE (`vive_poup/docs/01-huong-dan-chung.md`). Nếu lệch, theo hướng dẫn chung.
+Phiên bản 1.1 · 15/11/2026 (bỏ font có chân trên web). Nguồn gốc: hướng dẫn chung của dự án VIVE (`vive_poup/docs/01-huong-dan-chung.md`). Nếu lệch, theo hướng dẫn chung.
 
 ## 1. Màu
 | Token | Mã | Dùng cho |
@@ -15,8 +15,9 @@ Phiên bản 1.0 · 15/11/2026. Nguồn gốc: hướng dẫn chung của dự �
 Không thêm màu ngoài bảng này (kể cả đỏ cho giảm giá). Nhãn giảm giá: nền `den`, chữ trắng.
 
 ## 2. Chữ
-- **Be Vietnam Pro** (400, 500, 600, 700): mọi chữ giao diện.
-- **Playfair Display Italic** (400, 600): chữ nhấn ngắn, ví dụ "Hợp da!", tiêu đề màn chào, số tiền tiết kiệm.
+- **Be Vietnam Pro** (400, 500, 600, 700): mọi chữ trên web, kể cả tiêu đề và chữ nhấn.
+- **Không dùng font có chân (serif)** trên web, kể cả Playfair Display (chủ dự án chốt 15/11/2026). Tiêu đề dùng Be Vietnam Pro 700, khoảng cách chữ −0,5 đến −1,2px.
+- Chữ cần nhấn: vệt hồng `#E8D2CC` sau chữ (`box-shadow: inset 0 -10px 0 #E8D2CC`), không dùng chữ nghiêng.
 - Cỡ tối thiểu 14px cho chữ đọc, 12px cho chú thích. Giá bán 24–28px, đậm.
 
 ## 3. Logo
