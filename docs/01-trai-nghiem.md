@@ -54,7 +54,16 @@ Mỗi câu một màn, chạm để chọn, thanh tiến độ 1/3, nút "Bỏ q
 
 Ngưỡng kéo: hơn 30% chiều rộng thẻ hoặc vuốt nhanh. Thả sớm thì thẻ bật về. Có nút cho mọi cử chỉ. Tôn trọng chế độ giảm chuyển động của máy.
 
-**Phản hồi khi thích:** rung nhẹ nếu máy hỗ trợ, chữ "Hợp da!" (Be Vietnam Pro đậm) hiện dưới 0,6 giây. Sản phẩm trang điểm, cơ thể, thiết bị dùng "Ưng ý!".
+**Hiệu ứng** (mẫu chạy được: `design/Quet.dc.html`):
+| Lúc | Thích (phải) | Bỏ qua (trái) | Vào giỏ (lên) |
+|---|---|---|---|
+| Đang kéo | Thẻ đi theo ngón tay, nghiêng 0,06°/px; dấu "THÍCH" (nền bạc hà) hiện dần ở góc trái ảnh; nút tim to dần tới 116% và có vòng bạc hà | Dấu "BỎ QUA" (nền hồng nhạt) hiện dần ở góc phải; nút ✕ to dần, nền chuyển hồng nhạt | Dấu "VÀO GIỎ" hiện dần ở giữa dưới ảnh; nút túi to dần |
+| Thả quá ngưỡng hoặc bấm nút | Thẻ bay ra phải, xoay 26°, mờ dần, 380ms; nút tim nảy; 6 trái tim nhỏ bay lên từ nút tim (820ms); hộp "Hợp da!" nền đen bật ra | Thẻ bay ra trái, xoay −26°, 380ms; nút ✕ lắc | Thẻ bay lên trên, 380ms; nút túi nảy; biểu tượng giỏ trên đầu trang nảy, số tăng; hộp "Đã vào giỏ" |
+| Thả chưa tới ngưỡng | Thẻ bật về giữa có nảy nhẹ (320ms) | như bên trái | như bên trái |
+- Ngưỡng: kéo ngang hơn 110px (khoảng 30% thẻ), kéo lên hơn 120px. Thẻ sau phóng to dần từ 96% lên 100% theo độ kéo; thẻ mới vào từ 95%.
+- Hoàn tác: thẻ vừa quẹt bay ngược từ phía nó đã đi về giữa.
+- Máy bật giảm chuyển động: bỏ hết hiệu ứng, chỉ đổi thẻ. Rung nhẹ (navigator.vibrate 10ms) khi qua ngưỡng nếu máy hỗ trợ.
+- Sản phẩm trang điểm, cơ thể, thiết bị dùng chữ "Ưng ý!" thay "Hợp da!".
 
 **Thẻ đặc biệt** chen vào deck, tối đa 1 trên 8 thẻ, không chen 2 thẻ đặc biệt liền nhau:
 - Thẻ deal hợp sở thích: "Bạn thích 2 món Medicube. Mua từ 700K tặng sữa rửa mặt LOPOE" + nút "Xem bộ gợi ý".

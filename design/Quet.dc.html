@@ -12,12 +12,17 @@
 <style>
 body{margin:0}
 a{color:#2B2B2A}a:hover{color:#000000}
+@keyframes vq-pop{0%{transform:scale(1)}35%{transform:scale(1.22)}70%{transform:scale(0.94)}100%{transform:scale(1)}}
+@keyframes vq-nope{0%{transform:rotate(0)}25%{transform:rotate(-14deg)}50%{transform:rotate(12deg)}75%{transform:rotate(-6deg)}100%{transform:rotate(0)}}
+@keyframes vq-heart{0%{transform:translate(0,0) scale(0.4);opacity:0}15%{opacity:1}100%{transform:translate(var(--x),-150px) scale(1.15);opacity:0}}
+@keyframes vq-toast{0%{transform:translateX(-50%) scale(0.6);opacity:0}30%{transform:translateX(-50%) scale(1.08);opacity:1}100%{transform:translateX(-50%) scale(1);opacity:1}}
+@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
 </style>
 </helmet>
 <div style="width: 390px; height: 844px; box-sizing: border-box; background: #FFFFFF; font-family: 'Be Vietnam Pro', sans-serif; color: #2B2B2A; display: flex; flex-direction: column; overflow: hidden; position: relative">
   <header style="height: 60px; box-sizing: border-box; padding: 12px 12px 0 20px; display: flex; align-items: center; justify-content: space-between">
     <img src="/brand/vive-logo-black.png" alt="VIVE" style="width: 56px; height: auto">
-    <a href="Gio.dc.html" aria-label="Giỏ hàng" style="position: relative; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; text-decoration: none">
+    <a href="Gio.dc.html" aria-label="Giỏ hàng" style="position: relative; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; text-decoration: none; animation: {{bagAnim}}">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2B2B2A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
       <sc-if value="{{hasCart}}" hint-placeholder-val="{{false}}">
         <span style="position: absolute; top: 4px; right: 2px; min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 999px; background: #2B2B2A; color: #FFFFFF; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center">{{cart}}</span>
@@ -35,17 +40,20 @@ a{color:#2B2B2A}a:hover{color:#000000}
   <section style="position: relative; height: 508px; margin: 0 16px" aria-label="Thẻ sản phẩm">
     <sc-if value="{{notDone}}" hint-placeholder-val="{{true}}">
       <sc-if value="{{hasNext}}" hint-placeholder-val="{{true}}">
-        <div style="position: absolute; left: 14px; right: 14px; top: 12px; bottom: -8px; border-radius: 28px; background: {{nextBg}}; border: 1px solid #F2E4E0"></div>
+        <div style="position: absolute; left: 14px; right: 14px; top: 12px; bottom: -8px; border-radius: 28px; background: {{nextBg}}; border: 1px solid #F2E4E0; transform: scale({{nextScale}}); transition: transform 300ms ease-out"></div>
       </sc-if>
-      <article style="position: absolute; inset: 0; border-radius: 28px; background: #FFFFFF; border: 1px solid #F2E4E0; box-shadow: 0 16px 40px rgba(43,43,42,0.12); display: flex; flex-direction: column; overflow: hidden">
+      <article onPointerDown="{{down}}" onPointerMove="{{move}}" onPointerUp="{{up}}" onPointerCancel="{{up}}" style="position: absolute; inset: 0; border-radius: 28px; background: #FFFFFF; border: 1px solid #F2E4E0; box-shadow: 0 16px 40px rgba(43,43,42,0.12); display: flex; flex-direction: column; overflow: hidden; touch-action: none; cursor: grab; user-select: none; transform: {{cardTransform}}; transition: {{cardTransition}}; opacity: {{cardOpacity}}">
         <div style="position: relative; margin: 8px; height: 292px; border-radius: 22px; background: {{card.bg}}; display: flex; align-items: center; justify-content: center">
-          <img src="{{card.img}}" alt="{{card.name}}" style="width: 236px; height: 236px; object-fit: contain">
+          <img src="{{card.img}}" alt="{{card.name}}" draggable="false" style="width: 236px; height: 236px; object-fit: contain; pointer-events: none">
           <a href="ChiTiet.dc.html" aria-label="Xem chi tiết sản phẩm" style="position: absolute; top: 10px; right: 10px; width: 40px; height: 40px; border-radius: 999px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2B2B2A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
           </a>
           <span style="position: absolute; left: 12px; bottom: 12px; height: 28px; padding: 0 12px; border-radius: 999px; background: #FFFFFF; font-size: 12px; font-weight: 500; display: flex; align-items: center; gap: 6px">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2B2B2A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>{{card.reason}}
           </span>
+          <div aria-hidden="true" style="position: absolute; left: 18px; top: 26px; padding: 6px 16px; border: 3px solid #2B2B2A; border-radius: 12px; background: #CFE3D5; transform: rotate(-16deg) scale({{likeStampScale}}); opacity: {{likeOp}}; font-size: 30px; font-weight: 700; letter-spacing: 4px">THÍCH</div>
+          <div aria-hidden="true" style="position: absolute; right: 18px; top: 26px; padding: 6px 16px; border: 3px solid #2B2B2A; border-radius: 12px; background: #F7EEEB; transform: rotate(16deg) scale({{skipStampScale}}); opacity: {{skipOp}}; font-size: 30px; font-weight: 700; letter-spacing: 4px">BỎ QUA</div>
+          <div aria-hidden="true" style="position: absolute; left: 50%; bottom: 52px; padding: 6px 16px; border: 3px solid #2B2B2A; border-radius: 12px; background: #FFFFFF; transform: translateX(-50%) scale({{cartStampScale}}); opacity: {{cartOp}}; font-size: 26px; font-weight: 700; letter-spacing: 3px; white-space: nowrap">VÀO GIỎ</div>
         </div>
         <div style="padding: 10px 20px 0 20px; display: flex; flex-direction: column; gap: 4px">
           <span style="font-size: 12px; font-weight: 600; letter-spacing: 1.4px; color: #737373">{{card.brand}}</span>
@@ -62,15 +70,15 @@ a{color:#2B2B2A}a:hover{color:#000000}
         </div>
       </article>
       <sc-if value="{{showToast}}" hint-placeholder-val="{{false}}">
-        <div role="status" style="position: absolute; left: 50%; top: 120px; transform: translateX(-50%); height: 72px; padding: 0 28px; border-radius: 999px; background: #FFFFFF; box-shadow: 0 12px 32px rgba(43,43,42,0.18); display: flex; align-items: center; gap: 12px; white-space: nowrap">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="#2B2B2A" stroke="#2B2B2A" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          <span style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700; letter-spacing: -0.5px; font-size: 28px">{{toast}}</span>
+        <div role="status" style="position: absolute; left: 50%; top: 120px; transform: translateX(-50%); animation: vq-toast 420ms ease-out both; height: 68px; padding: 0 26px; border-radius: 999px; background: #2B2B2A; color: #FFFFFF; box-shadow: 0 12px 32px rgba(43,43,42,0.22); display: flex; align-items: center; gap: 12px; white-space: nowrap; pointer-events: none">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="{{toastIconFill}}" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{toastIcon}}"/></svg>
+          <span style="font-weight: 700; letter-spacing: -0.5px; font-size: 24px">{{toast}}</span>
         </div>
       </sc-if>
     </sc-if>
     <sc-if value="{{done}}" hint-placeholder-val="{{false}}">
       <div style="position: absolute; inset: 0; border-radius: 28px; background: #F7EEEB; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 32px; text-align: center">
-        <span style="font-family: 'Be Vietnam Pro', sans-serif; font-weight: 700; letter-spacing: -0.5px; font-size: 26px">Đã xem hết</span>
+        <span style="font-weight: 700; letter-spacing: -0.5px; font-size: 26px">Đã xem hết</span>
         <p style="margin: 0; font-size: 15px; line-height: 1.5; color: #5C5C5B">Bạn đã thích {{liked}} món. Xem lại danh sách hoặc deal hợp với bạn.</p>
         <a href="Deal.dc.html" style="margin-top: 8px; height: 48px; padding: 0 24px; border-radius: 999px; background: #2B2B2A; color: #FFFFFF; text-decoration: none; display: flex; align-items: center; font-weight: 600">Xem deal cho bạn</a>
         <a href="DaThich.dc.html" style="font-weight: 500; padding: 8px">Xem món đã thích</a>
@@ -82,16 +90,24 @@ a{color:#2B2B2A}a:hover{color:#000000}
     <button type="button" onClick="{{undo}}" aria-label="Hoàn tác" style="width: 52px; height: 52px; border-radius: 999px; border: 1.5px solid #E8D2CC; background: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2B2B2A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
     </button>
-    <button type="button" onClick="{{skip}}" aria-label="Bỏ qua" style="width: 68px; height: 68px; border-radius: 999px; border: 1.5px solid #2B2B2A; background: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer">
+    <button type="button" onClick="{{skip}}" aria-label="Bỏ qua" style="width: 68px; height: 68px; border-radius: 999px; border: 1.5px solid #2B2B2A; background: {{skipBtnBg}}; display: flex; align-items: center; justify-content: center; cursor: pointer; transform: scale({{skipBtnScale}}); transition: transform 120ms ease-out, background 160ms; animation: {{skipAnim}}">
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2B2B2A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
     </button>
-    <button type="button" onClick="{{like}}" aria-label="Thích" style="width: 68px; height: 68px; border-radius: 999px; border: none; background: #2B2B2A; display: flex; align-items: center; justify-content: center; cursor: pointer">
+    <button type="button" onClick="{{like}}" aria-label="Thích" style="width: 68px; height: 68px; border-radius: 999px; border: none; background: #2B2B2A; box-shadow: 0 0 0 {{likeRing}}px #CFE3D5; display: flex; align-items: center; justify-content: center; cursor: pointer; transform: scale({{likeBtnScale}}); transition: transform 120ms ease-out, box-shadow 160ms; animation: {{likeAnim}}">
       <svg width="28" height="28" viewBox="0 0 24 24" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
     </button>
-    <button type="button" onClick="{{addCart}}" aria-label="Thêm vào giỏ" style="width: 52px; height: 52px; border-radius: 999px; border: 1.5px solid #E8D2CC; background: #CFE3D5; display: flex; align-items: center; justify-content: center; cursor: pointer">
+    <button type="button" onClick="{{addCart}}" aria-label="Thêm vào giỏ" style="width: 52px; height: 52px; border-radius: 999px; border: 1.5px solid #E8D2CC; background: #CFE3D5; display: flex; align-items: center; justify-content: center; cursor: pointer; transform: scale({{cartBtnScale}}); transition: transform 120ms ease-out; animation: {{cartAnim}}">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2B2B2A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
     </button>
   </div>
+
+  <sc-if value="{{burst}}" hint-placeholder-val="{{false}}">
+    <div aria-hidden="true" style="position: absolute; left: 238px; top: 660px; width: 0; height: 0; pointer-events: none">
+      <sc-for list="{{hearts}}" as="h" hint-placeholder-count="6">
+        <svg width="{{h.size}}" height="{{h.size}}" viewBox="0 0 24 24" fill="{{h.fill}}" stroke="#2B2B2A" stroke-width="1.2" stroke-linejoin="round" style="position: absolute; left: -9px; top: -9px; --x: {{h.x}}px; animation: vq-heart 820ms ease-out {{h.delay}}ms both"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </sc-for>
+    </div>
+  </sc-if>
 
   <nav aria-label="Điều hướng chính" style="margin-top: auto; flex-shrink: 0; height: 76px; box-sizing: border-box; padding: 8px 4px 14px 4px; border-top: 1px solid #F2E4E0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); background: #FFFFFF">
     <a href="Quet.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; font-size: 11px; font-weight: 600; color: #2B2B2A; white-space: nowrap">
@@ -113,41 +129,81 @@ a{color:#2B2B2A}a:hover{color:#000000}
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+const FLY = 380;
+const HEART = 'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z';
+const BAG = 'M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0';
+function clamp01(v) { return Math.max(0, Math.min(1, v)); }
+function flyTransform(kind) {
+  if (kind === 'like') return 'translate(560px, 60px) rotate(26deg)';
+  if (kind === 'skip') return 'translate(-560px, 60px) rotate(-26deg)';
+  if (kind === 'cart') return 'translate(0px, -760px) rotate(-4deg) scale(0.9)';
+  return 'translate(0px, 0px) rotate(0deg)';
+}
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { idx: 0, liked: 0, cart: 0, history: [], toast: '' };
-    this.timer = null;
+    this.state = { idx: 0, liked: 0, cart: 0, history: [], toast: '', anim: '', back: '', enter: false, dragging: false, dx: 0, dy: 0, burst: false, bump: false };
+    this.timers = [];
+    this.start = null;
+    this.reduce = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
   componentWillUnmount() {
-    if (this.timer) clearTimeout(this.timer);
+    this.timers.forEach((t) => clearTimeout(t));
   }
-  flash(text) {
-    if (this.timer) clearTimeout(this.timer);
-    this.setState({ toast: text });
-    this.timer = setTimeout(() => this.setState({ toast: '' }), 700);
+  later(fn, ms) {
+    this.timers.push(setTimeout(fn, ms));
   }
   act(kind) {
     const s = this.state;
-    if (s.idx >= 4) return;
-    const next = { idx: s.idx + 1, history: s.history.concat([kind]) };
+    if (s.idx >= 4 || s.anim) return;
+    if (this.reduce) { this.commit(kind); return; }
+    this.setState({ anim: kind, dragging: false, burst: kind === 'like', bump: kind === 'cart' });
+    if (kind === 'like') this.setState({ toast: 'Hợp da!' });
+    if (kind === 'cart') this.setState({ toast: 'Đã vào giỏ' });
+    this.later(() => this.commit(kind), FLY);
+    this.later(() => this.setState({ toast: '' }), FLY + 520);
+    this.later(() => this.setState({ burst: false, bump: false }), 900);
+  }
+  commit(kind) {
+    const s = this.state;
+    const next = { idx: s.idx + 1, history: s.history.concat([kind]), anim: '', dx: 0, dy: 0, enter: true };
     if (kind === 'like') next.liked = s.liked + 1;
     if (kind === 'cart') next.cart = s.cart + 1;
     this.setState(next);
-    if (kind === 'like') this.flash('Hợp da!');
-    if (kind === 'cart') this.flash('Vào giỏ');
+    requestAnimationFrame(() => requestAnimationFrame(() => this.setState({ enter: false })));
   }
   undo() {
     const s = this.state;
-    if (!s.history.length) return;
+    if (!s.history.length || s.anim) return;
     const last = s.history[s.history.length - 1];
     this.setState({
       idx: s.idx - 1,
       history: s.history.slice(0, -1),
       liked: last === 'like' ? s.liked - 1 : s.liked,
       cart: last === 'cart' ? s.cart - 1 : s.cart,
-      toast: ''
+      toast: '', back: this.reduce ? '' : last, dx: 0, dy: 0
     });
+    if (!this.reduce) requestAnimationFrame(() => requestAnimationFrame(() => this.setState({ back: '' })));
+  }
+  down(e) {
+    if (this.state.anim || this.state.idx >= 4) return;
+    if (e.target && e.target.closest && e.target.closest('a')) return;
+    this.start = { x: e.clientX, y: e.clientY };
+    if (e.currentTarget && e.currentTarget.setPointerCapture) e.currentTarget.setPointerCapture(e.pointerId);
+    this.setState({ dragging: true, dx: 0, dy: 0 });
+  }
+  move(e) {
+    if (!this.start) return;
+    this.setState({ dx: e.clientX - this.start.x, dy: e.clientY - this.start.y });
+  }
+  up() {
+    if (!this.start) return;
+    this.start = null;
+    const { dx, dy } = this.state;
+    if (dx > 110) return this.act('like');
+    if (dx < -110) return this.act('skip');
+    if (dy < -120 && Math.abs(dy) > Math.abs(dx)) return this.act('cart');
+    this.setState({ dragging: false, dx: 0, dy: 0 });
   }
   renderVals() {
     const cards = [
@@ -160,23 +216,80 @@ class Component extends DCLogic {
     const done = s.idx >= cards.length;
     const card = done ? cards[cards.length - 1] : cards[s.idx];
     const nextCard = cards[s.idx + 1];
+
+    let likeOp = 0, skipOp = 0, cartOp = 0;
+    if (s.anim === 'like') likeOp = 1;
+    else if (s.anim === 'skip') skipOp = 1;
+    else if (s.anim === 'cart') cartOp = 1;
+    else if (s.dragging) {
+      const vertical = s.dy < 0 && Math.abs(s.dy) > Math.abs(s.dx);
+      if (vertical) cartOp = clamp01(-s.dy / 120);
+      else if (s.dx > 0) likeOp = clamp01(s.dx / 110);
+      else skipOp = clamp01(-s.dx / 110);
+    }
+    const progress = Math.max(likeOp, skipOp, cartOp);
+
+    let cardTransform, cardTransition;
+    if (s.anim) {
+      cardTransform = flyTransform(s.anim);
+      cardTransition = 'transform ' + FLY + 'ms cubic-bezier(0.3, 0.6, 0.3, 1), opacity ' + FLY + 'ms ease-in';
+    } else if (s.back) {
+      cardTransform = flyTransform(s.back);
+      cardTransition = 'none';
+    } else if (s.dragging) {
+      cardTransform = 'translate(' + s.dx + 'px, ' + s.dy + 'px) rotate(' + (s.dx * 0.06).toFixed(2) + 'deg)';
+      cardTransition = 'none';
+    } else if (s.enter) {
+      cardTransform = 'translateY(12px) scale(0.95)';
+      cardTransition = 'none';
+    } else {
+      cardTransform = 'translate(0px, 0px) rotate(0deg) scale(1)';
+      cardTransition = 'transform 320ms cubic-bezier(0.2, 0.9, 0.3, 1.25)';
+    }
+
+    const hearts = [
+      { x: -52, delay: 0, size: 18, fill: '#2B2B2A' },
+      { x: -24, delay: 70, size: 14, fill: '#E8D2CC' },
+      { x: 4, delay: 30, size: 22, fill: '#2B2B2A' },
+      { x: 30, delay: 110, size: 16, fill: '#CFE3D5' },
+      { x: 54, delay: 50, size: 14, fill: '#2B2B2A' },
+      { x: -8, delay: 150, size: 12, fill: '#E8D2CC' }
+    ];
+
     return {
-      card,
-      done,
-      notDone: !done,
+      card, done, notDone: !done,
       hasNext: !!nextCard,
       nextBg: nextCard ? nextCard.bg : '#F7EEEB',
-      liked: s.liked,
-      cart: s.cart,
-      hasCart: s.cart > 0,
+      nextScale: (0.96 + 0.04 * progress).toFixed(3),
+      cardTransform, cardTransition,
+      cardOpacity: s.anim ? '0.2' : '1',
+      likeOp: likeOp.toFixed(2), skipOp: skipOp.toFixed(2), cartOp: cartOp.toFixed(2),
+      likeStampScale: (0.8 + 0.2 * likeOp).toFixed(2),
+      skipStampScale: (0.8 + 0.2 * skipOp).toFixed(2),
+      cartStampScale: (0.8 + 0.2 * cartOp).toFixed(2),
+      likeBtnScale: (1 + 0.16 * likeOp).toFixed(2),
+      skipBtnScale: (1 + 0.16 * skipOp).toFixed(2),
+      cartBtnScale: (1 + 0.16 * cartOp).toFixed(2),
+      likeRing: Math.round(8 * likeOp),
+      skipBtnBg: skipOp > 0.5 ? '#F7EEEB' : '#FFFFFF',
+      likeAnim: s.anim === 'like' ? 'vq-pop 380ms ease-out' : 'none',
+      skipAnim: s.anim === 'skip' ? 'vq-nope 380ms ease-out' : 'none',
+      cartAnim: s.anim === 'cart' ? 'vq-pop 380ms ease-out' : 'none',
+      bagAnim: s.bump ? 'vq-pop 420ms ease-out 260ms' : 'none',
+      burst: s.burst, hearts,
+      liked: s.liked, cart: s.cart, hasCart: s.cart > 0,
       likedLabel: s.liked > 0 ? '(' + s.liked + ')' : '',
       cartLabel: s.cart > 0 ? '(' + s.cart + ')' : '',
-      showToast: s.toast !== '',
-      toast: s.toast,
+      showToast: s.toast !== '', toast: s.toast,
+      toastIcon: s.toast === 'Đã vào giỏ' ? BAG : HEART,
+      toastIconFill: s.toast === 'Đã vào giỏ' ? 'none' : '#FFFFFF',
       like: () => this.act('like'),
       skip: () => this.act('skip'),
       addCart: () => this.act('cart'),
-      undo: () => this.undo()
+      undo: () => this.undo(),
+      down: (e) => this.down(e),
+      move: (e) => this.move(e),
+      up: () => this.up()
     };
   }
 }
