@@ -32,7 +32,7 @@ Mỗi câu một màn, chạm để chọn, thanh tiến độ 1/3, nút "Bỏ q
 3. **Mỗi món bạn thường chi khoảng?** Dưới 200K · 200K–500K · Trên 500K · Không quan trọng.
 
 ### 2.3 Deck quẹt `/quet`
-**Thanh trên:** logo nhỏ bên trái; bên phải biểu tượng Giỏ có số. Thanh dưới cố định 5 tab: Quẹt · Danh mục · Đã thích (số) · Deal · Giỏ.
+**Thanh trên:** logo nhỏ bên trái; bên phải biểu tượng Giỏ có số. Thanh dưới cố định 5 tab: Quẹt · Danh mục · Đã thích · Deal · Giỏ. Nhãn tab luôn 1 dòng, không kèm số; số món đã thích và trong giỏ hiện bằng chấm tròn đen nhỏ ở góc biểu tượng.
 
 **Thẻ sản phẩm** (chiếm khoảng 70% chiều cao màn):
 - Ảnh tách nền ở giữa, nền hồng nhạt `#F7EEEB` hoặc bạc hà nhạt `#EAF3ED` (đổi theo danh mục).
