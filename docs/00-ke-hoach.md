@@ -15,6 +15,7 @@ Mục tiêu theo thứ tự của dự án VIVE: (1) tăng người theo dõi, (
 | Khách mua thế nào | Giữ hàng trên web, đến booth trả tiền và nhận hàng (nhân viên tính trên POS KiotViet) |
 | Báo deal qua đâu | Mục "Deal cho bạn" trong web và email |
 | Code ở đâu | Repo riêng `minhduc1395/vive-swipe`. Repo `vive_poup` chỉ giữ task điều phối (T016) |
+| Supabase | Project cloud `dsrejhghgbvnwgxpdhee` (chủ dự án tạo 15/11). Migration và seed ở `supabase/` |
 | Hosting | Chạy local trên máy trước. Chỉ thuê hosting và tên miền khi web hoàn chỉnh hoặc ít nhất có 1 chức năng dùng được (W024) |
 
 ## 3. Phạm vi bản đầu (ra mắt 26–27/11)
@@ -76,7 +77,7 @@ Chỉ tiêu cụ thể đặt sau 3 ngày chạy đầu, khi đã có số thậ
 
 ## 8. Chủ dự án cần quyết định hoặc cung cấp
 1. ~~Tên miền~~ và 2. ~~Hosting~~: **để sau** (chốt 15/11). Chạy local đến khi có chức năng dùng được, khi đó làm W024: chọn Vercel Pro (khoảng 20 USD/tháng) hay Cloudflare (miễn phí, cài đặt phức tạp hơn), mua tên miền để chạy web và gửi email.
-3. **Supabase lúc chạy local:** project cloud gói miễn phí (0 đồng, Claude tạo qua MCP, Antigravity không cần cài thêm) hay Supabase chạy trên máy bằng Docker (cần Docker Desktop trên máy Antigravity). Claude đề xuất cloud miễn phí. Cần trước W013, khoảng 20/11.
+3. ~~Supabase~~: đã chọn cloud, project `dsrejhghgbvnwgxpdhee` (15/11). Ghi chú cũ: **Supabase lúc chạy local:** project cloud gói miễn phí (0 đồng, Claude tạo qua MCP, Antigravity không cần cài thêm) hay Supabase chạy trên máy bằng Docker (cần Docker Desktop trên máy Antigravity). Claude đề xuất cloud miễn phí. Cần trước W013, khoảng 20/11.
 4. **Ảnh sản phẩm** tách nền, đặt tên theo mã vạch (W004).
 5. **Giữ hàng bao lâu:** đề xuất đến 21:00 ngày hôm sau.
 6. **Quà follow (sample):** có được nêu trên web không (hướng dẫn chung đang để nhân viên nói miệng).
@@ -94,6 +95,7 @@ Chỉ tiêu cụ thể đặt sau 3 ngày chạy đầu, khi đã có số thậ
 | `tasks/`, `handoff/` | Việc và tin nhắn giữa Claude và Antigravity (cách dùng: AGENTS.md) |
 
 ## Nhật ký thay đổi
+- 15/11/2026: Chủ dự án tạo Supabase `dsrejhghgbvnwgxpdhee`. Claude soạn migration, RLS, seed (supabase/), đã chạy thử trên Postgres trong bộ nhớ; chờ quyền truy cập để áp lên project.
 - 15/11/2026: Web chỉ dùng Be Vietnam Pro, bỏ Playfair Display (font có chân) ở mọi màn.
 - 15/11/2026: Thêm trang Danh mục (W026) và tab thứ 5; màn chào đổi tiêu đề "Thích thì quẹt phải", font Be Vietnam Pro.
 - 15/11/2026: v1.1. Chủ dự án chốt chạy local trước, thuê hosting và tên miền sau khi có ít nhất 1 chức năng dùng được. Thêm W024 (thuê hosting), W025 (đưa web lên); W023 phụ thuộc W025; email ở local chỉ xem trước, không gửi thật.
