@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>VIVE Quẹt – Danh mục sản phẩm</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #FFFFFF; font-family: 'Be Vietnam Pro', sans-serif; color: #2B2B2A; display: flex; flex-direction: column; overflow: hidden">
+  <div style="flex-grow: 1; min-height: 0; overflow-y: auto">
+    <header style="padding: 24px 20px 0 20px; display: flex; align-items: center; gap: 4px">
+      <sc-if value="{{listMode}}" hint-placeholder-val="{{false}}">
+        <button type="button" onClick="{{reset}}" aria-label="Về tất cả danh mục" style="width: 44px; height: 44px; margin-left: -12px; border: none; background: none; display: flex; align-items: center; justify-content: center; cursor: pointer">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2B2B2A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+      </sc-if>
+      <h1 style="margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.4px">{{title}}</h1>
+      <sc-if value="{{listMode}}" hint-placeholder-val="{{false}}">
+        <span style="margin-left: 6px; font-size: 14px; color: #737373">{{total}} món</span>
+      </sc-if>
+    </header>
+
+    <div style="padding: 12px 20px 0 20px">
+      <div style="height: 48px; box-sizing: border-box; border-radius: 14px; background: #F7EEEB; display: flex; align-items: center; gap: 10px; padding: 0 14px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5C5C5B" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <label for="tim-sp" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Tìm sản phẩm</label>
+        <input id="tim-sp" type="search" value="{{q}}" onChange="{{onQ}}" placeholder="Tìm tên, thương hiệu, thành phần" style="flex-grow: 1; min-width: 0; border: none; outline: none; background: transparent; font-family: inherit; font-size: 15px; color: #2B2B2A">
+      </div>
+    </div>
+
+    <sc-if value="{{landing}}" hint-placeholder-val="{{true}}">
+      <section style="padding: 20px 20px 0 20px; display: flex; flex-direction: column; gap: 10px">
+        <h2 style="margin: 0; font-size: 15px; font-weight: 600">Loại sản phẩm</h2>
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+          <sc-for list="{{cats}}" as="c" hint-placeholder-count="12">
+            <button type="button" onClick="{{c.pick}}" style="{{c.style}}">
+              <span style="font-size: 14px; font-weight: 600; line-height: 1.25">{{c.label}}</span>
+              <span style="font-size: 12px; color: #5C5C5B">{{c.count}} món</span>
+            </button>
+          </sc-for>
+        </div>
+      </section>
+
+      <section style="padding: 20px 20px 0 20px; display: flex; flex-direction: column; gap: 10px">
+        <h2 style="margin: 0; font-size: 15px; font-weight: 600">Theo vấn đề da</h2>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px">
+          <sc-for list="{{concerns}}" as="v" hint-placeholder-count="6">
+            <button type="button" onClick="{{v.pick}}" style="height: 38px; padding: 0 14px; border-radius: 999px; border: 1px solid #E8D2CC; background: #FFFFFF; font-family: inherit; font-size: 14px; color: #2B2B2A; cursor: pointer">{{v.label}}</button>
+          </sc-for>
+        </div>
+      </section>
+
+      <section style="padding: 20px 0 20px 20px; display: flex; flex-direction: column; gap: 10px">
+        <h2 style="margin: 0; font-size: 15px; font-weight: 600">Thương hiệu</h2>
+        <div style="display: flex; gap: 8px; overflow-x: auto; padding-right: 20px">
+          <sc-for list="{{brands}}" as="b" hint-placeholder-count="6">
+            <button type="button" onClick="{{b.pick}}" style="height: 38px; padding: 0 14px; border-radius: 999px; border: 1px solid #E8D2CC; background: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 500; white-space: nowrap; color: #2B2B2A; cursor: pointer">{{b.label}}</button>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{listMode}}" hint-placeholder-val="{{false}}">
+      <div style="padding: 14px 0 0 20px; display: flex; gap: 8px; overflow-x: auto" role="group" aria-label="Chọn loại sản phẩm">
+        <sc-for list="{{catChips}}" as="c" hint-placeholder-count="6">
+          <button type="button" onClick="{{c.pick}}" aria-pressed="{{c.pressed}}" style="{{c.style}}">{{c.label}}</button>
+        </sc-for>
+        <span style="flex-shrink: 0; width: 12px"></span>
+      </div>
+      <div style="padding: 12px 20px 0 20px; display: flex; align-items: center; justify-content: space-between; gap: 10px">
+        <div style="display: flex; gap: 6px; overflow-x: auto; min-width: 0" role="group" aria-label="Lọc theo vấn đề da">
+          <sc-for list="{{concernChips}}" as="v" hint-placeholder-count="3">
+            <button type="button" onClick="{{v.pick}}" aria-pressed="{{v.pressed}}" style="{{v.style}}">{{v.label}}</button>
+          </sc-for>
+        </div>
+        <label style="flex-shrink: 0; display: flex; align-items: center; gap: 4px; font-size: 13px; color: #737373">
+          <span>Xếp</span>
+          <select value="{{sort}}" onChange="{{onSort}}" style="height: 34px; border-radius: 10px; border: 1px solid #E8D2CC; background: #FFFFFF; font-family: inherit; font-size: 13px; color: #2B2B2A; padding: 0 6px">
+            <option value="goi-y">Gợi ý</option>
+            <option value="giam">Đang giảm giá</option>
+            <option value="gia-tang">Giá thấp trước</option>
+            <option value="gia-giam">Giá cao trước</option>
+          </select>
+        </label>
+      </div>
+
+      <div style="padding: 14px 16px 0 16px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+        <sc-for list="{{items}}" as="it" hint-placeholder-count="4">
+          <article style="display: flex; flex-direction: column; gap: 5px">
+            <div style="position: relative; height: 150px; border-radius: 18px; background: {{it.bg}}; display: flex; align-items: center; justify-content: center">
+              <sc-if value="{{it.hasImg}}" hint-placeholder-val="{{false}}">
+                <img src="{{it.img}}" alt="{{it.name}}" style="width: 126px; height: 126px; object-fit: contain">
+              </sc-if>
+              <sc-if value="{{it.noImg}}" hint-placeholder-val="{{true}}">
+                <span role="img" aria-label="Ảnh sản phẩm chờ bổ sung" style="font-size: 11px; font-weight: 600; letter-spacing: 1.4px; color: #5C5C5B">{{it.ph}}</span>
+              </sc-if>
+              <sc-if value="{{it.hasBadge}}" hint-placeholder-val="{{false}}">
+                <span style="position: absolute; left: 8px; top: 8px; height: 24px; padding: 0 8px; border-radius: 8px; background: #2B2B2A; color: #FFFFFF; font-size: 11px; font-weight: 600; display: flex; align-items: center">{{it.badge}}</span>
+              </sc-if>
+              <button type="button" onClick="{{it.toggleLike}}" aria-label="Thích" aria-pressed="{{it.likedPressed}}" style="position: absolute; top: 6px; right: 6px; width: 38px; height: 38px; border-radius: 999px; border: none; background: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="{{it.heartFill}}" stroke="#2B2B2A" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </button>
+            </div>
+            <span style="font-size: 11px; font-weight: 600; letter-spacing: 1.2px; color: #737373">{{it.brandCaps}}</span>
+            <span style="font-size: 14px; line-height: 1.35; font-weight: 500; height: 38px; overflow: hidden">{{it.name}}</span>
+            <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 6px">
+              <div style="display: flex; flex-direction: column; min-width: 0">
+                <span style="display: flex; align-items: baseline; gap: 6px"><strong style="font-size: 16px; font-weight: 700">{{it.price}}</strong><sc-if value="{{it.hasOld}}" hint-placeholder-val="{{false}}"><s style="font-size: 12px; color: #737373">{{it.old}}</s></sc-if></span>
+                <span style="font-size: 11px; color: #737373; height: 15px">{{it.note}}</span>
+              </div>
+              <a href="Gio.dc.html" aria-label="Thêm vào giỏ" style="width: 38px; height: 38px; flex-shrink: 0; border-radius: 999px; background: #CFE3D5; display: flex; align-items: center; justify-content: center">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2B2B2A" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+              </a>
+            </div>
+          </article>
+        </sc-for>
+      </div>
+      <sc-if value="{{hasMore}}" hint-placeholder-val="{{false}}">
+        <div style="padding: 16px 20px 0 20px">
+          <button type="button" onClick="{{more}}" style="width: 100%; height: 48px; border-radius: 999px; border: 1.5px solid #2B2B2A; background: #FFFFFF; font-family: inherit; font-size: 15px; font-weight: 600; color: #2B2B2A; cursor: pointer">Xem thêm {{moreCount}} sản phẩm</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{empty}}" hint-placeholder-val="{{false}}">
+        <p style="margin: 28px 20px 0 20px; text-align: center; font-size: 14px; line-height: 1.5; color: #737373">Chưa có sản phẩm hợp bộ lọc này. Thử bỏ bớt bộ lọc hoặc tìm từ khác.</p>
+      </sc-if>
+      <div style="height: 20px"></div>
+    </sc-if>
+  </div>
+
+  <nav aria-label="Điều hướng chính" style="flex-shrink: 0; height: 76px; box-sizing: border-box; padding: 8px 4px 14px 4px; border-top: 1px solid #F2E4E0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); background: #FFFFFF">
+    <a href="Quet.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; font-size: 11px; color: #737373">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#737373" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3" width="13" height="17" rx="2.5"/><path d="M4 7v12a2 2 0 0 0 2 2h9"/></svg>Quẹt
+    </a>
+    <a href="DanhMuc.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; font-size: 11px; font-weight: 600; color: #2B2B2A">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2B2B2A" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Danh mục
+    </a>
+    <a href="DaThich.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; font-size: 11px; color: #737373">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#737373" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Đã thích
+    </a>
+    <a href="Deal.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; font-size: 11px; color: #737373">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#737373" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><path d="M7 7h.01"/></svg>Deal
+    </a>
+    <a href="Gio.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; font-size: 11px; color: #737373">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#737373" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Giỏ
+    </a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"startCat":{"editor":null,"default":""},"startSort":{"editor":null,"default":"goi-y"},"$preview":{"width":390,"height":844}}'>
+const SP = [["8809557517892","Aprilskin","Phấn nước Magic Snow Cushion #21 Light Beige",350000,470000,"-26%","trang-diem","trang-diem","","",""],["8809557517908","Aprilskin","Phấn nước Magic Snow Cushion #22 Pink Beige",350000,470000,"-26%","trang-diem","trang-diem","","",""],["8809557517915","Aprilskin","Phấn nước Magic Snow Cushion #23 Natural Beige",350000,470000,"-26%","trang-diem","trang-diem","","",""],["8809953160067","Beaund","Máy nâng cơ D-Therma",4500000,4900000,"Giảm 400.000","thiet-bi","chong-lao-hoa;thiet-bi","","",""],["8809953160258","Beaund","Máy massage mắt Eye Rejuv",2400000,4400000,"-45%","thiet-bi","chong-lao-hoa;thiet-bi;vung-mat","","",""],["8809953160043","Beaund","Máy tỉa lông mày Eyebrow Trimmer",849000,899000,"Giảm 50.000","thiet-bi","thiet-bi","","",""],["9880201379621","Beaund","Máy rửa mặt Foincle",2600000,4000000,"-35%","thiet-bi","thiet-bi","","",""],["8809953160012","Beaund","Máy uốn mi Lashcurl",849000,899000,"Giảm 50.000","thiet-bi","thiet-bi","","",""],["8809953160081","Beaund","Máy nâng cơ N Mode Pro",2900000,3500000,"-17%","thiet-bi","chong-lao-hoa;thiet-bi","","",""],["8809463992615","Celimax","Toner pad Heartleaf BHA Peeling Pad",260000,0,"","toner-pad","mun;lo-chan-long;lam-diu;tay-te-bao-chet","BHA;Diếp cá","",""],["8809875907412","Celimax","Tinh chất Pore + Dark Spot Serum 30ml",600000,0,"","tinh-chat","lo-chan-long;sang-da","","",""],["8809700320805","Celimax","Tinh chất Vita-A Retinol Shot Serum 30ml",450000,0,"","tinh-chat","chong-lao-hoa","Retinol","",""],["8809371973935","Dermagarden","Kem dưỡng Aqua Cream",553000,691000,"-20%","kem-duong","cap-am","","",""],["8809371973263","Dermagarden","Tinh chất Aqua Serum",553000,691000,"-20%","tinh-chat","cap-am","","",""],["8809371973607","Dermagarden","Sữa rửa mặt Enzyme Powder Cleanser",510000,637000,"-20%","sua-rua-mat","tay-te-bao-chet","Enzyme","",""],["8809369850354","Dermal","Mặt nạ Aloe Collagen Essence Mask",25000,0,"","mat-na","cap-am;lam-diu;chong-lao-hoa","Collagen;Lô hội","/products/8809369850354.webp",""],["8809369850279","Dermal","Mặt nạ Arbutin Collagen Essence Mask",25000,0,"","mat-na","sang-da;chong-lao-hoa","Collagen;Arbutin","",""],["8809369850521","Dermal","Mặt nạ Hyaluronate Collagen Essence Mask",25000,0,"","mat-na","cap-am;chong-lao-hoa","Collagen;Hyaluronic","/products/8809369850521.webp",""],["8809647110514","Dermal","Mặt nạ It's Real Superfood Mask Avocado",25000,0,"","mat-na","","","",""],["8809647110453","Dermal","Mặt nạ It's Real Superfood Mask Blueberry",25000,0,"","mat-na","","","",""],["8809369850248","Dermal","Mặt nạ Pearl Collagen Essence Mask",25000,0,"","mat-na","sang-da;chong-lao-hoa","Collagen","/products/8809369850248.webp",""],["8809369850262","Dermal","Mặt nạ Red Ginseng Collagen Essence Mask",25000,0,"","mat-na","chong-lao-hoa","Collagen;Hồng sâm","/products/8809369850262.webp",""],["8809647113171","Dermal","Mặt nạ Tea Tree Collagen Essence Mask",25000,0,"","mat-na","mun;lam-diu;chong-lao-hoa","Collagen;Tràm trà","",""],["8809213800184","Edit.B","Kem dưỡng Calming Tok Cica Cream 100ml",535000,0,"","kem-duong","lam-diu","Cica","",""],["8809213800122","Edit.B","Toner pad Cica Heartleaf Trouble Pad",552000,0,"","toner-pad","mun;lam-diu","Cica;Diếp cá","",""],["8809871388420","Edit.B","Sữa rửa mặt Joyfull Carrot Gel Cleanser",365000,0,"","sua-rua-mat","","Cà rốt","",""],["8800303335555","Edit.B","Marshmallow Cushion Pink Beige",595000,0,"","trang-diem","trang-diem","","",""],["8800303335548","Edit.B","Marshmallow Cushion Purple",595000,0,"","trang-diem","trang-diem","","",""],["8809213800061","Edit.B","Serum chống nắng Sunday Cica Sun Serum",552000,0,"","chong-nang","lam-diu;chong-nang","Cica","",""],["8809213800078","Edit.B","Serum chống nắng Sunday Tone-Up Sun Serum",552000,0,"","chong-nang","sang-da;chong-nang","","",""],["8809871388499","Edit.B","Dưỡng môi Waterfull Jelly Lip Essence",212000,0,"","duong-moi","cap-am","","",""],["8809523403853","Franz","Miếng dán mụn Naked Dark Spot Patches",170000,230000,"-26%","mieng-dan","mun;sang-da","","",""],["8809523403839","Franz","Miếng dán mụn Naked Early Spot Patches",170000,230000,"-26%","mieng-dan","mun","","",""],["8809264740279","ISOI","Sữa rửa mặt Acni Dr.1st Black Deep Cleansing Foam",435000,0,"","sua-rua-mat","mun;lo-chan-long","","",""],["8809264721117","ISOI","Nước cân bằng Acni Dr.1st Control Tonic",560000,0,"","nuoc-can-bang","mun","","",""],["8809264741849","ISOI","Miếng dán mắt Blemish Care Eye & Wrinkle Patch",410000,0,"","mat-na","sang-da;chong-lao-hoa;vung-mat","","",""],["8809264736951","ISOI","Nước cân bằng Blemish Care Tonic Essence",630000,0,"","nuoc-can-bang","sang-da","","",""],["8809264740910","ISOI","Kem dưỡng Blemish Care Up Cream 55ml",855000,0,"","kem-duong","sang-da","","",""],["8809264736555","ISOI","Tinh chất Blemish Care Up Serum 35ml",769000,0,"","tinh-chat","sang-da","","",""],["8809467634177","JUNGSAEMMOOL","Xịt khóa nền Essential Mool Micro Fitting Mist",300000,462000,"-35%","trang-diem","trang-diem","","",""],["8809467630346","JUNGSAEMMOOL","Powder Illuminator · Pink Glow",410000,630000,"-35%","trang-diem","sang-da;trang-diem","","",""],["8809826710719","JUNGSAEMMOOL","Pro-lasting Finish Powder · Bare Blur",491000,756000,"-35%","trang-diem","trang-diem","","",""],["8809467632272","JUNGSAEMMOOL","Skin Nuder Cushion · Fair Light",655000,1008000,"-35%","trang-diem","trang-diem","","",""],["8809467630162","JUNGSAEMMOOL","Skin Nuder Cushion · Light",655000,1008000,"-35%","trang-diem","trang-diem","","",""],["8809826712638","JUNGSAEMMOOL","Skin Nuder Cushion · N Light",655000,1008000,"-35%","trang-diem","trang-diem","","",""],["8809467634672","JUNGSAEMMOOL","Skin Setting Glowing Base",450000,693000,"-35%","trang-diem","sang-da;trang-diem","","",""],["8809467634665","JUNGSAEMMOOL","Skin Setting Smoothing Base",450000,693000,"-35%","trang-diem","trang-diem","","",""],["8809467634689","JUNGSAEMMOOL","Skin Setting Tone Balancing Base",450000,693000,"-35%","trang-diem","trang-diem","","",""],["8809467637444","JUNGSAEMMOOL","Skin Setting Tone Correcting Base",450000,693000,"-35%","trang-diem","trang-diem","","",""],["8809467635419","JUNGSAEMMOOL","Kem lót chống nắng Skin Setting Tone-up Sun Base",450000,693000,"-35%","trang-diem","sang-da;chong-nang;trang-diem","","",""],["8809675772791","Lalarecipe","Nước cân bằng Bakuchinol First Essence",340000,0,"","nuoc-can-bang","chong-lao-hoa","Bakuchiol","",""],["8809971481571","Lalarecipe","Kem dưỡng Bakuchinol Glow Balm",329000,0,"","kem-duong","sang-da;chong-lao-hoa","Bakuchiol","",""],["8809750462739","Lalarecipe","Mặt nạ Glow Face Moisture Mask",30000,0,"","mat-na","sang-da;cap-am","","",""],["8809844730874","Lalarecipe","Sữa rửa mặt Hemp Seed Mild Cica 3in1",255000,0,"","sua-rua-mat","lam-diu","Cica;Hạt gai dầu","",""],["8809675771893","Lalarecipe","Toner pad Hemp Seed Purifying Pad",298000,0,"","toner-pad","lam-diu","Hạt gai dầu","",""],["8809962373564","Lalarecipe","Kem dưỡng Hempseed Cream",298000,0,"","kem-duong","lam-diu","Hạt gai dầu","",""],["8809638305714","Lalarecipe","Tinh chất Hempseed Serum",298000,0,"","tinh-chat","lam-diu","Hạt gai dầu","",""],["8809689374011","Lalarecipe","Sữa rửa mặt Yuzu Self Foaming 3in1 Peel",255000,0,"","sua-rua-mat","sang-da;tay-te-bao-chet","Thanh yên","",""],["8809638307466","Lalarecipe","Tinh chất Yuzu Vita C Ampoule",315000,0,"","tinh-chat","sang-da","Vitamin C;Thanh yên","",""],["8809675771909","Lalarecipe","Toner pad Yuzu Vita C Ampoule Pad",298000,0,"","toner-pad","sang-da","Vitamin C;Thanh yên","",""],["8809638307473","Lalarecipe","Kem dưỡng Yuzu Vita C Cream",383000,0,"","kem-duong","sang-da","Vitamin C;Thanh yên","",""],["8809875906569","Lalarecipe","Tinh chất Yuzu Vita C Eye Serum",319000,0,"","tinh-chat","sang-da;vung-mat","Vitamin C;Thanh yên","",""],["8800289468759","Medicube","Máy chăm sóc da Age-R Booster Pro X2 · Hồng",8550000,9500000,"Giảm 950.000","thiet-bi","chong-lao-hoa;thiet-bi","","",""],["8800289468674","Medicube","Máy chăm sóc da Age-R Booster Pro X2 · Trắng",8550000,9500000,"Giảm 950.000","thiet-bi","chong-lao-hoa;thiet-bi","","",""],["8800256112227","Medicube","Kem dưỡng Collagen Jelly Cream",520000,0,"","kem-duong","cap-am;chong-lao-hoa","Collagen","",""],["8809982769866","Medicube","Kem dưỡng Deep Vita C Capsule Cream",580000,0,"","kem-duong","sang-da","Vitamin C","",""],["8800256109661","Medicube","Toner pad Deep Vita C Pad · Nâu",615000,0,"","toner-pad","sang-da","Vitamin C","",""],["8800256115174","Medicube","Tinh chất Glutathione Glow Serum",420000,0,"","tinh-chat","sang-da","Glutathione","",""],["8800289467714","Medicube","Kem dưỡng PDRN Pink Collagen Capsule Cream",615000,0,"","kem-duong","chong-lao-hoa","PDRN;Collagen","",""],["8800256108053","Medicube","Tinh chất PDRN Pink Peptide Serum",530000,0,"","tinh-chat","chong-lao-hoa","PDRN;Peptide","",""],["8800256114351","Medicube","Tinh chất Triple Collagen Serum 4.0",475000,0,"","tinh-chat","chong-lao-hoa","Collagen","",""],["8800256114320","Medicube","Nước cân bằng Triple Collagen Toner 4.0",660000,0,"","nuoc-can-bang","chong-lao-hoa","Collagen","",""],["8809517414315","Medicube","Toner pad Zero Pore Pad Mild",505000,0,"","toner-pad","lo-chan-long;lam-diu","","",""],["8800256114665","Medicube","Toner pad Zero Pore Pad · Xanh dương",505000,0,"","toner-pad","lo-chan-long","","",""],["8809198846184","Rep!el","Sữa rửa mặt All Day Calming Gel Cleanser",209000,280000,"-25%","sua-rua-mat","lam-diu","","",""],["8809198846924","Rep!el","Tinh chất CICA PDRN Flow Booster",179000,210000,"-15%","tinh-chat","lam-diu;chong-lao-hoa","PDRN;Cica","",""],["8809198846238","Rep!el","Tinh chất CICA-Niacin Pore Serum",319000,380000,"-16%","tinh-chat","lo-chan-long;sang-da;lam-diu","Cica;Niacinamide","",""],["8809198846191","Rep!el","Sữa rửa mặt Deep Pore Foaming Cleanser",209000,280000,"-25%","sua-rua-mat","lo-chan-long","","",""],["8809198846757","Rep!el","Tinh chất Gluta Vita C Serum",319000,380000,"-16%","tinh-chat","sang-da","Vitamin C;Glutathione","",""],["8809198846733","Rep!el","Tinh chất Hyaluronic B5 Serum",319000,380000,"-16%","tinh-chat","cap-am","Hyaluronic;Vitamin B5","",""],["8809198845880","Rep!el","Mặt nạ Hyaluronic Capsule Mask",190000,380000,"-50%","mat-na","cap-am","Hyaluronic","",""],["8809198846207","Rep!el","Toner pad Pore Zero Calming Pads",319000,440000,"-28%","toner-pad","lo-chan-long;lam-diu","","",""],["8809198846665","Rep!el","Toner pad Pore Zero Calming Pads · Refill",179000,220000,"-19%","toner-pad","lo-chan-long;lam-diu","","",""],["8809198845989","Rep!el","Mặt nạ S.O.S Heartleaf Capsule Mask",190000,380000,"-50%","mat-na","mun;lam-diu","Diếp cá","",""],["8809198845897","Rep!el","Mặt nạ Vita C 2X Capsule Mask",190000,380000,"-50%","mat-na","sang-da","Vitamin C","",""],["8809198846740","Rep!el","Nước cân bằng Vita Toning First Essence 200ml",299000,330000,"Giảm 31.000","nuoc-can-bang","sang-da","","",""],["8809198846252","Rep!el","Toner pad Vita-Toning Soothing Pads",319000,440000,"-28%","toner-pad","sang-da;lam-diu","","",""],["8809198846672","Rep!el","Toner pad Vita-Toning Soothing Pads · Refill",179000,220000,"-19%","toner-pad","sang-da;lam-diu","","",""],["8801990000405","salTherapy","Muối tắm Eucalyptus Bath Salt · Woody Breeze",49000,70000,"-30%","duong-the","cham-soc-co-the","Bạch đàn","",""],["8801990000368","salTherapy","Muối tắm Honey Bath Salt · Citrus Blossom",49000,70000,"-30%","duong-the","cap-am;cham-soc-co-the","Mật ong","",""],["8801990000399","salTherapy","Muối tắm Mugwort Bath Salt · Green Rose",49000,70000,"-30%","duong-the","cham-soc-co-the","Ngải cứu","",""],["8801990000375","salTherapy","Muối tắm Rice Bath Salt · Dewy Jasmine",49000,70000,"-30%","duong-the","cham-soc-co-the","Gạo","",""],["8801990000412","salTherapy","Sữa tắm Eucalyptus Body Wash · Woody Breeze",150000,200000,"-25%","duong-the","cham-soc-co-the","Bạch đàn","",""],["8801990000351","salTherapy","Tẩy tế bào chết Eucalyptus Salt & Oil · Woody Breeze",130000,170000,"-24%","duong-the","tay-te-bao-chet;cham-soc-co-the","Bạch đàn","",""],["8801990000320","salTherapy","Tẩy tế bào chết Honey Salt & Oil · Citrus Blossom",130000,170000,"-24%","duong-the","cap-am;tay-te-bao-chet;cham-soc-co-the","Mật ong","",""],["8801990000344","salTherapy","Tẩy tế bào chết Mugwort Salt & Oil · Green Rose",130000,170000,"-24%","duong-the","tay-te-bao-chet;cham-soc-co-the","Ngải cứu","",""],["8801990000337","salTherapy","Tẩy tế bào chết Rice Salt & Oil · Dewy Jasmine",130000,170000,"-24%","duong-the","tay-te-bao-chet;cham-soc-co-the","Gạo","",""],["8809032673662","SKINFOOD","Toner pad Acorn Pore Peptide Pad",587000,0,"","toner-pad","lo-chan-long;chong-lao-hoa","Peptide;Quả sồi","",""],["8809153102034","SKINFOOD","Mặt nạ Apricot Food Mask",250000,0,"","mat-na","","","",""],["8809032673754","SKINFOOD","Mặt nạ Black Sugar Mask Wash Off",297000,0,"","mat-na","lo-chan-long;tay-te-bao-chet","Đường đen","",""],["8809153102201","SKINFOOD","Toner pad Carrot Carotene Calming Pad",340000,0,"","toner-pad","lam-diu","Cà rốt","",""],["8809032675499","SKINFOOD","Mặt nạ Carrot Carotene Daily Mask",450000,0,"","mat-na","lam-diu","Cà rốt","",""],["8809032673631","SKINFOOD","Sữa rửa mặt Egg White Pore Cleansing Foam",238000,0,"","sua-rua-mat","lo-chan-long","Lòng trắng trứng","",""],["8809032673778","SKINFOOD","Mặt nạ Egg White Pore Mask",297000,0,"","mat-na","lo-chan-long","Lòng trắng trứng","",""],["8809153101891","SKINFOOD","Mặt nạ Honey Sugar Food Mask",250000,0,"","mat-na","cap-am;tay-te-bao-chet","Mật ong","",""],["8809153102027","SKINFOOD","Mặt nạ Lavender Food Mask",250000,0,"","mat-na","","","",""],["8809032673228","SKINFOOD","Mặt nạ Lemon Dill Butter Food Mask",347000,0,"","mat-na","","","",""],["8809153108425","SKINFOOD","Toner pad Parsley Clear Pad",340000,0,"","toner-pad","lo-chan-long","Mùi tây","",""],["8809153102041","SKINFOOD","Mặt nạ Pear Mint Food Mask",250000,0,"","mat-na","","","",""],["8809032676359","SKINFOOD","Toner pad Potato Madecassoside Pad",587000,0,"","toner-pad","lam-diu","Cica;Khoai tây","",""],["8809032673761","SKINFOOD","Mặt nạ Rice Mask Wash Off",297000,0,"","mat-na","","Gạo","",""],["8809153107732","SKINFOOD","Xịt dưỡng Royal Honey Cream Mist 120ml",497000,0,"","nuoc-can-bang","cap-am","Mật ong","",""],["8809511276728","SKINFOOD","Tinh chất Royal Honey Essence 50ml",320000,0,"","tinh-chat","cap-am","Mật ong","",""],["8809511276704","SKINFOOD","Nước cân bằng Royal Honey Toner 160ml",350000,0,"","nuoc-can-bang","cap-am","Mật ong","",""],["8809153102010","SKINFOOD","Mặt nạ Strawberry Sugar Food Mask",250000,0,"","mat-na","tay-te-bao-chet","","",""],["8809032675505","SKINFOOD","Mặt nạ Yuja C Vita Daily Mask",450000,0,"","mat-na","sang-da","Vitamin C;Thanh yên","",""],["8800282110143","Tiela","Perfume Body Cream · Pure",519000,780000,"-33%","duong-the","cham-soc-co-the","","",""],["8800282110150","Tiela","Perfume Body Cream · Shine",519000,780000,"-33%","duong-the","cham-soc-co-the","","",""],["8800282110006","Tiela","Perfume Body Cream · Sunset",519000,780000,"-33%","duong-the","cham-soc-co-the","","",""],["8800282110167","Tiela","Perfume Body Scrub · Pure",399000,550000,"-27%","duong-the","tay-te-bao-chet;cham-soc-co-the","","",""],["8800282110174","Tiela","Perfume Body Scrub · Shine",399000,550000,"-27%","duong-the","tay-te-bao-chet;cham-soc-co-the","","",""],["8800282110181","Tiela","Sữa rửa mặt Ritual Low pH Gel Cleanser",199000,280000,"-29%","sua-rua-mat","","","",""],["8800274071278","Uniura","Mặt nạ Cica Calming Melting Mask",99000,0,"","mat-na","cap-am;lam-diu","Cica","",""],["8800274071247","Uniura","Mặt nạ Deep Collagen Melting Mask",99000,0,"","mat-na","cap-am;chong-lao-hoa","Collagen","",""],["8800274071285","Uniura","Mặt nạ Hydro Boost Melting Mask",99000,0,"","mat-na","cap-am","","",""],["8800274071292","Uniura","Mặt nạ Vita-C Brightening Melting Mask",99000,0,"","mat-na","sang-da;cap-am","Vitamin C","",""],["LOPOE-CF","LOPOE","Sữa rửa mặt Better Balance Cleansing Foam",249000,0,"","sua-rua-mat","cap-am","","","Mua kèm: 186.000"],["LOPOE-AMP","LOPOE","Tinh chất Better Balance Ampoule",419000,0,"","tinh-chat","cap-am","","","Mua kèm: 314.000"],["LOPOE-CR","LOPOE","Kem dưỡng Better Balance Moisture Cream",549000,0,"","kem-duong","cap-am","","","Mua kèm: 411.000"]];
+const CATS = [['sua-rua-mat', 'Sữa rửa mặt'], ['nuoc-can-bang', 'Nước cân bằng'], ['toner-pad', 'Toner pad'], ['tinh-chat', 'Tinh chất, serum'], ['kem-duong', 'Kem dưỡng'], ['mat-na', 'Mặt nạ'], ['chong-nang', 'Chống nắng'], ['trang-diem', 'Trang điểm'], ['duong-moi', 'Dưỡng môi'], ['mieng-dan', 'Miếng dán mụn'], ['duong-the', 'Chăm sóc cơ thể'], ['thiet-bi', 'Thiết bị làm đẹp']];
+const CONCERNS = [['mun', 'Mụn'], ['lo-chan-long', 'Lỗ chân lông'], ['sang-da', 'Thâm, sáng da'], ['cap-am', 'Cấp ẩm'], ['lam-diu', 'Làm dịu'], ['chong-lao-hoa', 'Chống lão hóa']];
+function boDau(s) {
+  return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd');
+}
+function tien(n) {
+  return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { cat: props.startCat || '', van: '', brand: '', sort: props.startSort || 'goi-y', q: '', limit: 6, liked: {} };
+  }
+  go(patch) {
+    this.setState(Object.assign({ limit: 6 }, patch));
+  }
+  renderVals() {
+    const s = this.state;
+    const list = SP.map((r) => ({ id: r[0], brand: r[1], name: r[2], p: r[3], g: r[4], tag: r[5], cat: r[6], van: r[7] ? r[7].split(';') : [], tp: r[8], img: r[9], note: r[10] }));
+    const tileBase = 'height: 76px; box-sizing: border-box; border: none; border-radius: 18px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; text-align: left; font-family: inherit; color: #2B2B2A; cursor: pointer; ';
+    const cats = CATS.map(([id, label], i) => ({
+      label,
+      count: list.filter((x) => x.cat === id).length,
+      style: tileBase + (i % 2 === 0 ? 'background: #F7EEEB;' : 'background: #EAF3ED;'),
+      pick: () => this.go({ cat: id, brand: '', van: '' })
+    }));
+    const concerns = CONCERNS.map(([id, label]) => ({ label, pick: () => this.go({ van: id, cat: '', brand: '' }) }));
+    const counts = {};
+    list.forEach((x) => { counts[x.brand] = (counts[x.brand] || 0) + 1; });
+    const brands = Object.keys(counts).sort((a, b) => counts[b] - counts[a]).map((b) => ({ label: b + ' · ' + counts[b], pick: () => this.go({ brand: b, cat: '', van: '' }) }));
+
+    const q = boDau(s.q.trim());
+    let found = list.filter((x) =>
+      (!s.cat || x.cat === s.cat) &&
+      (!s.brand || x.brand === s.brand) &&
+      (!s.van || x.van.indexOf(s.van) >= 0) &&
+      (!q || boDau(x.brand + ' ' + x.name + ' ' + x.tp).indexOf(q) >= 0)
+    );
+    const pct = (x) => (x.g ? (x.g - x.p) / x.g : 0);
+    if (s.sort === 'giam') found = found.slice().sort((a, b) => pct(b) - pct(a));
+    if (s.sort === 'gia-tang') found = found.slice().sort((a, b) => a.p - b.p);
+    if (s.sort === 'gia-giam') found = found.slice().sort((a, b) => b.p - a.p);
+    if (s.sort === 'goi-y') found = found.slice().sort((a, b) => (b.img ? 1 : 0) - (a.img ? 1 : 0));
+
+    const chipBase = 'flex-shrink: 0; height: 34px; padding: 0 12px; border-radius: 999px; font-family: inherit; font-size: 13px; font-weight: 500; white-space: nowrap; cursor: pointer; ';
+    const onStyle = 'background: #2B2B2A; color: #FFFFFF; border: 1px solid #2B2B2A;';
+    const offStyle = 'background: #FFFFFF; color: #2B2B2A; border: 1px solid #E8D2CC;';
+    const catChips = [['', 'Tất cả']].concat(CATS).map(([id, label]) => ({
+      label, pressed: s.cat === id ? 'true' : 'false',
+      style: chipBase + (s.cat === id ? onStyle : offStyle),
+      pick: () => this.go({ cat: id })
+    }));
+    const concernChips = CONCERNS.map(([id, label]) => ({
+      label, pressed: s.van === id ? 'true' : 'false',
+      style: chipBase + (s.van === id ? onStyle : offStyle),
+      pick: () => this.go({ van: s.van === id ? '' : id })
+    }));
+    const items = found.slice(0, s.limit).map((x, i) => {
+      const liked = !!s.liked[x.id];
+      return {
+        name: x.name, brandCaps: x.brand.toUpperCase(), ph: x.brand.toUpperCase(),
+        price: tien(x.p), old: x.g ? tien(x.g) : '', hasOld: !!x.g,
+        badge: x.tag, hasBadge: !!x.tag, note: x.note,
+        img: x.img, hasImg: !!x.img, noImg: !x.img,
+        bg: i % 4 === 0 || i % 4 === 3 ? '#F7EEEB' : '#EAF3ED',
+        heartFill: liked ? '#2B2B2A' : 'none', likedPressed: liked ? 'true' : 'false',
+        toggleLike: () => { const l = Object.assign({}, s.liked); l[x.id] = !liked; this.setState({ liked: l }); }
+      };
+    });
+    const listMode = !!(s.cat || s.brand || s.van || q);
+    let title = 'Danh mục';
+    if (listMode) {
+      if (q) title = 'Kết quả tìm';
+      else if (s.cat) title = CATS.find((c) => c[0] === s.cat)[1];
+      else if (s.brand) title = s.brand;
+      else if (s.van) title = CONCERNS.find((c) => c[0] === s.van)[1];
+    }
+    return {
+      title, listMode, landing: !listMode, total: found.length,
+      cats, concerns, brands, catChips, concernChips, items,
+      hasMore: found.length > s.limit, moreCount: found.length - s.limit, empty: found.length === 0,
+      q: s.q, sort: s.sort,
+      onQ: (e) => this.setState({ q: e.target.value, limit: 6 }),
+      onSort: (e) => this.setState({ sort: e.target.value }),
+      more: () => this.setState({ limit: s.limit + 6 }),
+      reset: () => this.go({ cat: '', brand: '', van: '', q: '' })
+    };
+  }
+}
+</script>
+</body>
+</html>

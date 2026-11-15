@@ -23,7 +23,7 @@ Biến môi trường (`.env.example`, không commit khóa thật): `NEXT_PUBLIC
 app/
   page.tsx                  màn chào
   bat-dau/                  3 câu hỏi
-  quet/  da-thich/  deal/  gio/
+  quet/  danh-muc/  da-thich/  deal/  gio/
   giu-hang/  giu-hang/[ma]/
   chinh-sach/
   nhan-vien/                cần đăng nhập vai trò nhan_vien

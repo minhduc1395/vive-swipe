@@ -32,7 +32,7 @@ Mỗi câu một màn, chạm để chọn, thanh tiến độ 1/3, nút "Bỏ q
 3. **Mỗi món bạn thường chi khoảng?** Dưới 200K · 200K–500K · Trên 500K · Không quan trọng.
 
 ### 2.3 Deck quẹt `/quet`
-**Thanh trên:** logo nhỏ bên trái; bên phải biểu tượng Giỏ có số. Thanh dưới cố định 4 tab: Quẹt · Đã thích (số) · Deal cho bạn · Giỏ.
+**Thanh trên:** logo nhỏ bên trái; bên phải biểu tượng Giỏ có số. Thanh dưới cố định 5 tab: Quẹt · Danh mục · Đã thích (số) · Deal · Giỏ.
 
 **Thẻ sản phẩm** (chiếm khoảng 70% chiều cao màn):
 - Ảnh tách nền ở giữa, nền hồng nhạt `#F7EEEB` hoặc bạc hà nhạt `#EAF3ED` (đổi theo danh mục).
@@ -104,6 +104,14 @@ Lưới 2 cột, lọc theo danh mục. Mỗi ô: ảnh, tên, giá, nút thêm 
 - **Nhập tồn:** tải CSV xuất từ KiotViet, xem trước thay đổi, xác nhận.
 - **Số liệu:** khách, lượt quẹt, tỷ lệ thích theo sản phẩm và nhãn, giữ hàng và tỷ lệ lấy, email.
 - **Email:** danh sách khách đã đồng ý, soạn và gửi email deal (xem trước, gửi thử cho mình trước khi gửi thật).
+
+### 2.10b Danh mục `/danh-muc` (tìm theo cách truyền thống)
+Cho khách muốn tự tìm thay vì quẹt. Dùng chung dữ liệu, giá, deal với deck.
+- Ô tìm: theo tên, thương hiệu, thành phần; không phân biệt dấu ("vitamin c", "cica", "phan nuoc").
+- Màn đầu: lưới 12 loại sản phẩm theo thứ tự chăm sóc da (sữa rửa mặt → nước cân bằng → toner pad → tinh chất → kem dưỡng → mặt nạ → chống nắng → trang điểm → dưỡng môi → miếng dán mụn → chăm sóc cơ thể → thiết bị), mỗi ô có số món; hàng chip "Theo vấn đề da"; hàng thương hiệu cuộn ngang có số món.
+- Chọn một mục: danh sách 2 cột, hàng chip đổi loại nhanh, chip lọc vấn đề da, chọn cách xếp (Gợi ý, Đang giảm giá, Giá thấp trước, Giá cao trước), nút "Xem thêm" mỗi lần 6 món.
+- Thẻ sản phẩm: ảnh, nhãn giảm giá, tim (thích, tính như quẹt phải), giá và giá gạch, ghi chú deal (ví dụ LOPOE "Mua kèm: 186.000"), nút + thêm giỏ.
+- Màn chào có link "Xem theo danh mục".
 
 ### 2.11 Trang phụ
 `/chinh-sach`: bảo mật dữ liệu, giữ hàng (hạn giữ, hủy), đổi trả theo quy định booth, thông tin doanh nghiệp (chờ chủ dự án cung cấp).

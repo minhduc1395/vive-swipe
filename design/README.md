@@ -11,6 +11,8 @@ Các file `.dc.html` ở đây là mã nguồn của từng màn, chép ra để
 | QuetKeo.dc.html | 1.4 Trạng thái đang kéo phải (dấu THÍCH, nút tim to lên) | W011 |
 | TheDeal.dc.html | 1.5 Thẻ deal chen trong deck | W011, W016 |
 | ChiTiet.dc.html | 1.6 Bảng chi tiết sản phẩm | W011 |
+| DanhMuc.dc.html | 1.7 Danh mục: tìm kiếm, loại sản phẩm, vấn đề da, thương hiệu; bấm vào thì ra danh sách lọc, xếp, xem thêm | W026 |
+| DanhMucKetQua.dc.html | 1.8 Cùng màn Danh mục, mở sẵn Mặt nạ xếp theo giảm giá (nhúng DanhMuc với start-cat, start-sort) | W026 |
 | DaThich.dc.html | 2.1 Đã thích (lọc, bỏ thích) | W012 |
 | Deal.dc.html | 2.2 Deal cho bạn + ô đăng ký email | W016, W018 |
 | Gio.dc.html | 2.3 Giỏ: quà dự kiến, thanh tới mốc, dòng combo, tổng ước tính | W012 |
@@ -24,4 +26,6 @@ Quy ước rút ra từ thiết kế (bổ sung docs/03):
 - Chữ phụ trên nền hồng nhạt hoặc bạc hà nhạt dùng `#5C5C5B` (xám `#737373` chỉ dùng trên nền trắng để đủ độ tương phản 4.5:1).
 - Chỗ chưa có ảnh: ô màu nhạt ghi tên thương hiệu bằng Playfair Display Italic.
 - Biểu tượng: nét mảnh 1.8px (bộ Feather), không dùng emoji.
+- Thanh tab 5 mục: Quẹt · Danh mục · Đã thích · Deal · Giỏ.
+- Tiêu đề màn chào dùng Be Vietnam Pro 700 (chủ dự án không chọn Playfair cho tiêu đề này, 15/11).
 - Giỏ mẫu trong Gio.dc.html khớp đúng luật giá (docs/02 mục 4); dùng làm test giao diện cho W012.
