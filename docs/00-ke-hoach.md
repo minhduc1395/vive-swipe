@@ -95,6 +95,7 @@ Chỉ tiêu cụ thể đặt sau 3 ngày chạy đầu, khi đã có số thậ
 | `tasks/`, `handoff/` | Việc và tin nhắn giữa Claude và Antigravity (cách dùng: AGENTS.md) |
 
 ## Nhật ký thay đổi
+- 15/11/2026: Đã áp database lên Supabase VIVE_APPS (`dsrejhghgbvnwgxpdhee`, Tokyo): 2 migration, 149 sản phẩm, 20 deal, Advisors sạch. Sửa lỗi deals.yaml (tên bộ gợi ý G-13, G-14 có dấu phẩy; mã vạch trong `san_pham` phải là chuỗi).
 - 15/11/2026: Chủ dự án tạo Supabase `dsrejhghgbvnwgxpdhee`. Claude soạn migration, RLS, seed (supabase/), đã chạy thử trên Postgres trong bộ nhớ; chờ quyền truy cập để áp lên project.
 - 15/11/2026: Web chỉ dùng Be Vietnam Pro, bỏ Playfair Display (font có chân) ở mọi màn.
 - 15/11/2026: Thêm trang Danh mục (W026) và tab thứ 5; màn chào đổi tiêu đề "Thích thì quẹt phải", font Be Vietnam Pro.

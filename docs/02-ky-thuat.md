@@ -16,7 +16,7 @@ Phiên bản 1.0 · 15/11/2026. Antigravity code theo file này. Muốn đổi k
 | Test | Vitest (logic `lib/`), Playwright (luồng chính, khung iPhone 13 và Pixel 7) | |
 | Hosting | Giai đoạn đầu: chạy local (mục 9). Sau: Vercel Pro hoặc Cloudflare (W024) | Không viết code phụ thuộc riêng một nhà cung cấp hosting; cron gọi qua route `/api/cron/*` để nơi nào cũng gọi được |
 
-Biến môi trường (`.env.example`, không commit khóa thật): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, `EMAIL_FROM`, `CRON_SECRET`, `NEXT_PUBLIC_SITE_URL`, `GIO_MO_CUA` (ví dụ `10:00-21:00`), `GIU_HANG_DEN_GIO` (mặc định `21:00`), `GIU_HANG_SO_NGAY` (mặc định `1`).
+Biến môi trường (`.env.example`, không commit khóa thật): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, `EMAIL_FROM`, `CRON_SECRET`, `NEXT_PUBLIC_SITE_URL`, `GIO_MO_CUA` (ví dụ `10:00-21:00`), `GIU_HANG_DEN_GIO` (mặc định `21:00`), `GIU_HANG_SO_NGAY` (mặc định `1`).
 
 ## 2. Cấu trúc thư mục
 ```
