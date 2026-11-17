@@ -2,8 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 function xacThucCron(request: NextRequest): boolean {
   const secret = process.env.CRON_SECRET;
-  if (!secret) return true;
   const auth = request.headers.get("authorization");
+  if (!secret) {
+    if (process.env.NODE_ENV === "production") return false;
+    return true;
+  }
   return auth === `Bearer ${secret}`;
 }
 
@@ -11,6 +14,7 @@ export async function GET(request: NextRequest) {
   if (!xacThucCron(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+  console.log("[CRON] het-han-giu-hang chạy thành công lúc:", new Date().toISOString());
   return NextResponse.json({
     ok: true,
     route: "het-han-giu-hang",
