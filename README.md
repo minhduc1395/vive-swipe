@@ -30,4 +30,4 @@ Mở Antigravity ở thư mục cha của `vive_poup` (hoặc một thư mục t
 9. Cuối phiên tạo handoff trang-thai-phien, push, rồi tóm tắt cho tôi: xong việc gì, link Pull Request, cách chạy thử trên máy."
 
 ## Khởi động Antigravity (dán vào đầu mỗi phiên sau)
-"Vào repo vive-swipe. Pull bản mới nhất, đọc AGENTS.md và docs/00-ke-hoach.md, chạy python3 scripts/board.py, đọc handoff mới nhất. Nhận các việc Chủ trì = Antigravity trạng thái Todo theo ưu tiên, đọc đúng tài liệu được dẫn trong task, làm trên nhánh riêng và mở Pull Request. Cuối phiên tạo handoff trang-thai-phien."
+"Vào repo vive-swipe, pull bản mới nhất, đọc AGENTS.md (mục Vòng làm việc tự động). Chạy python3 scripts/inbox.py antigravity: sửa hết lỗi QA và trả lời tin mới trước, rồi mới nhận việc Todo tiếp theo. Sau mỗi việc xong, pull và chạy lại inbox.py. Cứ lặp như vậy đến khi hết việc làm được thì tạo handoff trang-thai-phien và dừng."
