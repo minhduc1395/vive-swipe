@@ -10,6 +10,7 @@ import type { SanPham } from "@/lib/data/types";
 import { dinhDangTien } from "@/lib/dinh-dang";
 import { NHAN_DANH_MUC } from "@/lib/nhan";
 import { layGhiChuDeal } from "@/lib/deals/ghi-chu";
+import { ghiLuotQuet } from "@/lib/supabase/luot-quet";
 import {
   layDanhSachDaThich,
   themDaThich,
@@ -88,12 +89,18 @@ export default function TrangDaThich() {
   const handleBoThich = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     xoaDaThich(id);
+    ghiLuotQuet({ san_pham_id: id, hanh_dong: "bo_thich" });
     setDanhSachThich((prev) => prev.filter((item) => item !== id));
   };
 
   const handleThemVaoGio = (sp: SanPham, e: React.MouseEvent) => {
     e.stopPropagation();
     themVaoGio(sp.id, 1);
+    ghiLuotQuet({
+      san_pham_id: sp.id,
+      hanh_dong: "gio",
+      nguon: "kham_pha",
+    });
     setGioHang(layGioHang());
     setThongBao(`Đã thêm "${sp.ten_hien_thi}" vào giỏ`);
     setTimeout(() => setThongBao(null), 2500);

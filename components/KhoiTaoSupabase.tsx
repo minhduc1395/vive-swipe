@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import {
   damBaoKhachAnDanh,
-  layKhachIdLocal,
   dongBoHoSo,
   KHOA_HO_SO_CAN_DONG_BO,
 } from "@/lib/supabase/auth";
@@ -22,17 +21,24 @@ export function KhoiTaoSupabase() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
+    // Bỏ qua các trang nội bộ của nhân viên và quản trị để không tạo phiên ẩn danh lẫn lộn
+    const pathname = window.location.pathname;
+    if (
+      pathname.startsWith("/nhan-vien") ||
+      pathname.startsWith("/quan-tri")
+    ) {
+      return;
+    }
+
     // 1. Lưu ?src= từ URL
     luuNguonVaoTuUrl();
 
     // 2. Thiết lập lắng nghe sự kiện mạng (online / visibilitychange / beforeunload)
     khoiTaoLangNgheMang();
 
-    // 3. Đăng nhập ẩn danh nếu chưa có id, và đồng bộ nền
+    // 3. Đăng nhập ẩn danh nếu chưa có session thật, và đồng bộ nền
     void (async () => {
-      if (!layKhachIdLocal()) {
-        await damBaoKhachAnDanh();
-      }
+      await damBaoKhachAnDanh();
 
       // Sự kiện mo_web (chỉ ghi 1 lần mỗi phiên duyệt web)
       try {

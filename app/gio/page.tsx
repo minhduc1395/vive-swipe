@@ -22,6 +22,7 @@ import {
   doiSangCombo,
   type ItemGioHang,
 } from "@/lib/kho-luu-tru";
+import { ghiSuKien } from "@/lib/supabase/su-kien";
 
 function layNgayTinhGio(): string {
   return chuanHoaNgay(new Date());
@@ -100,6 +101,7 @@ export default function TrangGio() {
   ) => {
     doiSangCombo(dealId, thanhPhan);
     setGioHang(layGioHang());
+    ghiSuKien("them_combo", { deal_id: dealId });
   };
 
   return (
@@ -511,6 +513,12 @@ export default function TrangGio() {
             <div className="flex flex-col gap-2 items-center pt-2">
               <Link
                 href="/giu-hang"
+                onClick={() =>
+                  ghiSuKien("bat_dau_giu_hang", {
+                    so_luong: tongSoLuongGio,
+                    tong_tam_tinh: ketQua.tong_tam_tinh,
+                  })
+                }
                 className="w-full h-14 rounded-full bg-den hover:bg-black text-trang flex items-center justify-center font-semibold text-[17px] shadow-sm transition-transform active:scale-[0.99] no-underline"
               >
                 Giữ hàng tại booth

@@ -1,4 +1,10 @@
 import { laySupabase } from "./client";
+import {
+  damBaoKhachAnDanh,
+  dongBoHoSo,
+  KHOA_HO_SO_CAN_DONG_BO,
+} from "./auth";
+import { layHoSoLocal } from "@/lib/kho-luu-tru";
 
 export type HanhDongQuet =
   | "thich"
@@ -133,7 +139,10 @@ export async function dayHangDoiLuotQuet(): Promise<{
     const {
       data: { session },
     } = await supabase.auth.getSession();
-    const userId = session?.user?.id;
+    let userId = session?.user?.id;
+    if (!userId) {
+      userId = (await damBaoKhachAnDanh()) ?? undefined;
+    }
     if (!userId) {
       // Chưa có session auth hợp lệ -> giữ nguyên hàng đợi để gửi sau
       return { soLuongGui: 0, thanhCong: false };
@@ -173,6 +182,14 @@ export async function dayHangDoiLuotQuet(): Promise<{
           void dayHangDoiLuotQuet();
         }, 1000);
       }
+    }
+
+    // Đồng bộ hồ sơ (nếu có đánh dấu thay đổi) theo cùng nhịp hàng đợi
+    if (
+      typeof window !== "undefined" &&
+      window.localStorage.getItem(KHOA_HO_SO_CAN_DONG_BO) === "true"
+    ) {
+      void dongBoHoSo(layHoSoLocal());
     }
 
     return { soLuongGui: banGui.length, thanhCong: true };

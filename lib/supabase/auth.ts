@@ -3,49 +3,22 @@ import { layTraLoiLocal, type TraLoiCauHoi } from "@/lib/khao-sat";
 import { layHoSoLocal } from "@/lib/kho-luu-tru";
 import type { HoSoKhach } from "@/lib/goi-y/ho-so";
 
-export const KHOA_KHACH_ID = "vive_khach_id";
 export const KHOA_HO_SO_CAN_DONG_BO = "vive_ho_so_can_dong_bo";
 
 let dangDangNhapPromise: Promise<string | null> | null = null;
+let timerDongBoHoSo: ReturnType<typeof setTimeout> | null = null;
 
 /**
- * Lấy id khách ẩn danh từ localStorage nếu có.
- */
-export function layKhachIdLocal(): string | null {
-  if (typeof window === "undefined") return null;
-  try {
-    return window.localStorage.getItem(KHOA_KHACH_ID);
-  } catch {
-    return null;
-  }
-}
-
-/**
- * Lưu id khách ẩn danh vào localStorage.
- */
-function luuKhachIdLocal(id: string): void {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem(KHOA_KHACH_ID, id);
-  } catch {
-    // bỏ qua lỗi storage
-  }
-}
-
-/**
- * Đảm bảo khách đã được đăng nhập ẩn danh (anonymous sign-in)
+ * Đảm bảo khách đã có session đăng nhập ẩn danh (anonymous sign-in)
  * và có một bản ghi trong bảng `khach`.
- * Hàm này an toàn trước race condition (dùng chung promise nếu đang gọi).
+ * - Không lưu id giả hay UUID tự sinh khi lỗi.
+ * - Luôn kiểm tra session qua `getSession()`.
+ * - Khi chưa có session thì gọi `signInAnonymously()`. Nếu lỗi (offline, 429...) trả về null để thử lại sau.
+ * - Chỉ upsert vào bảng `khach` khi có session thật.
  */
 export async function damBaoKhachAnDanh(): Promise<string | null> {
   const supabase = laySupabase();
   if (!supabase) return null;
-
-  // Nếu đã có id trong localStorage thì dùng luôn, không gọi auth lặp lại
-  const localId = layKhachIdLocal();
-  if (localId) {
-    return localId;
-  }
 
   if (dangDangNhapPromise) {
     return dangDangNhapPromise;
@@ -56,53 +29,49 @@ export async function damBaoKhachAnDanh(): Promise<string | null> {
       // 1. Kiểm tra session hiện có
       const {
         data: { session },
+        error: sessionError,
       } = await supabase.auth.getSession();
 
-      let userId = session?.user?.id ?? null;
+      if (sessionError) {
+        console.warn("[Supabase] Lỗi getSession:", sessionError.message);
+      }
+
+      let user = session?.user;
 
       // 2. Nếu chưa có session, đăng nhập ẩn danh
-      if (!userId) {
+      if (!user) {
         const { data, error } = await supabase.auth.signInAnonymously();
         if (error) {
           console.warn("[Supabase] Lỗi signInAnonymously:", error.message);
-          const fallbackId =
-            typeof crypto !== "undefined" && crypto.randomUUID
-              ? crypto.randomUUID()
-              : `${Date.now()}-anon-client`;
-          luuKhachIdLocal(fallbackId);
-          return fallbackId;
+          return null;
         }
-        userId = data.user?.id ?? null;
+        user = data.user ?? undefined;
       }
 
-      if (!userId) {
+      if (!user?.id) {
         return null;
       }
 
-      luuKhachIdLocal(userId);
+      // 3. Upsert vào bảng `khach` khi đã có session thật
+      const traLoi = layTraLoiLocal();
+      const hoSo = layHoSoLocal();
 
-      // 3. Đảm bảo bản ghi trong bảng `khach` tồn tại (chỉ gọi khi có session auth thật)
-      if (session?.user?.id || (userId && !userId.includes("-anon-client"))) {
-        const traLoi = layTraLoiLocal();
-        const hoSo = layHoSoLocal();
+      const { error: upsertError } = await supabase.from("khach").upsert(
+        {
+          id: user.id,
+          ...(traLoi ? { tra_loi: traLoi } : {}),
+          ...(hoSo && Object.keys(hoSo).length > 0 ? { ho_so: hoSo } : {}),
+        },
+        { onConflict: "id" }
+      );
 
-        const { error: upsertError } = await supabase.from("khach").upsert(
-          {
-            id: userId,
-            ...(traLoi ? { tra_loi: traLoi } : {}),
-            ...(hoSo && Object.keys(hoSo).length > 0 ? { ho_so: hoSo } : {}),
-          },
-          { onConflict: "id" }
-        );
-
-        if (upsertError) {
-          console.warn("[Supabase] Lỗi upsert khach:", upsertError.message);
-        }
+      if (upsertError) {
+        console.warn("[Supabase] Lỗi upsert khach:", upsertError.message);
       }
 
-      return userId;
+      return user.id;
     } catch (err) {
-      console.warn("[Supabase] Ngoại lệ khi đăng nhập ẩn danh:", err);
+      console.warn("[Supabase] Ngoại lệ khi damBaoKhachAnDanh:", err);
       return null;
     } finally {
       dangDangNhapPromise = null;
@@ -140,22 +109,39 @@ export async function dongBoTraLoi(traLoi: TraLoiCauHoi): Promise<boolean> {
 }
 
 /**
+ * Đánh dấu cần đồng bộ hồ sơ sau 5 giây (throttle theo nhịp hàng đợi).
+ */
+export function danhDauCanDongBoHoSo(): void {
+  if (typeof window !== "undefined") {
+    try {
+      window.localStorage.setItem(KHOA_HO_SO_CAN_DONG_BO, "true");
+    } catch {
+      // bỏ qua
+    }
+  }
+
+  if (!timerDongBoHoSo) {
+    timerDongBoHoSo = setTimeout(() => {
+      timerDongBoHoSo = null;
+      void dongBoHoSo(layHoSoLocal());
+    }, 5000);
+  }
+}
+
+/**
  * Đồng bộ hồ sơ trọng số sở thích lên bảng `khach`.
  */
 export async function dongBoHoSo(hoSo: HoSoKhach): Promise<boolean> {
   const supabase = laySupabase();
   if (!supabase) return false;
 
-  const userId = await damBaoKhachAnDanh();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  const userId = session?.user?.id;
+
   if (!userId) {
-    // Đánh dấu cần đồng bộ sau khi online
-    if (typeof window !== "undefined") {
-      try {
-        window.localStorage.setItem(KHOA_HO_SO_CAN_DONG_BO, "true");
-      } catch {
-        // bỏ qua
-      }
-    }
+    danhDauCanDongBoHoSo();
     return false;
   }
 
@@ -167,6 +153,7 @@ export async function dongBoHoSo(hoSo: HoSoKhach): Promise<boolean> {
 
     if (error) {
       console.warn("[Supabase] Lỗi dongBoHoSo:", error.message);
+      danhDauCanDongBoHoSo();
       return false;
     }
 
@@ -180,6 +167,7 @@ export async function dongBoHoSo(hoSo: HoSoKhach): Promise<boolean> {
     return true;
   } catch (err) {
     console.warn("[Supabase] Ngoại lệ dongBoHoSo:", err);
+    danhDauCanDongBoHoSo();
     return false;
   }
 }

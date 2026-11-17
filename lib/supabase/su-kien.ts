@@ -1,4 +1,5 @@
 import { laySupabase } from "./client";
+import { damBaoKhachAnDanh } from "./auth";
 
 export type TenSuKien =
   | "mo_web"
@@ -154,7 +155,10 @@ export async function dayHangDoiSuKien(): Promise<{
     const {
       data: { session },
     } = await supabase.auth.getSession();
-    const userId = session?.user?.id;
+    let userId = session?.user?.id;
+    if (!userId) {
+      userId = (await damBaoKhachAnDanh()) ?? undefined;
+    }
     if (!userId) {
       // Chưa có session auth hợp lệ -> giữ nguyên hàng đợi để gửi sau
       return { soLuongGui: 0, thanhCong: false };

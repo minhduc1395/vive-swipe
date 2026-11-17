@@ -10,6 +10,10 @@ export function coCauHinhSupabase(): boolean {
 }
 
 export function laySupabase(): SupabaseClient | null {
+  if (clientInstance) {
+    return clientInstance;
+  }
+
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
@@ -17,15 +21,20 @@ export function laySupabase(): SupabaseClient | null {
     return null;
   }
 
-  if (!clientInstance) {
-    clientInstance = createClient(url, key, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: false,
-      },
-    });
-  }
+  clientInstance = createClient(url, key, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: false,
+    },
+  });
 
   return clientInstance;
+}
+
+/**
+ * Đặt Supabase client mock (dành cho unit test).
+ */
+export function datSupabaseMock(mock: SupabaseClient | null): void {
+  clientInstance = mock;
 }
