@@ -53,7 +53,11 @@ const HEARTS = [
 ];
 
 export default function TrangQuet() {
-  const { sanPham: danhSachSanPham, deals: danhSachDeals } = useDuLieu();
+  const {
+    sanPham: danhSachSanPham,
+    deals: danhSachDeals,
+    daSanSang,
+  } = useDuLieu();
   const [deck, setDeck] = useState<TheDeck[]>([]);
   const [indexHienTai, setIndexHienTai] = useState<number>(0);
   const [daThich, setDaThich] = useState<string[]>([]);
@@ -84,6 +88,7 @@ export default function TrangQuet() {
 
   // Khởi tạo deck và dữ liệu lưu trữ
   useEffect(() => {
+    if (!daSanSang) return;
     if (deckKhoiTaoRef.current) return;
     deckKhoiTaoRef.current = true;
 
@@ -123,7 +128,7 @@ export default function TrangQuet() {
       daBoQua: listBoQua,
     });
     setDeck(dsThe);
-  }, [danhSachSanPham]);
+  }, [daSanSang, danhSachSanPham]);
 
   // Preload ảnh của 3 thẻ kế tiếp
   useEffect(() => {
@@ -476,6 +481,13 @@ export default function TrangQuet() {
         >
           {hienTheDealDacBiet ? (
             <TheDealDacBiet onBoQua={() => setHienTheDealDacBiet(false)} />
+          ) : !daSanSang ? (
+            <div className="absolute inset-0 rounded-[28px] bg-hong-nhat border border-vien p-8 flex flex-col items-center justify-center gap-3 text-center">
+              <div className="w-10 h-10 rounded-full border-2 border-primary border-t-transparent animate-spin mb-1" />
+              <span className="font-bold text-[16px] tracking-[-0.3px] text-chu">
+                Đang chuẩn bị sản phẩm...
+              </span>
+            </div>
           ) : theHienTai ? (
             <>
               {/* Thẻ phía dưới tạo chiều sâu */}

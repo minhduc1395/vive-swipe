@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { KhungDienThoai } from "@/components/KhungDienThoai";
 import { ThanhTab } from "@/components/ThanhTab";
-import { DEALS, SAN_PHAM, timSanPhamTheoId } from "@/lib/data";
+import { useDuLieu } from "@/lib/du-lieu-context";
 import { dinhDangTien } from "@/lib/dinh-dang";
 import { chuanHoaNgay } from "@/lib/deals/hien-thi";
 import {
@@ -29,6 +29,7 @@ function layNgayTinhGio(): string {
 }
 
 export default function TrangGio() {
+  const { sanPham, deals, timSanPham } = useDuLieu();
   const [gioHang, setGioHang] = useState<ItemGioHang[]>([]);
   const [danhSachThich, setDanhSachThich] = useState<string[]>([]);
   const [daSanSang, setDaSanSang] = useState(false);
@@ -71,10 +72,10 @@ export default function TrangGio() {
 
   const ketQua: KetQuaTinhGio = useMemo(() => {
     const ngay = layNgayTinhGio();
-    return tinhGio(gioInput, SAN_PHAM, DEALS, ngay, {
+    return tinhGio(gioInput, sanPham, deals, ngay, {
       daThich: danhSachThich,
     });
-  }, [gioInput, danhSachThich]);
+  }, [gioInput, sanPham, deals, danhSachThich]);
 
   const tongSoLuongGio = useMemo(() => {
     return gioHang.reduce((sum, item) => sum + item.soLuong, 0);
@@ -355,7 +356,7 @@ export default function TrangGio() {
             >
               {ketQua.cac_dong.map((dong) => {
                 const sp =
-                  dong.loai === "san_pham" ? timSanPhamTheoId(dong.id) : null;
+                  dong.loai === "san_pham" ? timSanPham(dong.id) : null;
 
                 const bgAnh =
                   sp?.danh_muc === "mat-na" || sp?.danh_muc === "kem-duong"

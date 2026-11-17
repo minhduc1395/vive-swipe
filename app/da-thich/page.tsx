@@ -5,7 +5,7 @@ import Link from "next/link";
 import { KhungDienThoai } from "@/components/KhungDienThoai";
 import { ThanhTab } from "@/components/ThanhTab";
 import { BangChiTiet } from "@/components/deck/BangChiTiet";
-import { timSanPhamTheoId, DEALS } from "@/lib/data";
+import { useDuLieu } from "@/lib/du-lieu-context";
 import type { SanPham } from "@/lib/data/types";
 import { dinhDangTien } from "@/lib/dinh-dang";
 import { NHAN_DANH_MUC } from "@/lib/nhan";
@@ -23,6 +23,7 @@ import {
 const DANH_MUC_LABEL = NHAN_DANH_MUC;
 
 export default function TrangDaThich() {
+  const { timSanPham, deals } = useDuLieu();
   const [danhSachThich, setDanhSachThich] = useState<string[]>([]);
   const [gioHang, setGioHang] = useState<ItemGioHang[]>([]);
   const [danhMucChon, setDanhMucChon] = useState<string>("all");
@@ -51,9 +52,9 @@ export default function TrangDaThich() {
 
   const sanPhamThich = useMemo(() => {
     return danhSachThich
-      .map((id) => timSanPhamTheoId(id))
+      .map((id) => timSanPham(id))
       .filter((sp): sp is SanPham => Boolean(sp));
-  }, [danhSachThich]);
+  }, [danhSachThich, timSanPham]);
 
   // Bộ lọc danh mục theo các món đang có trong Đã thích
   const danhSachLoc = useMemo(() => {
@@ -217,7 +218,7 @@ export default function TrangDaThich() {
                 sp.danh_muc === "mat-na" || sp.danh_muc === "kem-duong"
                   ? "bg-[#EAF3ED]"
                   : "bg-[#F7EEEB]";
-              const dealNote = layGhiChuDeal(sp, DEALS);
+              const dealNote = layGhiChuDeal(sp, deals);
 
               return (
                 <article

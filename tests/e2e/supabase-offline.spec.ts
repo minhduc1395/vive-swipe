@@ -1,4 +1,9 @@
-import { test, expect } from "@playwright/test";
+import {
+  test,
+  expect,
+  caiDatMockSupabase,
+  MOCK_USER_ID,
+} from "./fixtures";
 
 test.describe("W013 · Supabase, Đo lường ?src= & Ngoại tuyến", () => {
   test.beforeEach(async () => {
@@ -41,11 +46,10 @@ test.describe("W013 · Supabase, Đo lường ?src= & Ngoại tuyến", () => {
     context,
     page,
   }) => {
-    // 1. Giả lập Supabase Auth session trong localStorage để đảm bảo có session hợp lệ
+    // 1. Khởi tạo storage và hồ sơ khảo sát để vào thẳng deck quẹt
     await page.addInitScript(() => {
       sessionStorage.clear();
       localStorage.clear();
-      // Khởi tạo trước một hồ sơ khảo sát để vào thẳng deck quẹt
       localStorage.setItem("vive_da_khao_sat", "true");
       localStorage.setItem(
         "vive_tra_loi_cau_hoi",
@@ -55,20 +59,9 @@ test.describe("W013 · Supabase, Đo lường ?src= & Ngoại tuyến", () => {
           ngan_sach: "tiet-kiem",
         })
       );
-      // Giả lập token Supabase
-      localStorage.setItem(
-        "sb-dsrejhghgbvnwgxpdhee-auth-token",
-        JSON.stringify({
-          access_token: "mock-token-e2e",
-          token_type: "bearer",
-          expires_in: 3600,
-          refresh_token: "mock-refresh-e2e",
-          user: { id: "user-e2e-offline-test", aud: "authenticated" },
-        })
-      );
     });
 
-    // 2. Chặn và thu thập các request gửi lên Supabase
+    // 2. Chặn và thu thập các request gửi lên Supabase qua fixture dùng chung
     const insertedLuotQuet: Array<{
       khach_id: string;
       san_pham_id: string;
@@ -79,51 +72,11 @@ test.describe("W013 · Supabase, Đo lường ?src= & Ngoại tuyến", () => {
 
     let chanMangSupabase = false;
 
-    await page.route("**/auth/v1/**", async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify({
-          access_token: "mock-token-e2e",
-          token_type: "bearer",
-          expires_in: 3600,
-          refresh_token: "mock-refresh-e2e",
-          user: { id: "user-e2e-offline-test", aud: "authenticated" },
-        }),
-      });
-    });
-
-    await page.route("**/rest/v1/**", async (route) => {
-      if (chanMangSupabase) {
-        await route.abort("failed");
-        return;
-      }
-
-      const request = route.request();
-      const url = request.url();
-
-      if (url.includes("luot_quet") && request.method() === "POST") {
-        try {
-          const postData = request.postDataJSON();
-          if (Array.isArray(postData)) {
-            insertedLuotQuet.push(...postData);
-          }
-        } catch {
-          // bỏ qua
-        }
-        await route.fulfill({
-          status: 201,
-          contentType: "application/json",
-          body: JSON.stringify([]),
-        });
-        return;
-      }
-
-      await route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify([]),
-      });
+    await caiDatMockSupabase(page, {
+      chanRest: () => chanMangSupabase,
+      onInsertLuotQuet: (records) => {
+        insertedLuotQuet.push(...records);
+      },
     });
 
     // 3. Mở trang quẹt và đợi load xong
@@ -203,7 +156,7 @@ test.describe("W013 · Supabase, Đo lường ?src= & Ngoại tuyến", () => {
     );
 
     for (const r of insertedLuotQuet) {
-      expect(r.khach_id).toBe("user-e2e-offline-test");
+      expect(r.khach_id).toBe(MOCK_USER_ID);
       expect(r.tao_luc).toMatch(/^\d{4}-\d{2}-\d{2}T/);
     }
 
