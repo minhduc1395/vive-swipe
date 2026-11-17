@@ -24,13 +24,7 @@ import {
 } from "@/lib/kho-luu-tru";
 
 function layNgayTinhGio(): string {
-  if (typeof window === "undefined") return "2026-11-17";
-  const homNay = chuanHoaNgay(new Date());
-  // Nếu ngày hiện tại ngoài khung thời gian pop-up thì dùng ngày đại diện 2026-11-17
-  if (homNay < "2026-11-14" || homNay > "2026-11-29") {
-    return "2026-11-17";
-  }
-  return homNay;
+  return chuanHoaNgay(new Date());
 }
 
 export default function TrangGio() {
@@ -124,7 +118,7 @@ export default function TrangGio() {
           <div className="flex-1" />
         ) : gioHang.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
-            <div className="w-16 h-16 rounded-full bg-hong-nhat flex items-center justify-center mb-4 text-[#D96B6B]">
+            <div className="w-16 h-16 rounded-full bg-hong-nhat flex items-center justify-center mb-4 text-den">
               <svg
                 width="32"
                 height="32"
@@ -302,7 +296,7 @@ export default function TrangGio() {
                               <button
                                 type="button"
                                 onClick={() => handleThemGoiY(spGoiY.id)}
-                                className="h-9 px-3 rounded-full bg-[#CFE3D5] hover:bg-[#BCD7C4] text-den font-semibold text-[13px] shrink-0 transition-transform active:scale-95 cursor-pointer"
+                                className="h-9 px-3 rounded-full bg-[#CFE3D5] hover:opacity-90 text-den font-semibold text-[13px] shrink-0 transition-transform active:scale-95 cursor-pointer"
                               >
                                 + Thêm
                               </button>
@@ -328,7 +322,7 @@ export default function TrangGio() {
                     className="flex items-center justify-between gap-3"
                   >
                     <div className="flex flex-col min-w-0">
-                      <span className="text-[11px] font-bold text-[#1F7A4C] uppercase tracking-wide">
+                      <span className="text-[11px] font-bold text-den uppercase tracking-wide">
                         Gợi ý combo tiết kiệm
                       </span>
                       <strong className="text-[14px] font-semibold text-den truncate">
@@ -367,7 +361,6 @@ export default function TrangGio() {
                     : "bg-[#F7EEEB]";
 
                 const anhSrc = sp?.anh;
-                const coUuDai = dong.don_gia_sau_uu_dai < dong.don_gia_goc;
 
                 return (
                   <article
@@ -417,16 +410,29 @@ export default function TrangGio() {
 
                       {/* Giá và nút tăng giảm số lượng */}
                       <div className="flex items-center justify-between mt-1">
-                        <div className="flex items-baseline gap-1.5">
-                          <strong className="text-[16px] font-bold text-den">
-                            {dinhDangTien(dong.gia_sau_uu_dai)}đ
-                          </strong>
-                          {coUuDai && (
-                            <s className="text-[12px] text-xam">
-                              {dinhDangTien(dong.gia_goc_dong)}đ
-                            </s>
-                          )}
-                        </div>
+                        {(() => {
+                          const laDealGiamDong = dong.deal_ap_dung.includes("LOPOE-25");
+                          const giaHienThi =
+                            dong.loai === "combo" || laDealGiamDong
+                              ? dong.gia_sau_uu_dai
+                              : dong.gia_goc_dong;
+                          const coGachGia =
+                            laDealGiamDong &&
+                            dong.gia_sau_uu_dai < dong.gia_goc_dong;
+
+                          return (
+                            <div className="flex items-baseline gap-1.5">
+                              <strong className="text-[16px] font-bold text-den">
+                                {dinhDangTien(giaHienThi)}đ
+                              </strong>
+                              {coGachGia && (
+                                <s className="text-[12px] text-xam">
+                                  {dinhDangTien(dong.gia_goc_dong)}đ
+                                </s>
+                              )}
+                            </div>
+                          );
+                        })()}
 
                         {/* Nút cộng trừ */}
                         <div className="flex items-center border border-[#E8D2CC] rounded-full overflow-hidden bg-trang">
@@ -470,8 +476,8 @@ export default function TrangGio() {
               </div>
 
               {ketQua.tiet_kiem > 0 && (
-                <div className="flex justify-between text-[#1F7A4C] font-semibold">
-                  <span>Ưu đãi</span>
+                <div className="flex justify-between text-den font-semibold">
+                  <span>Bạn tiết kiệm</span>
                   <span>−{dinhDangTien(ketQua.tiet_kiem)}đ</span>
                 </div>
               )}

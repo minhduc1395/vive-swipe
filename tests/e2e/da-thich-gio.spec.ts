@@ -1,8 +1,9 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("W012 · Đã thích và Giỏ hàng (giao diện)", () => {
-  test.beforeEach(async () => {
+  test.beforeEach(async ({ page }) => {
     test.setTimeout(60000);
+    await page.clock.setFixedTime(new Date("2026-11-18T10:00:00+07:00"));
   });
   test.describe("Màn Đã thích (/da-thich)", () => {
     test("trạng thái trống hiển thị đúng chữ mẫu và nút điều hướng", async ({

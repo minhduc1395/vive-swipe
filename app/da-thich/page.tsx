@@ -5,9 +5,11 @@ import Link from "next/link";
 import { KhungDienThoai } from "@/components/KhungDienThoai";
 import { ThanhTab } from "@/components/ThanhTab";
 import { BangChiTiet } from "@/components/deck/BangChiTiet";
-import { timSanPhamTheoId } from "@/lib/data";
+import { timSanPhamTheoId, DEALS } from "@/lib/data";
 import type { SanPham } from "@/lib/data/types";
 import { dinhDangTien } from "@/lib/dinh-dang";
+import { NHAN_DANH_MUC } from "@/lib/nhan";
+import { layGhiChuDeal } from "@/lib/deals/ghi-chu";
 import {
   layDanhSachDaThich,
   themDaThich,
@@ -17,28 +19,7 @@ import {
   type ItemGioHang,
 } from "@/lib/kho-luu-tru";
 
-const DANH_MUC_LABEL: Record<string, string> = {
-  "sua-rua-mat": "Sữa rửa mặt",
-  "nuoc-can-bang": "Nước cân bằng",
-  "toner-pad": "Toner pad",
-  "tinh-chat": "Tinh chất",
-  "kem-duong": "Kem dưỡng",
-  "mat-na": "Mặt nạ",
-  "chong-nang": "Chống nắng",
-  "trang-diem": "Trang điểm",
-  "duong-moi": "Dưỡng môi",
-  "mieng-dan": "Miếng dán mụn",
-  "duong-the": "Chăm sóc cơ thể",
-  "thiet-bi": "Thiết bị làm đẹp",
-};
-
-const MAP_GHI_CHU_DEAL: Record<string, string> = {
-  "LOPOE-CF": "Mua kèm: còn 186.000",
-  "LOPOE-AMP": "Mua kèm: còn 314.000",
-  "LOPOE-CR": "Mua kèm: còn 411.000",
-  "8800256114320": "Có trong COMBO PINK",
-  "8800256114351": "Có trong COMBO PINK",
-};
+const DANH_MUC_LABEL = NHAN_DANH_MUC;
 
 export default function TrangDaThich() {
   const [danhSachThich, setDanhSachThich] = useState<string[]>([]);
@@ -175,7 +156,7 @@ export default function TrangDaThich() {
           <div className="flex-1" />
         ) : sanPhamThich.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
-            <div className="w-16 h-16 rounded-full bg-hong-nhat flex items-center justify-center mb-4 text-[#D96B6B]">
+            <div className="w-16 h-16 rounded-full bg-hong-nhat flex items-center justify-center mb-4 text-den">
               <svg
                 width="32"
                 height="32"
@@ -229,7 +210,7 @@ export default function TrangDaThich() {
                 sp.danh_muc === "mat-na" || sp.danh_muc === "kem-duong"
                   ? "bg-[#EAF3ED]"
                   : "bg-[#F7EEEB]";
-              const dealNote = MAP_GHI_CHU_DEAL[sp.id];
+              const dealNote = layGhiChuDeal(sp, DEALS);
 
               return (
                 <article
@@ -304,7 +285,7 @@ export default function TrangDaThich() {
                       type="button"
                       aria-label="Thêm vào giỏ"
                       onClick={(e) => handleThemVaoGio(sp, e)}
-                      className="w-10 h-10 shrink-0 rounded-full bg-[#CFE3D5] hover:bg-[#BCD7C4] text-den flex items-center justify-center transition-transform active:scale-90 cursor-pointer"
+                      className="w-10 h-10 shrink-0 rounded-full bg-[#CFE3D5] hover:opacity-90 text-den flex items-center justify-center transition-transform active:scale-90 cursor-pointer"
                     >
                       <svg
                         width="18"

@@ -111,7 +111,9 @@ export default function TrangQuet() {
       sanPham: SAN_PHAM,
       hoSo: hs,
       daThich: listThich,
-      daVaoGio: listGio.map((g) => g.sanPhamId),
+      daVaoGio: listGio
+        .map((g) => g.sanPhamId)
+        .filter((id): id is string => Boolean(id)),
       daBoQua: listBoQua,
     });
     setDeck(dsThe);
