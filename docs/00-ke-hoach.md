@@ -95,6 +95,7 @@ Chỉ tiêu cụ thể đặt sau 3 ngày chạy đầu, khi đã có số thậ
 | `tasks/`, `handoff/` | Việc và tin nhắn giữa Claude và Antigravity (cách dùng: AGENTS.md) |
 
 ## Nhật ký thay đổi
+- 18/11/2026 (2): Landing đổi hướng: trang chiến dịch giới thiệu sản phẩm mới và chương trình theo đợt, không nói về quẹt; cấu hình bằng `data/chien-dich/*.yaml` (docs/01 mục 2.0b). Thiết kế 4.1 (đợt LOPOE), 4.5 thư viện khối, 4.6 Pawlette (bản tạm). Viết lại W027, thêm W029.
 - 18/11/2026: Chủ dự án yêu cầu landing page và giao diện cho máy tính, máy tính bảng. Thêm thiết kế hàng 4 trên canvas (4.1–4.4), docs/01 mục 2.0, task W027 (landing `/`), W028 (giao diện máy tính và máy tính bảng). Ưu tiên Trung bình: làm sau luồng mua tại booth (W012–W014, W025).
 - 17/11/2026: Chủ dự án chọn hosting Google Cloud (Cloud Run, tự co giãn). Thêm docs/02 mục 10; viết lại W024 (chủ dự án: project, thanh toán, khóa bí mật) và W025 (Antigravity: Dockerfile, đưa lên, tự deploy từ main, lịch cron). Đưa lên sớm ngay sau W006 để có link xem thử; tên miền gắn sau. Thêm hộp thư `scripts/inbox.py` và lịch QA tự động của Claude (1:13, 12:13, 17:13).
 - 15/11/2026: Đã áp database lên Supabase VIVE_APPS (`dsrejhghgbvnwgxpdhee`, Tokyo): 2 migration, 149 sản phẩm, 20 deal, Advisors sạch. Sửa lỗi deals.yaml (tên bộ gợi ý G-13, G-14 có dấu phẩy; mã vạch trong `san_pham` phải là chuỗi).

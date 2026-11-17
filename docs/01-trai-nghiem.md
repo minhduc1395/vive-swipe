@@ -20,10 +20,39 @@ Màn chào → 3 câu hỏi (bỏ qua được) → Deck quẹt ⇄ Chi tiết s
 ## 2. Màn hình
 
 ### 2.0 Landing page và cỡ màn hình (thêm 18/11, thiết kế hàng 4 của canvas)
-- **`/` là landing page cho mọi thiết bị** (design/LandingPC.dc.html), co giãn: phần đầu (Thích thì quẹt phải, nút Bắt đầu quẹt → `/bat-dau`, Xem danh mục), 3 bước mua, Deal đang chạy (lấy từ deal hiện được, tối đa 4), thương hiệu, khối booth, chân trang. Trên máy tính có ô QR mở web trên điện thoại. Khách đã trả lời 3 câu hỏi mà mở `/` thì vẫn thấy landing, nút đổi thành "Quẹt tiếp".
+- **`/` là landing page chiến dịch** (chốt lại 18/11): giới thiệu sản phẩm mới và chương trình của từng đợt, **không nói về quẹt** (quẹt vẫn ở `/quet` và trong menu). Thiết kế mẫu: design/LandingPC.dc.html (đợt LOPOE Better Balance), các loại khối: design/LandingKhoi.dc.html.
+- **Đổi theo đợt không sửa code:** mỗi đợt là một file `data/chien-dich/<ma>.yaml` (mục 2.0b). Trang chọn đợt đang trong thời gian chạy, ưu tiên cao nhất; không có đợt nào thì dùng đợt mặc định.
+- **Ấn tượng nhưng nhẹ:** hiệu ứng 3D bản đầu làm bằng CSS 3D và chuyển động theo cuộn/chuột trên ảnh tách nền (WebP trong suốt); mô hình 3D thật (`.glb`) và video chỉ tải khi đợt có, tải lười, có ảnh dự phòng; tôn trọng "giảm chuyển động" của máy; trên điện thoại tắt nghiêng theo chuột, giữ trôi nhẹ.
+- **Personal Color cùng Pawlette:** khối giới thiệu trên landing dẫn tới `/personal-color` (design/Pawlette.dc.html, bản tạm, W029). Nội dung gói chờ Pawlette.
 - **Mốc cỡ màn hình:** dưới 768px như thiết kế điện thoại (thanh tab dưới). 768–1023px: máy tính bảng, thanh điều hướng dọc bên trái (rail), Quẹt có cột Deal cho bạn bên phải (QuetTablet); tablet dọc dưới 900px cao vẫn dùng bố cục điện thoại với thẻ to hơn. Từ 1024px: máy tính, thanh trên cùng có logo, 4 mục, ô tìm, nút Giỏ có số món; Quẹt chia 3 cột (gu + phím tắt | deck | deal cho bạn + giỏ mini, QuetPC); Danh mục có bộ lọc dính bên trái và lưới 3–4 cột (DanhMucPC).
 - **Máy tính:** quẹt bằng kéo chuột hoặc phím ← bỏ qua, → thích, ↑ vào giỏ, Z hoàn tác, Space xem chi tiết (chỉ khi con trỏ không ở ô nhập). Chi tiết sản phẩm mở thành hộp thoại giữa màn thay cho bảng trượt. Nội dung rộng tối đa 1280px, căn giữa.
 - Các trang còn lại (Đã thích, Deal, Giỏ, Giữ hàng) trên máy tính: lưới nhiều cột cho danh sách, cột tóm tắt giỏ dính bên phải; không cần thiết kế riêng, theo cùng thanh trên và lề.
+
+### 2.0b Cấu hình đợt `data/chien-dich/<ma>.yaml`
+```yaml
+ma: lopoe-better-balance
+ten: LOPOE Better Balance
+bat_dau: 2026-11-14
+ket_thuc: 2026-11-26
+uu_tien: 10
+mau: {nen: "#2B2B2A", nhan: "#E8D2CC", chu: "#FFFFFF"}   # chỉ dùng màu trong docs/03
+khoi:
+  - loai: hero            # kieu: san-pham-3d | video | anh-lon | cuon-ke
+    kieu: san-pham-3d
+    nhan_tren: "MỚI TẠI VIVE · NỘI ĐỊA HÀN"
+    tieu_de: ["LOPOE", "~Better", "Balance"]   # dấu ~ = chữ viền
+    mo_ta: "Bộ ba sữa rửa mặt, ampoule, kem dưỡng. Mua kèm sản phẩm bất kỳ, LOPOE giảm 25%."
+    san_pham: [LOPOE-CF, LOPOE-AMP, LOPOE-CR]  # ảnh lấy từ public/products; có mo_hinh .glb thì dùng
+    nut: [{chu: "Xem bộ sản phẩm", den: "/danh-muc?thuong_hieu=LOPOE"}, {chu: "Giữ hàng tại booth", den: "/gio"}]
+    video: null            # kieu video: {mp4, webm, anh_bia}
+  - {loai: bang-chu, chu: "BETTER BALANCE · NỘI ĐỊA HÀN · MỚI TẠI VIVE"}
+  - {loai: ra-mat, tieu_de: "Đủ bộ, đỡ tốn.", deal: [LOPOE-COMBO-2SRM, LOPOE-COMBO-KEM-AMP, LOPOE-COMBO-BO3]}
+  - {loai: chuong-trinh, tieu_de: "Đang chạy tại booth", deal: [COMBO-PINK, DC-05, KM-08], o_to: COMBO-PINK}
+  - {loai: doi-tac, doi_tac: pawlette}
+  - {loai: booth}
+```
+- Giá, tên, quà luôn lấy từ `data/` qua `lib/deals` (deal hết hạn hoặc ẩn thì khối tự bỏ ô đó). File cấu hình chỉ chứa chữ, thứ tự, kiểu hiển thị, đường dẫn media.
+- Media của đợt để ở `public/chien-dich/<ma>/` (ảnh WebP ≤ 300KB, video ≤ 4MB, mô hình `.glb` ≤ 3MB). Claude soạn file đợt mới theo yêu cầu chủ dự án; sau này có thể đưa vào trang quản trị.
 
 ### 2.1 Màn chào (điện thoại; từ W027 gộp vào landing `/`)
 - Logo VIVE (file gốc), một dòng chính: "Quẹt phải món hợp da. VIVE tìm deal cho bạn."
