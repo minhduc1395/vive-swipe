@@ -12,9 +12,9 @@ Phiên bản 1.0 · 15/11/2026. Antigravity code theo file này. Muốn đổi k
 | Khách | Supabase anonymous sign-in | Mỗi máy một `khach_id`, không cần đăng nhập |
 | Nhân viên, quản trị | Supabase Auth email + mật khẩu, vai trò trong bảng `nhan_vien` | |
 | Email | Resend + React Email | Cần tên miền đã xác thực. Ở local: không gửi thật, ghi email ra trang `/dev/email` để xem trước (mục 9) |
-| Việc định kỳ | Vercel Cron hoặc pg_cron gọi route `/api/cron/*` có khóa bí mật | Hết hạn giữ hàng, tính độ phổ biến |
+| Việc định kỳ | Google Cloud Scheduler gọi route `/api/cron/*` kèm khóa bí mật | Hết hạn giữ hàng, tính độ phổ biến |
 | Test | Vitest (logic `lib/`), Playwright (luồng chính, khung iPhone 13 và Pixel 7) | |
-| Hosting | Giai đoạn đầu: chạy local (mục 9). Sau: Vercel Pro hoặc Cloudflare (W024) | Không viết code phụ thuộc riêng một nhà cung cấp hosting; cron gọi qua route `/api/cron/*` để nơi nào cũng gọi được |
+| Hosting | Google Cloud Run, vùng `asia-northeast1` (mục 10) | Không viết code phụ thuộc riêng một nhà cung cấp; cron gọi qua route `/api/cron/*` |
 
 Biến môi trường (`.env.example`, không commit khóa thật): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, `EMAIL_FROM`, `CRON_SECRET`, `NEXT_PUBLIC_SITE_URL`, `GIO_MO_CUA` (ví dụ `10:00-21:00`), `GIU_HANG_DEN_GIO` (mặc định `21:00`), `GIU_HANG_SO_NGAY` (mặc định `1`).
 
@@ -240,4 +240,32 @@ Gợi ý "người thích A cũng thích B" từ ma trận cùng thích khi có 
 - **Email ở local:** khi `RESEND_API_KEY` trống hoặc `NODE_ENV=development`, không gửi email; lưu nội dung vào bộ nhớ và hiện ở `/dev/email` (chỉ có ở development). Có Resend nhưng chưa có tên miền thì chỉ gửi thử được tới email chủ tài khoản Resend.
 - **Cron ở local:** gọi tay `curl -H "Authorization: Bearer $CRON_SECRET" http://localhost:3000/api/cron/het-han-giu-hang`.
 - **Trang `/dev/*`** (xem trước email, nạp lại dữ liệu mẫu, xóa hồ sơ khách) chỉ bật khi `NODE_ENV=development`, build production phải trả 404.
-- Khi thuê hosting (W024–W025): đặt biến môi trường trên hosting, đổi `NEXT_PUBLIC_SITE_URL`, xác thực tên miền gửi email, cấu hình cron gọi 2 route ở mục 1. Không cần sửa code.
+- Bản trên mạng: mục 10.
+
+## 10. Triển khai lên Google Cloud Run (W024 chủ dự án, W025 Antigravity)
+**Vì sao Cloud Run:** chạy container, tự tăng số máy khi đông khách và giảm về 0 khi không ai dùng; trả tiền theo lượt dùng (có hạn mức miễn phí hằng tháng). Vùng `asia-northeast1` (Tokyo) cùng vùng với Supabase nên truy vấn từ server nhanh.
+
+**Thông số dịch vụ** (tên dịch vụ `vive-swipe`):
+- `--region asia-northeast1 --allow-unauthenticated --port 8080 --cpu 1 --memory 512Mi --concurrency 80`
+- `--min-instances 0` lúc phát triển. Trong giờ booth mở (từ 26/11) đặt `--min-instances 1` để khách không phải chờ máy khởi động; hết pop-up trả về 0.
+- `--max-instances 10` (chặn chi phí bất thường). Đặt cảnh báo ngân sách trong Billing.
+
+**Build:**
+- `next.config.ts`: `output: "standalone"`. `Dockerfile` nhiều tầng (node 22-alpine): `npm ci` → `npm run build` → chép `.next/standalone`, `.next/static`, `public` sang ảnh chạy; chạy `node server.js`, cổng lấy từ `PORT`.
+- Biến `NEXT_PUBLIC_*` được gắn vào lúc build, nên phải truyền khi build (build-arg hoặc substitutions của Cloud Build), không chỉ đặt lúc chạy: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `NEXT_PUBLIC_SITE_URL`.
+- Không đưa `.env.local` vào ảnh (`.dockerignore`: `.env*`, `node_modules`, `.next`, `tests`, `test-results`).
+
+**Khóa bí mật** (chủ dự án tự tạo trong Secret Manager, không qua chat): `SUPABASE_SERVICE_ROLE_KEY`, `CRON_SECRET`, `RESEND_API_KEY` (khi có tên miền). Gắn vào dịch vụ bằng `--set-secrets`. Biến thường đặt bằng `--set-env-vars`: `EMAIL_FROM`, `GIO_MO_CUA`, `GIU_HANG_DEN_GIO`, `GIU_HANG_SO_NGAY`.
+
+**Tự đưa lên:** Cloud Build trigger nối repo GitHub, chạy khi có commit vào `main` (tức là sau khi Claude QA và merge). File `cloudbuild.yaml` trong repo: build → đẩy ảnh lên Artifact Registry (`asia-northeast1-docker.pkg.dev/<project>/vive/vive-swipe`) → `gcloud run deploy`.
+
+**Lịch chạy (Cloud Scheduler, múi giờ Asia/Ho_Chi_Minh):** `het-han-giu-hang` mỗi 15 phút, `pho-bien` 3:00 hằng đêm; gọi POST tới URL dịch vụ, header `Authorization: Bearer <CRON_SECRET>`.
+
+**Liên kết Supabase:**
+- Server và trình duyệt dùng cùng `NEXT_PUBLIC_SUPABASE_URL` và publishable key (đã có trong `.env.example`); server action giữ hàng dùng `SUPABASE_SERVICE_ROLE_KEY` từ Secret Manager.
+- Supabase → Authentication → URL Configuration: Site URL = URL Cloud Run (sau này đổi thành tên miền); thêm URL Cloud Run, `http://localhost:3000` và tên miền vào Redirect URLs.
+- Bật Anonymous sign-ins (W003). Không mở thêm quyền gì trên database.
+
+**Kiểm sau mỗi lần đưa lên:** `/` trả 200; `/dev/email` trả 404; `/quet` đọc được sản phẩm; gọi cron không có khóa trả 401.
+
+**Tên miền (sau, chủ dự án):** Cloud Run → Manage custom domains (hoặc Firebase Hosting/Load Balancer nếu vùng chưa hỗ trợ), thêm bản ghi DNS theo hướng dẫn; đổi `NEXT_PUBLIC_SITE_URL` và Site URL của Supabase; xác thực tên miền trên Resend để gửi email thật.

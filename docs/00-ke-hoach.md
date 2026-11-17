@@ -16,7 +16,7 @@ Mục tiêu theo thứ tự của dự án VIVE: (1) tăng người theo dõi, (
 | Báo deal qua đâu | Mục "Deal cho bạn" trong web và email |
 | Code ở đâu | Repo riêng `minhduc1395/vive-swipe`. Repo `vive_poup` chỉ giữ task điều phối (T016) |
 | Supabase | Project cloud `dsrejhghgbvnwgxpdhee` (chủ dự án tạo 15/11). Migration và seed ở `supabase/` |
-| Hosting | Chạy local trên máy trước. Chỉ thuê hosting và tên miền khi web hoàn chỉnh hoặc ít nhất có 1 chức năng dùng được (W024) |
+| Hosting | **Google Cloud Run** (chốt 17/11), vùng Tokyo `asia-northeast1` cạnh Supabase. Tự tăng giảm số máy theo lượng khách (0 khi không ai dùng). Tên miền chủ dự án tự gắn sau khi web hoàn chỉnh. Chi tiết docs/02 mục 10, task W024 (tài khoản), W025 (đưa lên) |
 
 ## 3. Phạm vi bản đầu (ra mắt 26–27/11)
 **Có:**
@@ -38,7 +38,7 @@ Mục tiêu theo thứ tự của dự án VIVE: (1) tăng người theo dõi, (
 - Next.js (App Router, TypeScript) + Tailwind + Framer Motion, chạy tốt trên điện thoại.
 - Supabase: Postgres, khách ẩn danh (anonymous sign-in), RLS, lưu ảnh, lịch chạy việc.
 - Email: Resend (cần tên miền để gửi).
-- Giai đoạn đầu chạy local (`npm run dev`), thử trên điện thoại qua cùng Wi-Fi (docs/02 mục 9). Hosting chọn ở W024: Vercel Pro hoặc Cloudflare (gói Hobby của Vercel chỉ cho dùng phi thương mại).
+- Giai đoạn đầu chạy local (`npm run dev`), thử trên điện thoại qua cùng Wi-Fi (docs/02 mục 9). Hosting: Google Cloud Run, mỗi lần merge vào `main` tự build và đưa lên (docs/02 mục 10).
 - Logic giá, deal và gợi ý viết thành hàm thuần trong `lib/`, có unit test, không phụ thuộc giao diện.
 - Khoảng 130 sản phẩm nên deck được chấm điểm ngay trên máy khách; lượt quẹt gửi về server để học và làm số liệu.
 Chi tiết: `docs/02-ky-thuat.md`.
@@ -76,7 +76,7 @@ Chỉ tiêu cụ thể đặt sau 3 ngày chạy đầu, khi đã có số thậ
 | Ít thời gian (12 ngày) | Cắt phạm vi theo mục 3, giữ phần lõi |
 
 ## 8. Chủ dự án cần quyết định hoặc cung cấp
-1. ~~Tên miền~~ và 2. ~~Hosting~~: **để sau** (chốt 15/11). Chạy local đến khi có chức năng dùng được, khi đó làm W024: chọn Vercel Pro (khoảng 20 USD/tháng) hay Cloudflare (miễn phí, cài đặt phức tạp hơn), mua tên miền để chạy web và gửi email.
+1. **Tên miền:** chủ dự án tự gắn khi web hoàn chỉnh (chốt 17/11). Cần tên miền để gửi email thật. 2. ~~Hosting~~: Google Cloud Run (chốt 17/11), chủ dự án tạo project Google Cloud và bật thanh toán (W024).
 3. ~~Supabase~~: đã chọn cloud, project `dsrejhghgbvnwgxpdhee` (15/11). Ghi chú cũ: **Supabase lúc chạy local:** project cloud gói miễn phí (0 đồng, Claude tạo qua MCP, Antigravity không cần cài thêm) hay Supabase chạy trên máy bằng Docker (cần Docker Desktop trên máy Antigravity). Claude đề xuất cloud miễn phí. Cần trước W013, khoảng 20/11.
 4. **Ảnh sản phẩm** tách nền, đặt tên theo mã vạch (W004).
 5. **Giữ hàng bao lâu:** đề xuất đến 21:00 ngày hôm sau.
@@ -95,6 +95,7 @@ Chỉ tiêu cụ thể đặt sau 3 ngày chạy đầu, khi đã có số thậ
 | `tasks/`, `handoff/` | Việc và tin nhắn giữa Claude và Antigravity (cách dùng: AGENTS.md) |
 
 ## Nhật ký thay đổi
+- 17/11/2026: Chủ dự án chọn hosting Google Cloud (Cloud Run, tự co giãn). Thêm docs/02 mục 10; viết lại W024 (chủ dự án: project, thanh toán, khóa bí mật) và W025 (Antigravity: Dockerfile, đưa lên, tự deploy từ main, lịch cron). Đưa lên sớm ngay sau W006 để có link xem thử; tên miền gắn sau. Thêm hộp thư `scripts/inbox.py` và lịch QA tự động của Claude (1:13, 12:13, 17:13).
 - 15/11/2026: Đã áp database lên Supabase VIVE_APPS (`dsrejhghgbvnwgxpdhee`, Tokyo): 2 migration, 149 sản phẩm, 20 deal, Advisors sạch. Sửa lỗi deals.yaml (tên bộ gợi ý G-13, G-14 có dấu phẩy; mã vạch trong `san_pham` phải là chuỗi).
 - 15/11/2026: Chủ dự án tạo Supabase `dsrejhghgbvnwgxpdhee`. Claude soạn migration, RLS, seed (supabase/), đã chạy thử trên Postgres trong bộ nhớ; chờ quyền truy cập để áp lên project.
 - 15/11/2026: Web chỉ dùng Be Vietnam Pro, bỏ Playfair Display (font có chân) ở mọi màn.
