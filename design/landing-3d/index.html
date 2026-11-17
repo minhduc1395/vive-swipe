@@ -62,7 +62,7 @@
   .ll2{font-size:clamp(140px,22vw,300px);line-height:.8;font-weight:700;letter-spacing:-.06em;color:transparent;-webkit-text-stroke:2px var(--den)}
   @media (prefers-reduced-motion:reduce){.hien{opacity:1;transform:none;transition:none}.quat div{transition:none}}
   @media (max-width:760px){
-    header nav a:not(.dn){display:none}
+    header nav a:not(.dn):not(.on){display:none}
     section{align-items:flex-end;padding-bottom:56px}
     .phai{justify-content:flex-start}
     .o.to{grid-column:auto;grid-row:auto;min-height:260px}
@@ -76,8 +76,7 @@
 <canvas id="canh" aria-hidden="true"></canvas>
 <header>
   <a class="logo" href="#" aria-label="VIVE, về đầu trang"><img src="img/vive-logo-chu.png" alt="VIVE"></a>
-  <span class="tieu-de">New Arrival</span>
-  <nav aria-label="Điều hướng chính"><a href="#" data-den="/">Home</a><a href="#" data-den="/quet">Quẹt</a><a href="#" data-den="/danh-muc">Sản phẩm</a><a href="#" data-den="/gio">Giỏ</a><a href="#" data-den="/dang-nhap" class="dn">Đăng nhập</a></nav>
+  <nav aria-label="Điều hướng chính"><a href="#" class="on" aria-current="page">New Arrival</a><a href="https://claude.ai/artifact/RM3NbvY1uZ4pFibYCk1AxG" data-den="/">Home</a><a href="https://claude.ai/artifact/RM3NbvY1uZ4pFibYCk1AxG" data-den="/quet">Quẹt</a><a href="https://claude.ai/artifact/RM3NbvY1uZ4pFibYCk1AxG" data-den="/danh-muc">Sản phẩm</a><a href="https://claude.ai/artifact/RM3NbvY1uZ4pFibYCk1AxG" data-den="/gio">Giỏ</a><a href="#" data-den="/dang-nhap" class="dn">Đăng nhập</a></nav>
 </header>
 
 <main id="trang-landing">
