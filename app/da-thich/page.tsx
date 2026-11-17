@@ -2,8 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
-import { KhungDienThoai } from "@/components/KhungDienThoai";
-import { ThanhTab } from "@/components/ThanhTab";
+import { AppShell } from "@/components/AppShell";
 import { BangChiTiet } from "@/components/deck/BangChiTiet";
 import { useDuLieu } from "@/lib/du-lieu-context";
 import type { SanPham } from "@/lib/data/types";
@@ -108,7 +107,11 @@ export default function TrangDaThich() {
   };
 
   return (
-    <KhungDienThoai>
+    <AppShell
+      soLuongThich={sanPhamThich.length}
+      soLuongGio={tongSoLuongGio}
+      noiDungClassName="max-w-[1280px] w-full mx-auto"
+    >
       <div className="flex-1 flex flex-col min-h-0 bg-trang text-den font-sans overflow-hidden">
         {/* Header */}
         <header className="px-5 pt-7 pb-2 flex items-baseline gap-2 shrink-0">
@@ -317,8 +320,6 @@ export default function TrangDaThich() {
       </div>
 
       {/* Thanh tab dưới cố định */}
-      <ThanhTab soLuongThich={sanPhamThich.length} soLuongGio={tongSoLuongGio} />
-
       {/* Modal chi tiết sản phẩm */}
       <BangChiTiet
         sanPham={sanPhamChiTiet}
@@ -341,6 +342,6 @@ export default function TrangDaThich() {
           }
         }}
       />
-    </KhungDienThoai>
+    </AppShell>
   );
 }

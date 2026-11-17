@@ -2,9 +2,8 @@
 
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import Link from "next/link";
-import { KhungDienThoai } from "@/components/KhungDienThoai";
+import { AppShell } from "@/components/AppShell";
 import { ThanhTren } from "@/components/ThanhTren";
-import { ThanhTab } from "@/components/ThanhTab";
 import { TheSanPham } from "@/components/deck/TheSanPham";
 import { TheDealDacBiet } from "@/components/deck/TheDealDacBiet";
 import { BangChiTiet } from "@/components/deck/BangChiTiet";
@@ -425,7 +424,13 @@ export default function TrangQuet() {
   }, [theHienTai, danhSachDeals]);
 
   return (
-    <KhungDienThoai className="h-dvh">
+    <AppShell
+      hienDieuHuong={true}
+      soLuongThich={daThich.length}
+      soLuongGio={soLuongGio}
+      khoaChieuCao={true}
+      noiDungClassName="flex flex-col items-center justify-between h-full"
+    >
       <style>{`
         @keyframes vq-pop {
           0% { transform: scale(1); }
@@ -444,13 +449,15 @@ export default function TrangQuet() {
           100% { transform: translateX(-50%) scale(1); opacity: 1; }
         }
       `}</style>
-      <div className="w-full h-full flex flex-col bg-trang font-sans text-den overflow-hidden relative">
+      <div className="w-full h-full flex flex-col items-center bg-trang font-sans text-den overflow-hidden relative">
         <h1 className="sr-only">Deck quẹt VIVE</h1>
-        {/* Thanh trên */}
-        <ThanhTren soLuongGio={soLuongGio} />
+        {/* Thanh trên: hiện ở mobile và tablet, ẩn ở desktop (vì desktop đã có ThanhTrenDesktop) */}
+        <div className="w-full max-w-[480px] lg:hidden">
+          <ThanhTren soLuongGio={soLuongGio} />
+        </div>
 
         {/* Thanh phụ: Xếp theo + Sửa */}
-        <div className="px-5 pt-1 pb-2.5 flex items-center gap-1.5 text-[13px] shrink-0">
+        <div className="w-full max-w-[480px] px-5 pt-1 pb-2.5 flex items-center gap-1.5 text-[13px] shrink-0">
           <span className="text-xam">Xếp theo</span>
           {moiQuanTamLabels.length > 0 ? (
             moiQuanTamLabels.map((tag) => (
@@ -477,7 +484,7 @@ export default function TrangQuet() {
         {/* Khu vực Deck quẹt thẻ */}
         <section
           aria-label="Thẻ sản phẩm"
-          className="relative flex-1 min-h-0 mx-4"
+          className="relative flex-1 min-h-0 mx-4 w-full max-w-[440px]"
         >
           {hienTheDealDacBiet ? (
             <TheDealDacBiet onBoQua={() => setHienTheDealDacBiet(false)} />
@@ -732,9 +739,6 @@ export default function TrangQuet() {
           </button>
         </div>
 
-        {/* Thanh Tab 5 mục ở đáy */}
-        <ThanhTab soLuongThich={daThich.length} soLuongGio={soLuongGio} />
-
         {/* Dialog chi tiết sản phẩm */}
         <BangChiTiet
           sanPham={sanPhamChiTiet}
@@ -747,6 +751,6 @@ export default function TrangQuet() {
           }
         />
       </div>
-    </KhungDienThoai>
+    </AppShell>
   );
 }
