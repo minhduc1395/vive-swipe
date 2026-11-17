@@ -13,7 +13,8 @@
   #canh{position:fixed;inset:0;z-index:1;pointer-events:none}
   header{position:fixed;top:0;left:0;right:0;z-index:5;transition:background .3s;display:flex;align-items:center;gap:20px;padding:16px clamp(16px,4vw,48px)}
   header.nen{background:rgba(255,255,255,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-  header .logo{font-size:30px;font-weight:700;font-style:italic;letter-spacing:-1px;color:var(--den);text-decoration:none}
+  header .logo{display:flex;align-items:center;height:44px}
+  header .logo img{width:78px;height:auto;display:block}
   header nav{margin-left:auto;display:flex;gap:4px;flex-wrap:wrap}
   header nav a{height:44px;padding:0 12px;display:flex;align-items:center;color:var(--den);text-decoration:none;font-size:15px;font-weight:500;border-radius:999px}
   header nav a.on{background:#fff;font-weight:700}
@@ -72,7 +73,7 @@
 <div id="nen"></div>
 <canvas id="canh" aria-hidden="true"></canvas>
 <header>
-  <a class="logo" href="#" aria-label="VIVE, về đầu trang">vive</a>
+  <a class="logo" href="#" aria-label="VIVE, về đầu trang"><img src="img/vive-logo.png" alt="VIVE"></a>
   <nav aria-label="Điều hướng chính"><a href="#" class="on">Mới về</a><a href="#dang-chay">Đang chạy</a><a href="#personal-color">Personal Color</a><a href="#booth">Booth</a></nav>
   <a class="gio" href="#">Giỏ · 0</a>
 </header>
