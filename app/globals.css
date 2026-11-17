@@ -8,70 +8,72 @@
   --color-den: #2B2B2A;
   --color-xam: #737373;
   --color-xam-dam: #5C5C5B;
-  --color-vien: #F2E4E0;
+  --color-vien: #F7EEEB;
   --color-trang: #FFFFFF;
 
   --font-sans: var(--font-be-vietnam-pro), ui-sans-serif, system-ui, sans-serif;
 }
 
-:root {
-  --target-size: 24px;
-}
-
-@media (pointer: coarse) {
+@layer base {
   :root {
-    --target-size: 44px;
+    --target-size: 24px;
   }
-}
 
-html {
-  scroll-padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
-}
+  @media (pointer: coarse) {
+    :root {
+      --target-size: 44px;
+    }
+  }
 
-body {
-  margin: 0;
-  background-color: #FFFFFF;
-  color: #2B2B2A;
-  font-family: var(--font-be-vietnam-pro), ui-sans-serif, system-ui, sans-serif;
-  overflow-wrap: break-word;
-  -webkit-font-smoothing: antialiased;
-}
+  html {
+    scroll-padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+  }
 
-h1,
-h2,
-h3 {
-  text-wrap: balance;
-}
+  body {
+    margin: 0;
+    background-color: #FFFFFF;
+    color: #2B2B2A;
+    font-family: var(--font-be-vietnam-pro), ui-sans-serif, system-ui, sans-serif;
+    overflow-wrap: break-word;
+    -webkit-font-smoothing: antialiased;
+  }
 
-p,
-li {
-  text-wrap: pretty;
-}
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
 
-a {
-  color: inherit;
-}
+  p,
+  li {
+    text-wrap: pretty;
+  }
 
-:where(a, code) {
-  overflow-wrap: anywhere;
-}
+  a {
+    color: inherit;
+  }
 
-img,
-video {
-  max-inline-size: 100%;
-  block-size: auto;
-}
+  :where(a, code) {
+    overflow-wrap: anywhere;
+  }
 
-:where(
-    button,
-    select,
-    textarea,
-    input:not([type="checkbox"], [type="radio"]),
-    [role="button"],
-    nav a,
-    label:has(input[type="checkbox"], input[type="radio"])
-  ) {
-  min-block-size: var(--target-size);
+  img,
+  video {
+    max-inline-size: 100%;
+    block-size: auto;
+  }
+
+  :where(
+      button,
+      select,
+      textarea,
+      input:not([type="checkbox"], [type="radio"]),
+      [role="button"],
+      nav a,
+      label:has(input[type="checkbox"], input[type="radio"])
+    ) {
+    min-block-size: var(--target-size);
+  }
 }
 
 .vet-hong {

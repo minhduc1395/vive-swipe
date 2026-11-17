@@ -38,5 +38,12 @@ test.describe("Khung ứng dụng VIVE Quẹt", () => {
 
     const quetLink = nav.getByRole("link", { name: "Quẹt" });
     await expect(quetLink).toHaveAttribute("aria-current", "page");
+
+    const logo = page.locator("header img[alt='VIVE']");
+    await expect(logo).toBeVisible();
+    const box = await logo.boundingBox();
+    expect(box).not.toBeNull();
+    expect(box!.height).toBeLessThanOrEqual(32);
+    expect(box!.width).toBeLessThan(120);
   });
 });
