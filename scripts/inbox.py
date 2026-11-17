@@ -22,6 +22,8 @@ TEN = {"antigravity": "Antigravity", "claude": "Claude"}
 
 
 def main():
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     if len(sys.argv) < 2 or sys.argv[1].lower() not in TEN:
         print("Dùng: python3 scripts/inbox.py antigravity|claude")
         sys.exit(1)

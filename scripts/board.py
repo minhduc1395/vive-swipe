@@ -7,6 +7,7 @@ import argparse
 import glob
 import os
 import re
+import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FIELDS = ["Ưu tiên", "Chủ trì", "Trạng thái", "Phụ thuộc", "Đầu ra", "QA", "Cập nhật", "Ghi chú"]
@@ -26,6 +27,8 @@ def parse(path):
 
 
 def main():
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser()
     ap.add_argument("--owner")
     ap.add_argument("--status")

@@ -9,15 +9,20 @@ Repo code của web quẹt sản phẩm VIVE (kiểu Tinder). Claude = Lead (k�
 4. Nhận việc có Chủ trì = tên mình, Trạng thái = Todo, Phụ thuộc đã Done, theo Ưu tiên. Nếu phụ thuộc đang Review (đã có PR, chờ QA): được làm tiếp, tạo nhánh từ nhánh của task phụ thuộc, ghi "Dựa trên PR #x" trong mô tả PR. Claude merge theo thứ tự.
 5. Giao diện bám theo `design/` (xem `design/README.md`): bố cục, màu, cỡ chữ, khoảng cách lấy từ file `.dc.html` của màn tương ứng.
 
+## Máy Windows
+- Lệnh Python: dùng `python` hoặc `py` thay cho `python3` (ví dụ `python scripts/inbox.py antigravity`).
+- Tạo handoff bằng `python scripts/new_handoff.py ...` (không cần bash). Terminal mặc định PowerShell là được.
+- Đặt repo ngoài thư mục đồng bộ OneDrive (ví dụ `C:\code\vive-swipe`). Git đã có `.gitattributes` giữ xuống dòng kiểu LF, không đổi `core.autocrlf`.
+
 ## Vòng làm việc tự động (hộp thư)
 Claude và Antigravity nói chuyện qua `handoff/` (lịch sử chung). Chủ dự án không cần chuyển lời.
 - **Antigravity, trước khi nhận mỗi việc mới và ngay sau khi báo xong mỗi việc:** `git pull --rebase origin main` rồi `python3 scripts/inbox.py antigravity`. Có mục "SỬA TRƯỚC" (QA Fail) thì sửa hết trước, xong đặt task về Review, handoff `bao-xong` ghi đã sửa gì. Có tin mới (`hoi`, `tra-loi`, `thay-doi-luat`, `canh-bao`) thì làm theo trước khi làm tiếp. Hộp thư trống mới nhận việc Todo tiếp theo.
-- **Claude** chạy QA tự động theo lịch (mỗi giờ): `python3 scripts/inbox.py claude`, QA các task Review, ghi `qa-pass` (merge PR) hoặc `qa-fail` (nêu lỗi, cách sửa), bình luận lên PR.
+- **Claude** chạy QA tự động theo lịch (1:13, 12:13, 17:13): `python3 scripts/inbox.py claude`, QA các task Review, ghi `qa-pass` (merge PR) hoặc `qa-fail` (nêu lỗi, cách sửa), bình luận lên PR.
 - Không còn việc nào làm được (đều chờ QA hoặc chờ chủ dự án): tạo handoff `trang-thai-phien` rồi dừng.
 - Câu hỏi cần chủ dự án quyết: handoff `hoi` gửi `nguoi`, đặt task Blocked, làm việc khác.
 
 ## Quy trình (giống repo vive_poup)
-- Nhận việc: sửa `tasks/Wxxx.md` sang Doing, tạo handoff `nhan-viec` bằng `scripts/new_handoff.sh`, commit, push.
+- Nhận việc: sửa `tasks/Wxxx.md` sang Doing, tạo handoff `nhan-viec` bằng `scripts/new_handoff.py`, commit, push.
 - Làm trên nhánh `wxxx-mo-ta-ngan`, mở Pull Request vào `main`. Không push thẳng code lên `main`. Tài liệu, task, handoff được push thẳng `main`.
 - Xong: chạy `npm run lint`, `npm run typecheck`, `npm test` (và `npm run e2e` nếu task có giao diện) đều qua; ghi link PR vào dòng "Đầu ra" (chưa có hosting: ghi cách chạy thử local, docs/02 mục 9); Trạng thái = Review; handoff `bao-xong` nêu đã làm gì, chưa chắc chỗ nào, cách thử.
 - Chỉ Claude đặt QA = Pass và merge PR sau khi QA.
