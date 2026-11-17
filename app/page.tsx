@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { KhungDienThoai } from "@/components/KhungDienThoai";
 import { CAU_HINH_BOOTH } from "@/lib/cau-hinh";
+import { DieuHuongKhachQuayLai } from "@/components/DieuHuongKhachQuayLai";
 
 export default function TrangChao() {
   return (
     <KhungDienThoai>
+      <DieuHuongKhachQuayLai />
       <div className="relative h-[530px] shrink-0 bg-hong-nhat rounded-b-[44px] overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
