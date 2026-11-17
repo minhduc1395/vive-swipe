@@ -5,9 +5,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { KhungDienThoai } from "@/components/KhungDienThoai";
 import { ThanhTab } from "@/components/ThanhTab";
 import { BangChiTiet } from "@/components/deck/BangChiTiet";
-import { SAN_PHAM, laySanPhamHienThi } from "@/lib/data";
+import { SAN_PHAM, DEALS, laySanPhamHienThi } from "@/lib/data";
 import type { SanPham } from "@/lib/data/types";
 import { dinhDangTien, chuanHoaTimKiem } from "@/lib/dinh-dang";
+import { layGhiChuDeal } from "@/lib/deals/ghi-chu";
 import {
   layDanhSachDaThich,
   themDaThich,
@@ -41,12 +42,6 @@ const DANH_SACH_VAN_DE = [
   { id: "chong-lao-hoa", label: "Chống lão hóa" },
 ] as const;
 
-// Ghi chú deal mua kèm theo W008
-const MAP_GHI_CHU_DEAL: Record<string, string> = {
-  "LOPOE-CF": "Mua kèm: 186.000",
-  "LOPOE-AMP": "Mua kèm: 314.000",
-  "LOPOE-CR": "Mua kèm: 411.000",
-};
 
 function DanhMucNoiDung() {
   const router = useRouter();
@@ -106,13 +101,16 @@ function DanhMucNoiDung() {
   }, [tatCaSanPhamHienThi]);
 
   // Cập nhật URL bộ lọc
-  const capNhatBoLoc = (params: {
-    loai?: string;
-    vanDe?: string;
-    thuongHieu?: string;
-    tim?: string;
-    xep?: string;
-  }) => {
+  const capNhatBoLoc = (
+    params: {
+      loai?: string;
+      vanDe?: string;
+      thuongHieu?: string;
+      tim?: string;
+      xep?: string;
+    },
+    options?: { replace?: boolean }
+  ) => {
     const nextParams = new URLSearchParams(searchParams.toString());
 
     if (params.loai !== undefined) {
@@ -137,11 +135,20 @@ function DanhMucNoiDung() {
     }
 
     const queryStr = nextParams.toString();
-    router.replace(`/danh-muc${queryStr ? `?${queryStr}` : ""}`);
+    const target = `/danh-muc${queryStr ? `?${queryStr}` : ""}`;
+    if (options?.replace) {
+      router.replace(target);
+    } else {
+      router.push(target);
+    }
   };
 
   const xuLyVeTrangDau = () => {
-    router.replace("/danh-muc");
+    if (typeof window !== "undefined" && window.history.state?.idx > 0) {
+      router.back();
+    } else {
+      router.push("/danh-muc");
+    }
     setTimKiemInput("");
   };
 
@@ -266,10 +273,10 @@ function DanhMucNoiDung() {
   const conThem = ketQuaLoc.length - gioiHanHienThi;
 
   return (
-    <KhungDienThoai>
+    <KhungDienThoai className="h-dvh">
       <div className="w-full h-full flex flex-col bg-trang font-sans text-den overflow-hidden relative">
         {/* Vùng cuộn nội dung */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 min-h-0 overflow-y-auto">
           {/* Header */}
           <header className="px-5 pt-6 pb-2 flex items-center gap-1">
             {dangXemDanhSach && (
@@ -309,7 +316,9 @@ function DanhMucNoiDung() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                capNhatBoLoc({ tim: timKiemInput.trim() });
+                const fd = new FormData(e.currentTarget);
+                const query = (fd.get("tim") as string) ?? timKiemInput;
+                capNhatBoLoc({ tim: query.trim() });
               }}
               className="h-12 rounded-[14px] bg-hong-nhat flex items-center gap-2.5 px-3.5 focus-within:ring-2 focus-within:ring-den"
             >
@@ -331,8 +340,15 @@ function DanhMucNoiDung() {
               </label>
               <input
                 id="tim-sp"
+                name="tim"
                 type="search"
                 value={timKiemInput}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    capNhatBoLoc({ tim: e.currentTarget.value.trim() });
+                  }
+                }}
                 onChange={(e) => {
                   const val = e.target.value;
                   setTimKiemInput(val);
@@ -343,6 +359,9 @@ function DanhMucNoiDung() {
                 placeholder="Tìm tên, thương hiệu, thành phần"
                 className="flex-1 min-w-0 border-none outline-none bg-transparent font-sans text-[15px] text-den placeholder:text-xam"
               />
+              <button type="submit" className="hidden" aria-hidden="true">
+                Tìm
+              </button>
               {timKiemInput && (
                 <button
                   type="button"
@@ -351,9 +370,22 @@ function DanhMucNoiDung() {
                     capNhatBoLoc({ tim: "" });
                   }}
                   aria-label="Xóa tìm kiếm"
-                  className="w-6 h-6 rounded-full flex items-center justify-center text-xam hover:text-den"
+                  className="w-6 h-6 rounded-full flex items-center justify-center text-xam hover:text-den cursor-pointer"
                 >
-                  ✕
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
                 </button>
               )}
             </form>
@@ -523,7 +555,9 @@ function DanhMucNoiDung() {
                   <span>Xếp</span>
                   <select
                     value={xepUrl}
-                    onChange={(e) => capNhatBoLoc({ xep: e.target.value })}
+                    onChange={(e) =>
+                      capNhatBoLoc({ xep: e.target.value }, { replace: true })
+                    }
                     className="h-[34px] rounded-[10px] border border-[#E8D2CC] bg-trang font-sans text-[13px] text-den px-1.5 outline-none cursor-pointer"
                   >
                     <option value="goi-y">Gợi ý</option>
@@ -543,7 +577,7 @@ function DanhMucNoiDung() {
                       i % 4 === 0 || i % 4 === 3
                         ? "bg-[#F7EEEB]"
                         : "bg-[#EAF3ED]";
-                    const ghiChuDeal = MAP_GHI_CHU_DEAL[sp.id] || null;
+                    const ghiChuDeal = layGhiChuDeal(sp, DEALS);
 
                     return (
                       <article
@@ -632,7 +666,7 @@ function DanhMucNoiDung() {
                             type="button"
                             onClick={(e) => xuLyThemVaoGio(sp, e)}
                             aria-label={`Thêm ${sp.ten_hien_thi} vào giỏ`}
-                            className="w-[38px] h-[38px] shrink-0 rounded-full bg-[#CFE3D5] flex items-center justify-center text-den hover:bg-[#b8d4c0] cursor-pointer transition-colors"
+                            className="w-[38px] h-[38px] shrink-0 rounded-full bg-[#CFE3D5] flex items-center justify-center text-den hover:opacity-90 cursor-pointer transition-opacity"
                           >
                             <svg
                               width="18"

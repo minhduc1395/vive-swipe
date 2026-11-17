@@ -38,8 +38,11 @@ test.describe("Trang Danh mục - tìm kiếm và lọc sản phẩm (W026)", ()
     page,
   }) => {
     await page.goto("/danh-muc");
+    await page.waitForLoadState("domcontentloaded");
 
     const oTimKiem = page.getByPlaceholder("Tìm tên, thương hiệu, thành phần");
+    await expect(oTimKiem).toBeVisible();
+    await oTimKiem.click();
 
     // 1. Tìm "vitamin c"
     await oTimKiem.fill("vitamin c");
@@ -83,8 +86,8 @@ test.describe("Trang Danh mục - tìm kiếm và lọc sản phẩm (W026)", ()
     await page.goto("/danh-muc?thuong-hieu=LOPOE");
     await expect(page.locator("h1")).toHaveText("LOPOE");
 
-    // Kiểm tra có dòng ghi chú "Mua kèm: 186.000" ở sản phẩm sữa rửa mặt
-    await expect(page.getByText("Mua kèm: 186.000")).toBeVisible();
+    // Kiểm tra có dòng ghi chú "Mua kèm: còn 186.000" ở sản phẩm sữa rửa mặt
+    await expect(page.getByText(/Mua kèm: (còn )?186\.000/)).toBeVisible();
   });
 
   test("nút tim và nút + thêm giỏ hoạt động chính xác", async ({ page }) => {
@@ -122,6 +125,48 @@ test.describe("Trang Danh mục - tìm kiếm và lọc sản phẩm (W026)", ()
 
     // Quay lại màn landing
     await expect(page).toHaveURL(/^http:\/\/[^/]+\/danh-muc$/);
+    await expect(page.locator("h1")).toHaveText("Danh mục");
+  });
+
+  test("thanh điều hướng 5 tab luôn nằm gọn trong viewport ở màn hình nhỏ (390x664)", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 664 });
+    await page.goto("/danh-muc?loai=mat-na");
+
+    const thanhTab = page.getByRole("navigation", { name: "Điều hướng chính" });
+    await expect(thanhTab).toBeVisible();
+
+    const box = await thanhTab.boundingBox();
+    expect(box).not.toBeNull();
+    // Đáy thanh tab không vượt quá chiều cao viewport
+    expect(box!.y + box!.height).toBeLessThanOrEqual(664);
+  });
+
+  test("nút quay lại của trình duyệt (page.goBack) từ danh sách về đúng lưới danh mục", async ({
+    page,
+  }) => {
+    // 1. Vào /quet
+    await page.goto("/quet");
+    await expect(page.getByRole("article")).toBeVisible();
+
+    // 2. Chuyển sang /danh-muc
+    const linkDanhMuc = page.getByRole("link", { name: "Danh mục" });
+    await linkDanhMuc.click();
+    await expect(page).toHaveURL(/\/danh-muc$/);
+    await expect(page.locator("h1")).toHaveText("Danh mục");
+
+    // 3. Chọn Mặt nạ
+    const nutMatNa = page.getByRole("button", { name: /Mặt nạ/ });
+    await nutMatNa.click();
+    await expect(page).toHaveURL(/loai=mat-na/);
+    await expect(page.locator("h1")).toHaveText("Mặt nạ");
+
+    // 4. Nhấn Back của trình duyệt (page.goBack)
+    await page.goBack();
+
+    // Phải về lại đúng màn lưới danh mục (/danh-muc), không nhảy về /quet
+    await expect(page).toHaveURL(/\/danh-muc$/);
     await expect(page.locator("h1")).toHaveText("Danh mục");
   });
 });
