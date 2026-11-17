@@ -14,10 +14,12 @@
   header{position:fixed;top:0;left:0;right:0;z-index:5;transition:background .3s;display:flex;align-items:center;gap:20px;padding:16px clamp(16px,4vw,48px)}
   header.nen{background:rgba(255,255,255,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
   header .logo{display:flex;align-items:center;height:44px}
-  header .logo img{width:78px;height:auto;display:block}
+  header .logo img{width:64px;height:auto;display:block}
   header nav{margin-left:auto;display:flex;gap:4px;flex-wrap:wrap}
   header nav a{height:44px;padding:0 12px;display:flex;align-items:center;color:var(--den);text-decoration:none;font-size:15px;font-weight:500;border-radius:999px}
   header nav a.on{background:#fff;font-weight:700}
+  header .tieu-de{height:36px;padding:0 14px;border-radius:999px;background:#fff;display:flex;align-items:center;font-size:14px;font-weight:700;letter-spacing:.5px}
+  header nav a.dn{background:var(--den);color:#fff;padding:0 18px;font-weight:600}
   header .gio{height:44px;padding:0 18px;border-radius:999px;background:var(--den);color:#fff;display:flex;align-items:center;font-weight:600;font-size:14px;text-decoration:none}
   main{position:relative;z-index:2}
   section{min-height:100vh;display:flex;align-items:center;padding:96px clamp(20px,6vw,96px)}
@@ -60,7 +62,7 @@
   .ll2{font-size:clamp(140px,22vw,300px);line-height:.8;font-weight:700;letter-spacing:-.06em;color:transparent;-webkit-text-stroke:2px var(--den)}
   @media (prefers-reduced-motion:reduce){.hien{opacity:1;transform:none;transition:none}.quat div{transition:none}}
   @media (max-width:760px){
-    header nav{display:none}
+    header nav a:not(.dn){display:none}
     section{align-items:flex-end;padding-bottom:56px}
     .phai{justify-content:flex-start}
     .o.to{grid-column:auto;grid-row:auto;min-height:260px}
@@ -73,9 +75,9 @@
 <div id="nen"></div>
 <canvas id="canh" aria-hidden="true"></canvas>
 <header>
-  <a class="logo" href="#" aria-label="VIVE, về đầu trang"><img src="img/vive-logo.png" alt="VIVE"></a>
-  <nav aria-label="Điều hướng chính"><a href="#" class="on">Mới về</a><a href="#dang-chay">Đang chạy</a><a href="#personal-color">Personal Color</a><a href="#booth">Booth</a></nav>
-  <a class="gio" href="#">Giỏ · 0</a>
+  <a class="logo" href="#" aria-label="VIVE, về đầu trang"><img src="img/vive-logo-chu.png" alt="VIVE"></a>
+  <span class="tieu-de">New Arrival</span>
+  <nav aria-label="Điều hướng chính"><a href="#" data-den="/">Home</a><a href="#" data-den="/quet">Quẹt</a><a href="#" data-den="/danh-muc">Sản phẩm</a><a href="#" data-den="/gio">Giỏ</a><a href="#" data-den="/dang-nhap" class="dn">Đăng nhập</a></nav>
 </header>
 
 <main id="trang-landing">
