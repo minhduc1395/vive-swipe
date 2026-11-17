@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Be_Vietnam_Pro } from "next/font/google";
 import "./globals.css";
+import { KhoiTaoSupabase } from "@/components/KhoiTaoSupabase";
 
 const beVietnamPro = Be_Vietnam_Pro({
   subsets: ["vietnamese", "latin"],
@@ -30,6 +31,7 @@ export default function RootLayout({
   return (
     <html lang="vi" className={beVietnamPro.variable}>
       <body className="font-sans antialiased bg-trang text-den">
+        <KhoiTaoSupabase />
         {children}
       </body>
     </html>
