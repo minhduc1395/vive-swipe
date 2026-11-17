@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+@theme {
+  --color-hong: #E8D2CC;
+  --color-hong-nhat: #F7EEEB;
+  --color-bac-ha: #CFE3D5;
+  --color-bac-ha-nhat: #EAF3ED;
+  --color-den: #2B2B2A;
+  --color-xam: #737373;
+  --color-xam-dam: #5C5C5B;
+  --color-vien: #F7EEEB;
+  --color-trang: #FFFFFF;
+
+  --font-sans: var(--font-be-vietnam-pro), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  :root {
+    --target-size: 24px;
+  }
+
+  @media (pointer: coarse) {
+    :root {
+      --target-size: 44px;
+    }
+  }
+
+  html {
+    scroll-padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  body {
+    margin: 0;
+    background-color: #FFFFFF;
+    color: #2B2B2A;
+    font-family: var(--font-be-vietnam-pro), ui-sans-serif, system-ui, sans-serif;
+    overflow-wrap: break-word;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p,
+  li {
+    text-wrap: pretty;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  :where(a, code) {
+    overflow-wrap: anywhere;
+  }
+
+  img,
+  video {
+    max-inline-size: 100%;
+    block-size: auto;
+  }
+
+  :where(
+      button,
+      select,
+      textarea,
+      input:not([type="checkbox"], [type="radio"]),
+      [role="button"],
+      nav a,
+      label:has(input[type="checkbox"], input[type="radio"])
+    ) {
+    min-block-size: var(--target-size);
+  }
+}
+
+.vet-hong {
+  box-shadow: inset 0 -10px 0 #E8D2CC;
+  padding: 0 2px;
+}
+
+.vet-hong-lon {
+  box-shadow: inset 0 -14px 0 #E8D2CC;
+  padding: 0 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
