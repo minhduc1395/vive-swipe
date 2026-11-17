@@ -87,7 +87,9 @@ test.describe("Deck quẹt sản phẩm (W011)", () => {
 
   test("điều khiển quẹt bằng phím mũi tên", async ({ page }) => {
     await page.goto("/quet");
-    await page.waitForTimeout(300);
+    await expect(page.getByRole("article")).toBeVisible();
+    await page.evaluate(() => window.focus());
+    await page.waitForTimeout(600);
 
     const linkDaThich = page.getByRole("link", { name: "Đã thích" });
     const linkGio = page.getByRole("link", { name: "Giỏ" });
@@ -95,15 +97,51 @@ test.describe("Deck quẹt sản phẩm (W011)", () => {
     // Nhấn ArrowRight để thích
     await page.keyboard.press("ArrowRight");
     await expect(linkDaThich.getByLabel("1 món")).toBeVisible();
+    await page.waitForTimeout(400);
 
     // Nhấn ArrowUp để vào giỏ
     await page.keyboard.press("ArrowUp");
     await expect(linkGio.getByLabel("1 món")).toBeVisible();
     await expect(linkDaThich.getByLabel("2 món")).toBeVisible();
+    await page.waitForTimeout(400);
 
     // Nhấn z để hoàn tác
     await page.keyboard.press("z");
     await expect(linkGio.getByLabel("1 món")).not.toBeVisible();
     await expect(linkDaThich.getByLabel("1 món")).toBeVisible();
+  });
+
+  test("thanh điều hướng 5 tab nằm gọn trong viewport ở các kích thước màn hình nhỏ", async ({
+    page,
+  }) => {
+    const viewports = [
+      { width: 360, height: 640 },
+      { width: 390, height: 664 },
+      { width: 412, height: 839 },
+    ];
+
+    for (const vp of viewports) {
+      await page.setViewportSize(vp);
+      await page.goto("/quet");
+
+      const nav = page.getByRole("navigation", { name: "Điều hướng chính" });
+      await expect(nav).toBeVisible();
+
+      const box = await nav.boundingBox();
+      expect(
+        box,
+        `Không tìm thấy boundingBox của thanh tab ở ${vp.width}x${vp.height}`
+      ).not.toBeNull();
+      if (box) {
+        expect(
+          box.y + box.height,
+          `Thanh tab bị tràn đáy màn hình ở ${vp.width}x${vp.height} (y=${box.y}, h=${box.height}, tổng=${box.y + box.height}, max=${vp.height})`
+        ).toBeLessThanOrEqual(vp.height + 2);
+        expect(
+          box.y,
+          `Thanh tab nằm ngoài viewport ở ${vp.width}x${vp.height}`
+        ).toBeGreaterThanOrEqual(0);
+      }
+    }
   });
 });

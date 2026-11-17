@@ -36,8 +36,8 @@ const MAP_LOAI_DA: Record<string, string | null> = {
   "da-hon-hop": "da-hon-hop",
   "da nhay cam": "da-nhay-cam",
   "da-nhay-cam": "da-nhay-cam",
-  "da thuong": "da-thuong",
-  "da-thuong": "da-thuong",
+  "da thuong": "moi-loai-da",
+  "da-thuong": "moi-loai-da",
   "chua ro": null,
   "chua-ro": null,
 };

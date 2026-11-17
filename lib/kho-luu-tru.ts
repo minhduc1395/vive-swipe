@@ -76,6 +76,26 @@ export function themVaoGio(sanPhamId: string, soLuong = 1): void {
   }
 }
 
+export function giamSoLuongGio(sanPhamId: string): void {
+  const hienTai = layGioHang();
+  const viTri = hienTai.findIndex((item) => item.sanPhamId === sanPhamId);
+  if (viTri < 0) return;
+
+  if (hienTai[viTri].soLuong > 1) {
+    const banSao = [...hienTai];
+    banSao[viTri] = {
+      ...banSao[viTri],
+      soLuong: banSao[viTri].soLuong - 1,
+    };
+    ghiJson(KHOA_GIO_HANG, banSao);
+  } else {
+    ghiJson(
+      KHOA_GIO_HANG,
+      hienTai.filter((item) => item.sanPhamId !== sanPhamId)
+    );
+  }
+}
+
 export function xoaKhoiGio(sanPhamId: string): void {
   const hienTai = layGioHang();
   ghiJson(

@@ -33,7 +33,7 @@ const DANH_SACH_MOI_QUAN_TAM: LuaChon[] = [
   { id: "chong-lao-hoa", label: "Chống lão hóa" },
   { id: "chong-nang", label: "Chống nắng" },
   { id: "trang-diem", label: "Trang điểm" },
-  { id: "co-the", label: "Chăm sóc cơ thể" },
+  { id: "cham-soc-co-the", label: "Chăm sóc cơ thể" },
   { id: "thiet-bi", label: "Thiết bị làm đẹp" },
 ];
 

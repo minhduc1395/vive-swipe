@@ -1,7 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import type { SanPham } from "@/lib/data/types";
+import { DEALS } from "@/lib/data";
 import { dinhDangTien } from "@/lib/dinh-dang";
+import { layNhanLoaiDa, layNhanVanDe } from "@/lib/nhan";
+import { layCacDealCuaSanPham } from "@/lib/deals/ghi-chu";
 
 interface BangChiTietProps {
   sanPham: SanPham | null;
@@ -20,13 +24,17 @@ export function BangChiTiet({
   onThemGio,
   daThich = false,
 }: BangChiTietProps) {
+  const [anhLoi, setAnhLoi] = useState<boolean>(false);
+
   if (!dangMo || !sanPham) return null;
 
-  const nenAnh = sanPham.danh_muc === "mat-na" || sanPham.danh_muc === "kem-duong"
-    ? "bg-[#EAF3ED]"
-    : "bg-[#F7EEEB]";
+  const nenAnh =
+    sanPham.danh_muc === "mat-na" || sanPham.danh_muc === "kem-duong"
+      ? "bg-[#EAF3ED]"
+      : "bg-[#F7EEEB]";
 
   const anhSrc = sanPham.anh || "/brand/vive-logo-black.png";
+  const dealsLienQuan = layCacDealCuaSanPham(sanPham, DEALS);
 
   return (
     <div
@@ -41,7 +49,10 @@ export function BangChiTiet({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Nắp kéo */}
-        <div className="flex justify-center pt-2.5 pb-1 shrink-0" aria-hidden="true">
+        <div
+          className="flex justify-center pt-2.5 pb-1 shrink-0"
+          aria-hidden="true"
+        >
           <div className="w-10 h-1 rounded-full bg-[#E8D2CC]" />
         </div>
 
@@ -71,14 +82,23 @@ export function BangChiTiet({
         <div className="flex-1 overflow-y-auto px-5 pt-2 pb-6 flex flex-col gap-4">
           {/* Hộp ảnh */}
           <div
-            className={`w-full h-[196px] rounded-[22px] ${nenAnh} flex items-center justify-center shrink-0`}
+            className={`w-full h-[196px] rounded-[22px] ${nenAnh} flex items-center justify-center shrink-0 overflow-hidden`}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={anhSrc}
-              alt={sanPham.ten_hien_thi}
-              className="w-[176px] h-[176px] object-contain"
-            />
+            {anhLoi ? (
+              <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center">
+                <span className="text-[13px] font-semibold tracking-[1.4px] text-xam uppercase">
+                  {sanPham.thuong_hieu}
+                </span>
+              </div>
+            ) : (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                src={anhSrc}
+                alt={sanPham.ten_hien_thi}
+                onError={() => setAnhLoi(true)}
+                className="w-[176px] h-[176px] object-contain"
+              />
+            )}
           </div>
 
           {/* Tiêu đề & giá */}
@@ -107,7 +127,7 @@ export function BangChiTiet({
           </div>
 
           {/* Phù hợp với */}
-          {(sanPham.loai_da?.length || sanPham.van_de?.length) ? (
+          {sanPham.loai_da?.length || sanPham.van_de?.length ? (
             <div className="flex flex-col gap-2 pt-2 border-t border-vien">
               <h3 className="m-0 text-[13px] font-semibold tracking-[1px] text-xam uppercase">
                 Phù hợp với
@@ -118,7 +138,7 @@ export function BangChiTiet({
                     key={da}
                     className="h-[30px] px-3 rounded-full bg-hong-nhat text-[13px] font-medium flex items-center text-den"
                   >
-                    {da}
+                    {layNhanLoaiDa(da)}
                   </span>
                 ))}
                 {sanPham.van_de?.map((vd) => (
@@ -126,12 +146,40 @@ export function BangChiTiet({
                     key={vd}
                     className="h-[30px] px-3 rounded-full bg-[#EAF3ED] text-[13px] font-medium flex items-center text-den"
                   >
-                    {vd}
+                    {layNhanVanDe(vd)}
                   </span>
                 ))}
               </div>
             </div>
           ) : null}
+
+          {/* Các deal có sản phẩm này */}
+          {dealsLienQuan.length > 0 && (
+            <div className="flex flex-col gap-2 pt-2 border-t border-vien">
+              <h3 className="m-0 text-[13px] font-semibold tracking-[1px] text-xam uppercase">
+                Các deal có sản phẩm này
+              </h3>
+              <div className="flex flex-col gap-2">
+                {dealsLienQuan.map((deal) => (
+                  <div
+                    key={deal.id}
+                    className="p-3 rounded-2xl bg-hong-nhat border border-vien flex flex-col gap-1"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-[14px] text-den">
+                        {deal.ten}
+                      </span>
+                    </div>
+                    {(deal.hook || deal.dieu_kien) && (
+                      <p className="m-0 text-[13px] text-[#5C5C5B]">
+                        {deal.hook || deal.dieu_kien}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Thành phần nổi bật */}
           {sanPham.thanh_phan?.length ? (
@@ -194,7 +242,7 @@ export function BangChiTiet({
               onThemGio();
               onDong();
             }}
-            className="flex-1 h-[52px] rounded-full bg-den text-trang flex items-center justify-center gap-2 font-semibold text-[16px] cursor-pointer hover:bg-black transition-colors"
+            className="flex-1 h-[52px] rounded-full bg-den text-trang flex items-center justify-center gap-2 font-semibold text-[16px] cursor-pointer hover:opacity-90 transition-opacity"
           >
             <svg
               width="20"
