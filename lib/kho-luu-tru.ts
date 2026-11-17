@@ -8,7 +8,9 @@ export const KHOA_DA_BO_QUA = "vive_da_bo_qua";
 export const KHOA_HO_SO = "vive_ho_so";
 
 export interface ItemGioHang {
-  sanPhamId: string;
+  loai?: "san_pham" | "combo";
+  sanPhamId?: string;
+  dealId?: string;
   soLuong: number;
 }
 
@@ -31,6 +33,9 @@ function ghiJson<T>(khoa: string, duLieu: T): void {
   if (typeof window === "undefined") return;
   try {
     window.localStorage.setItem(khoa, JSON.stringify(duLieu));
+    window.dispatchEvent(
+      new CustomEvent("vive_storage_update", { detail: { khoa } })
+    );
   } catch {
     // bỏ qua lỗi storage
   }
@@ -63,7 +68,9 @@ export function layGioHang(): ItemGioHang[] {
 
 export function themVaoGio(sanPhamId: string, soLuong = 1): void {
   const hienTai = layGioHang();
-  const viTri = hienTai.findIndex((item) => item.sanPhamId === sanPhamId);
+  const viTri = hienTai.findIndex(
+    (item) => (item.loai !== "combo" && item.sanPhamId === sanPhamId)
+  );
   if (viTri >= 0) {
     const banSao = [...hienTai];
     banSao[viTri] = {
@@ -72,36 +79,121 @@ export function themVaoGio(sanPhamId: string, soLuong = 1): void {
     };
     ghiJson(KHOA_GIO_HANG, banSao);
   } else {
-    ghiJson(KHOA_GIO_HANG, [{ sanPhamId, soLuong }, ...hienTai]);
+    ghiJson(KHOA_GIO_HANG, [{ loai: "san_pham", sanPhamId, soLuong }, ...hienTai]);
   }
 }
 
-export function giamSoLuongGio(sanPhamId: string): void {
+export function themComboVaoGio(dealId: string, soLuong = 1): void {
   const hienTai = layGioHang();
-  const viTri = hienTai.findIndex((item) => item.sanPhamId === sanPhamId);
-  if (viTri < 0) return;
-
-  if (hienTai[viTri].soLuong > 1) {
+  const viTri = hienTai.findIndex(
+    (item) => item.loai === "combo" && item.dealId === dealId
+  );
+  if (viTri >= 0) {
     const banSao = [...hienTai];
     banSao[viTri] = {
       ...banSao[viTri],
-      soLuong: banSao[viTri].soLuong - 1,
+      soLuong: banSao[viTri].soLuong + soLuong,
     };
     ghiJson(KHOA_GIO_HANG, banSao);
   } else {
-    ghiJson(
-      KHOA_GIO_HANG,
-      hienTai.filter((item) => item.sanPhamId !== sanPhamId)
-    );
+    ghiJson(KHOA_GIO_HANG, [{ loai: "combo", dealId, soLuong }, ...hienTai]);
   }
 }
 
-export function xoaKhoiGio(sanPhamId: string): void {
+export function capNhatSoLuongGio(
+  id: string,
+  soLuong: number,
+  loai: "san_pham" | "combo" = "san_pham"
+): void {
+  const hienTai = layGioHang();
+  if (soLuong <= 0) {
+    xoaKhoiGio(id, loai);
+    return;
+  }
+  const banSao = hienTai.map((item) => {
+    const khop =
+      loai === "combo"
+        ? item.loai === "combo" && item.dealId === id
+        : item.loai !== "combo" && item.sanPhamId === id;
+    return khop ? { ...item, soLuong } : item;
+  });
+  ghiJson(KHOA_GIO_HANG, banSao);
+}
+
+export function giamSoLuongGio(
+  id: string,
+  loai: "san_pham" | "combo" = "san_pham"
+): void {
+  const hienTai = layGioHang();
+  const muc = hienTai.find((item) =>
+    loai === "combo"
+      ? item.loai === "combo" && item.dealId === id
+      : item.loai !== "combo" && item.sanPhamId === id
+  );
+  if (!muc) return;
+  if (muc.soLuong <= 1) {
+    xoaKhoiGio(id, loai);
+  } else {
+    capNhatSoLuongGio(id, muc.soLuong - 1, loai);
+  }
+}
+
+export function xoaKhoiGio(
+  id: string,
+  loai: "san_pham" | "combo" = "san_pham"
+): void {
   const hienTai = layGioHang();
   ghiJson(
     KHOA_GIO_HANG,
-    hienTai.filter((item) => item.sanPhamId !== sanPhamId)
+    hienTai.filter((item) => {
+      if (loai === "combo") {
+        return !(item.loai === "combo" && item.dealId === id);
+      }
+      return !(item.loai !== "combo" && item.sanPhamId === id);
+    })
   );
+}
+
+export function doiSangCombo(
+  dealId: string,
+  thanhPhan: Array<{ id: string; so_luong: number }>
+): void {
+  const hienTai = layGioHang();
+  let banSao = [...hienTai];
+
+  for (const tp of thanhPhan) {
+    let canTru = tp.so_luong;
+    banSao = banSao
+      .map((item) => {
+        if (canTru <= 0) return item;
+        if (item.loai !== "combo" && item.sanPhamId === tp.id) {
+          const tru = Math.min(item.soLuong, canTru);
+          canTru -= tru;
+          return { ...item, soLuong: item.soLuong - tru };
+        }
+        return item;
+      })
+      .filter((item) => item.soLuong > 0);
+  }
+
+  // Thêm combo
+  const viTriCombo = banSao.findIndex(
+    (item) => item.loai === "combo" && item.dealId === dealId
+  );
+  if (viTriCombo >= 0) {
+    banSao[viTriCombo] = {
+      ...banSao[viTriCombo],
+      soLuong: banSao[viTriCombo].soLuong + 1,
+    };
+  } else {
+    banSao.unshift({ loai: "combo", dealId, soLuong: 1 });
+  }
+
+  ghiJson(KHOA_GIO_HANG, banSao);
+}
+
+export function xoaToanBoGio(): void {
+  ghiJson(KHOA_GIO_HANG, []);
 }
 
 // --- BỎ QUA ---
