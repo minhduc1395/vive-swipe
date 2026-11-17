@@ -1,0 +1,11 @@
+.env*
+node_modules
+.next
+tests
+test-results
+.git
+.github
+*.md
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
