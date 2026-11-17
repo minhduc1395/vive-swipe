@@ -22,6 +22,7 @@ Các file `.dc.html` ở đây là mã nguồn của từng màn, chép ra để
 | QuanTri.dc.html | 3.2 Quản trị deal, nhập tồn KiotViet | W017 |
 | LandingPC.dc.html | 4.1 Landing chiến dịch `/`, mẫu đợt LOPOE Better Balance (co giãn mọi cỡ màn hình). Sản phẩm vẽ bằng CSS là chỗ chờ ảnh tách nền hoặc mô hình 3D | W027 |
 | LandingKhoi.dc.html | 4.5 Thư viện khối của landing: 8 loại khối, phần nào đổi mỗi đợt | W027 |
+| HieuUngCuon.dc.html | 4.7 Hiệu ứng khi cuộn landing (4 khung: 0%, 25%, 55%, 85%) | W027 |
 | Pawlette.dc.html | 4.6 Personal Color cùng Pawlette (bản tạm, sau làm trang riêng) | W029 |
 | QuetPC.dc.html | 4.2 Quẹt trên máy tính: thanh trên, 3 cột (gu, deck, deal + giỏ mini) | W028 |
 | DanhMucPC.dc.html | 4.3 Danh mục trên máy tính: bộ lọc bên trái, lưới sản phẩm | W028 |

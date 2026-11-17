@@ -23,6 +23,13 @@ Màn chào → 3 câu hỏi (bỏ qua được) → Deck quẹt ⇄ Chi tiết s
 - **`/` là landing page chiến dịch** (chốt lại 18/11): giới thiệu sản phẩm mới và chương trình của từng đợt, **không nói về quẹt** (quẹt vẫn ở `/quet` và trong menu). Thiết kế mẫu: design/LandingPC.dc.html (đợt LOPOE Better Balance), các loại khối: design/LandingKhoi.dc.html.
 - **Đổi theo đợt không sửa code:** mỗi đợt là một file `data/chien-dich/<ma>.yaml` (mục 2.0b). Trang chọn đợt đang trong thời gian chạy, ưu tiên cao nhất; không có đợt nào thì dùng đợt mặc định.
 - **Ấn tượng nhưng nhẹ:** hiệu ứng 3D bản đầu làm bằng CSS 3D và chuyển động theo cuộn/chuột trên ảnh tách nền (WebP trong suốt); mô hình 3D thật (`.glb`) và video chỉ tải khi đợt có, tải lười, có ảnh dự phòng; tôn trọng "giảm chuyển động" của máy; trên điện thoại tắt nghiêng theo chuột, giữ trôi nhẹ.
+- **Màu:** landing sáng, tươi (nền hồng nhạt, trắng, bạc hà nhạt); đen chỉ dùng cho chữ và nút chính, không làm nền khối lớn (chủ dự án 18/11).
+- **Hiệu ứng khi cuộn** (design/HieuUngCuon.dc.html), gắn với vị trí cuộn, cuộn lên thì chạy lùi:
+  1. Đầu trang: sản phẩm trôi, nghiêng theo chuột (máy tính).
+  2. Cuộn xuống: chữ lớn trượt lên mờ dần; 3 sản phẩm xoay và rơi vào kệ khối ra-mat; thẻ combo nghiêng dần về thẳng.
+  3. Khối chuong-trinh: nền chuyển trắng → bạc hà nhạt, ô to hiện trước, ô nhỏ trượt lên lần lượt.
+  4. Khối doi-tac: quạt màu xòe theo lượt cuộn; khối booth: chữ LL2 phóng to dần.
+  Cách làm: CSS `animation-timeline: view()/scroll()` khi trình duyệt hỗ trợ, còn lại dùng Framer Motion `useScroll` + `useTransform` (đã có trong dự án). Chỉ animate `transform`, `opacity`, `background-color`; không cuộn giả (scroll-jacking), không khóa cuộn; tắt khi máy bật giảm chuyển động. Mỗi khối khai báo hiệu ứng trong cấu hình đợt (`hieu_ung: roi-vao-ke | hien-lan-luot | xoe | phong-to | khong`).
 - **Personal Color cùng Pawlette:** khối giới thiệu trên landing dẫn tới `/personal-color` (design/Pawlette.dc.html, bản tạm, W029). Nội dung gói chờ Pawlette.
 - **Mốc cỡ màn hình:** dưới 768px như thiết kế điện thoại (thanh tab dưới). 768–1023px: máy tính bảng, thanh điều hướng dọc bên trái (rail), Quẹt có cột Deal cho bạn bên phải (QuetTablet); tablet dọc dưới 900px cao vẫn dùng bố cục điện thoại với thẻ to hơn. Từ 1024px: máy tính, thanh trên cùng có logo, 4 mục, ô tìm, nút Giỏ có số món; Quẹt chia 3 cột (gu + phím tắt | deck | deal cho bạn + giỏ mini, QuetPC); Danh mục có bộ lọc dính bên trái và lưới 3–4 cột (DanhMucPC).
 - **Máy tính:** quẹt bằng kéo chuột hoặc phím ← bỏ qua, → thích, ↑ vào giỏ, Z hoàn tác, Space xem chi tiết (chỉ khi con trỏ không ở ô nhập). Chi tiết sản phẩm mở thành hộp thoại giữa màn thay cho bảng trượt. Nội dung rộng tối đa 1280px, căn giữa.

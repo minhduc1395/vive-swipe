@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>VIVE – Hiệu ứng khi cuộn</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2B2B2A}a:hover{color:#000000}
+@keyframes noi{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@keyframes chay{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes xoay{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes sang{0%,100%{opacity:.55}50%{opacity:.9}}
+@media (prefers-reduced-motion: reduce){*{animation:none!important}}
+
+</style>
+</helmet>
+<div style="font-family: 'Be Vietnam Pro', sans-serif; color: #2B2B2A; background: #FFFFFF; padding: 48px; box-sizing: border-box">
+  <div style="max-width: 1344px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 20px">
+      <h1 style="margin: 0; font-size: 48px; font-weight: 700; letter-spacing: -1.5px">Hiệu ứng khi cuộn trang</h1>
+      <p style="margin: 0; font-size: 16px; line-height: 1.6; color: #5C5C5B; max-width: 560px">Chuyển động gắn với vị trí cuộn: cuộn xuống thì chạy tới, cuộn lên thì chạy lùi. Máy bật "giảm chuyển động" thì chỉ hiện tĩnh.</p>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: 24px"><figure style="margin: 0; flex: 1 1 280px; display: flex; flex-direction: column; gap: 14px">
+  <div style="position: relative; height: 560px; border-radius: 28px; overflow: hidden; background: linear-gradient(180deg, #F7EEEB, #FFFFFF); box-shadow: 0 0 0 1px #F7EEEB">
+    <div style="position: absolute; left: 24px; top: 40px; font-size: 54px; line-height: .92; font-weight: 700; letter-spacing: -2px">LOPOE<br><span style="color: transparent; -webkit-text-stroke: 1.2px #2B2B2A">Better</span><br>Balance</div>
+<div style="position: absolute; left: 40px; top: 260px; opacity: 1; filter: drop-shadow(0 10px 12px rgba(43,43,42,0.14))"><div style="width: 46px; height: 150px; transform: rotate(-12deg); display: flex; flex-direction: column; align-items: center">
+  <div style="width: 100%; flex: 1; border-radius: 12px 12px 6px 6px; background: linear-gradient(90deg, #E9DEDA 0%, #FFFFFF 38%, #F7EEEB 70%, #D9C7C1 100%); box-shadow: inset 0 -2px 0 rgba(0,0,0,0.04); display: flex; align-items: center; justify-content: center">
+    <span style="writing-mode: vertical-rl; transform: rotate(180deg); font-size: 9px; font-weight: 700; letter-spacing: 3px; color: #2B2B2A">LOPOE</span>
+  </div>
+  <div style="width: 70%; height: 20px; border-radius: 0 0 6px 6px; background: linear-gradient(90deg, #1E1E1D, #4A4A48 45%, #1E1E1D)"></div>
+</div></div><div style="position: absolute; left: 120px; top: 220px; opacity: 1; filter: drop-shadow(0 10px 12px rgba(43,43,42,0.14))"><div style="width: 72px; transform: rotate(4deg); display: flex; flex-direction: column; align-items: center">
+  <div style="width: 21px; height: 32px; border-radius: 10px 10px 4px 4px; background: linear-gradient(90deg, #1E1E1D, #555553 45%, #1E1E1D)"></div>
+  <div style="width: 32px; height: 15px; background: linear-gradient(90deg, #C9B7B1, #F2E9E6 45%, #C9B7B1)"></div>
+  <div style="width: 100%; height: 118px; border-radius: 16px; background: linear-gradient(90deg, rgba(232,210,204,0.85) 0%, rgba(255,255,255,0.95) 35%, rgba(232,210,204,0.9) 75%, rgba(200,170,162,0.95) 100%); display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.6)">
+    <span style="font-size: 9px; font-weight: 700; letter-spacing: 2px; color: #2B2B2A">LOPOE</span>
+  </div>
+</div></div><div style="position: absolute; left: 170px; top: 380px; opacity: 1; filter: drop-shadow(0 10px 12px rgba(43,43,42,0.14))"><div style="width: 102px; transform: rotate(-6deg); display: flex; flex-direction: column">
+  <div style="height: 25px; border-radius: 8px 8px 2px 2px; background: linear-gradient(90deg, #1E1E1D, #555553 45%, #1E1E1D)"></div>
+  <div style="height: 55px; border-radius: 2px 2px 14px 14px; background: linear-gradient(90deg, #E2D3CE 0%, #FFFFFF 40%, #F7EEEB 70%, #CDB9B3 100%); display: flex; align-items: center; justify-content: center">
+    <span style="font-size: 9px; font-weight: 700; letter-spacing: 3px; color: #2B2B2A">LOPOE</span>
+  </div>
+</div></div>
+<div style="position: absolute; right: -80px; top: -60px; width: 300px; height: 300px; border-radius: 999px; background: radial-gradient(circle, rgba(232,210,204,.9), rgba(255,255,255,0) 70%)"></div>
+    <div style="position: absolute; right: 10px; top: 16px; width: 6px; height: 120px; border-radius: 6px; background: rgba(43,43,42,0.08)"><div style="position: absolute; left: 0; top: 0px; width: 6px; height: 30px; border-radius: 6px; background: #2B2B2A"></div></div>
+  </div>
+  <figcaption style="display: flex; flex-direction: column; gap: 6px">
+    <span style="font-size: 13px; font-weight: 700; color: #737373; letter-spacing: 1px">CUỘN 0%</span>
+    <span style="font-size: 18px; font-weight: 700">Sản phẩm trôi, nghiêng theo chuột</span>
+    <span style="font-size: 14px; line-height: 1.55; color: #5C5C5B">Đầu trang: ba sản phẩm nổi lơ lửng, quầng hồng thở nhẹ. Trên máy tính, rê chuột thì cả cụm nghiêng theo.</span>
+  </figcaption>
+</figure><figure style="margin: 0; flex: 1 1 280px; display: flex; flex-direction: column; gap: 14px">
+  <div style="position: relative; height: 560px; border-radius: 28px; overflow: hidden; background: linear-gradient(180deg, #F7EEEB, #FFFFFF); box-shadow: 0 0 0 1px #F7EEEB">
+    <div style="position: absolute; left: 24px; top: -40px; opacity: .25; font-size: 54px; line-height: .92; font-weight: 700; letter-spacing: -2px; transform: translateY(-20px)">LOPOE<br>Better</div>
+<div style="position: absolute; left: 20px; top: 170px; opacity: 0.95; filter: drop-shadow(0 10px 12px rgba(43,43,42,0.14))"><div style="width: 42px; height: 137px; transform: rotate(-30deg); display: flex; flex-direction: column; align-items: center">
+  <div style="width: 100%; flex: 1; border-radius: 11px 11px 5px 5px; background: linear-gradient(90deg, #E9DEDA 0%, #FFFFFF 38%, #F7EEEB 70%, #D9C7C1 100%); box-shadow: inset 0 -2px 0 rgba(0,0,0,0.04); display: flex; align-items: center; justify-content: center">
+    <span style="writing-mode: vertical-rl; transform: rotate(180deg); font-size: 8px; font-weight: 700; letter-spacing: 2px; color: #2B2B2A">LOPOE</span>
+  </div>
+  <div style="width: 70%; height: 18px; border-radius: 0 0 5px 5px; background: linear-gradient(90deg, #1E1E1D, #4A4A48 45%, #1E1E1D)"></div>
+</div></div><div style="position: absolute; left: 118px; top: 140px; opacity: 1; filter: drop-shadow(0 10px 12px rgba(43,43,42,0.14))"><div style="width: 62px; transform: rotate(0deg); display: flex; flex-direction: column; align-items: center">
+  <div style="width: 18px; height: 27px; border-radius: 9px 9px 3px 3px; background: linear-gradient(90deg, #1E1E1D, #555553 45%, #1E1E1D)"></div>
+  <div style="width: 27px; height: 13px; background: linear-gradient(90deg, #C9B7B1, #F2E9E6 45%, #C9B7B1)"></div>
+  <div style="width: 100%; height: 102px; border-radius: 14px; background: linear-gradient(90deg, rgba(232,210,204,0.85) 0%, rgba(255,255,255,0.95) 35%, rgba(232,210,204,0.9) 75%, rgba(200,170,162,0.95) 100%); display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.6)">
+    <span style="font-size: 8px; font-weight: 700; letter-spacing: 2px; color: #2B2B2A">LOPOE</span>
+  </div>
+</div></div><div style="position: absolute; left: 190px; top: 230px; opacity: 0.95; filter: drop-shadow(0 10px 12px rgba(43,43,42,0.14))"><div style="width: 93px; transform: rotate(20deg); display: flex; flex-direction: column">
+  <div style="height: 23px; border-radius: 7px 7px 2px 2px; background: linear-gradient(90deg, #1E1E1D, #555553 45%, #1E1E1D)"></div>
+  <div style="height: 50px; border-radius: 2px 2px 13px 13px; background: linear-gradient(90deg, #E2D3CE 0%, #FFFFFF 40%, #F7EEEB 70%, #CDB9B3 100%); display: flex; align-items: center; justify-content: center">
+    <span style="font-size: 8px; font-weight: 700; letter-spacing: 2px; color: #2B2B2A">LOPOE</span>
+  </div>
+</div></div>
+<div style="position: absolute; left: 0; right: 0; bottom: 0; height: 260px; background: #FFFFFF; border-radius: 28px 28px 0 0; padding: 20px; box-sizing: border-box">
+  <div style="font-size: 30px; font-weight: 700; letter-spacing: -1px; line-height: 1">Đủ bộ,<br>đỡ tốn.</div>
+  <div style="display: flex; gap: 8px; margin-top: 16px; perspective: 400px"><div style="flex: 1; height: 120px; border-radius: 14px; background: #F7EEEB; transform: rotateY(14deg) translateY(20px)"></div><div style="flex: 1; height: 120px; border-radius: 14px; background: #F7EEEB; transform: rotateY(0deg) translateY(0px)"></div><div style="flex: 1; height: 120px; border-radius: 14px; background: #F7EEEB; transform: rotateY(-14deg) translateY(30px)"></div></div>
+</div>
+    <div style="position: absolute; right: 10px; top: 16px; width: 6px; height: 120px; border-radius: 6px; background: rgba(43,43,42,0.08)"><div style="position: absolute; left: 0; top: 30px; width: 6px; height: 30px; border-radius: 6px; background: #2B2B2A"></div></div>
+  </div>
+  <figcaption style="display: flex; flex-direction: column; gap: 6px">
+    <span style="font-size: 13px; font-weight: 700; color: #737373; letter-spacing: 1px">CUỘN 25%</span>
+    <span style="font-size: 18px; font-weight: 700">Sản phẩm rơi vào kệ</span>
+    <span style="font-size: 14px; line-height: 1.55; color: #5C5C5B">Cuộn xuống: chữ lớn trượt lên và mờ dần, ba sản phẩm xoay rồi rơi đúng vào kệ của khối "Đủ bộ, đỡ tốn". Các thẻ combo nghiêng dần về thẳng.</span>
+  </figcaption>
+</figure><figure style="margin: 0; flex: 1 1 280px; display: flex; flex-direction: column; gap: 14px">
+  <div style="position: relative; height: 560px; border-radius: 28px; overflow: hidden; background: #FFFFFF; box-shadow: 0 0 0 1px #F7EEEB">
+    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, #FFFFFF 0%, #EAF3ED 45%)"></div>
+<div style="position: absolute; left: 20px; top: 40px; font-size: 30px; font-weight: 700; letter-spacing: -1px; line-height: 1">Đang chạy<br>tại booth</div>
+<div style="position: absolute; left: 20px; right: 26px; top: 130px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px">
+  <div style="grid-row: span 2; height: 230px; border-radius: 16px; background: #E8D2CC"></div>
+  <div style="height: 110px; border-radius: 16px; background: #CFE3D5"></div>
+  <div style="height: 110px; border-radius: 16px; background: #FFFFFF; opacity: .55; transform: translateY(24px)"></div>
+  <div style="grid-column: span 2; height: 100px; border-radius: 16px; background: #FFFFFF; opacity: .2; transform: translateY(50px)"></div>
+</div>
+    <div style="position: absolute; right: 10px; top: 16px; width: 6px; height: 120px; border-radius: 6px; background: rgba(43,43,42,0.08)"><div style="position: absolute; left: 0; top: 60px; width: 6px; height: 30px; border-radius: 6px; background: #2B2B2A"></div></div>
+  </div>
+  <figcaption style="display: flex; flex-direction: column; gap: 6px">
+    <span style="font-size: 13px; font-weight: 700; color: #737373; letter-spacing: 1px">CUỘN 55%</span>
+    <span style="font-size: 18px; font-weight: 700">Nền đổi màu, ô hiện lần lượt</span>
+    <span style="font-size: 14px; line-height: 1.55; color: #5C5C5B">Nền chuyển mượt từ trắng sang bạc hà nhạt; ô to hiện trước, các ô nhỏ trượt lên theo nhịp cuộn.</span>
+  </figcaption>
+</figure><figure style="margin: 0; flex: 1 1 280px; display: flex; flex-direction: column; gap: 14px">
+  <div style="position: relative; height: 560px; border-radius: 28px; overflow: hidden; background: #FFFFFF; box-shadow: 0 0 0 1px #F7EEEB">
+    <div style="position: absolute; inset: 0; background: #FFFFFF"></div>
+<div style="position: absolute; left: 20px; top: 34px; font-size: 30px; font-weight: 700; letter-spacing: -1px; line-height: 1">Tông nào<br>hợp bạn?</div>
+<div style="position: absolute; left: 50%; top: 150px; width: 80px; height: 170px; margin-left: -40px; transform-origin: 50% 110%; transform: rotate(-45deg); border-radius: 14px; background: #FFFFFF; box-shadow: 0 10px 20px rgba(43,43,42,.12); padding: 8px; box-sizing: border-box; display: flex; flex-direction: column; gap: 5px"><span style="flex: 2; border-radius: 8px; background: #F6C9A9"></span><span style="flex: 1; border-radius: 8px; background: #F9E0A8"></span></div><div style="position: absolute; left: 50%; top: 150px; width: 80px; height: 170px; margin-left: -40px; transform-origin: 50% 110%; transform: rotate(-15deg); border-radius: 14px; background: #FFFFFF; box-shadow: 0 10px 20px rgba(43,43,42,.12); padding: 8px; box-sizing: border-box; display: flex; flex-direction: column; gap: 5px"><span style="flex: 2; border-radius: 8px; background: #C9D6EA"></span><span style="flex: 1; border-radius: 8px; background: #E7C6D9"></span></div><div style="position: absolute; left: 50%; top: 150px; width: 80px; height: 170px; margin-left: -40px; transform-origin: 50% 110%; transform: rotate(15deg); border-radius: 14px; background: #FFFFFF; box-shadow: 0 10px 20px rgba(43,43,42,.12); padding: 8px; box-sizing: border-box; display: flex; flex-direction: column; gap: 5px"><span style="flex: 2; border-radius: 8px; background: #C98B5E"></span><span style="flex: 1; border-radius: 8px; background: #D6B46A"></span></div><div style="position: absolute; left: 50%; top: 150px; width: 80px; height: 170px; margin-left: -40px; transform-origin: 50% 110%; transform: rotate(45deg); border-radius: 14px; background: #FFFFFF; box-shadow: 0 10px 20px rgba(43,43,42,.12); padding: 8px; box-sizing: border-box; display: flex; flex-direction: column; gap: 5px"><span style="flex: 2; border-radius: 8px; background: #2F3A66"></span><span style="flex: 1; border-radius: 8px; background: #B3264B"></span></div>
+<div style="position: absolute; left: 0; right: 0; bottom: 0; height: 170px; background: #F7EEEB; display: flex; align-items: center; padding-left: 16px; font-size: 130px; font-weight: 700; letter-spacing: -8px; color: transparent; -webkit-text-stroke: 1.5px #2B2B2A">LL2</div>
+    <div style="position: absolute; right: 10px; top: 16px; width: 6px; height: 120px; border-radius: 6px; background: rgba(43,43,42,0.08)"><div style="position: absolute; left: 0; top: 90px; width: 6px; height: 30px; border-radius: 6px; background: #2B2B2A"></div></div>
+  </div>
+  <figcaption style="display: flex; flex-direction: column; gap: 6px">
+    <span style="font-size: 13px; font-weight: 700; color: #737373; letter-spacing: 1px">CUỘN 85%</span>
+    <span style="font-size: 18px; font-weight: 700">Quạt màu xòe, chữ LL2 phóng to</span>
+    <span style="font-size: 14px; line-height: 1.55; color: #5C5C5B">Khối Pawlette: quạt 4 nhóm màu xòe ra theo lượt cuộn. Khối booth: chữ LL2 phóng to dần và dừng ở cuối trang.</span>
+  </figcaption>
+</figure></div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":860}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>
