@@ -20,6 +20,10 @@ Các file `.dc.html` ở đây là mã nguồn của từng màn, chép ra để
 | MaGiuHang.dc.html | 2.5 Mã giữ hàng + QR | W014 |
 | NhanVien.dc.html | 3.1 Trang nhân viên (máy tính bảng 1024×768) | W015 |
 | QuanTri.dc.html | 3.2 Quản trị deal, nhập tồn KiotViet | W017 |
+| LandingPC.dc.html | 4.1 Landing page `/` (co giãn mọi cỡ màn hình) | W027 |
+| QuetPC.dc.html | 4.2 Quẹt trên máy tính: thanh trên, 3 cột (gu, deck, deal + giỏ mini) | W028 |
+| DanhMucPC.dc.html | 4.3 Danh mục trên máy tính: bộ lọc bên trái, lưới sản phẩm | W028 |
+| QuetTablet.dc.html | 4.4 Quẹt trên máy tính bảng ngang: thanh điều hướng dọc bên trái | W028 |
 
 Quy ước rút ra từ thiết kế (bổ sung docs/03):
 - Thẻ, khối: bo góc 28px (thẻ deck), 22–24px (khối), 14–16px (ô nhập, ô nhỏ). Nút chính: viên thuốc đen cao 56px.

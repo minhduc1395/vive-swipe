@@ -19,7 +19,13 @@ Màn chào → 3 câu hỏi (bỏ qua được) → Deck quẹt ⇄ Chi tiết s
 
 ## 2. Màn hình
 
-### 2.1 Màn chào `/`
+### 2.0 Landing page và cỡ màn hình (thêm 18/11, thiết kế hàng 4 của canvas)
+- **`/` là landing page cho mọi thiết bị** (design/LandingPC.dc.html), co giãn: phần đầu (Thích thì quẹt phải, nút Bắt đầu quẹt → `/bat-dau`, Xem danh mục), 3 bước mua, Deal đang chạy (lấy từ deal hiện được, tối đa 4), thương hiệu, khối booth, chân trang. Trên máy tính có ô QR mở web trên điện thoại. Khách đã trả lời 3 câu hỏi mà mở `/` thì vẫn thấy landing, nút đổi thành "Quẹt tiếp".
+- **Mốc cỡ màn hình:** dưới 768px như thiết kế điện thoại (thanh tab dưới). 768–1023px: máy tính bảng, thanh điều hướng dọc bên trái (rail), Quẹt có cột Deal cho bạn bên phải (QuetTablet); tablet dọc dưới 900px cao vẫn dùng bố cục điện thoại với thẻ to hơn. Từ 1024px: máy tính, thanh trên cùng có logo, 4 mục, ô tìm, nút Giỏ có số món; Quẹt chia 3 cột (gu + phím tắt | deck | deal cho bạn + giỏ mini, QuetPC); Danh mục có bộ lọc dính bên trái và lưới 3–4 cột (DanhMucPC).
+- **Máy tính:** quẹt bằng kéo chuột hoặc phím ← bỏ qua, → thích, ↑ vào giỏ, Z hoàn tác, Space xem chi tiết (chỉ khi con trỏ không ở ô nhập). Chi tiết sản phẩm mở thành hộp thoại giữa màn thay cho bảng trượt. Nội dung rộng tối đa 1280px, căn giữa.
+- Các trang còn lại (Đã thích, Deal, Giỏ, Giữ hàng) trên máy tính: lưới nhiều cột cho danh sách, cột tóm tắt giỏ dính bên phải; không cần thiết kế riêng, theo cùng thanh trên và lề.
+
+### 2.1 Màn chào (điện thoại; từ W027 gộp vào landing `/`)
 - Logo VIVE (file gốc), một dòng chính: "Quẹt phải món hợp da. VIVE tìm deal cho bạn."
 - Nút "Bắt đầu quẹt". Không bắt đăng nhập.
 - Dưới cùng: "VIVE | K-Beauty Experience · LL2 Union Square, 171 Đồng Khởi". Giờ mở cửa lấy từ cấu hình, không viết cứng.
