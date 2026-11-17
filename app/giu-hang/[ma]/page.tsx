@@ -1,5 +1,6 @@
-import Link from "next/link";
-import { KhungDienThoai } from "@/components/KhungDienThoai";
+import { AppShell } from "@/components/AppShell";
+import { layDonGiuHangTheoMa } from "@/lib/giu-hang/kho-giu-hang";
+import { ChiTietMaGiuHang } from "./ChiTietMaGiuHang";
 
 export default async function TrangMaGiuHang({
   params,
@@ -7,38 +8,67 @@ export default async function TrangMaGiuHang({
   params: Promise<{ ma: string }>;
 }) {
   const { ma } = await params;
+  const maChuanHoa = decodeURIComponent(ma).toUpperCase();
+
+  let don = await layDonGiuHangTheoMa(maChuanHoa);
+
+  // Fallback demo object nếu chưa có trong DB (ví dụ mở trực tiếp VIVE-4821)
+  if (!don) {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const yyyy = tomorrow.getFullYear();
+    const mm = String(tomorrow.getMonth() + 1).padStart(2, "0");
+    const dd = String(tomorrow.getDate()).padStart(2, "0");
+
+    don = {
+      id: `fallback-${maChuanHoa}`,
+      ma: maChuanHoa,
+      ten: "Khách trải nghiệm",
+      sdt: "0901234567",
+      email: "khach@email.com",
+      ngayDen: `${yyyy}-${mm}-${dd}`,
+      hetHan: `${yyyy}-${mm}-${dd}T21:00:00+07:00`,
+      trangThai: "moi",
+      tongUocTinh: 1235000,
+      quaDuKien: "1 ampoule LOPOE",
+      taoLuc: new Date().toISOString(),
+      cacDong: [
+        {
+          id: "combo-pink",
+          ten: "COMBO PINK PDRN",
+          thuongHieu: "VIVE",
+          soLuong: 1,
+          giaSauUuDai: 999000,
+          loai: "combo",
+        },
+        {
+          id: "LOPOE-CF",
+          ten: "Sữa rửa mặt LOPOE",
+          thuongHieu: "LOPOE",
+          soLuong: 1,
+          giaSauUuDai: 186000,
+          loai: "san_pham",
+        },
+        {
+          id: "8809459397669",
+          ten: "Mặt nạ Aloe Dermal",
+          thuongHieu: "Dermal",
+          soLuong: 2,
+          giaSauUuDai: 50000,
+          loai: "san_pham",
+        },
+      ],
+    };
+  }
 
   return (
-    <KhungDienThoai>
-      <header className="flex items-center gap-1 pt-5 px-2">
-        <Link
-          href="/quet"
-          aria-label="Về trang quẹt"
-          className="w-11 h-11 flex items-center justify-center rounded-full"
-        >
-          <svg
-            width="22"
-            height="22"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M15 18l-6-6 6-6" />
-          </svg>
-        </Link>
-        <h1 className="m-0 text-[20px] font-semibold">Mã giữ hàng</h1>
-      </header>
-
-      <main className="px-5 pt-4 flex flex-col gap-3">
-        <div className="rounded-[24px] bg-hong-nhat p-6 text-center">
-          <p className="m-0 text-[13px] text-xam-dam">Mã giữ hàng</p>
-          <p className="mt-1 mb-0 text-[28px] font-bold tracking-tight">{ma}</p>
-        </div>
-      </main>
-    </KhungDienThoai>
+    <AppShell>
+      <div className="max-w-[540px] mx-auto px-4 md:px-6 py-4 md:py-8">
+        <main>
+          <ChiTietMaGiuHang don={don} />
+        </main>
+      </div>
+    </AppShell>
   );
 }
