@@ -6,7 +6,8 @@ Repo code của web quẹt sản phẩm VIVE (kiểu Tinder). Claude = Lead (k�
 1. `git pull --rebase origin main`.
 2. Đọc `docs/00-ke-hoach.md`, rồi tài liệu đúng phần việc: `docs/01-trai-nghiem.md` (giao diện), `docs/02-ky-thuat.md` (code, database, giá, gợi ý), `docs/03-thuong-hieu-va-noi-dung.md` (màu, chữ, pháp lý).
 3. Chạy `python3 scripts/board.py` và đọc 10 file mới nhất trong `handoff/`.
-4. Nhận việc có Chủ trì = tên mình, Trạng thái = Todo, Phụ thuộc đã Done, theo Ưu tiên.
+4. Nhận việc có Chủ trì = tên mình, Trạng thái = Todo, Phụ thuộc đã Done, theo Ưu tiên. Nếu phụ thuộc đang Review (đã có PR, chờ QA): được làm tiếp, tạo nhánh từ nhánh của task phụ thuộc, ghi "Dựa trên PR #x" trong mô tả PR. Claude merge theo thứ tự.
+5. Giao diện bám theo `design/` (xem `design/README.md`): bố cục, màu, cỡ chữ, khoảng cách lấy từ file `.dc.html` của màn tương ứng.
 
 ## Quy trình (giống repo vive_poup)
 - Nhận việc: sửa `tasks/Wxxx.md` sang Doing, tạo handoff `nhan-viec` bằng `scripts/new_handoff.sh`, commit, push.

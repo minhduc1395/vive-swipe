@@ -15,5 +15,19 @@ Web bán hàng của **VIVE | K-Beauty Experience** theo kiểu Tinder: quẹt p
 
 Điều phối chung của dự án VIVE: repo `minhduc1395/vive_poup` (task T016).
 
-## Khởi động Antigravity (dán vào đầu mỗi phiên)
+## Phiên đầu tiên của Antigravity (dán 1 lần)
+Mở Antigravity ở thư mục cha của `vive_poup` (hoặc một thư mục trống), chọn chế độ Planning, rồi dán:
+
+"Đây là phiên đầu tiên của bạn với dự án VIVE Quẹt: web bán mỹ phẩm kiểu quẹt Tinder. Trả lời tôi bằng tiếng Việt.
+1. Clone https://github.com/minhduc1395/vive-swipe vào thư mục này. Mọi việc làm trong thư mục vive-swipe.
+2. Đọc AGENTS.md, README.md, docs/00-ke-hoach.md, docs/01-trai-nghiem.md, docs/02-ky-thuat.md, docs/03-thuong-hieu-va-noi-dung.md và design/README.md. Đây là luật của dự án: Claude là Lead và kiểm tra (QA), bạn viết code theo task, tôi là chủ dự án.
+3. Chạy python3 scripts/board.py và đọc các handoff mới nhất (handoff W013 tra-loi nói cách kết nối Supabase).
+4. Kiểm tra máy: node -v (cần 20 trở lên), npm, git, gh auth status. Thiếu gì thì báo tôi, không tự cài phần mềm lớn. Chưa có gh thì push nhánh rồi gửi tôi link tạo Pull Request mà GitHub trả về.
+5. Sao chép .env.example thành .env.local. Để trống SUPABASE_SERVICE_ROLE_KEY, tôi tự điền sau. Không commit file này.
+6. Làm W006 trước: nhận việc theo AGENTS.md, cho tôi xem kế hoạch rồi mới code, làm trên nhánh w006-khoi-tao, mở Pull Request. Giao diện bám theo design/.
+7. Xong W006 thì làm tiếp W007, rồi W008 và W009 (logic trong lib/, có test). Mỗi task một nhánh tách từ nhánh task phụ thuộc, một Pull Request riêng.
+8. Không sửa data/, docs/, supabase/. Thấy thiếu dữ liệu hoặc tài liệu mâu thuẫn thì tạo handoff hoi và hỏi tôi, không tự đoán.
+9. Cuối phiên tạo handoff trang-thai-phien, push, rồi tóm tắt cho tôi: xong việc gì, link Pull Request, cách chạy thử trên máy."
+
+## Khởi động Antigravity (dán vào đầu mỗi phiên sau)
 "Vào repo vive-swipe. Pull bản mới nhất, đọc AGENTS.md và docs/00-ke-hoach.md, chạy python3 scripts/board.py, đọc handoff mới nhất. Nhận các việc Chủ trì = Antigravity trạng thái Todo theo ưu tiên, đọc đúng tài liệu được dẫn trong task, làm trên nhánh riêng và mở Pull Request. Cuối phiên tạo handoff trang-thai-phien."
