@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useMemo, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { AppShell } from "@/components/AppShell";
 import { NutQuayLai } from "@/components/NutQuayLai";
 import { BangChiTiet } from "@/components/deck/BangChiTiet";
 import { laySanPhamHienThi, duongDanAnh } from "@/lib/data";
@@ -14,9 +13,7 @@ import {
   layDanhSachDaThich,
   themDaThich,
   xoaDaThich,
-  layGioHang,
   themVaoGio,
-  type ItemGioHang,
 } from "@/lib/kho-luu-tru";
 
 const DANH_SACH_LOAI = [
@@ -58,15 +55,12 @@ function DanhMucNoiDung() {
   const [timKiemInput, setTimKiemInput] = useState<string>(timUrl);
   const [gioiHanHienThi, setGioiHanHienThi] = useState<number>(6);
   const [daThich, setDaThich] = useState<string[]>([]);
-  const [soLuongGio, setSoLuongGio] = useState<number>(0);
   const [sanPhamChiTiet, setSanPhamChiTiet] = useState<SanPham | null>(null);
 
   // Sync state từ storage
   useEffect(() => {
     /* eslint-disable react-hooks/set-state-in-effect */
     setDaThich(layDanhSachDaThich());
-    const gh = layGioHang();
-    setSoLuongGio(gh.reduce((t: number, m: ItemGioHang) => t + m.soLuong, 0));
     /* eslint-enable react-hooks/set-state-in-effect */
   }, []);
 
@@ -273,20 +267,13 @@ function DanhMucNoiDung() {
   const xuLyThemVaoGio = (sp: SanPham, e?: React.MouseEvent) => {
     e?.stopPropagation();
     themVaoGio(sp.id, 1);
-    setSoLuongGio((prev) => prev + 1);
   };
 
   const sanPhamHienThiList = ketQuaLoc.slice(0, gioiHanHienThi);
   const conThem = ketQuaLoc.length - gioiHanHienThi;
 
   return (
-    <AppShell
-      soLuongThich={daThich.length}
-      soLuongGio={soLuongGio}
-      khoaChieuCao={true}
-      noiDungClassName="w-full flex-1 min-h-0 flex flex-col"
-    >
-      <div className="w-full flex-1 min-h-0 flex flex-col bg-trang font-sans text-den overflow-hidden relative">
+    <div className="w-full flex-1 min-h-0 flex flex-col bg-trang font-sans text-den overflow-hidden relative">
         {/* Vùng cuộn nội dung */}
         <div className="flex-1 min-h-0 overflow-y-auto">
           <div className="max-w-[1280px] mx-auto w-full">
@@ -845,7 +832,6 @@ function DanhMucNoiDung() {
           }
         />
       </div>
-    </AppShell>
   );
 }
 

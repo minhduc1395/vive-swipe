@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { layGioHang } from "@/lib/kho-luu-tru";
+import { LogoVive } from "@/components/LogoVive";
 
 interface LandingHeaderProps {
   scrolled?: boolean;
@@ -47,12 +48,7 @@ export function LandingHeader({
         className="flex items-center h-10 shrink-0"
         aria-label="VIVE New Arrival, về đầu trang"
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/brand/vive-logo-chu.png"
-          alt="VIVE"
-          className="w-[52px] h-auto object-contain block"
-        />
+        <LogoVive rong={52} />
       </Link>
 
       {/* Thanh gọn điện thoại (< 768px) */}

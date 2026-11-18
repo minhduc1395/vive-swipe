@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { KhungUngDung } from "@/components/KhungUngDung";
 import { duongDanAnh, type SanPham } from "@/lib/data";
 import { useDuLieu } from "@/lib/du-lieu-context";
 import { dinhDangTien } from "@/lib/dinh-dang";
@@ -120,17 +119,8 @@ export default function TrangDeal() {
     hienToast("Đã lưu email nhận deal của bạn!");
   };
 
-  const soLuongGio = useMemo(
-    () => gioHang.reduce((sum, item) => sum + item.soLuong, 0),
-    [gioHang]
-  );
-
   return (
-    <KhungUngDung
-      soLuongThich={daThich.length}
-      soLuongGio={soLuongGio}
-    >
-      <div className="w-full max-w-[1280px] mx-auto bg-trang text-den font-sans flex flex-col pb-28 md:pb-12">
+    <div className="w-full max-w-[1280px] mx-auto bg-trang text-den font-sans flex flex-col pb-28 md:pb-12">
         {/* Toast thông báo */}
         {thongBaoToast && (
           <div
@@ -252,7 +242,6 @@ export default function TrangDeal() {
           </section>
         </div>
       </div>
-    </KhungUngDung>
   );
 }
 

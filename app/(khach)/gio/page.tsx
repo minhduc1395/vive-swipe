@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
-import { AppShell } from "@/components/AppShell";
 import { useDuLieu } from "@/lib/du-lieu-context";
 import { dinhDangTien } from "@/lib/dinh-dang";
 import { duongDanAnh } from "@/lib/anh";
@@ -106,12 +105,7 @@ export default function TrangGio() {
   };
 
   return (
-    <AppShell
-      soLuongThich={danhSachThich.length}
-      soLuongGio={tongSoLuongGio}
-      noiDungClassName="max-w-[1280px] w-full mx-auto"
-    >
-      <div className="flex-1 flex flex-col min-h-0 bg-trang text-den font-sans overflow-hidden">
+    <div className="max-w-[1280px] w-full mx-auto flex-1 flex flex-col min-h-0 bg-trang text-den font-sans overflow-hidden">
         {/* Header */}
         <header className="px-5 pt-7 pb-2 flex items-baseline gap-2 shrink-0">
           <h1 className="m-0 text-[28px] font-semibold tracking-tight">Giỏ hàng</h1>
@@ -548,6 +542,5 @@ export default function TrangGio() {
           </div>
         )}
       </div>
-    </AppShell>
   );
 }

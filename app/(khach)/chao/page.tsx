@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { AppShell } from "@/components/AppShell";
+import Image from "next/image";
 import { NutQuayLai } from "@/components/NutQuayLai";
 import { CAU_HINH_BOOTH } from "@/lib/cau-hinh";
 
@@ -11,26 +11,29 @@ export const metadata: Metadata = {
 
 export default function TrangChao() {
   return (
-    <AppShell>
-      <div className="max-w-[540px] w-full mx-auto px-4 sm:px-6 pt-2 pb-6 flex-1 flex flex-col">
+    <div className="max-w-[540px] w-full mx-auto px-4 sm:px-6 pt-2 pb-6 flex-1 flex flex-col">
         <div className="flex items-center justify-between pb-2">
           <NutQuayLai fallback="/" />
         </div>
 
         <div className="relative h-[400px] sm:h-[460px] shrink-0 bg-hong-nhat rounded-[36px] overflow-hidden">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src="/brand/vive-logo-chu.png"
             alt="VIVE"
+            width={92}
+            height={24}
+            priority
             className="absolute left-1/2 top-8 w-[92px] h-auto -translate-x-1/2"
           />
 
           <div aria-hidden="true">
             <div className="absolute left-[20px] sm:left-[28px] top-[148px] w-[144px] sm:w-[164px] h-[194px] sm:h-[222px] rounded-[26px] bg-trang -rotate-12 shadow-[0_10px_28px_rgba(43,43,42,0.10)] flex items-center justify-center">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src="/products/8809369850262.webp"
                 alt=""
+                width={142}
+                height={142}
+                priority
                 className="w-[122px] sm:w-[142px] h-[122px] sm:h-[142px] object-contain"
               />
               <div className="absolute -left-2 -top-2 w-[42px] h-[42px] rounded-full bg-trang border-[1.5px] border-den flex items-center justify-center">
@@ -50,19 +53,23 @@ export default function TrangChao() {
             </div>
 
             <div className="absolute right-[20px] sm:right-[28px] top-[148px] w-[144px] sm:w-[164px] h-[194px] sm:h-[222px] rounded-[26px] bg-trang rotate-12 shadow-[0_10px_28px_rgba(43,43,42,0.10)] flex items-center justify-center">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src="/products/8809369850248.webp"
                 alt=""
+                width={142}
+                height={142}
+                priority
                 className="w-[122px] sm:w-[142px] h-[122px] sm:h-[142px] object-contain"
               />
             </div>
 
             <div className="absolute left-1/2 top-[116px] -translate-x-1/2 w-[168px] sm:w-[192px] h-[228px] sm:h-[260px] rounded-[30px] bg-trang shadow-[0_18px_40px_rgba(43,43,42,0.16)] flex items-center justify-center">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src="/products/8809369850521.webp"
                 alt=""
+                width={170}
+                height={170}
+                priority
                 className="w-[146px] sm:w-[170px] h-[146px] sm:h-[170px] object-contain"
               />
               <div className="absolute -right-3.5 -top-3.5 w-[50px] h-[50px] rounded-full bg-den flex items-center justify-center">
@@ -153,6 +160,5 @@ export default function TrangChao() {
           </div>
         </main>
       </div>
-    </AppShell>
   );
 }

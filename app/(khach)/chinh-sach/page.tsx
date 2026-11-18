@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { AppShell } from "@/components/AppShell";
 import { NutQuayLai } from "@/components/NutQuayLai";
 import { CAU_HINH_BOOTH } from "@/lib/cau-hinh";
 import { DOANH_NGHIEP } from "@/lib/data";
@@ -11,8 +10,7 @@ export const metadata: Metadata = {
 
 export default function TrangChinhSach() {
   return (
-    <AppShell>
-      <div className="max-w-[820px] w-full mx-auto px-5 md:px-8 py-5 md:py-10 flex flex-col gap-6">
+    <div className="max-w-[820px] w-full mx-auto px-5 md:px-8 py-5 md:py-10 flex flex-col gap-6">
         <header className="flex flex-col items-start gap-1">
           <NutQuayLai fallback="/" />
           <h1 className="m-0 text-[26px] md:text-[34px] font-bold tracking-tight text-den">
@@ -176,6 +174,5 @@ export default function TrangChinhSach() {
           </section>
         </main>
       </div>
-    </AppShell>
   );
 }

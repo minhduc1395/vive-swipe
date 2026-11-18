@@ -10,8 +10,6 @@ import {
 } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { AppShell } from "@/components/AppShell";
-import { ThanhTren } from "@/components/ThanhTren";
 import { TheSanPham } from "@/components/deck/TheSanPham";
 import { TheDealDacBiet } from "@/components/deck/TheDealDacBiet";
 import { BangChiTiet } from "@/components/deck/BangChiTiet";
@@ -585,22 +583,14 @@ export default function TrangQuet() {
 
   if (!daKiemTraKhaoSat) {
     return (
-      <AppShell khoaChieuCao={true}>
-        <div className="flex-1 flex items-center justify-center p-6">
-          <h1 className="sr-only">Deck quẹt VIVE</h1>
-        </div>
-      </AppShell>
+      <div className="flex-1 flex items-center justify-center p-6">
+        <h1 className="sr-only">Deck quẹt VIVE</h1>
+      </div>
     );
   }
 
   return (
-    <AppShell
-      hienDieuHuong={true}
-      soLuongThich={daThich.length}
-      soLuongGio={soLuongGio}
-      khoaChieuCao={true}
-      noiDungClassName="flex flex-col items-center justify-between h-full"
-    >
+    <div className="w-full h-full flex flex-col items-center bg-trang font-sans text-den overflow-hidden relative">
       <style>{`
         @keyframes vq-pop {
           0% { transform: scale(1); }
@@ -619,12 +609,7 @@ export default function TrangQuet() {
           100% { transform: translateX(-50%) scale(1); opacity: 1; }
         }
       `}</style>
-      <div className="w-full h-full flex flex-col items-center bg-trang font-sans text-den overflow-hidden relative">
-        <h1 className="sr-only">Deck quẹt VIVE</h1>
-        {/* Thanh trên: hiện ở mobile và tablet dọc ngắn, ẩn ở desktop/tablet lớn */}
-        <div className="w-full max-w-[480px] md:hidden">
-          <ThanhTren soLuongGio={soLuongGio} />
-        </div>
+      <h1 className="sr-only">Deck quẹt VIVE</h1>
 
         {/* Khung nội dung co giãn 3 mốc: 1 cột mobile | 2 cột tablet | 3 cột PC */}
         <div className="w-full flex-1 min-h-0 flex justify-center md:gap-6 lg:grid lg:grid-cols-[minmax(220px,280px)_minmax(360px,1fr)_minmax(260px,340px)] max-w-[1280px] px-0 md:px-6 lg:px-8 py-0 md:py-4 lg:gap-8 items-stretch">
@@ -1094,6 +1079,5 @@ export default function TrangQuet() {
           }
         />
       </div>
-    </AppShell>
   );
 }

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { AppShell } from "@/components/AppShell";
 import { NutQuayLai } from "@/components/NutQuayLai";
 
 export const metadata: Metadata = {
@@ -64,8 +63,7 @@ const BA_BUOC_BOOTH: BuocTraiNghiem[] = [
 
 export default function TrangPersonalColor() {
   return (
-    <AppShell>
-      <div className="bg-trang text-den">
+    <div className="bg-trang text-den w-full flex-1">
         {/* Khối quay lại */}
         <div className="max-w-[1360px] mx-auto px-5 md:px-8 pt-4 md:pt-6">
           <NutQuayLai fallback="/" />
@@ -230,6 +228,5 @@ export default function TrangPersonalColor() {
           </p>
         </section>
       </div>
-    </AppShell>
   );
 }

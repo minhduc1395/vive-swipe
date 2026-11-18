@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { AppShell } from "@/components/AppShell";
 import { NutQuayLai } from "@/components/NutQuayLai";
 import {
   layTraLoiLocal,
@@ -112,8 +111,7 @@ export default function TrangBatDau() {
   };
 
   return (
-    <AppShell khoaChieuCao={true}>
-      <div className="w-full max-w-[560px] mx-auto flex-1 min-h-0 flex flex-col bg-trang font-sans text-den overflow-hidden">
+    <div className="w-full max-w-[560px] mx-auto flex-1 min-h-0 flex flex-col bg-trang font-sans text-den overflow-hidden">
         {/* Header điều hướng */}
         <header className="flex items-center gap-2 pt-3 md:pt-5 px-4 pb-2 shrink-0">
           {buoc === 1 ? (
@@ -358,6 +356,5 @@ export default function TrangBatDau() {
           </div>
         )}
       </div>
-    </AppShell>
   );
 }
