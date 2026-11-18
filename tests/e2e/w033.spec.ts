@@ -21,6 +21,7 @@ const TRANG_KHACH_MENU = [
   "/bat-dau",
   "/danh-muc",
   "/chinh-sach",
+  "/personal-color",
   "/dang-nhap",
   "/giu-hang",
   "/giu-hang/VIVE-KHONG-CO",
@@ -142,11 +143,19 @@ test.describe("W033 · Landing là trang đầu, menu thống nhất, nút quay 
     await backChao.click();
     await expect(page).toHaveURL(/^http:\/\/[^/]+\/$/);
 
-    // b) Mở thẳng /chinh-sach -> fallback về /
+    // b) Mở thẳng /chinh-sach và /personal-color -> fallback về /
     await page.goto("/chinh-sach");
     const backChinhSach = page.getByRole("button", { name: /Quay lại/i });
     await expect(backChinhSach).toBeVisible();
     await backChinhSach.click();
+    await expect(page).toHaveURL(/^http:\/\/[^/]+\/$/);
+
+    await page.goto("/personal-color");
+    const backPersonalColor = page.getByRole("button", { name: /Quay lại/i });
+    await expect(backPersonalColor).toBeVisible();
+    const boxPc = await backPersonalColor.boundingBox();
+    expect(boxPc!.height).toBeGreaterThanOrEqual(44);
+    await backPersonalColor.click();
     await expect(page).toHaveURL(/^http:\/\/[^/]+\/$/);
 
     // c) Đi từ / -> /dang-nhap -> quay lại về /
