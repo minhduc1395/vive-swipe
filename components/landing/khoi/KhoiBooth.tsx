@@ -22,7 +22,7 @@ export function KhoiBooth({ khoi }: KhoiBoothProps) {
     >
       <div className="max-w-[1360px] mx-auto flex flex-col md:flex-row md:items-end justify-between gap-10">
         <div className="flex flex-col gap-3 max-w-[640px]">
-          <span className="text-[13px] md:text-[14px] font-bold tracking-[1.5px] text-xam uppercase">
+          <span className="text-[13px] md:text-[14px] font-bold tracking-[1.5px] text-[#5C5C5B] uppercase">
             GHÉ BOOTH
           </span>
 

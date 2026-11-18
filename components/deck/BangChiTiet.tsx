@@ -5,7 +5,7 @@ import type { SanPham } from "@/lib/data/types";
 import { useDuLieu } from "@/lib/du-lieu-context";
 import { NutQuayLai } from "@/components/NutQuayLai";
 import { dinhDangTien } from "@/lib/dinh-dang";
-import { duongDanAnh } from "@/lib/anh";
+import { duongDanAnh, laAnhHopLe } from "@/lib/anh";
 import { layNhanLoaiDa, layNhanVanDe } from "@/lib/nhan";
 import { layCacDealCuaSanPham } from "@/lib/deals/ghi-chu";
 
@@ -94,13 +94,7 @@ export function BangChiTiet({
           <div
             className={`w-full h-[196px] rounded-[22px] ${nenAnh} flex items-center justify-center shrink-0 overflow-hidden`}
           >
-            {anhLoi ? (
-              <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center">
-                <span className="text-[13px] font-semibold tracking-[1.4px] text-xam uppercase">
-                  {sanPham.thuong_hieu}
-                </span>
-              </div>
-            ) : (
+            {!anhLoi && anhSrc && laAnhHopLe(anhSrc) ? (
               /* eslint-disable-next-line @next/next/no-img-element */
               <img
                 src={anhSrc}
@@ -108,6 +102,12 @@ export function BangChiTiet({
                 onError={() => setAnhLoi(true)}
                 className="w-[176px] h-[176px] object-contain"
               />
+            ) : (
+              <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center">
+                <span className="text-[13px] font-semibold tracking-[1.4px] text-xam uppercase">
+                  {sanPham.thuong_hieu}
+                </span>
+              </div>
             )}
           </div>
 

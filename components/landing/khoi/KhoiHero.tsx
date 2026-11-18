@@ -1,14 +1,26 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import type { KhoiHero as KhoiHeroType } from "@/lib/chien-dich/types";
 
 interface KhoiHeroProps {
   khoi: KhoiHeroType;
+  stageReady?: boolean;
 }
 
-export function KhoiHero({ khoi }: KhoiHeroProps) {
+export function KhoiHero({ khoi, stageReady = false }: KhoiHeroProps) {
   const { nhan_tren, tieu_de, mo_ta, nut = [] } = khoi;
+
+  const heroItem =
+    khoi.vat_the?.doc?.find((v) => v.id === "ampoule") ||
+    khoi.vat_the?.ngang?.find((v) => v.id === "ampoule") ||
+    khoi.vat_the?.doc?.[0] ||
+    khoi.vat_the?.ngang?.[0];
+  const anhHero =
+    heroItem?.anh ||
+    (khoi.anh && khoi.anh.length > 1 ? khoi.anh[1] : khoi.anh?.[0]) ||
+    "";
 
   return (
     <section
@@ -17,6 +29,27 @@ export function KhoiHero({ khoi }: KhoiHeroProps) {
       aria-label="Phần đầu chiến dịch"
       className="vq-k trai relative z-10"
     >
+      {anhHero && (
+        <div
+          className={`anh-hero-tinh pointer-events-none absolute inset-0 -z-10 overflow-hidden ${
+            stageReady ? "hidden" : "block"
+          }`}
+          aria-hidden="true"
+        >
+          {/* Mobile: đặt ở nửa trên màn hình (trên phần chữ ở 41svh). Desktop: đặt ở nửa phải màn hình */}
+          <div className="absolute top-[6svh] sm:top-[8svh] left-1/2 -translate-x-1/2 w-[180px] sm:w-[220px] h-[30svh] max-h-[280px] lg:top-1/2 lg:-translate-y-1/2 lg:left-auto lg:right-[12%] lg:translate-x-0 lg:w-[320px] lg:h-[440px] lg:max-h-none">
+            <Image
+              src={anhHero}
+              alt=""
+              fill
+              preload
+              sizes="(max-width: 768px) 220px, 320px"
+              className="object-contain drop-shadow-[0_20px_25px_rgba(43,43,42,0.12)]"
+            />
+          </div>
+        </div>
+      )}
+
       <div className="cot flex flex-col gap-2.5 sm:gap-3.5 md:gap-5">
         {nhan_tren && (
           <div className="self-start inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white text-[12px] md:text-[13px] font-bold tracking-[1.5px] text-den shadow-xs">

@@ -54,6 +54,22 @@ export async function caiDatMockSupabase(
 ) {
   await page.route(
     (url) =>
+      url.hostname.includes("supabase.co") &&
+      url.pathname.includes("/storage/v1/object/public/media"),
+    async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "image/webp",
+        body: Buffer.from(
+          "UklGRkAAAABXRUJQVlA4WAoAAAAQAAAAAAAAAAAAQUxQSAIAAAAAAFZQOCAYAAAAMAEAnQEqAQABAAFAJiWkAANwAP79NvgA",
+          "base64"
+        ),
+      });
+    }
+  );
+
+  await page.route(
+    (url) =>
       url.hostname === "supabase.e2e.test" ||
       url.pathname.includes("/auth/v1") ||
       url.pathname.includes("/rest/v1"),
@@ -97,10 +113,29 @@ export async function caiDatMockSupabase(
 
         if (method === "GET") {
           if (pathname.includes("/san_pham")) {
+            const coSanLocal = new Set([
+              "8809369850248",
+              "8809369850262",
+              "8809369850354",
+              "8809369850521",
+            ]);
+            const spMock = SAN_PHAM.map((sp) => {
+              const ma = sp.barcode || sp.id;
+              const dungAnhKhoMedia =
+                sp.anh &&
+                sp.anh.startsWith("/products/") &&
+                !coSanLocal.has(ma);
+              return {
+                ...sp,
+                anh: dungAnhKhoMedia
+                  ? `https://dsrejhghgbvnwgxpdhee.supabase.co/storage/v1/object/public/media/san-pham/${ma}/the.webp`
+                  : sp.anh,
+              };
+            });
             await route.fulfill({
               status: 200,
               contentType: "application/json",
-              body: JSON.stringify(SAN_PHAM),
+              body: JSON.stringify(spMock),
             });
             return;
           }
@@ -156,23 +191,44 @@ export async function datDaKhaoSat(page: Page) {
       {
         name: "vive_da_khao_sat",
         value: "true",
+        domain: "127.0.0.1",
+        path: "/",
+      },
+      {
+        name: "vive_da_khao_sat",
+        value: "true",
         domain: "localhost",
         path: "/",
       },
     ]);
   } catch {
-    // ignore
+    // context may not be ready yet
   }
   await page.addInitScript(() => {
     window.localStorage.setItem("vive_da_khao_sat", "true");
-    document.cookie = "vive_da_khao_sat=true; path=/; max-age=2592000";
+    document.cookie =
+      "vive_da_khao_sat=true; path=/; max-age=31536000; SameSite=Lax";
   });
 }
 
 export const test = base.extend<{ mockSupabase: void }>({
   mockSupabase: [
-    async ({ page }, use) => {
+    async ({ page, context }, use) => {
       await caiDatMockSupabase(page);
+      await context.addCookies([
+        {
+          name: "vive_da_khao_sat",
+          value: "true",
+          domain: "127.0.0.1",
+          path: "/",
+        },
+        {
+          name: "vive_da_khao_sat",
+          value: "true",
+          domain: "localhost",
+          path: "/",
+        },
+      ]);
       await use();
     },
     { auto: true },

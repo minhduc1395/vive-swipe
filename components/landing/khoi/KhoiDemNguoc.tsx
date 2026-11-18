@@ -57,7 +57,7 @@ export function KhoiDemNguoc({ khoi }: KhoiDemNguocProps) {
             <span className="w-16 sm:w-22 h-16 sm:h-22 rounded-2xl bg-white flex items-center justify-center shadow-xs">
               {pad(timeLeft.ngay)}
             </span>
-            <span className="text-[12px] font-medium text-xam mt-1.5 uppercase">
+            <span className="text-[12px] font-medium text-[#5C5C5B] mt-1.5 uppercase">
               Ngày
             </span>
           </div>
@@ -66,7 +66,7 @@ export function KhoiDemNguoc({ khoi }: KhoiDemNguocProps) {
             <span className="w-16 sm:w-22 h-16 sm:h-22 rounded-2xl bg-white flex items-center justify-center shadow-xs">
               {pad(timeLeft.gio)}
             </span>
-            <span className="text-[12px] font-medium text-xam mt-1.5 uppercase">
+            <span className="text-[12px] font-medium text-[#5C5C5B] mt-1.5 uppercase">
               Giờ
             </span>
           </div>
@@ -75,7 +75,7 @@ export function KhoiDemNguoc({ khoi }: KhoiDemNguocProps) {
             <span className="w-16 sm:w-22 h-16 sm:h-22 rounded-2xl bg-white flex items-center justify-center shadow-xs">
               {pad(timeLeft.phut)}
             </span>
-            <span className="text-[12px] font-medium text-xam mt-1.5 uppercase">
+            <span className="text-[12px] font-medium text-[#5C5C5B] mt-1.5 uppercase">
               Phút
             </span>
           </div>
@@ -84,7 +84,7 @@ export function KhoiDemNguoc({ khoi }: KhoiDemNguocProps) {
             <span className="w-16 sm:w-22 h-16 sm:h-22 rounded-2xl bg-white flex items-center justify-center shadow-xs">
               {pad(timeLeft.giay)}
             </span>
-            <span className="text-[12px] font-medium text-xam mt-1.5 uppercase">
+            <span className="text-[12px] font-medium text-[#5C5C5B] mt-1.5 uppercase">
               Giây
             </span>
           </div>

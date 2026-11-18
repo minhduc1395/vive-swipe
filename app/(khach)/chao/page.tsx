@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { NutQuayLai } from "@/components/NutQuayLai";
+import { KiemTraKhachCu } from "@/components/KiemTraKhachCu";
 import { CAU_HINH_BOOTH } from "@/lib/cau-hinh";
 
 export const metadata: Metadata = {
@@ -12,6 +13,7 @@ export const metadata: Metadata = {
 export default function TrangChao() {
   return (
     <div className="max-w-[540px] w-full mx-auto px-4 sm:px-6 pt-2 pb-6 flex-1 flex flex-col">
+      <KiemTraKhachCu />
         <div className="flex items-center justify-between pb-2">
           <NutQuayLai fallback="/" />
         </div>

@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { NutQuayLai } from "@/components/NutQuayLai";
 import { BangChiTiet } from "@/components/deck/BangChiTiet";
 import { laySanPhamHienThi, duongDanAnh } from "@/lib/data";
+import { laAnhHopLe } from "@/lib/anh";
 import { useDuLieu } from "@/lib/du-lieu-context";
 import type { SanPham } from "@/lib/data/types";
 import { dinhDangTien, chuanHoaTimKiem } from "@/lib/dinh-dang";
@@ -681,7 +682,7 @@ function DanhMucNoiDung() {
                         <div
                           className={`relative h-[150px] rounded-[18px] ${bgClass} flex items-center justify-center overflow-hidden`}
                         >
-                          {anhSrc ? (
+                          {anhSrc && laAnhHopLe(anhSrc) ? (
                             /* eslint-disable-next-line @next/next/no-img-element */
                             <img
                               src={anhSrc}

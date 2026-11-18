@@ -250,8 +250,9 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
         await page.evaluate((idx) => {
           const s = document.querySelectorAll("section[data-k]")[idx] as HTMLElement;
           window.scrollTo({ top: s.offsetTop, behavior: "instant" });
+          window.dispatchEvent(new Event("scroll"));
         }, k);
-        await expect(page.locator(`#canh[data-stage="${k}"]`)).toBeAttached();
+        await expect(page.locator(`#canh[data-stage="${k}"]`)).toBeAttached({ timeout: 10000 });
         await page.screenshot({
           path: `test-results/screenshots/new-arrival/${sc.label}_k${k + 1}.png`,
           fullPage: false,

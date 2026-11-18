@@ -1,11 +1,8 @@
-import { expect, test } from "@playwright/test";
+import { test, expect, datDaKhaoSat } from "./fixtures";
 
 test.describe("Trang Danh mục - tìm kiếm và lọc sản phẩm (W026)", () => {
   test.beforeEach(async ({ page }) => {
-    await page.addInitScript(() => {
-      localStorage.clear();
-      localStorage.setItem("vive_da_khao_sat", "true");
-    });
+    await datDaKhaoSat(page);
   });
 
   test("màn landing hiển thị đủ 12 loại sản phẩm, số món khớp dữ liệu", async ({

@@ -17,11 +17,21 @@ export function layTraLoiLocal(): TraLoiCauHoi | null {
   }
 }
 
+export function capNhatCookieKhaoSat(): void {
+  if (typeof document === "undefined") return;
+  try {
+    document.cookie = "vive_da_khao_sat=true; path=/; max-age=2592000; SameSite=Lax";
+  } catch {
+    // ignore
+  }
+}
+
 export function luuTraLoiLocal(traLoi: TraLoiCauHoi): void {
   if (typeof window === "undefined") return;
   try {
     window.localStorage.setItem(KHOA_TRA_LOI, JSON.stringify(traLoi));
     window.localStorage.setItem(KHOA_DA_KHAO_SAT, "true");
+    capNhatCookieKhaoSat();
   } catch {
     // bỏ qua lỗi quota / bảo mật của storage
   }
@@ -43,6 +53,7 @@ export function danhDauBoQuaKhaoSat(): void {
   if (typeof window === "undefined") return;
   try {
     window.localStorage.setItem(KHOA_DA_KHAO_SAT, "true");
+    capNhatCookieKhaoSat();
   } catch {
     // bỏ qua lỗi
   }

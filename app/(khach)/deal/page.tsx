@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { duongDanAnh, type SanPham } from "@/lib/data";
+import { laAnhHopLe } from "@/lib/anh";
 import { useDuLieu } from "@/lib/du-lieu-context";
 import { dinhDangTien } from "@/lib/dinh-dang";
 import {
@@ -336,7 +337,7 @@ function TheDealMuc({
                   className="rounded-[14px] bg-trang p-2.5 flex items-center justify-between gap-2.5"
                 >
                   <div className="flex items-center gap-2.5 min-w-0">
-                    {anhDau ? (
+                    {anhDau && laAnhHopLe(anhDau) ? (
                       <div className="w-11 h-11 rounded-[10px] bg-[#F7EEEB] relative overflow-hidden shrink-0">
                         <Image
                           src={anhDau}
@@ -421,7 +422,7 @@ function TheDealMuc({
                     idx > 0 ? "-ml-4" : ""
                   }`}
                 >
-                  {anhSp ? (
+                  {anhSp && laAnhHopLe(anhSp) ? (
                     <Image
                       src={anhSp}
                       alt={sp.ten_hien_thi}

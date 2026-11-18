@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import type { ChienDich } from "@/lib/chien-dich/types";
 import { LandingStage3D, type CanhStage3D } from "./LandingStage3D";
 import { KhoiHero } from "./khoi/KhoiHero";
@@ -21,6 +21,7 @@ interface LandingClientProps {
 export function LandingClient({
   chienDich,
 }: LandingClientProps) {
+  const [stageReady, setStageReady] = useState(false);
   const heroBlock = chienDich.khoi.find((k) => k.loai === "hero");
   const tieuDiemBlock = chienDich.khoi.find((k) => k.loai === "tieu-diem");
   const marqueeBlock = chienDich.khoi.find((k) => k.loai === "bang-chu");
@@ -94,10 +95,10 @@ export function LandingClient({
         }
       `}</style>
 
-      <LandingStage3D cacCanh={cacCanh} />
+      <LandingStage3D cacCanh={cacCanh} onReady={() => setStageReady(true)} />
 
       <main id="trang-landing" className="relative z-10">
-        {heroBlock && <KhoiHero khoi={heroBlock} />}
+        {heroBlock && <KhoiHero khoi={heroBlock} stageReady={stageReady} />}
         {tieuDiemBlock && <KhoiTieuDiem khoi={tieuDiemBlock} />}
         {raMatBlock && <KhoiRaMat khoi={raMatBlock} />}
       </main>

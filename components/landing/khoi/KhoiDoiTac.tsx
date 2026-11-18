@@ -112,7 +112,7 @@ export function KhoiDoiTac({ khoi }: KhoiDoiTacProps) {
           <span className="text-[13px] md:text-[14px] font-bold tracking-[1.5px] text-xam uppercase">
             TRẢI NGHIỆM TẠI BOOTH · PAWLETTE
           </span>
-          <h2 className="m-0 font-bold text-[40px] sm:text-[54px] md:text-[68px] leading-[0.95] tracking-[-0.04em] text-den">
+          <h2 className="m-0 font-bold text-[36px] sm:text-[44px] md:text-[46px] lg:text-[60px] leading-[0.95] tracking-[-0.04em] text-den">
             {tieu_de}
           </h2>
           <p className="m-0 text-[16px] sm:text-[18px] leading-[1.6] text-xam">
@@ -130,7 +130,8 @@ export function KhoiDoiTac({ khoi }: KhoiDoiTacProps) {
 
           <Link
             href={link}
-            className="self-start h-14 px-8 rounded-full bg-den text-white font-semibold text-[16px] inline-flex items-center gap-2.5 hover:bg-black transition-transform active:scale-95"
+            data-testid="nut-personal-color"
+            className="self-start h-14 px-6 sm:px-8 rounded-full bg-den text-white font-semibold text-[15px] sm:text-[16px] whitespace-nowrap max-w-full inline-flex items-center gap-2.5 hover:bg-black transition-transform active:scale-95"
           >
             Tìm hiểu Personal Color
             <svg

@@ -36,11 +36,11 @@ export function docDanhSachChienDichTuDisk(
     typeof window !== "undefined" ||
     process.env.NODE_ENV === "production" ||
     !fs.existsSync ||
-    !fs.existsSync(dirPath)
+    !fs.existsSync(/*turbopackIgnore: true*/ dirPath)
   ) {
     return CHIEN_DICH_MAC_DINH_LIST;
   }
-  const files = fs.readdirSync(dirPath);
+  const files = fs.readdirSync(/*turbopackIgnore: true*/ dirPath);
   const danhSach: ChienDich[] = [];
 
   for (const file of files) {

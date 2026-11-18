@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { datVaoVung, layVatTheTheoCheDo, type KetQuaDatVung, type VungVatThe } from "@/lib/chien-dich/vat-the";
 import type { CheDoVung3D, VatPham3D, VatThe3D } from "@/lib/chien-dich/types";
 
@@ -11,6 +11,7 @@ export interface CanhStage3D {
 
 interface LandingStage3DProps {
   cacCanh: CanhStage3D[];
+  onReady?: () => void;
 }
 
 interface BoCucVungRender {
@@ -61,7 +62,7 @@ function khoaTenKhoi(id: string): string {
   return id;
 }
 
-export function LandingStage3D({ cacCanh }: LandingStage3DProps) {
+export function LandingStage3D({ cacCanh, onReady }: LandingStage3DProps) {
   const [mounted, setMounted] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [isTouch, setIsTouch] = useState(false);
@@ -256,10 +257,11 @@ export function LandingStage3D({ cacCanh }: LandingStage3DProps) {
       stageIdx: t > 0.5 ? nextIdx : kClamp,
       items: renderedItems,
     });
-  }, [cacCanh]);
+    onReady?.();
+  }, [cacCanh, onReady]);
 
-  useLayoutEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => {
+    /* eslint-disable-next-line react-hooks/set-state-in-effect */
     setMounted(true);
     tinhBoCuc();
   }, [tinhBoCuc]);
@@ -277,22 +279,12 @@ export function LandingStage3D({ cacCanh }: LandingStage3DProps) {
     mqMotion.addEventListener("change", syncPrefs);
     mqTouch.addEventListener("change", syncPrefs);
 
-    let rafId = 0;
     const onScroll = () => {
-      if (!rafId) {
-        rafId = window.requestAnimationFrame(() => {
-          rafId = 0;
-          tinhBoCuc();
-        });
-      }
+      tinhBoCuc();
     };
 
-    let resizeTimer: ReturnType<typeof setTimeout> | null = null;
     const onResize = () => {
-      if (resizeTimer) clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
-        tinhBoCuc();
-      }, 100);
+      tinhBoCuc();
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -305,8 +297,6 @@ export function LandingStage3D({ cacCanh }: LandingStage3DProps) {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
       window.removeEventListener("orientationchange", onResize);
-      if (rafId) window.cancelAnimationFrame(rafId);
-      if (resizeTimer) clearTimeout(resizeTimer);
     };
   }, [tinhBoCuc]);
 
@@ -436,8 +426,6 @@ export function LandingStage3D({ cacCanh }: LandingStage3DProps) {
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={item.nap_anh}
-                          srcSet={`${item.nap_anh} 600w, ${item.nap_anh} 1200w`}
-                          sizes="(max-width: 759px) 90px, 140px"
                           alt=""
                           data-part="nap"
                           style={{
@@ -464,8 +452,6 @@ export function LandingStage3D({ cacCanh }: LandingStage3DProps) {
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={item.anh}
-                        srcSet={`${item.anh} 600w, ${item.anh} 1200w`}
-                        sizes="(max-width: 759px) 180px, 320px"
                         alt={item.ten || item.id}
                         data-part="than"
                         style={{
@@ -480,8 +466,6 @@ export function LandingStage3D({ cacCanh }: LandingStage3DProps) {
                     /* eslint-disable-next-line @next/next/no-img-element */
                     <img
                       src={item.anh}
-                      srcSet={`${item.anh} 600w, ${item.anh} 1200w`}
-                      sizes="(max-width: 759px) 180px, 320px"
                       alt={item.ten || item.id}
                       data-part="than"
                       style={{

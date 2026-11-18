@@ -25,7 +25,7 @@ import {
 import { layTraLoiLocal, daTungKhaoSat } from "@/lib/khao-sat";
 import { layNhanVanDe, layNhanLoaiDa, layLyDoGoiY } from "@/lib/nhan";
 import { dinhDangTien } from "@/lib/dinh-dang";
-import { duongDanAnh } from "@/lib/anh";
+import { duongDanAnh, laAnhHopLe } from "@/lib/anh";
 import { layGhiChuDeal } from "@/lib/deals/ghi-chu";
 import { layDanhSachDealChoBan } from "@/lib/deals/diem-deal";
 import { tinhGio, type MucGioInput } from "@/lib/deals/gio-hang";
@@ -225,7 +225,7 @@ export default function TrangQuet() {
     ) {
       const sp = deck[i]?.san_pham;
       const anh = duongDanAnh(sp?.anh, "the");
-      if (anh) {
+      if (anh && laAnhHopLe(anh)) {
         const img = new Image();
         img.src = anh;
       }

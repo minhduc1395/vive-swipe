@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { test, expect, datDaKhaoSat } from "./fixtures";
 
 test.describe("W016 · Deal cho bạn (/deal) và thẻ deal trong deck", () => {
   test.beforeEach(async ({ page }) => {
@@ -115,9 +115,8 @@ test.describe("W016 · Deal cho bạn (/deal) và thẻ deal trong deck", () => 
   test("thẻ deal trong deck (/quet) xuất hiện sau 5 lượt thích và dẫn tới /deal", async ({
     page,
   }) => {
+    await datDaKhaoSat(page);
     await page.addInitScript(() => {
-      localStorage.clear();
-      localStorage.setItem("vive_da_khao_sat", "true");
       // Đã có 4 món thích sẵn
       localStorage.setItem(
         "vive_da_thich",

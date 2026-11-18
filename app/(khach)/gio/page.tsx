@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useDuLieu } from "@/lib/du-lieu-context";
 import { dinhDangTien } from "@/lib/dinh-dang";
-import { duongDanAnh } from "@/lib/anh";
+import { duongDanAnh, laAnhHopLe } from "@/lib/anh";
 import { chuanHoaNgay } from "@/lib/deals/hien-thi";
 import {
   tinhGio,
@@ -32,6 +32,7 @@ export default function TrangGio() {
   const [gioHang, setGioHang] = useState<ItemGioHang[]>([]);
   const [danhSachThich, setDanhSachThich] = useState<string[]>([]);
   const [daSanSang, setDaSanSang] = useState(false);
+  const [anhLoi, setAnhLoi] = useState<Record<string, boolean>>({});
 
   const taiDuLieu = () => {
     setGioHang(layGioHang());
@@ -279,12 +280,18 @@ export default function TrangGio() {
                                 aria-label="Ảnh sản phẩm"
                                 className="w-12 h-12 rounded-xl bg-hong-nhat text-[10px] font-semibold tracking-wider uppercase text-[#5C5C5B] flex items-center justify-center shrink-0 overflow-hidden"
                               >
-                                {anhGoiY ? (
+                                {anhGoiY && !anhLoi[spGoiY.id] && laAnhHopLe(anhGoiY) ? (
                                   /* eslint-disable-next-line @next/next/no-img-element */
                                   <img
                                     src={anhGoiY}
                                     alt={spGoiY.ten_hien_thi}
                                     className="w-10 h-10 object-contain"
+                                    onError={() =>
+                                      setAnhLoi((prev) => ({
+                                        ...prev,
+                                        [spGoiY.id]: true,
+                                      }))
+                                    }
                                   />
                                 ) : (
                                   spGoiY.thuong_hieu
@@ -383,12 +390,15 @@ export default function TrangGio() {
                           COMBO
                         </span>
                       )}
-                      {anhSrc ? (
+                      {anhSrc && !anhLoi[dong.id] && laAnhHopLe(anhSrc) ? (
                         /* eslint-disable-next-line @next/next/no-img-element */
                         <img
                           src={anhSrc}
                           alt={dong.ten}
                           className="w-14 h-14 object-contain"
+                          onError={() =>
+                            setAnhLoi((prev) => ({ ...prev, [dong.id]: true }))
+                          }
                         />
                       ) : (
                         <span className="text-[10px] font-bold uppercase tracking-wider text-[#5C5C5B] px-1 text-center">

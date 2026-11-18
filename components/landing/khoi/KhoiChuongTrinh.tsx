@@ -28,12 +28,12 @@ export function KhoiChuongTrinh({ khoi }: KhoiChuongTrinhProps) {
       className="relative z-10 bg-bac-ha-nhat py-20 sm:py-24 px-5 sm:px-8 md:px-16"
     >
       <div className="max-w-[1360px] mx-auto flex flex-col gap-10">
-        <h2 className="m-0 font-bold text-[40px] sm:text-[54px] md:text-[68px] leading-[0.95] tracking-[-0.04em] text-den">
+        <h2 className="m-0 font-bold text-[36px] sm:text-[48px] md:text-[52px] lg:text-[68px] leading-[0.95] tracking-[-0.04em] text-den">
           {tieu_de}
         </h2>
 
         {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 auto-rows-fr">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 auto-rows-fr">
           {resolvedDeals.map((d) => {
             const isBig = d.id === o_to;
 
@@ -60,8 +60,9 @@ export function KhoiChuongTrinh({ khoi }: KhoiChuongTrinhProps) {
               <Link
                 key={d.id}
                 href="/deal"
-                className={`rounded-[30px] p-7 md:p-8 flex flex-col justify-between gap-4 no-underline text-den shadow-[0_12px_32px_rgba(43,43,42,0.06)] hover:shadow-lg transition-all duration-300 hover:scale-[1.01] ${bgClass} ${
-                  isBig ? "md:col-span-2 md:row-span-2 min-h-[340px]" : "min-h-[220px]"
+                data-testid="the-deal-booth"
+                className={`rounded-[30px] p-5 sm:p-7 md:p-6 lg:p-8 flex flex-col justify-between gap-4 no-underline text-den shadow-[0_12px_32px_rgba(43,43,42,0.06)] hover:shadow-lg transition-all duration-300 hover:scale-[1.01] ${bgClass} ${
+                  isBig ? "md:col-span-2 lg:col-span-2 lg:row-span-2 min-h-[300px] sm:min-h-[340px]" : "min-h-[200px] sm:min-h-[220px]"
                 }`}
               >
                 <div className="flex flex-col gap-3">
@@ -74,8 +75,8 @@ export function KhoiChuongTrinh({ khoi }: KhoiChuongTrinhProps) {
                   </span>
 
                   <strong
-                    className={`font-bold tracking-tight text-den leading-[1.15] ${
-                      isBig ? "text-[28px] sm:text-[36px]" : "text-[22px] sm:text-[24px]"
+                    className={`font-bold tracking-tight text-den leading-[1.15] break-words hyphens-none ${
+                      isBig ? "text-[26px] sm:text-[32px] md:text-[34px] lg:text-[36px]" : "text-[20px] sm:text-[22px] md:text-[22px] lg:text-[24px]"
                     }`}
                   >
                     {d.ten}
@@ -91,8 +92,8 @@ export function KhoiChuongTrinh({ khoi }: KhoiChuongTrinhProps) {
                 {giaBan && (
                   <div className="mt-auto pt-2 flex items-baseline gap-2.5">
                     <span
-                      className={`font-bold text-den ${
-                        isBig ? "text-[32px] sm:text-[38px]" : "text-[24px] sm:text-[26px]"
+                      className={`font-bold text-den whitespace-nowrap ${
+                        isBig ? "text-[28px] sm:text-[34px] md:text-[36px] lg:text-[38px]" : "text-[22px] sm:text-[24px] md:text-[24px] lg:text-[26px]"
                       }`}
                     >
                       {dinhDangTien(giaBan)}

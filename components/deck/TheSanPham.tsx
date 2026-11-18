@@ -3,7 +3,7 @@
 import { useState, useRef, useCallback } from "react";
 import type { SanPham } from "@/lib/data/types";
 import { dinhDangTien } from "@/lib/dinh-dang";
-import { duongDanAnh } from "@/lib/anh";
+import { duongDanAnh, laAnhHopLe } from "@/lib/anh";
 import { layNhanVanDe } from "@/lib/nhan";
 
 interface TheSanPhamProps {
@@ -175,7 +175,8 @@ export function TheSanPham({
     ...(sanPham.thanh_phan?.slice(0, 1) ?? []),
   ].slice(0, 3);
 
-  const anhSrc = duongDanAnh(sanPham.anh, "the") || "/brand/vive-logo-black.png";
+  const anhSrc = duongDanAnh(sanPham.anh, "the");
+  const renderDuocAnh = !anhLoi && laAnhHopLe(anhSrc);
 
   return (
     <article
@@ -198,13 +199,7 @@ export function TheSanPham({
       <div
         className={`relative m-2 flex-1 min-h-[140px] rounded-[22px] ${nenAnh} flex items-center justify-center shrink-0 overflow-hidden`}
       >
-        {anhLoi ? (
-          <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center">
-            <span className="text-[13px] font-semibold tracking-[1.4px] text-xam uppercase">
-              {sanPham.thuong_hieu}
-            </span>
-          </div>
-        ) : (
+        {renderDuocAnh && anhSrc ? (
           /* eslint-disable-next-line @next/next/no-img-element */
           <img
             src={anhSrc}
@@ -213,6 +208,12 @@ export function TheSanPham({
             draggable="false"
             className="w-[236px] h-[236px] max-w-[85%] max-h-[85%] object-contain pointer-events-none"
           />
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center">
+            <span className="text-[13px] font-semibold tracking-[1.4px] text-xam uppercase">
+              {sanPham.thuong_hieu}
+            </span>
+          </div>
         )}
 
         {/* Nút xem chi tiết (i) */}
