@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AppShell } from "@/components/AppShell";
 import { useDuLieu } from "@/lib/du-lieu-context";
 import { dinhDangTien } from "@/lib/dinh-dang";
+import { duongDanAnh } from "@/lib/anh";
 import { chuanHoaNgay } from "@/lib/deals/hien-thi";
 import {
   tinhGio,
@@ -273,6 +274,7 @@ export default function TrangGio() {
                           Gợi ý từ danh sách Đã thích:
                         </span>
                         {ketQua.moc_tiep_theo.goi_y.map((spGoiY) => {
+                          const anhGoiY = duongDanAnh(spGoiY.anh, "nho");
                           return (
                             <div
                               key={spGoiY.id}
@@ -283,10 +285,10 @@ export default function TrangGio() {
                                 aria-label="Ảnh sản phẩm"
                                 className="w-12 h-12 rounded-xl bg-hong-nhat text-[10px] font-semibold tracking-wider uppercase text-[#5C5C5B] flex items-center justify-center shrink-0 overflow-hidden"
                               >
-                                {spGoiY.anh ? (
+                                {anhGoiY ? (
                                   /* eslint-disable-next-line @next/next/no-img-element */
                                   <img
-                                    src={spGoiY.anh}
+                                    src={anhGoiY}
                                     alt={spGoiY.ten_hien_thi}
                                     className="w-10 h-10 object-contain"
                                   />
@@ -369,7 +371,7 @@ export default function TrangGio() {
                     ? "bg-[#EAF3ED]"
                     : "bg-[#F7EEEB]";
 
-                const anhSrc = sp?.anh;
+                const anhSrc = duongDanAnh(sp?.anh, "nho");
 
                 return (
                   <article

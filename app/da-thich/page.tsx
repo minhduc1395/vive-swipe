@@ -7,6 +7,7 @@ import { BangChiTiet } from "@/components/deck/BangChiTiet";
 import { useDuLieu } from "@/lib/du-lieu-context";
 import type { SanPham } from "@/lib/data/types";
 import { dinhDangTien } from "@/lib/dinh-dang";
+import { duongDanAnh } from "@/lib/anh";
 import { NHAN_DANH_MUC } from "@/lib/nhan";
 import { layGhiChuDeal } from "@/lib/deals/ghi-chu";
 import { ghiLuotQuet } from "@/lib/supabase/luot-quet";
@@ -222,6 +223,7 @@ export default function TrangDaThich() {
                   ? "bg-[#EAF3ED]"
                   : "bg-[#F7EEEB]";
               const dealNote = layGhiChuDeal(sp, deals);
+              const anhSrc = duongDanAnh(sp.anh, "nho");
 
               return (
                 <article
@@ -233,10 +235,10 @@ export default function TrangDaThich() {
                   <div
                     className={`relative h-[150px] rounded-[18px] ${bgMoi} flex items-center justify-center overflow-hidden transition-transform group-active:scale-[0.98]`}
                   >
-                    {sp.anh ? (
+                    {anhSrc ? (
                       /* eslint-disable-next-line @next/next/no-img-element */
                       <img
-                        src={sp.anh}
+                        src={anhSrc}
                         alt={sp.ten_hien_thi}
                         className="w-[128px] h-[128px] object-contain"
                         loading="lazy"

@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
 import { NutQuayLai } from "@/components/NutQuayLai";
 import { BangChiTiet } from "@/components/deck/BangChiTiet";
-import { laySanPhamHienThi } from "@/lib/data";
+import { laySanPhamHienThi, duongDanAnh } from "@/lib/data";
 import { useDuLieu } from "@/lib/du-lieu-context";
 import type { SanPham } from "@/lib/data/types";
 import { dinhDangTien, chuanHoaTimKiem } from "@/lib/dinh-dang";
@@ -682,6 +682,7 @@ function DanhMucNoiDung() {
                         ? "bg-[#F7EEEB]"
                         : "bg-[#EAF3ED]";
                     const ghiChuDeal = layGhiChuDeal(sp, deals);
+                    const anhSrc = duongDanAnh(sp.anh, "the");
 
                     return (
                       <article
@@ -693,10 +694,10 @@ function DanhMucNoiDung() {
                         <div
                           className={`relative h-[150px] rounded-[18px] ${bgClass} flex items-center justify-center overflow-hidden`}
                         >
-                          {sp.anh ? (
+                          {anhSrc ? (
                             /* eslint-disable-next-line @next/next/no-img-element */
                             <img
-                              src={sp.anh}
+                              src={anhSrc}
                               alt={sp.ten_hien_thi}
                               className="w-[126px] h-[126px] object-contain group-hover:scale-105 transition-transform"
                             />

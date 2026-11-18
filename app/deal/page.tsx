@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { KhungUngDung } from "@/components/KhungUngDung";
-import { type SanPham } from "@/lib/data";
+import { duongDanAnh, type SanPham } from "@/lib/data";
 import { useDuLieu } from "@/lib/du-lieu-context";
 import { dinhDangTien } from "@/lib/dinh-dang";
 import {
@@ -340,16 +340,17 @@ function TheDealMuc({
             </span>
             {deal.goi_y.slice(0, 2).map((bo) => {
               const spDau = sanPhamMap.get(bo.san_pham[0]);
+              const anhDau = duongDanAnh(spDau?.anh, "nho");
               return (
                 <div
                   key={bo.id}
                   className="rounded-[14px] bg-trang p-2.5 flex items-center justify-between gap-2.5"
                 >
                   <div className="flex items-center gap-2.5 min-w-0">
-                    {spDau?.anh ? (
+                    {anhDau ? (
                       <div className="w-11 h-11 rounded-[10px] bg-[#F7EEEB] relative overflow-hidden shrink-0">
                         <Image
-                          src={spDau.anh}
+                          src={anhDau}
                           alt={bo.ten}
                           fill
                           sizes="44px"
@@ -422,28 +423,31 @@ function TheDealMuc({
         <div className="flex items-center gap-3">
           {/* Ảnh các món chồng nhau */}
           <div className="flex shrink-0">
-            {sanPhamTrongCombo.map((sp, idx) => (
-              <div
-                key={sp.id}
-                className={`w-[56px] h-[56px] rounded-[14px] bg-[#F7EEEB] border-2 border-trang relative overflow-hidden shrink-0 ${
-                  idx > 0 ? "-ml-4" : ""
-                }`}
-              >
-                {sp.anh ? (
-                  <Image
-                    src={sp.anh}
-                    alt={sp.ten_hien_thi}
-                    fill
-                    sizes="56px"
-                    className="object-contain p-1"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-[9px] font-semibold text-xam">
-                    {sp.thuong_hieu.slice(0, 4)}
-                  </div>
-                )}
-              </div>
-            ))}
+            {sanPhamTrongCombo.map((sp, idx) => {
+              const anhSp = duongDanAnh(sp.anh, "nho");
+              return (
+                <div
+                  key={sp.id}
+                  className={`w-[56px] h-[56px] rounded-[14px] bg-[#F7EEEB] border-2 border-trang relative overflow-hidden shrink-0 ${
+                    idx > 0 ? "-ml-4" : ""
+                  }`}
+                >
+                  {anhSp ? (
+                    <Image
+                      src={anhSp}
+                      alt={sp.ten_hien_thi}
+                      fill
+                      sizes="56px"
+                      className="object-contain p-1"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-[9px] font-semibold text-xam">
+                      {sp.thuong_hieu.slice(0, 4)}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
 
           <div className="flex flex-col min-w-0">
