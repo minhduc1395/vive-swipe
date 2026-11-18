@@ -1,0 +1,428 @@
+[
+  {
+    "ma": "lopoe-better-balance",
+    "ten": "LOPOE Better Balance",
+    "bat_dau": "2026-11-14",
+    "ket_thuc": "2026-11-29",
+    "uu_tien": 10,
+    "mau": {
+      "nen": "#F7EEEB",
+      "nhan": "#E8D2CC",
+      "chu": "#2B2B2A"
+    },
+    "khoi": [
+      {
+        "loai": "hero",
+        "kieu": "san-pham-3d",
+        "nhan_tren": "MỚI TẠI VIVE · NỘI ĐỊA HÀN",
+        "tieu_de": [
+          "LOPOE",
+          "~Better",
+          "Balance"
+        ],
+        "mo_ta": "Bộ ba sữa rửa mặt, ampoule, kem dưỡng. Mua kèm sản phẩm bất kỳ, LOPOE giảm 25%.",
+        "san_pham": [
+          "LOPOE-CF",
+          "LOPOE-AMP",
+          "LOPOE-CR"
+        ],
+        "nut": [
+          {
+            "chu": "Xem bộ sản phẩm",
+            "den": "/danh-muc?thuong_hieu=LOPOE"
+          },
+          {
+            "chu": "Giữ hàng tại booth",
+            "den": "/gio"
+          }
+        ],
+        "hieu_ung": "roi-vao-ke",
+        "anh": [
+          "/chien-dich/lopoe-better-balance/srm.webp",
+          "/chien-dich/lopoe-better-balance/ampoule-than.webp",
+          "/chien-dich/lopoe-better-balance/ampoule-nap.webp",
+          "/chien-dich/lopoe-better-balance/kem.webp"
+        ],
+        "vat_the": [
+          {
+            "id": "srm",
+            "ten": "LOPOE Cleansing Foam",
+            "anh": "/chien-dich/lopoe-better-balance/srm.webp",
+            "rong_px": 135,
+            "x": 0.14,
+            "y": 0.04,
+            "z": 30,
+            "rx": 0,
+            "ry": -8,
+            "rz": -12,
+            "scale": 0.9,
+            "mo": 0
+          },
+          {
+            "id": "ampoule",
+            "ten": "LOPOE Better Balance Ampoule",
+            "anh": "/chien-dich/lopoe-better-balance/ampoule-than.webp",
+            "nap_anh": "/chien-dich/lopoe-better-balance/ampoule-nap.webp",
+            "rong_px": 165,
+            "x": 0.48,
+            "y": -0.06,
+            "z": 120,
+            "rx": 0,
+            "ry": 4,
+            "rz": 4,
+            "scale": 1.05,
+            "mo": 0
+          },
+          {
+            "id": "kem",
+            "ten": "LOPOE Moisture Cream",
+            "anh": "/chien-dich/lopoe-better-balance/kem.webp",
+            "rong_px": 185,
+            "x": 0.8,
+            "y": 0.08,
+            "z": 45,
+            "rx": 0,
+            "ry": -12,
+            "rz": 12,
+            "scale": 0.92,
+            "mo": 0
+          }
+        ]
+      },
+      {
+        "loai": "tieu-diem",
+        "id": "ampoule-better-balance",
+        "nhan_phu": "AMPOULE · 50ML",
+        "tieu_de": [
+          "Better Balance",
+          "~Ampoule"
+        ],
+        "mo_ta": "Tinh chất Better Balance Ampoule 50ml thuộc bộ ba LOPOE Better Balance (da khô · cấp ẩm).",
+        "san_pham_id": "LOPOE-AMP",
+        "deal_id": "LOPOE-25",
+        "cta_chinh": {
+          "chu": "Xem sản phẩm",
+          "den": "/danh-muc?thuong_hieu=LOPOE"
+        },
+        "anh": [
+          "/chien-dich/lopoe-better-balance/ampoule-than.webp",
+          "/chien-dich/lopoe-better-balance/ampoule-nap.webp"
+        ],
+        "vat_the": [
+          {
+            "id": "srm",
+            "ten": "LOPOE Cleansing Foam",
+            "anh": "/chien-dich/lopoe-better-balance/srm.webp",
+            "rong_px": 135,
+            "x": -1.45,
+            "y": 0.06,
+            "z": -40,
+            "rx": 0,
+            "ry": -18,
+            "rz": -24,
+            "scale": 0.72,
+            "mo": 0
+          },
+          {
+            "id": "ampoule",
+            "ten": "LOPOE Better Balance Ampoule",
+            "anh": "/chien-dich/lopoe-better-balance/ampoule-than.webp",
+            "nap_anh": "/chien-dich/lopoe-better-balance/ampoule-nap.webp",
+            "rong_px": 165,
+            "x": -0.46,
+            "y": -0.04,
+            "z": 160,
+            "rx": 0,
+            "ry": 6,
+            "rz": -4,
+            "scale": 1.18,
+            "mo": 1
+          },
+          {
+            "id": "kem",
+            "ten": "LOPOE Moisture Cream",
+            "anh": "/chien-dich/lopoe-better-balance/kem.webp",
+            "rong_px": 185,
+            "x": 1.45,
+            "y": 0.12,
+            "z": -40,
+            "rx": 0,
+            "ry": 18,
+            "rz": 24,
+            "scale": 0.72,
+            "mo": 0
+          }
+        ]
+      },
+      {
+        "loai": "bang-chu",
+        "chu": "BETTER BALANCE · NỘI ĐỊA HÀN · MỚI TẠI VIVE · LL2 UNION SQUARE · ",
+        "mau_nen": "#E8D2CC"
+      },
+      {
+        "loai": "ra-mat",
+        "tieu_de": "Đủ bộ, đỡ tốn.",
+        "mo_ta": "Giá combo cố định, không cộng thêm giảm 25%. Hết quà thì combo về giá không quà.",
+        "deal": [
+          "LOPOE-COMBO-2SRM",
+          "LOPOE-COMBO-KEM-AMP",
+          "LOPOE-COMBO-BO3"
+        ],
+        "san_pham": [
+          "LOPOE-CF",
+          "LOPOE-AMP",
+          "LOPOE-CR"
+        ],
+        "anh_san_pham": {
+          "LOPOE-CF": "/chien-dich/lopoe-better-balance/srm.webp",
+          "LOPOE-AMP": "/chien-dich/lopoe-better-balance/ampoule-than.webp",
+          "LOPOE-CR": "/chien-dich/lopoe-better-balance/kem.webp"
+        },
+        "anh": [
+          "/chien-dich/lopoe-better-balance/srm.webp",
+          "/chien-dich/lopoe-better-balance/ampoule-than.webp",
+          "/chien-dich/lopoe-better-balance/kem.webp"
+        ],
+        "vat_the": [
+          {
+            "id": "srm",
+            "ten": "LOPOE Cleansing Foam",
+            "anh": "/chien-dich/lopoe-better-balance/srm.webp",
+            "rong_px": 135,
+            "x": -0.52,
+            "y": 0.04,
+            "z": 20,
+            "rx": 0,
+            "ry": 8,
+            "rz": -6,
+            "scale": 0.85,
+            "mo": 0
+          },
+          {
+            "id": "ampoule",
+            "ten": "LOPOE Better Balance Ampoule",
+            "anh": "/chien-dich/lopoe-better-balance/ampoule-than.webp",
+            "nap_anh": "/chien-dich/lopoe-better-balance/ampoule-nap.webp",
+            "rong_px": 165,
+            "x": 0,
+            "y": -0.02,
+            "z": 80,
+            "rx": 0,
+            "ry": 0,
+            "rz": 0,
+            "scale": 0.95,
+            "mo": 0
+          },
+          {
+            "id": "kem",
+            "ten": "LOPOE Moisture Cream",
+            "anh": "/chien-dich/lopoe-better-balance/kem.webp",
+            "rong_px": 185,
+            "x": 0.52,
+            "y": 0.04,
+            "z": 30,
+            "rx": 0,
+            "ry": -8,
+            "rz": 6,
+            "scale": 0.85,
+            "mo": 0
+          }
+        ]
+      },
+      {
+        "loai": "chuong-trinh",
+        "tieu_de": "Đang chạy tại booth",
+        "deal": [
+          "COMBO-PINK",
+          "DC-05",
+          "KM-08",
+          "KM-13"
+        ],
+        "o_to": "COMBO-PINK"
+      },
+      {
+        "loai": "doi-tac",
+        "doi_tac": "pawlette",
+        "tieu_de": "Tông nào hợp bạn?",
+        "mo_ta": "Đo personal color cùng Pawlette, rồi thử lớp nền đúng tông ngay tại booth.",
+        "gia_goi": 378000,
+        "link": "/personal-color"
+      },
+      {
+        "loai": "booth",
+        "tieu_de": "VIVE | K-Beauty Experience",
+        "dia_chi": "Tầng LL2 Union Square, 171 Đồng Khởi, Quận 1",
+        "gio": "10:00 – 21:00",
+        "ngay_cuoi": "đến 29/11"
+      }
+    ]
+  },
+  {
+    "ma": "mac-dinh",
+    "ten": "VIVE New Arrival",
+    "bat_dau": "2026-01-01",
+    "ket_thuc": "2026-12-31",
+    "uu_tien": 1,
+    "mau": {
+      "nen": "#F7EEEB",
+      "nhan": "#E8D2CC",
+      "chu": "#2B2B2A"
+    },
+    "khoi": [
+      {
+        "loai": "hero",
+        "kieu": "san-pham-3d",
+        "nhan_tren": "MỚI TẠI VIVE · NỘI ĐỊA HÀN",
+        "tieu_de": [
+          "K-BEAUTY",
+          "~New",
+          "Arrival"
+        ],
+        "mo_ta": "Trải nghiệm mỹ phẩm nội địa Hàn Quốc thịnh hành nhất ngay tại Tầng LL2 Union Square.",
+        "san_pham": [
+          "LOPOE-CF",
+          "LOPOE-AMP",
+          "LOPOE-CR"
+        ],
+        "nut": [
+          {
+            "chu": "Khám phá sản phẩm",
+            "den": "/danh-muc"
+          },
+          {
+            "chu": "Xem giỏ hàng",
+            "den": "/gio"
+          }
+        ],
+        "hieu_ung": "roi-vao-ke",
+        "anh": [
+          "/chien-dich/lopoe-better-balance/srm.webp",
+          "/chien-dich/lopoe-better-balance/ampoule-than.webp",
+          "/chien-dich/lopoe-better-balance/kem.webp"
+        ],
+        "vat_the": [
+          {
+            "id": "srm",
+            "ten": "LOPOE Cleansing Foam",
+            "anh": "/chien-dich/lopoe-better-balance/srm.webp",
+            "rong_px": 135,
+            "x": 0.14,
+            "y": 0.04,
+            "z": 30,
+            "rx": 0,
+            "ry": -8,
+            "rz": -12,
+            "scale": 0.9,
+            "mo": 0
+          },
+          {
+            "id": "ampoule",
+            "ten": "LOPOE Better Balance Ampoule",
+            "anh": "/chien-dich/lopoe-better-balance/ampoule-than.webp",
+            "nap_anh": "/chien-dich/lopoe-better-balance/ampoule-nap.webp",
+            "rong_px": 165,
+            "x": 0.48,
+            "y": -0.06,
+            "z": 120,
+            "rx": 0,
+            "ry": 4,
+            "rz": 4,
+            "scale": 1.05,
+            "mo": 0
+          },
+          {
+            "id": "kem",
+            "ten": "LOPOE Moisture Cream",
+            "anh": "/chien-dich/lopoe-better-balance/kem.webp",
+            "rong_px": 185,
+            "x": 0.8,
+            "y": 0.08,
+            "z": 45,
+            "rx": 0,
+            "ry": -12,
+            "rz": 12,
+            "scale": 0.92,
+            "mo": 0
+          }
+        ]
+      },
+      {
+        "loai": "tieu-diem",
+        "id": "ampoule-mac-dinh",
+        "nhan_phu": "AMPOULE · 50ML",
+        "tieu_de": [
+          "Better Balance",
+          "~Ampoule"
+        ],
+        "mo_ta": "Tinh chất Better Balance Ampoule 50ml tại booth VIVE Tầng LL2 Union Square.",
+        "san_pham_id": "LOPOE-AMP",
+        "deal_id": "LOPOE-25",
+        "cta_chinh": {
+          "chu": "Khám phá sản phẩm",
+          "den": "/danh-muc"
+        },
+        "anh": [
+          "/chien-dich/lopoe-better-balance/ampoule-than.webp"
+        ],
+        "vat_the": [
+          {
+            "id": "srm",
+            "anh": "/chien-dich/lopoe-better-balance/srm.webp",
+            "x": -1.45,
+            "y": 0.06,
+            "z": -40,
+            "scale": 0.72
+          },
+          {
+            "id": "ampoule",
+            "anh": "/chien-dich/lopoe-better-balance/ampoule-than.webp",
+            "nap_anh": "/chien-dich/lopoe-better-balance/ampoule-nap.webp",
+            "x": -0.46,
+            "y": -0.04,
+            "z": 160,
+            "scale": 1.18,
+            "mo": 1
+          },
+          {
+            "id": "kem",
+            "anh": "/chien-dich/lopoe-better-balance/kem.webp",
+            "x": 1.45,
+            "y": 0.12,
+            "z": -40,
+            "scale": 0.72
+          }
+        ]
+      },
+      {
+        "loai": "bang-chu",
+        "chu": "K-BEAUTY EXPERIENCE · NỘI ĐỊA HÀN · MỚI TẠI VIVE · LL2 UNION SQUARE · ",
+        "mau_nen": "#CFE3D5"
+      },
+      {
+        "loai": "chuong-trinh",
+        "tieu_de": "Chương trình nổi bật",
+        "deal": [
+          "COMBO-PINK",
+          "DC-05",
+          "KM-08"
+        ],
+        "o_to": "COMBO-PINK"
+      },
+      {
+        "loai": "doi-tac",
+        "doi_tac": "pawlette",
+        "tieu_de": "Tông nào hợp bạn?",
+        "mo_ta": "Đo personal color cùng Pawlette, rồi thử lớp nền đúng tông ngay tại booth.",
+        "gia_goi": 378000,
+        "link": "/personal-color"
+      },
+      {
+        "loai": "booth",
+        "tieu_de": "VIVE | K-Beauty Experience",
+        "dia_chi": "Tầng LL2 Union Square, 171 Đồng Khởi, Quận 1",
+        "gio": "10:00 – 21:00",
+        "ngay_cuoi": "đến 29/11"
+      }
+    ]
+  }
+]

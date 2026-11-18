@@ -1,34 +1,44 @@
-import Link from "next/link";
-import { AppShell } from "@/components/AppShell";
+import type { Metadata } from "next";
+import { layChienDichHienTai } from "@/lib/chien-dich";
+import { LandingClient } from "@/components/landing/LandingClient";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const chienDich = layChienDichHienTai();
+  const title = chienDich
+    ? `${chienDich.ten} · VIVE New Arrival`
+    : "VIVE New Arrival · K-Beauty Experience";
+  const description =
+    chienDich?.khoi.find((k) => k.loai === "hero")?.mo_ta ||
+    "Giới thiệu các dòng sản phẩm mới và chương trình ưu đãi K-Beauty tại VIVE Tầng LL2 Union Square.";
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [
+        {
+          url: "/brand/og-image.png",
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+  };
+}
 
 export default function TrangNewArrival() {
-  return (
-    <AppShell>
-      <div className="flex-1 flex flex-col items-center justify-center p-6 text-center max-w-[640px] mx-auto min-h-[60vh]">
-        <span className="text-[12px] font-bold tracking-wider text-[#737373] uppercase mb-2">
-          Chiến dịch mới
-        </span>
-        <h1 className="text-[28px] md:text-[36px] font-bold tracking-tight mb-3">
-          New Arrival: LOPOE Better Balance
-        </h1>
-        <p className="text-[15px] md:text-[16px] text-[#5C5C5B] leading-relaxed mb-6">
-          Bộ sản phẩm cân bằng da chuyên sâu từ Hàn Quốc. Trang chiến dịch với trải nghiệm 3D đang được hoàn thiện (W027).
-        </p>
-        <div className="flex flex-wrap gap-3 justify-center">
-          <Link
-            href="/quet"
-            className="h-11 px-6 rounded-full bg-den text-trang font-semibold inline-flex items-center justify-center hover:opacity-90 transition-opacity"
-          >
-            Bắt đầu quẹt sản phẩm
-          </Link>
-          <Link
-            href="/danh-muc?thuong_hieu=LOPOE"
-            className="h-11 px-6 rounded-full border border-[#E8D2CC] text-den font-semibold inline-flex items-center justify-center hover:bg-[#F7EEEB] transition-colors"
-          >
-            Xem bộ sản phẩm LOPOE
-          </Link>
-        </div>
+  const chienDich = layChienDichHienTai();
+
+  if (!chienDich) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-hong-nhat text-den">
+        <p>Chưa có chiến dịch nào được cấu hình.</p>
       </div>
-    </AppShell>
-  );
+    );
+  }
+
+  return <LandingClient chienDich={chienDich} />;
 }

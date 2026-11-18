@@ -36,6 +36,7 @@ function loadParseModule() {
 export function buildStaticData({
   csvPath = path.join(ROOT, "data", "products.csv"),
   yamlPath = path.join(ROOT, "data", "deals.yaml"),
+  chienDichDir = path.join(ROOT, "data", "chien-dich"),
   outDir = path.join(ROOT, "lib", "data"),
 } = {}) {
   const { parseProductsCsv, parseDealsYaml } = loadParseModule();
@@ -45,6 +46,22 @@ export function buildStaticData({
 
   const yamlText = fs.readFileSync(yamlPath, "utf8");
   const deals = parseDealsYaml(yamlText);
+
+  const yaml = require("js-yaml");
+  const chienDichList = [];
+  if (fs.existsSync(chienDichDir)) {
+    const files = fs.readdirSync(chienDichDir);
+    for (const file of files) {
+      if (file.endsWith(".yaml") || file.endsWith(".yml")) {
+        const content = fs.readFileSync(path.join(chienDichDir, file), "utf8");
+        const cd = yaml.load(content);
+        if (cd && cd.ma) {
+          chienDichList.push(cd);
+        }
+      }
+    }
+  }
+  chienDichList.sort((a, b) => (b.uu_tien || 0) - (a.uu_tien || 0));
 
   fs.mkdirSync(outDir, { recursive: true });
   fs.writeFileSync(
@@ -57,8 +74,13 @@ export function buildStaticData({
     `${JSON.stringify(deals, null, 2)}\n`,
     "utf8"
   );
+  fs.writeFileSync(
+    path.join(outDir, "chien-dich.json"),
+    `${JSON.stringify(chienDichList, null, 2)}\n`,
+    "utf8"
+  );
 
-  return { products, deals };
+  return { products, deals, chienDichList };
 }
 
 const isDirectRun =
