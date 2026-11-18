@@ -1,7 +1,6 @@
 # Thương hiệu được phép dùng ảnh từ website chính hãng hoặc nhà phân phối (docs/06 mục 3).
-# Chỉ chủ dự án hoặc Claude sửa. Trống = chưa thương hiệu nào được phép, chỉ dùng ảnh Drive và ảnh chụp tại booth.
-duoc_phep: []
-# Mẫu:
-# - thuong_hieu: LOPOE
-#   trang: https://...      # website chính hãng
-#   xac_nhan: "chủ dự án, 18/11"
+# Chỉ chủ dự án hoặc Claude sửa.
+tat_ca_thuong_hieu: true   # chủ dự án xác nhận 18/11/2026: mọi sản phẩm được lấy ảnh từ website chính hãng
+# "Website chính hãng" = tên miền của chính thương hiệu (kể cả bản Hàn/global của thương hiệu),
+# hoặc gian hàng chính thức do thương hiệu vận hành. KHÔNG phải sàn bán lẻ, đại lý, trang review.
+duoc_phep: []              # để trống khi tat_ca_thuong_hieu = true
