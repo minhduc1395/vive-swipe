@@ -72,7 +72,9 @@ def dich_mo_ta_sang_tieng_anh(mo_ta: str) -> str:
     if text in ban_dich_san:
         return ban_dich_san[text]
 
-    return text
+    # Theo docs/07 §2 và QA: nếu không dịch được thì để trống và báo, không chép bản vi sang en
+    print(f"Cảnh báo: Chưa có bản dịch tiếng Anh cho mô tả: {text[:50]}...")
+    return ""
 
 
 def chay_dich_bu(kho_chi_dinh: list[str] | None = None) -> dict[str, Any]:

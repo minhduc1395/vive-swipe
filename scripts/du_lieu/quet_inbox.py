@@ -18,21 +18,31 @@ import common  # noqa: E402
 
 
 def tim_thu_muc_inbox(duong_dan_chi_dinh: str | None = None) -> tuple[Path, Path, Path]:
-    """Xác định bộ 3 thư mục: 00 Inbox, 01 Đã xử lý, 02 Lỗi."""
+    """Xác định thư mục:
+    - Inbox chung: MEDIA_INBOX_DIR ('Her Bazaar Pop up/00 Inbox - ảnh và thông tin sản phẩm')
+    - Thư mục đích Drive 09: '01 Đã xử lý', '02 Lỗi' (DRIVE_09_DIR)
+    """
+    env = common.tai_env()
     if duong_dan_chi_dinh:
-        base = Path(duong_dan_chi_dinh).resolve()
+        inbox = Path(duong_dan_chi_dinh).resolve()
+        drive_09 = inbox.parent if inbox.name.startswith("00") else inbox
     else:
-        env = common.tai_env()
-        d09 = env.get("DRIVE_09_DIR")
-        if d09 and Path(d09).exists():
-            base = Path(d09).resolve()
+        # 1. Thư mục Inbox chung theo thay-doi-luat 18:33
+        inbox_env = env.get("MEDIA_INBOX_DIR") or env.get("MEDIA_NGUON_DIR")
+        if inbox_env and Path(inbox_env).exists():
+            inbox = Path(inbox_env).resolve()
         else:
-            base = ROOT / "media" / "tmp" / "drive_09"
+            inbox = ROOT / "media" / "tmp" / "inbox"
 
-    inbox = base / "00 Inbox" if (base / "00 Inbox").exists() or not (base.name == "00 Inbox") else base
-    parent = inbox.parent if inbox.name == "00 Inbox" else base
-    da_xu_ly = parent / "01 Đã xử lý"
-    loi = parent / "02 Lỗi"
+        # 2. Thư mục đích Drive 09
+        d09_env = env.get("DRIVE_09_DIR")
+        if d09_env and Path(d09_env).exists():
+            drive_09 = Path(d09_env).resolve()
+        else:
+            drive_09 = ROOT / "media" / "tmp" / "drive_09"
+
+    da_xu_ly = drive_09 / "01 Đã xử lý"
+    loi = drive_09 / "02 Lỗi"
 
     inbox.mkdir(parents=True, exist_ok=True)
     da_xu_ly.mkdir(parents=True, exist_ok=True)
