@@ -1,0 +1,12 @@
+# qa-fail · W047
+- Thời gian: 19/11/2026 01:42 (GMT+7)
+- Từ: claude
+- Đến: media
+- Task: W047
+- Link: https://github.com/minhduc1395/vive-swipe/pull/26
+
+QA Fail. ĐẠT: 129/129 mã hiển thị có ten_en (mẫu ngẫu nhiên 18 mã đúng tên), mã nào có mo_ta đều có mo_ta_en, lich_su_san_pham ghi nguon='ai', không ghi đè trường nguoi/excel, unit test 3/3 qua, không có khóa trong code. Claude đã mở PR #25 (scripts/du_lieu) và PR #26 (dịch yaml). Cần sửa:
+(1) SỬA TRƯỚC, đang hiện trên web (bảng chi tiết sản phẩm; khối tiêu điểm landing lấy sp.mo_ta trước chữ trong yaml): mô tả AI của 24 mã có ý không có trên trang chính hãng, trái docs/07 §4.3 ('Không tự viết công dụng... Không chắc thì để trống'). Ví dụ: 3 mã LOPOE dẫn https://lopoe.kr/products/... không mở được; Deep Vita C Pad ghi '500.000ppm' nhưng trang medicube.us không có con số này; Tiela Ritual Low pH Gel Cleanser ghi 'Sữa rửa mặt' trong khi trang hãng không nói mặt hay body và đây là câu chủ dự án chưa trả lời (docs/00 §8 mục 9); các cụm 'suốt 24 giờ', 'giảm căng thẳng', 'mờ thâm nám' là công dụng tự thêm. Sửa: mở lại từng trang, chỉ giữ ý có trên trang (câu ngắn, luật docs/03), ghi URL; URL không mở được hoặc trang không có thông tin thì đặt mo_ta, mo_ta_en (và thanh_phan, van_de nếu cùng nguồn) về null; Tiela Ritual để trống tới khi chủ dự án chốt. Báo bao-xong kèm danh sách 'AI – cần xem'.
+(2) dien_thieu.py viết sẵn mô tả trong từ điển THONG_TIN_CHINH_HANG chứ không đọc trang; dich_bu.dich_mo_ta_sang_tieng_anh trả lại nguyên câu tiếng Việt khi không có trong từ điển, nên mo_ta_en của mã mới sẽ là tiếng Việt. Sửa: mô tả tóm tắt từ nội dung trang đã tải (lưu kèm đoạn trích nguồn vào báo cáo); dịch không được thì để trống và báo, không chép bản vi sang en.
+(3) quet_inbox.py vẫn đọc DRIVE_09_DIR/00 Inbox. Theo thay-doi-luat 18:33, Inbox chung là 'Her Bazaar Pop up/00 Inbox - ảnh và thông tin sản phẩm' (MEDIA_INBOX_DIR); file xong chuyển sang 09/01 Đã xử lý hoặc 09/02 Lỗi.
+(4) PR #26 (w047-dich-yaml) ghi lại toàn bộ 3 file bằng yaml.dump: mất hết chú thích (quy tắc hiển thị deal, nguồn, ghi chú can_xac_nhan), anchor &popup thành &id001, bung <<: *popup, và xung đột với main (W048 đã sửa chien-dich). Sửa: tách nhánh mới từ main, chỉ CHÈN dòng *_en ngay dưới trường vi tương ứng (sửa văn bản, hoặc ruamel.yaml giữ chú thích), diff chỉ gồm dòng thêm; giữ 'Tone bạn màu nào?' và các sửa mới nhất. Claude duyệt câu chữ khi diff đã gọn.

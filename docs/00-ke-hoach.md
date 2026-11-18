@@ -95,6 +95,7 @@ Chỉ tiêu cụ thể đặt sau 3 ngày chạy đầu, khi đã có số thậ
 | `tasks/`, `handoff/` | Việc và tin nhắn giữa Claude và Antigravity (cách dùng: AGENTS.md) |
 
 ## Nhật ký thay đổi
+- 19/11/2026: QA 1:13 merge W017 (trang quản trị, nút email khóa chờ W018). Fail: W032 (CI e2e đỏ, hero ampoule nhân đôi, LCP / 3,8s, route ảnh giả 1×1), W038 (test cũ chưa theo thanh mới, nút Đăng nhập điện thoại 32px), W036 (khoảng 70 mã có trang chính hãng chưa xử lý), W037 (còn 15 video chờ ảnh; đã duyệt video Deep Vita C Pad), W047 (mô tả AI có ý không có trên trang hãng, đang hiện trên web; PR #26 dịch yaml làm mất chú thích). Mở PR #25, #26 cho W047.
 - 18/11/2026 (5): Chủ dự án yêu cầu chân trang gọn. Bản mẫu `design/ChanTrang.html`, task W049 (sau W038). `data/doanh-nghiep.yaml` thêm địa chỉ booth, link bản đồ, link mạng xã hội (sửa link Facebook đang trỏ trang chủ facebook.com).
 - 18/11/2026 (4): QA 17:13 merge W028, W027, W033, W019, W005, W029, W035 (landing là trang đầu, giao diện máy tính/máy tính bảng, chân trang, ảnh từ kho media). Địa chỉ booth trong `data/chien-dich/*.yaml` sửa "Quận 1" thành "Phường Sài Gòn" theo docs/03. Ngân sách hiệu năng (LCP landing 4,4s) và bố cục máy tính bảng 768–1023px của landing chuyển sang W032.
 - 18/11/2026 (3): Lập docs/05-lo-trinh-hoan-thien.md (tóm tắt, nguyên tắc co giãn, ngân sách hiệu năng, ma trận kiểm thử, thứ tự làm tới 27/11). Thêm W031 (khung co giãn, làm sớm), W032 (kiểm thử đa màn hình, hiệu năng); W027, W028 lên ưu tiên Cao.
