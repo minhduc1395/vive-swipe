@@ -215,7 +215,7 @@ export default function TrangDaThich() {
             </button>
           </div>
         ) : (
-          <div className="flex-1 overflow-y-auto px-4 pt-3 pb-6 grid grid-cols-2 gap-3 content-start">
+          <div className="flex-1 overflow-y-auto px-4 md:px-6 pt-3 pb-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-3.5 md:gap-5 content-start">
             {sanPhamHienThi.map((sp) => {
               const bgMoi =
                 sp.danh_muc === "mat-na" || sp.danh_muc === "kem-duong"

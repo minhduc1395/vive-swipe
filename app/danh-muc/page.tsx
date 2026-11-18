@@ -2,8 +2,7 @@
 
 import { useState, useEffect, useMemo, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { KhungDienThoai } from "@/components/KhungDienThoai";
-import { ThanhTab } from "@/components/ThanhTab";
+import { AppShell } from "@/components/AppShell";
 import { BangChiTiet } from "@/components/deck/BangChiTiet";
 import { laySanPhamHienThi } from "@/lib/data";
 import { useDuLieu } from "@/lib/du-lieu-context";
@@ -275,46 +274,52 @@ function DanhMucNoiDung() {
   const conThem = ketQuaLoc.length - gioiHanHienThi;
 
   return (
-    <KhungDienThoai className="h-dvh">
-      <div className="w-full h-full flex flex-col bg-trang font-sans text-den overflow-hidden relative">
+    <AppShell
+      soLuongThich={daThich.length}
+      soLuongGio={soLuongGio}
+      khoaChieuCao={true}
+      noiDungClassName="w-full flex-1 min-h-0 flex flex-col"
+    >
+      <div className="w-full flex-1 min-h-0 flex flex-col bg-trang font-sans text-den overflow-hidden relative">
         {/* Vùng cuộn nội dung */}
         <div className="flex-1 min-h-0 overflow-y-auto">
-          {/* Header */}
-          <header className="px-5 pt-6 pb-2 flex items-center gap-1">
-            {dangXemDanhSach && (
-              <button
-                type="button"
-                onClick={xuLyVeTrangDau}
-                aria-label="Về tất cả danh mục"
-                className="w-11 h-11 -ml-3 flex items-center justify-center rounded-full text-den hover:bg-hong-nhat transition-colors cursor-pointer"
-              >
-                <svg
-                  width="22"
-                  height="22"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
+          <div className="max-w-[1280px] mx-auto w-full">
+            {/* Header */}
+            <header className="px-5 md:px-8 pt-6 pb-2 flex items-center gap-1">
+              {dangXemDanhSach && (
+                <button
+                  type="button"
+                  onClick={xuLyVeTrangDau}
+                  aria-label="Về tất cả danh mục"
+                  className="w-11 h-11 -ml-3 flex items-center justify-center rounded-full text-den hover:bg-hong-nhat transition-colors cursor-pointer"
                 >
-                  <path d="M15 18l-6-6 6-6" />
-                </svg>
-              </button>
-            )}
-            <h1 className="m-0 text-[26px] font-bold tracking-[-0.4px] text-den">
-              {tieuDeTrang}
-            </h1>
-            {dangXemDanhSach && (
-              <span className="ml-1.5 text-[14px] text-xam">
-                {ketQuaLoc.length} món
-              </span>
-            )}
-          </header>
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M15 18l-6-6 6-6" />
+                  </svg>
+                </button>
+              )}
+              <h1 className="m-0 text-[26px] md:text-[32px] font-bold tracking-[-0.4px] text-den">
+                {tieuDeTrang}
+              </h1>
+              {dangXemDanhSach && (
+                <span className="ml-1.5 text-[14px] text-xam">
+                  {ketQuaLoc.length} món
+                </span>
+              )}
+            </header>
 
-          {/* Ô tìm kiếm */}
-          <div className="px-5 pt-1 pb-3">
+            {/* Ô tìm kiếm */}
+            <div className="px-5 md:px-8 pt-1 pb-3 max-w-[600px]">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -397,11 +402,11 @@ function DanhMucNoiDung() {
           {!dangXemDanhSach && (
             <>
               {/* Lưới 12 loại sản phẩm */}
-              <section className="px-5 pt-3 pb-2 flex flex-col gap-2.5">
+              <section className="px-5 md:px-8 pt-3 pb-2 flex flex-col gap-2.5">
                 <h2 className="m-0 text-[15px] font-semibold text-den">
                   Loại sản phẩm
                 </h2>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-3">
                   {DANH_SACH_LOAI.map((c, i) => {
                     const count = soLuongTheoLoai[c.id] || 0;
                     const bgClass =
@@ -417,7 +422,7 @@ function DanhMucNoiDung() {
                             thuongHieu: "",
                           })
                         }
-                        className={`h-[76px] rounded-[18px] p-3 flex flex-col justify-between items-start text-left cursor-pointer border-none ${bgClass} hover:opacity-90 transition-opacity`}
+                        className={`h-[76px] md:h-[92px] rounded-[18px] p-3 md:p-4 flex flex-col justify-between items-start text-left cursor-pointer border-none ${bgClass} hover:opacity-90 transition-opacity`}
                       >
                         <span className="text-[14px] font-semibold leading-[1.25] text-den">
                           {c.label}
@@ -432,7 +437,7 @@ function DanhMucNoiDung() {
               </section>
 
               {/* Hàng chip theo vấn đề da */}
-              <section className="px-5 pt-4 pb-2 flex flex-col gap-2.5">
+              <section className="px-5 md:px-8 pt-4 pb-2 flex flex-col gap-2.5">
                 <h2 className="m-0 text-[15px] font-semibold text-den">
                   Theo vấn đề da
                 </h2>
@@ -448,7 +453,7 @@ function DanhMucNoiDung() {
                           thuongHieu: "",
                         })
                       }
-                      className="h-[38px] px-3.5 rounded-full border border-[#E8D2CC] bg-trang font-sans text-[14px] text-den hover:border-den cursor-pointer transition-colors"
+                      className="h-[44px] px-4 rounded-full border border-[#E8D2CC] bg-trang font-sans text-[14px] text-den hover:border-den cursor-pointer transition-colors"
                     >
                       {v.label}
                     </button>
@@ -456,12 +461,12 @@ function DanhMucNoiDung() {
                 </div>
               </section>
 
-              {/* Thương hiệu cuộn ngang */}
-              <section className="pl-5 pt-4 pb-6 flex flex-col gap-2.5">
+              {/* Thương hiệu */}
+              <section className="pl-5 md:px-8 pt-4 pb-6 flex flex-col gap-2.5">
                 <h2 className="m-0 text-[15px] font-semibold text-den">
                   Thương hiệu
                 </h2>
-                <div className="flex gap-2 overflow-x-auto pr-5 pb-1">
+                <div className="flex md:flex-wrap gap-2 overflow-x-auto md:overflow-visible pr-5 md:pr-0 pb-1">
                   {danhSachThuongHieu.map((b) => (
                     <button
                       key={b.ten}
@@ -473,7 +478,7 @@ function DanhMucNoiDung() {
                           vanDe: "",
                         })
                       }
-                      className="h-[38px] px-3.5 rounded-full border border-[#E8D2CC] bg-trang font-sans text-[14px] font-medium whitespace-nowrap text-den hover:border-den cursor-pointer shrink-0 transition-colors"
+                      className="h-[44px] px-4 rounded-full border border-[#E8D2CC] bg-trang font-sans text-[14px] font-medium whitespace-nowrap text-den hover:border-den cursor-pointer shrink-0 transition-colors"
                     >
                       {b.ten} · {b.count}
                     </button>
@@ -485,94 +490,202 @@ function DanhMucNoiDung() {
 
           {/* MÀN HÌNH DANH SÁCH KẾT QUẢ */}
           {dangXemDanhSach && (
-            <>
-              {/* Chip cuộn ngang loại sản phẩm */}
-              <div
-                className="pl-5 pt-2 flex gap-2 overflow-x-auto pr-5"
-                role="group"
-                aria-label="Chọn loại sản phẩm"
+            <div className="lg:grid lg:grid-cols-[240px_1fr] lg:gap-8 lg:px-8 lg:items-start">
+              {/* Cột lọc trái dính trên máy tính (DanhMucPC) */}
+              <aside
+                aria-label="Bộ lọc"
+                className="hidden lg:flex flex-col gap-6 sticky top-4 pb-8"
               >
-                <button
-                  type="button"
-                  onClick={() => capNhatBoLoc({ loai: "" })}
-                  aria-pressed={!loaiUrl}
-                  className={`h-[34px] px-3 rounded-full font-sans text-[13px] font-medium whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
-                    !loaiUrl
-                      ? "bg-den text-trang border border-den"
-                      : "bg-trang text-den border border-[#E8D2CC]"
-                  }`}
-                >
-                  Tất cả
-                </button>
-                {DANH_SACH_LOAI.map((c) => {
-                  const on = loaiUrl === c.id;
-                  return (
-                    <button
-                      key={c.id}
-                      type="button"
-                      onClick={() => capNhatBoLoc({ loai: c.id })}
-                      aria-pressed={on}
-                      className={`h-[34px] px-3 rounded-full font-sans text-[13px] font-medium whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
-                        on
-                          ? "bg-den text-trang border border-den"
-                          : "bg-trang text-den border border-[#E8D2CC]"
-                      }`}
-                    >
-                      {c.label}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Hàng chip vấn đề da + dropdown Xếp */}
-              <div className="px-5 pt-3 pb-2 flex items-center justify-between gap-2.5">
-                <div
-                  className="flex gap-1.5 overflow-x-auto min-w-0"
-                  role="group"
-                  aria-label="Lọc theo vấn đề da"
-                >
-                  {DANH_SACH_VAN_DE.map((v) => {
-                    const on = vanDeUrl === v.id;
+                <section className="flex flex-col gap-1.5">
+                  <h2 className="m-0 mb-1 px-3 text-[12px] font-semibold text-xam tracking-[0.6px] uppercase">
+                    DANH MỤC
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={() => capNhatBoLoc({ loai: "" })}
+                    className={`h-11 px-3 rounded-xl flex items-center justify-between text-[14px] cursor-pointer border-none ${
+                      !loaiUrl
+                        ? "bg-hong-nhat font-semibold text-den"
+                        : "bg-transparent text-den hover:bg-hong-nhat/50"
+                    }`}
+                  >
+                    <span>Tất cả</span>
+                    <span className="text-[12px] text-xam">
+                      {tatCaSanPhamHienThi.length}
+                    </span>
+                  </button>
+                  {DANH_SACH_LOAI.map((c) => {
+                    const on = loaiUrl === c.id;
                     return (
                       <button
-                        key={v.id}
+                        key={c.id}
                         type="button"
-                        onClick={() =>
-                          capNhatBoLoc({ vanDe: on ? "" : v.id })
-                        }
+                        onClick={() => capNhatBoLoc({ loai: c.id })}
+                        className={`h-11 px-3 rounded-xl flex items-center justify-between text-[14px] cursor-pointer border-none ${
+                          on
+                            ? "bg-hong-nhat font-semibold text-den"
+                            : "bg-transparent text-den hover:bg-hong-nhat/50"
+                        }`}
+                      >
+                        <span>{c.label}</span>
+                        <span className="text-[12px] text-xam">
+                          {soLuongTheoLoai[c.id] || 0}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </section>
+
+                <section className="flex flex-col gap-2">
+                  <h2 className="m-0 text-[12px] font-semibold text-xam tracking-[0.6px] uppercase">
+                    VẤN ĐỀ DA
+                  </h2>
+                  <div className="flex flex-wrap gap-1.5">
+                    {DANH_SACH_VAN_DE.map((v) => {
+                      const on = vanDeUrl === v.id;
+                      return (
+                        <button
+                          key={v.id}
+                          type="button"
+                          onClick={() =>
+                            capNhatBoLoc({ vanDe: on ? "" : v.id })
+                          }
+                          aria-pressed={on}
+                          className={`h-11 px-3.5 rounded-full font-sans text-[13px] font-medium cursor-pointer transition-colors ${
+                            on
+                              ? "bg-bac-ha text-den border border-bac-ha font-semibold"
+                              : "bg-trang text-den border border-[#E8D2CC] hover:border-den"
+                          }`}
+                        >
+                          {v.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </section>
+
+                <section className="flex flex-col gap-2">
+                  <h2 className="m-0 text-[12px] font-semibold text-xam tracking-[0.6px] uppercase">
+                    THƯƠNG HIỆU
+                  </h2>
+                  <div className="flex flex-wrap gap-1.5">
+                    {danhSachThuongHieu.map((b) => {
+                      const on =
+                        thuongHieuUrl.toLowerCase() === b.ten.toLowerCase();
+                      return (
+                        <button
+                          key={b.ten}
+                          type="button"
+                          onClick={() =>
+                            capNhatBoLoc({ thuongHieu: on ? "" : b.ten })
+                          }
+                          className={`h-11 px-3 rounded-full font-sans text-[13px] font-medium cursor-pointer transition-colors ${
+                            on
+                              ? "bg-den text-trang border border-den"
+                              : "bg-trang text-den border border-[#E8D2CC] hover:border-den"
+                          }`}
+                        >
+                          {b.ten}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </section>
+              </aside>
+
+              {/* Cột phải: Chip lọc mobile/tablet + Dropdown Xếp + Lưới sản phẩm */}
+              <div className="min-w-0 flex flex-col">
+                {/* Chip cuộn ngang loại sản phẩm (ẩn trên desktop) */}
+                <div
+                  className="pl-5 pt-2 flex gap-2 overflow-x-auto pr-5 lg:hidden"
+                  role="group"
+                  aria-label="Chọn loại sản phẩm"
+                >
+                  <button
+                    type="button"
+                    onClick={() => capNhatBoLoc({ loai: "" })}
+                    aria-pressed={!loaiUrl}
+                    className={`h-[44px] px-3.5 rounded-full font-sans text-[13px] font-medium whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+                      !loaiUrl
+                        ? "bg-den text-trang border border-den"
+                        : "bg-trang text-den border border-[#E8D2CC]"
+                    }`}
+                  >
+                    Tất cả
+                  </button>
+                  {DANH_SACH_LOAI.map((c) => {
+                    const on = loaiUrl === c.id;
+                    return (
+                      <button
+                        key={c.id}
+                        type="button"
+                        onClick={() => capNhatBoLoc({ loai: c.id })}
                         aria-pressed={on}
-                        className={`h-[32px] px-3 rounded-full font-sans text-[12px] font-medium whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+                        className={`h-[44px] px-3.5 rounded-full font-sans text-[13px] font-medium whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
                           on
                             ? "bg-den text-trang border border-den"
                             : "bg-trang text-den border border-[#E8D2CC]"
                         }`}
                       >
-                        {v.label}
+                        {c.label}
                       </button>
                     );
                   })}
                 </div>
 
-                <label className="shrink-0 flex items-center gap-1 text-[13px] text-xam">
-                  <span>Xếp</span>
-                  <select
-                    value={xepUrl}
-                    onChange={(e) =>
-                      capNhatBoLoc({ xep: e.target.value }, { replace: true })
-                    }
-                    className="h-[34px] rounded-[10px] border border-[#E8D2CC] bg-trang font-sans text-[13px] text-den px-1.5 outline-none cursor-pointer"
+                {/* Hàng chip vấn đề da + dropdown Xếp */}
+                <div className="px-5 lg:px-0 pt-3 pb-2 flex items-center justify-between gap-2.5">
+                  <div
+                    className="flex gap-1.5 overflow-x-auto min-w-0 lg:hidden"
+                    role="group"
+                    aria-label="Lọc theo vấn đề da"
                   >
-                    <option value="goi-y">Gợi ý</option>
-                    <option value="giam">Đang giảm giá</option>
-                    <option value="gia-tang">Giá thấp trước</option>
-                    <option value="gia-giam">Giá cao trước</option>
-                  </select>
-                </label>
-              </div>
+                    {DANH_SACH_VAN_DE.map((v) => {
+                      const on = vanDeUrl === v.id;
+                      return (
+                        <button
+                          key={v.id}
+                          type="button"
+                          onClick={() =>
+                            capNhatBoLoc({ vanDe: on ? "" : v.id })
+                          }
+                          aria-pressed={on}
+                          className={`h-[36px] px-3 rounded-full font-sans text-[12px] font-medium whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+                            on
+                              ? "bg-den text-trang border border-den"
+                              : "bg-trang text-den border border-[#E8D2CC]"
+                          }`}
+                        >
+                          {v.label}
+                        </button>
+                      );
+                    })}
+                  </div>
 
-              {/* Lưới sản phẩm 2 cột */}
-              {ketQuaLoc.length > 0 ? (
-                <div className="px-4 pt-2 grid grid-cols-2 gap-3">
+                  <span className="hidden lg:block text-[14px] text-xam">
+                    Hiển thị {sanPhamHienThiList.length} / {ketQuaLoc.length} sản phẩm
+                  </span>
+
+                  <label className="shrink-0 flex items-center gap-1.5 text-[13px] text-xam ml-auto">
+                    <span>Xếp</span>
+                    <select
+                      value={xepUrl}
+                      onChange={(e) =>
+                        capNhatBoLoc({ xep: e.target.value }, { replace: true })
+                      }
+                      className="h-[44px] rounded-[12px] border border-[#E8D2CC] bg-trang font-sans text-[13px] text-den px-2.5 outline-none cursor-pointer"
+                    >
+                      <option value="goi-y">Gợi ý</option>
+                      <option value="giam">Đang giảm giá</option>
+                      <option value="gia-tang">Giá thấp trước</option>
+                      <option value="gia-giam">Giá cao trước</option>
+                    </select>
+                  </label>
+                </div>
+
+                {/* Lưới sản phẩm co giãn auto-fill */}
+                {ketQuaLoc.length > 0 ? (
+                  <div className="px-4 lg:px-0 pt-2 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-3.5 md:gap-5">
                   {sanPhamHienThiList.map((sp, i) => {
                     const liked = daThich.includes(sp.id);
                     const bgClass =
@@ -710,12 +823,11 @@ function DanhMucNoiDung() {
               )}
 
               <div className="h-6" />
-            </>
+            </div>
+            </div>
           )}
+          </div>
         </div>
-
-        {/* Thanh Tab 5 mục ở đáy */}
-        <ThanhTab soLuongThich={daThich.length} soLuongGio={soLuongGio} />
 
         {/* Modal chi tiết sản phẩm */}
         <BangChiTiet
@@ -743,7 +855,7 @@ function DanhMucNoiDung() {
           }
         />
       </div>
-    </KhungDienThoai>
+    </AppShell>
   );
 }
 

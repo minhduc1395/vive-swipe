@@ -4,7 +4,7 @@ import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useDuLieu } from "@/lib/du-lieu-context";
-import { dinhDangTienGio } from "@/lib/dinh-dang";
+import { dinhDangTien, dinhDangTienGio } from "@/lib/dinh-dang";
 import { tinhGio } from "@/lib/deals/gio-hang";
 import {
   layGioHang,
@@ -163,25 +163,8 @@ export function FormGiuHang({ gioBanDau }: Props) {
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      {/* Tóm tắt giỏ hàng */}
-      <div className="rounded-[18px] bg-hong-nhat p-4 flex justify-between items-center text-[13px]">
-        <div className="flex flex-col gap-0.5">
-          <span className="text-[#5C5C5B]">
-            {tongSoMon} món · tổng ước tính
-          </span>
-          <strong className="text-[18px] font-bold text-den">
-            {dinhDangTienGio(ketQua.tong_tam_tinh)}
-          </strong>
-        </div>
-        <div className="flex flex-col gap-0.5 text-right">
-          <span className="text-[#5C5C5B]">Quà dự kiến</span>
-          <strong className="font-semibold text-den line-clamp-1 max-w-[160px]">
-            {ketQua.qua_du_kien || "Không có"}
-          </strong>
-        </div>
-      </div>
-
+    <div className="flex flex-col lg:grid lg:grid-cols-[1fr_360px] lg:gap-8 lg:items-start gap-4">
+      <div className="flex flex-col gap-4 min-w-0 order-last lg:order-first">
       {loiValidation && (
         <div
           role="alert"
@@ -344,6 +327,57 @@ export function FormGiuHang({ gioBanDau }: Props) {
           </span>
         </div>
       </form>
+      </div>
+
+      {/* Cột tóm tắt giỏ hàng responsive (trên đầu mobile/tablet, cột phải dính trên desktop) */}
+      <aside
+        aria-label="Tóm tắt giỏ giữ hàng"
+        className="order-first lg:order-last flex flex-col gap-3 rounded-[18px] lg:rounded-[24px] bg-hong-nhat p-4 lg:p-6 lg:border lg:border-vien lg:sticky lg:top-6"
+      >
+        <div className="flex justify-between items-center gap-3 lg:hidden text-[13px]">
+          <div className="flex flex-col gap-0.5">
+            <span className="text-[#5C5C5B]">Quà dự kiến</span>
+            <strong className="font-semibold text-den line-clamp-1 max-w-[180px]">
+              {ketQua.qua_du_kien || "Không có"}
+            </strong>
+          </div>
+        </div>
+        <h2 className="hidden lg:block m-0 text-[18px] font-bold text-den">
+          Đơn giữ ({tongSoMon} món)
+        </h2>
+        <ul className="hidden lg:flex m-0 p-0 list-none flex-col gap-2 text-[14px] border-t border-vien pt-3">
+          {ketQua.cac_dong.map((dong) => (
+            <li
+              key={`${dong.loai}-${dong.id}`}
+              className="flex justify-between gap-2"
+            >
+              <span className="text-den truncate">
+                {dong.so_luong > 1 ? `${dong.so_luong}× ` : ""}
+                {dong.ten}
+              </span>
+              <strong className="shrink-0 text-den">
+                {dinhDangTien(dong.gia_sau_uu_dai)}
+              </strong>
+            </li>
+          ))}
+        </ul>
+        {ketQua.qua_du_kien && (
+          <div className="hidden lg:block rounded-xl bg-trang p-3 text-[13px] text-den">
+            Quà dự kiến: <strong>{ketQua.qua_du_kien}</strong>
+          </div>
+        )}
+        <div className="lg:border-t lg:border-vien lg:pt-3 flex justify-between items-baseline">
+          <span className="text-[13px] lg:text-[15px] font-medium lg:font-semibold text-[#5C5C5B] lg:text-den">
+            {tongSoMon} món · tổng ước tính
+          </span>
+          <strong className="text-[18px] lg:text-[22px] font-bold text-den">
+            {dinhDangTienGio(ketQua.tong_tam_tinh)}
+          </strong>
+        </div>
+        <p className="hidden lg:block m-0 text-[12px] text-xam leading-relaxed">
+          Giá và quà là ước tính. Nhân viên xác nhận khi thanh toán tại booth.
+        </p>
+      </aside>
     </div>
   );
 }

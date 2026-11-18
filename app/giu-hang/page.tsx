@@ -5,7 +5,7 @@ import { FormGiuHang } from "./FormGiuHang";
 export default function TrangGiuHang() {
   return (
     <AppShell>
-      <div className="max-w-[540px] mx-auto px-4 md:px-6 py-4 md:py-8">
+      <div className="max-w-[540px] lg:max-w-[1040px] w-full mx-auto px-4 md:px-6 py-4 md:py-8">
         <header className="flex items-center gap-2 mb-4">
           <Link
             href="/gio"

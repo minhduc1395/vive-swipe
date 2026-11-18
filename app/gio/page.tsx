@@ -163,8 +163,11 @@ export default function TrangGio() {
             </div>
           </div>
         ) : (
-          <div className="flex-1 overflow-y-auto px-4 pt-2 pb-8 flex flex-col gap-4">
-            {/* 1. Phần Quà theo hóa đơn & Mốc tiếp theo & Đổi combo */}
+          <div className="flex-1 overflow-y-auto px-4 md:px-8 pt-2 pb-12">
+            <div className="lg:grid lg:grid-cols-[1fr_360px] lg:gap-8 lg:items-start flex flex-col gap-6 max-w-[1280px] mx-auto">
+              {/* Cột trái: Quà theo hóa đơn, Mốc tiếp theo, Đổi combo, và Danh sách sản phẩm */}
+              <div className="flex flex-col gap-5 min-w-0">
+                {/* 1. Phần Quà theo hóa đơn & Mốc tiếp theo & Đổi combo */}
             {(ketQua.qua_du_kien || ketQua.moc_tiep_theo) && (
               <section
                 aria-label="Quà theo hóa đơn"
@@ -468,6 +471,13 @@ export default function TrangGio() {
                 );
               })}
             </section>
+          </div>
+
+          {/* Cột phải: Tóm tắt đơn hàng dính trên máy tính */}
+          <div className="lg:sticky lg:top-6 flex flex-col gap-4 bg-[#FDFBF7] p-5 md:p-6 rounded-[24px] border border-[#F2E4E0] shadow-xs">
+            <h2 className="m-0 text-[18px] font-bold text-den">
+              Tóm tắt đơn hàng
+            </h2>
 
             {/* 3. Tổng tiền */}
             <section
@@ -530,6 +540,8 @@ export default function TrangGio() {
               <span className="text-[12px] text-xam text-center">
                 Trả tiền và nhận hàng tại VIVE, tầng LL2 Union Square
               </span>
+            </div>
+          </div>
             </div>
           </div>
         )}

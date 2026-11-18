@@ -130,7 +130,7 @@ export default function TrangDeal() {
       soLuongThich={daThich.length}
       soLuongGio={soLuongGio}
     >
-      <div className="w-full bg-trang text-den font-sans flex flex-col pb-28">
+      <div className="w-full max-w-[1280px] mx-auto bg-trang text-den font-sans flex flex-col pb-28 md:pb-12">
         {/* Toast thông báo */}
         {thongBaoToast && (
           <div
@@ -143,8 +143,8 @@ export default function TrangDeal() {
         )}
 
         {/* Tiêu đề & Tags giải thích theo hồ sơ */}
-        <header className="px-5 pt-7 pb-2 flex flex-col gap-2.5">
-          <h1 className="m-0 text-[28px] font-semibold tracking-[-0.3px]">
+        <header className="px-5 md:px-8 pt-7 pb-2 flex flex-col gap-2.5">
+          <h1 className="m-0 text-[28px] md:text-[32px] font-semibold tracking-[-0.3px]">
             Deal{" "}
             <span className="bg-[#E8D2CC]/70 px-1 py-0.5 rounded-md">
               cho bạn
@@ -164,9 +164,9 @@ export default function TrangDeal() {
         </header>
 
         {/* Danh sách Deal */}
-        <main className="px-4 pt-3 flex flex-col gap-3.5">
+        <div className="px-4 md:px-8 pt-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 md:gap-5 items-start">
           {dealsChoBan.length === 0 ? (
-            <div className="rounded-[20px] bg-[#F7EEEB] p-6 text-center text-xam">
+            <div className="md:col-span-2 lg:col-span-3 rounded-[20px] bg-[#F7EEEB] p-6 text-center text-xam">
               Hiện chưa có deal nào đang chạy hôm nay. Vui lòng quay lại sau!
             </div>
           ) : (
@@ -184,7 +184,7 @@ export default function TrangDeal() {
           {/* Ô đăng ký email */}
           <section
             aria-label="Đăng ký nhận deal"
-            className="rounded-[22px] bg-[#F7EEEB] p-5 flex flex-col gap-2.5 mt-2"
+            className="md:col-span-2 lg:col-span-3 rounded-[22px] bg-[#F7EEEB] p-5 flex flex-col gap-2.5 mt-2"
           >
             <div className="flex items-center gap-2">
               <svg
@@ -250,7 +250,7 @@ export default function TrangDeal() {
               Chỉ gửi khi có ưu đãi thật sự tốt cho sản phẩm bạn quan tâm. Không spam.
             </p>
           </section>
-        </main>
+        </div>
       </div>
     </KhungUngDung>
   );
