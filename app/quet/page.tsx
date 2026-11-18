@@ -19,6 +19,7 @@ import {
 import { layTraLoiLocal } from "@/lib/khao-sat";
 import { layNhanVanDe, layLyDoGoiY } from "@/lib/nhan";
 import { layGhiChuDeal } from "@/lib/deals/ghi-chu";
+import { layDanhSachDealChoBan } from "@/lib/deals/diem-deal";
 import { ghiLuotQuet } from "@/lib/supabase/luot-quet";
 import { danhDauCanDongBoHoSo } from "@/lib/supabase/auth";
 import { useDuLieu } from "@/lib/du-lieu-context";
@@ -84,6 +85,41 @@ export default function TrangQuet() {
   });
   const [moiQuanTamLabels, setMoiQuanTamLabels] = useState<string[]>([]);
   const deckKhoiTaoRef = useRef(false);
+
+  const sanPhamMap = useMemo(
+    () => new Map<string, SanPham>(danhSachSanPham.map((sp) => [sp.id, sp])),
+    [danhSachSanPham]
+  );
+
+  const { dealTopDacBiet, thongTinThuongHieu } = useMemo(() => {
+    if (!hienTheDealDacBiet) {
+      return {
+        dealTopDacBiet: null,
+        thongTinThuongHieu: { ten: null, dem: 0 },
+      };
+    }
+    const listGio = layGioHang();
+    const ds = layDanhSachDealChoBan(danhSachDeals, hoSo, sanPhamMap, daThich, listGio);
+    const dealTop = ds.length > 0 ? ds[0] : null;
+
+    const demMap = new Map<string, number>();
+    for (const id of daThich) {
+      const sp = sanPhamMap.get(id);
+      if (sp) demMap.set(sp.thuong_hieu, (demMap.get(sp.thuong_hieu) ?? 0) + 1);
+    }
+    let maxTen = "";
+    let maxDem = 0;
+    for (const [ten, dem] of demMap.entries()) {
+      if (dem > maxDem) {
+        maxDem = dem;
+        maxTen = ten;
+      }
+    }
+    return {
+      dealTopDacBiet: dealTop,
+      thongTinThuongHieu: { ten: maxTen || null, dem: maxDem },
+    };
+  }, [hienTheDealDacBiet, hoSo, sanPhamMap, daThich, danhSachDeals]);
 
   // Khởi tạo deck và dữ liệu lưu trữ
   useEffect(() => {
@@ -487,7 +523,13 @@ export default function TrangQuet() {
           className="relative flex-1 min-h-0 mx-4 w-full max-w-[440px]"
         >
           {hienTheDealDacBiet ? (
-            <TheDealDacBiet onBoQua={() => setHienTheDealDacBiet(false)} />
+            <TheDealDacBiet
+              onBoQua={() => setHienTheDealDacBiet(false)}
+              soMonHopDa={daThich.length}
+              dealTop={dealTopDacBiet}
+              tenThuongHieuNoiBat={thongTinThuongHieu.ten}
+              soMonThuongHieu={thongTinThuongHieu.dem}
+            />
           ) : !daSanSang ? (
             <div className="absolute inset-0 rounded-[28px] bg-hong-nhat border border-vien p-8 flex flex-col items-center justify-center gap-3 text-center">
               <div className="w-10 h-10 rounded-full border-2 border-primary border-t-transparent animate-spin mb-1" />
