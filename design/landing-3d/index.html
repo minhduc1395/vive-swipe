@@ -10,7 +10,7 @@
   *{box-sizing:border-box}
   html,body{margin:0;background:var(--bac-ha-nhat);color:var(--den);font-family:'Be Vietnam Pro',sans-serif;-webkit-font-smoothing:antialiased}
   #nen{position:fixed;inset:0;z-index:0}
-  #canh{position:fixed;inset:0;z-index:1;pointer-events:none}
+  #canh{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:1;pointer-events:none} /* phải có width/height 100%: canvas không tự giãn theo inset, màn retina sẽ bị phóng gấp đôi */
   header{position:fixed;top:0;left:0;right:0;z-index:5;transition:background .3s;display:flex;align-items:center;gap:20px;padding:16px clamp(16px,4vw,48px)}
   header.nen{background:rgba(255,255,255,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
   header .logo{display:flex;align-items:center;height:44px}
@@ -27,7 +27,7 @@
   .trai{justify-content:flex-start}.phai{justify-content:flex-end}
   .nhan{align-self:flex-start;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;background:#fff;font-size:13px;font-weight:700;letter-spacing:1.5px}
   .nhan i{width:8px;height:8px;border-radius:99px;background:#8FBF9F;display:block}
-  h1{margin:0;font-size:clamp(64px,10vw,140px);line-height:.9;font-weight:700;letter-spacing:-.045em}
+  h1{margin:0;font-size:clamp(56px,7.4vw,120px);line-height:.9;font-weight:700;letter-spacing:-.045em}
   h2{margin:0;font-size:clamp(44px,6vw,84px);line-height:.95;font-weight:700;letter-spacing:-.04em}
   .vien{color:transparent;-webkit-text-stroke:2px var(--den)}
   .vet{box-shadow:inset 0 -.28em 0 var(--hong);padding:0 .08em}
@@ -61,13 +61,38 @@
   .quat div span{border-radius:10px}.quat div span:first-child{flex:2}.quat div span:last-child{flex:1}
   .ll2{font-size:clamp(140px,22vw,300px);line-height:.8;font-weight:700;letter-spacing:-.06em;color:transparent;-webkit-text-stroke:2px var(--den)}
   @media (prefers-reduced-motion:reduce){.hien{opacity:1;transform:none;transition:none}.quat div{transition:none}}
-  @media (max-width:760px){
-    header nav a:not(.dn):not(.on){display:none}
-    section{align-items:flex-end;padding-bottom:56px}
+  .quat{max-width:100%}
+  /* Chế độ DỌC: điện thoại, và máy tính bảng dựng đứng. Sản phẩm ở vùng trên (đến 46svh), chữ ở dưới. */
+  @media (max-width:759px), (max-width:1023px) and (orientation:portrait){
+    section{min-height:100svh;align-items:flex-start;padding:var(--vung,46svh) 20px 64px}
     .phai{justify-content:flex-start}
-    .o.to{grid-column:auto;grid-row:auto;min-height:260px}
+    .cot{gap:14px;width:100%;max-width:560px}
+    h1{font-size:clamp(44px,13vw,72px)}
+    h2{font-size:clamp(34px,9.5vw,56px)}
+    p{font-size:16px;line-height:1.5}
+    .nut a{height:52px;padding:0 22px;font-size:15px}
+    .the{padding:14px 18px;border-radius:18px}
+    .gia b{font-size:28px}
     .ghichu{display:none}
   }
+  @media (min-width:760px) and (max-width:1023px) and (orientation:portrait){ section{--vung:56svh;padding-left:48px;padding-right:48px} }
+  @media (max-width:759px){
+    header{padding:8px 14px;gap:8px}
+    header .logo{height:40px} header .logo img{width:52px}
+    header nav{gap:2px;align-items:center}
+    header nav a:not(.dn):not(.on){display:none}
+    header nav a{height:40px;padding:0 10px;font-size:13px}
+    header nav a.on{background:none;font-weight:700;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:6px;text-decoration-color:var(--hong)}
+    header nav a.dn{height:32px;padding:0 12px;font-size:13px;font-weight:600;margin-left:4px;background:transparent;color:var(--den);border:1px solid rgba(43,43,42,.25)}
+    header nav a.dn::after{content:'';position:absolute;inset:-6px -2px} header nav a{position:relative}
+    .khoi{padding:72px 20px 56px}
+    .luoi>*{grid-column:auto!important;grid-row:auto!important}
+    .o.to{min-height:260px}.o.to strong{font-size:30px}
+    .quat{width:300px;height:270px;margin:0 auto}
+    #personal-color{gap:32px!important}
+  }
+  /* ?khung=1: vẽ vùng vật thể để đối chiếu */
+  #khung-vung{position:fixed;z-index:4;pointer-events:none;outline:2px dashed #D9534F;display:none}
 </style>
 <script type="importmap">{"imports":{"three":"./lib/three.module.min.js"}}</script>
 </head>
@@ -117,7 +142,7 @@
       <a class="o hien" href="#" style="background:#EAF3ED;grid-column:span 2"><em>Quà</em><strong>Mua Medicube, Celimax, SKINFOOD tặng LOPOE</strong><small>Từ 700.000 tặng sữa rửa mặt LOPOE; mốc 1,1 triệu và 1,3 triệu quà lớn hơn.</small></a>
     </div>
   </div>
-  <div style="background:#F7EEEB">
+  <div style="background:#F7EEEB;overflow-x:clip">
     <div class="khoi" id="personal-color" style="display:flex;flex-wrap:wrap;align-items:center;gap:56px;padding-top:96px">
       <div class="quat" id="quat" aria-hidden="true">
         <div><span style="background:#F6C9A9"></span><span style="background:#F9E0A8"></span></div>
@@ -141,6 +166,7 @@
   </div>
 </div>
 
+<div id="khung-vung"></div>
 <div class="gach" id="gach" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
 <div class="ghichu" id="ghichu">Bản thử · ảnh thật LOPOE, dựng thành lớp 3D</div>
 
@@ -227,75 +253,155 @@ const srm = lopAnh(imSrm, imSrm.width * PX, imSrm.height * PX, 0.45); scene.add(
 const kem = lopAnh(imKem, imKem.width * PX, imKem.height * PX, 0.45); scene.add(kem);
 const bA = bong(3.2), bS = bong(3.4), bK = bong(3.4);
 
-// ---------- mốc theo khối ----------
-// x,y theo tỉ lệ nửa màn; mo = độ nhấc bóp ampoule (0–1)
-const MOC = [
-  { nen: '#EAF3ED', A: { x: 0.42, y: -0.02, ry: -0.18, rz: 0.03, s: 1.0, mo: 0, z: 0 }, S: { x: 0.15, y: 0.04, ry: 0.3, rz: -0.2, s: 0.9, z: -2 }, K: { x: 0.72, y: 0.06, ry: -0.3, rz: 0.18, s: 0.9, z: -2.4 } },
-  { nen: '#FFFFFF', A: { x: -0.42, y: -0.26, ry: 0.22, rz: -0.05, s: 1.12, mo: 1, z: 0 }, S: { x: -1.6, y: 0.7, ry: 0.6, rz: -0.7, s: 0.8, z: -2 }, K: { x: 1.6, y: -0.7, ry: -0.6, rz: 0.7, s: 0.8, z: -2.4 } },
-  { nen: '#F7EEEB', A: { x: 0.43, y: -0.06, ry: 0, rz: 0, s: 0.86, mo: 0, z: 0 }, S: { x: 0.14, y: -0.02, ry: 0.12, rz: -0.03, s: 0.8, z: -0.6 }, K: { x: 0.72, y: -0.02, ry: -0.12, rz: 0.03, s: 0.8, z: -0.6 } },
-];
+// ---------- bố cục co giãn ----------
+// Nguyên tắc (Anti làm theo, docs: tasks/W027.md):
+// 1. Mỗi khối có một "vùng vật thể" = phần màn hình không có chữ.
+//    - Chế độ NGANG (máy tính, máy tính bảng nằm ngang): nửa màn đối diện cột chữ.
+//    - Chế độ DỌC (điện thoại, máy tính bảng dựng đứng): dải trên, từ dưới thanh đầu trang tới padding-top của khối
+//      (46svh điện thoại, 56svh máy tính bảng); chữ bắt đầu từ đó.
+// 2. Mốc trong cấu hình ghi theo vùng: x, y = vị trí tâm (0–1 của vùng), co = chiều cao vật thể / chiều cao vùng.
+// 3. Sau khi đặt, hộp bao của từng vật thể (kể cả bóp đang nhấc) bị kẹp vào trong vùng; không đủ chỗ thì thu nhỏ.
+// 4. an = 0..1: mờ dần (thay cho việc bay ra ngoài màn hình).
+const MOC = {
+  ngang: [
+    { nen: '#EAF3ED', A: { x: 0.52, y: 0.52, co: 0.80, ry: -0.18, rz: 0.03, mo: 0, z: 0 }, S: { x: 0.16, y: 0.56, co: 0.52, ry: 0.3, rz: -0.2, z: -2, an: 0 }, K: { x: 0.86, y: 0.58, co: 0.52, ry: -0.3, rz: 0.18, z: -2.4, an: 0 } },
+    { nen: '#FFFFFF', A: { x: 0.50, y: 0.54, co: 0.92, ry: 0.22, rz: -0.05, mo: 1, z: 0 }, S: { x: 0.30, y: 0.40, co: 0.40, ry: 0.6, rz: -0.7, z: -2, an: 1 }, K: { x: 0.70, y: 0.66, co: 0.40, ry: -0.6, rz: 0.7, z: -2.4, an: 1 } },
+    { nen: '#F7EEEB', A: { x: 0.50, y: 0.52, co: 0.66, ry: 0, rz: 0, mo: 0, z: 0 }, S: { x: 0.17, y: 0.56, co: 0.50, ry: 0.12, rz: -0.03, z: -0.6, an: 0 }, K: { x: 0.83, y: 0.56, co: 0.50, ry: -0.12, rz: 0.03, z: -0.6, an: 0 } },
+  ],
+  doc: [
+    { nen: '#EAF3ED', A: { x: 0.50, y: 0.52, co: 0.92, ry: -0.18, rz: 0.03, mo: 0, z: 0 }, S: { x: 0.20, y: 0.58, co: 0.62, ry: 0.3, rz: -0.2, z: -2, an: 0 }, K: { x: 0.80, y: 0.60, co: 0.62, ry: -0.3, rz: 0.18, z: -2.4, an: 0 } },
+    { nen: '#FFFFFF', A: { x: 0.50, y: 0.52, co: 0.96, ry: 0.22, rz: -0.05, mo: 1, z: 0 }, S: { x: 0.30, y: 0.45, co: 0.40, ry: 0.6, rz: -0.7, z: -2, an: 1 }, K: { x: 0.70, y: 0.60, co: 0.40, ry: -0.6, rz: 0.7, z: -2.4, an: 1 } },
+    { nen: '#F7EEEB', A: { x: 0.50, y: 0.52, co: 0.86, ry: 0, rz: 0, mo: 0, z: 0 }, S: { x: 0.20, y: 0.56, co: 0.72, ry: 0.12, rz: -0.03, z: -0.6, an: 0 }, K: { x: 0.80, y: 0.56, co: 0.72, ry: -0.12, rz: 0.03, z: -0.6, an: 0 } },
+  ],
+};
+const LE = 16;                                  // cách mép vùng (px)
+const NHAC = { ngang: 1.55, doc: 0.55 };        // độ nhấc bóp tối đa (đơn vị 3D): điện thoại ≈ 12% chiều cao chai
+const coChuot = matchMedia('(hover: hover) and (pointer: fine)').matches; // cảm ứng: không nghiêng theo chuột
+const hienKhung = new URLSearchParams(location.search).has('khung');
+
 const sections = [...document.querySelectorAll('#trang-landing section[data-k]')];
 const gach = [...document.querySelectorAll('#gach i')];
 const nenEl = document.getElementById('nen');
+const headerEl = document.querySelector('header');
+const khungEl = document.getElementById('khung-vung');
 const muot = t => t * t * (3 - 2 * t);
 const lerp = (a, b, t) => a + (b - a) * t;
 const tron = (a, b, t) => { const o = {}; for (const k in a) o[k] = lerp(a[k], b[k] ?? a[k], t); return o; };
 let cur = null; const chuot = { x: 0, y: 0 }, cm = { x: 0, y: 0 };
-addEventListener('pointermove', e => { chuot.x = e.clientX / innerWidth * 2 - 1; chuot.y = e.clientY / innerHeight * 2 - 1; });
-function coKhung() { renderer.setSize(innerWidth, innerHeight, false); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); }
-addEventListener('resize', coKhung); coKhung();
+if (coChuot) addEventListener('pointermove', e => { chuot.x = e.clientX / innerWidth * 2 - 1; chuot.y = e.clientY / innerHeight * 2 - 1; });
+
+// kích thước gốc (đơn vị 3D, scale = 1) của từng vật thể
+const KT = {
+  A: { r: Math.max(imThan.width, imNap.width) * PX, c: H },
+  S: { r: imSrm.width * PX, c: imSrm.height * PX },
+  K: { r: imKem.width * PX, c: imKem.height * PX },
+};
+// độ mờ: nhớ độ mờ gốc của từng vật liệu
+function ganMo(g) { const ds = []; g.traverse(o => { if (o.material) ds.push([o.material, o.material.opacity]); }); return v => ds.forEach(([m, o]) => m.opacity = o * v); }
+const moS = ganMo(srm), moK = ganMo(kem);
+
+let cheDo = 'ngang', W = innerWidth, Hm = innerHeight;
+function coKhung() {
+  W = innerWidth; Hm = innerHeight;
+  cheDo = (W < 760 || (W < 1024 && Hm >= W)) ? 'doc' : 'ngang';
+  renderer.setSize(W, Hm, false); camera.aspect = W / Hm; camera.updateProjectionMatrix();
+}
+let hen; addEventListener('resize', () => { clearTimeout(hen); hen = setTimeout(coKhung, 120); });
+addEventListener('orientationchange', () => setTimeout(coKhung, 200));
+coKhung();
+
+// vùng vật thể của khối k (toạ độ màn hình, khi khối nằm trọn trong màn)
+function vung(k) {
+  const tren = headerEl.offsetHeight + 8;
+  if (cheDo === 'doc') return { x0: LE, x1: W - LE, y0: tren, y1: parseFloat(getComputedStyle(sections[k]).paddingTop) - 8 };
+  const cot = sections[k].querySelector('.cot');
+  const r = cot.getBoundingClientRect();
+  const duoi = Hm - 56;
+  return sections[k].classList.contains('phai')
+    ? { x0: LE, x1: r.left - 32, y0: tren, y1: duoi }
+    : { x0: r.right + 32, x1: W - LE, y0: tren, y1: duoi };
+}
+// px trên mỗi đơn vị 3D ở độ sâu z
+const pxMoi = z => Hm / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * (camera.position.z - z));
+
+// đặt một vật thể theo mốc v trong vùng V → {X, Y (3D), s, ...}
+function datVaoVung(ten, v, V) {
+  const vr = V.x1 - V.x0, vc = V.y1 - V.y0, p = pxMoi(v.z);
+  const nhac = ten === 'A' ? v.mo * NHAC[cheDo] : 0;
+  const caoGoc = KT[ten].c + nhac, rongGoc = KT[ten].r;
+  // chiều cao mong muốn → scale; rồi thu nhỏ nếu bề ngang vượt vùng
+  let s = (v.co * vc) / (caoGoc * p);
+  s = Math.min(s, (vr - 2) / (rongGoc * p), (vc - 2) / (caoGoc * p));
+  const nr = rongGoc * s * p / 2, nc = caoGoc * s * p / 2;
+  // tâm hộp bao (px) rồi kẹp vào vùng
+  let cx = V.x0 + v.x * vr, cy = V.y0 + v.y * vc;
+  cx = Math.min(Math.max(cx, V.x0 + nr), V.x1 - nr);
+  cy = Math.min(Math.max(cy, V.y0 + nc), V.y1 - nc);
+  // tâm vật thể = tâm hộp bao dịch xuống nửa đoạn nhấc
+  const cyVat = cy + (nhac * s * p) / 2;
+  return { X: (cx - W / 2) / p, Y: -(cyVat - Hm / 2) / p, s, ry: v.ry, rz: v.rz, z: v.z, mo: v.mo ?? 0, an: v.an ?? 0,
+           hop: [cx - nr, cy - nc, cx + nr, cy + nc] };
+}
+function bo(k) {
+  const m = MOC[cheDo][k], V = vung(k);
+  return { V, nen: m.nen, A: datVaoVung('A', m.A, V), S: datVaoVung('S', m.S, V), K: datVaoVung('K', m.K, V) };
+}
+const boHop = o => { const { hop, ...r } = o; return r; };
 
 function mucTieu() {
-  const giua = innerHeight * 0.5; let k = 0, f = 0;
+  const giua = Hm * 0.5; let k = 0, f = 0;
   sections.forEach((s, i) => { const r = s.getBoundingClientRect(); if (r.top <= giua) { k = i; f = Math.min(Math.max((giua - r.top) / r.height, 0), 1); } });
   const t = muot(Math.min(Math.max((f - 0.4) / 0.6, 0), 1));
-  const a = MOC[k], b = MOC[Math.min(k + 1, MOC.length - 1)];
+  const a = bo(k), b = bo(Math.min(k + 1, sections.length - 1));
   gach.forEach((g, i) => g.classList.toggle('on', i === (t > 0.5 ? Math.min(k + 1, 2) : k)));
-  return { A: tron(a.A, b.A, t), S: tron(a.S, b.S, t), K: tron(a.K, b.K, t), nen: new THREE.Color(a.nen).lerp(new THREE.Color(b.nen), t) };
+  const V = t > 0.5 ? b.V : a.V;
+  if (hienKhung) Object.assign(khungEl.style, { display: 'block', left: V.x0 + 'px', top: V.y0 + 'px', width: (V.x1 - V.x0) + 'px', height: (V.y1 - V.y0) + 'px' });
+  window.__viveBo = t > 0.5 ? b : a; // để test đọc hộp bao
+  return { A: tron(boHop(a.A), boHop(b.A), t), S: tron(boHop(a.S), boHop(b.S), t), K: tron(boHop(a.K), boHop(b.K), t),
+           nen: new THREE.Color(a.nen).lerp(new THREE.Color(b.nen), t) };
 }
 
 const dongHo = new THREE.Clock();
-function dat(obj, bg, v, tg, pha, nuaR, nuaC, hep) {
-  const X = (hep ? (Math.abs(v.x) > 1 ? v.x * 1.5 : v.x * 0.38) : v.x) * nuaR, Y = (hep ? 0.42 + v.y * 0.3 : v.y) * nuaC;
-  const troi = giamChuyenDong ? 0 : Math.sin(tg * 1.1 + pha) * 0.08;
-  const s = v.s * (hep ? 0.6 : 1);
-  obj.position.set(X + cm.x * 0.2, Y + troi, v.z);
-  obj.rotation.set(-cm.y * 0.12, v.ry + cm.x * 0.28, v.rz);
-  obj.scale.setScalar(s);
-  bg.position.set(X, Y - 2.25 * s, v.z - 0.3); bg.scale.setScalar(s * (1 - troi));
+function dat(obj, bg, v, tg, pha) {
+  const troi = giamChuyenDong ? 0 : Math.sin(tg * 1.1 + pha) * 0.05;
+  obj.position.set(v.X + cm.x * 0.12, v.Y + troi, v.z);
+  obj.rotation.set(-cm.y * 0.12, v.ry + cm.x * 0.28 + (coChuot || giamChuyenDong ? 0 : Math.sin(tg * 0.5 + pha) * 0.12), v.rz);
+  obj.scale.setScalar(v.s);
+  bg.position.set(v.X, v.Y - 2.25 * v.s, v.z - 0.3); bg.scale.setScalar(v.s);
 }
 function ve() {
   requestAnimationFrame(ve);
   const tg = dongHo.getElapsedTime();
   const m = mucTieu();
   if (!cur) cur = m;
-  const he = giamChuyenDong ? 1 : 0.09;
+  const he = giamChuyenDong ? 1 : 0.12;
   cur = { A: tron(cur.A, m.A, he), S: tron(cur.S, m.S, he), K: tron(cur.K, m.K, he) };
   nenEl.style.background = '#' + m.nen.getHexString();
-  cm.x = lerp(cm.x, giamChuyenDong ? 0 : chuot.x, 0.06); cm.y = lerp(cm.y, giamChuyenDong ? 0 : chuot.y, 0.06);
-  const nuaC = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.position.z, nuaR = nuaC * camera.aspect;
-  const hep = innerWidth < 760;
+  cm.x = lerp(cm.x, coChuot && !giamChuyenDong ? chuot.x : 0, 0.06); cm.y = lerp(cm.y, coChuot && !giamChuyenDong ? chuot.y : 0, 0.06);
   // qua hết khối 3 thì sản phẩm đứng yên trên kệ và trôi lên theo trang
   const day3 = sections[2].getBoundingClientRect().bottom;
-  const vuot = Math.max(0, innerHeight - day3);
-  scene.position.y = vuot * (2 * nuaC / innerHeight);
-  canvas.style.visibility = vuot > innerHeight * 1.2 ? 'hidden' : 'visible';
-  document.querySelector('header').classList.toggle('nen', vuot > innerHeight * 0.6);
+  const vuot = Math.max(0, Hm - day3);
+  scene.position.y = vuot / pxMoi(0);
+  canvas.style.visibility = vuot > Hm * 1.2 ? 'hidden' : 'visible';
+  headerEl.classList.toggle('nen', cheDo === 'doc' || vuot > Hm * 0.6);
   document.getElementById('gach').style.opacity = vuot > 0 ? 0 : 1;
-  dat(ampoule, bA, cur.A, tg, 0, nuaR, nuaC, hep);
-  dat(srm, bS, cur.S, tg, 1.3, nuaR, nuaC, hep);
-  dat(kem, bK, cur.K, tg, 2.6, nuaR, nuaC, hep);
-  // bóp nhỏ giọt: nhấc lên, nghiêng nhẹ; ống thủy tinh lộ ra; giọt lớn dần rồi rơi
-  const mo = cur.A.mo;
-  bopG.position.set(mo * 0.3, goc + mo * 1.55, 0.05 * mo);
-  bopG.rotation.z = -mo * 0.12;
+  if (hienKhung) khungEl.style.opacity = vuot > 0 ? 0 : 1;
+  dat(ampoule, bA, cur.A, tg, 0);
+  dat(srm, bS, cur.S, tg, 1.3);
+  dat(kem, bK, cur.K, tg, 2.6);
+  moS(1 - cur.S.an); moK(1 - cur.K.an);
+  bS.visible = srm.visible = cur.S.an < 0.98; bK.visible = kem.visible = cur.K.an < 0.98;
+  // bóp nhỏ giọt: nhấc lên theo NHAC của chế độ, nghiêng nhẹ; ống thủy tinh lộ ra; giọt lớn dần rồi rơi
+  const mo = cur.A.mo, nhac = mo * NHAC[cheDo];
+  bopG.position.set(mo * 0.2, goc + nhac, 0.05 * mo);
+  bopG.rotation.z = -mo * (cheDo === 'doc' ? 0.06 : 0.12);
   ong.visible = mo > 0.05;
   const chu = giamChuyenDong ? 0.5 : (tg * 0.6) % 1;
-  giot.visible = mo > 0.9;
+  giot.visible = mo > 0.9 && cheDo === 'ngang';
   giot.position.set(0, dayBop - 2.62 - (chu > 0.6 ? (chu - 0.6) * 9 : 0), -0.25);
   giot.scale.set(1, 1.25, 1).multiplyScalar(chu > 0.6 ? 1 : 0.4 + chu);
   // vệt sáng chạy theo cuộn và chuột
-  const lech = scrollY / innerHeight * 0.35 + cm.x * 0.15;
+  const lech = scrollY / Hm * 0.35 + cm.x * 0.15;
   vets.forEach((v, i) => v.material.map.offset.x = -lech - i * 0.07);
   renderer.render(scene, camera);
 }

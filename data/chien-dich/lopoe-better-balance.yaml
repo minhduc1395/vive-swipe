@@ -1,0 +1,290 @@
+ma: lopoe-better-balance
+ten: LOPOE Better Balance
+bat_dau: "2026-11-14"
+ket_thuc: "2026-11-29"
+uu_tien: 10
+mau:
+  nen: "#F7EEEB"
+  nhan: "#E8D2CC"
+  chu: "#2B2B2A"
+khoi:
+  - loai: hero
+    kieu: san-pham-3d
+    nhan_tren: "MỚI TẠI VIVE · NỘI ĐỊA HÀN"
+    tieu_de:
+      - "LOPOE"
+      - "~Better"
+      - "Balance"
+    mo_ta: "Bộ ba sữa rửa mặt, ampoule, kem dưỡng. Mua kèm sản phẩm bất kỳ, LOPOE giảm 25%."
+    san_pham:
+      - "LOPOE-CF"
+      - "LOPOE-AMP"
+      - "LOPOE-CR"
+    nut:
+      - chu: "Xem bộ sản phẩm"
+        den: "/danh-muc?thuong_hieu=LOPOE"
+      - chu: "Giữ hàng tại booth"
+        den: "/gio"
+    hieu_ung: roi-vao-ke
+    anh:
+      - "/chien-dich/lopoe-better-balance/srm.webp"
+      - "/chien-dich/lopoe-better-balance/ampoule-than.webp"
+      - "/chien-dich/lopoe-better-balance/ampoule-nap.webp"
+      - "/chien-dich/lopoe-better-balance/kem.webp"
+    vat_the:
+      ngang:
+        - id: srm
+          ten: "LOPOE Cleansing Foam"
+          anh: "/chien-dich/lopoe-better-balance/srm.webp"
+          ty_le_khung: 2.70
+          x: 0.16
+          y: 0.56
+          co: 0.52
+          xoay: -11.5
+          mo: 0
+          an: 0
+        - id: ampoule
+          ten: "LOPOE Better Balance Ampoule"
+          anh: "/chien-dich/lopoe-better-balance/ampoule-than.webp"
+          nap_anh: "/chien-dich/lopoe-better-balance/ampoule-nap.webp"
+          ty_le_khung: 2.33
+          x: 0.52
+          y: 0.52
+          co: 0.80
+          xoay: 1.7
+          mo: 0
+          an: 0
+        - id: kem
+          ten: "LOPOE Moisture Cream"
+          anh: "/chien-dich/lopoe-better-balance/kem.webp"
+          ty_le_khung: 2.66
+          x: 0.86
+          y: 0.58
+          co: 0.52
+          xoay: 10.3
+          mo: 0
+          an: 0
+      doc:
+        - id: srm
+          ten: "LOPOE Cleansing Foam"
+          anh: "/chien-dich/lopoe-better-balance/srm.webp"
+          ty_le_khung: 2.70
+          x: 0.20
+          y: 0.58
+          co: 0.62
+          xoay: -11.5
+          mo: 0
+          an: 0
+        - id: ampoule
+          ten: "LOPOE Better Balance Ampoule"
+          anh: "/chien-dich/lopoe-better-balance/ampoule-than.webp"
+          nap_anh: "/chien-dich/lopoe-better-balance/ampoule-nap.webp"
+          ty_le_khung: 2.33
+          x: 0.50
+          y: 0.52
+          co: 0.92
+          xoay: 1.7
+          mo: 0
+          an: 0
+        - id: kem
+          ten: "LOPOE Moisture Cream"
+          anh: "/chien-dich/lopoe-better-balance/kem.webp"
+          ty_le_khung: 2.66
+          x: 0.80
+          y: 0.60
+          co: 0.62
+          xoay: 10.3
+          mo: 0
+          an: 0
+
+  - loai: tieu-diem
+    id: ampoule-better-balance
+    nhan_phu: "AMPOULE · 50ML"
+    tieu_de:
+      - "Better Balance"
+      - "~Ampoule"
+    mo_ta: "Tinh chất Better Balance Ampoule 50ml thuộc bộ ba LOPOE Better Balance (da khô · cấp ẩm)."
+    san_pham_id: "LOPOE-AMP"
+    deal_id: "LOPOE-25"
+    cta_chinh:
+      chu: "Xem sản phẩm"
+      den: "/danh-muc?thuong_hieu=LOPOE"
+    anh:
+      - "/chien-dich/lopoe-better-balance/ampoule-than.webp"
+      - "/chien-dich/lopoe-better-balance/ampoule-nap.webp"
+    vat_the:
+      ngang:
+        - id: srm
+          ten: "LOPOE Cleansing Foam"
+          anh: "/chien-dich/lopoe-better-balance/srm.webp"
+          ty_le_khung: 2.70
+          x: 0.30
+          y: 0.40
+          co: 0.40
+          xoay: -40
+          mo: 0
+          an: 1
+        - id: ampoule
+          ten: "LOPOE Better Balance Ampoule"
+          anh: "/chien-dich/lopoe-better-balance/ampoule-than.webp"
+          nap_anh: "/chien-dich/lopoe-better-balance/ampoule-nap.webp"
+          ty_le_khung: 2.33
+          x: 0.50
+          y: 0.54
+          co: 0.92
+          xoay: -2.9
+          mo: 1
+          an: 0
+        - id: kem
+          ten: "LOPOE Moisture Cream"
+          anh: "/chien-dich/lopoe-better-balance/kem.webp"
+          ty_le_khung: 2.66
+          x: 0.70
+          y: 0.66
+          co: 0.40
+          xoay: 40
+          mo: 0
+          an: 1
+      doc:
+        - id: srm
+          ten: "LOPOE Cleansing Foam"
+          anh: "/chien-dich/lopoe-better-balance/srm.webp"
+          ty_le_khung: 2.70
+          x: 0.30
+          y: 0.45
+          co: 0.40
+          xoay: -40
+          mo: 0
+          an: 1
+        - id: ampoule
+          ten: "LOPOE Better Balance Ampoule"
+          anh: "/chien-dich/lopoe-better-balance/ampoule-than.webp"
+          nap_anh: "/chien-dich/lopoe-better-balance/ampoule-nap.webp"
+          ty_le_khung: 2.33
+          x: 0.50
+          y: 0.52
+          co: 0.96
+          xoay: -2.9
+          mo: 1
+          an: 0
+        - id: kem
+          ten: "LOPOE Moisture Cream"
+          anh: "/chien-dich/lopoe-better-balance/kem.webp"
+          ty_le_khung: 2.66
+          x: 0.70
+          y: 0.60
+          co: 0.40
+          xoay: 40
+          mo: 0
+          an: 1
+
+  - loai: bang-chu
+    chu: "BETTER BALANCE · NỘI ĐỊA HÀN · MỚI TẠI VIVE · LL2 UNION SQUARE · "
+    mau_nen: "#E8D2CC"
+
+  - loai: ra-mat
+    tieu_de: "Đủ bộ, đỡ tốn."
+    mo_ta: "Giá combo cố định, không cộng thêm giảm 25%. Hết quà thì combo về giá không quà."
+    deal:
+      - "LOPOE-COMBO-2SRM"
+      - "LOPOE-COMBO-KEM-AMP"
+      - "LOPOE-COMBO-BO3"
+    san_pham:
+      - "LOPOE-CF"
+      - "LOPOE-AMP"
+      - "LOPOE-CR"
+    anh_san_pham:
+      LOPOE-CF: "/chien-dich/lopoe-better-balance/srm.webp"
+      LOPOE-AMP: "/chien-dich/lopoe-better-balance/ampoule-than.webp"
+      LOPOE-CR: "/chien-dich/lopoe-better-balance/kem.webp"
+    anh:
+      - "/chien-dich/lopoe-better-balance/srm.webp"
+      - "/chien-dich/lopoe-better-balance/ampoule-than.webp"
+      - "/chien-dich/lopoe-better-balance/kem.webp"
+    vat_the:
+      ngang:
+        - id: srm
+          ten: "LOPOE Cleansing Foam"
+          anh: "/chien-dich/lopoe-better-balance/srm.webp"
+          ty_le_khung: 2.70
+          x: 0.17
+          y: 0.56
+          co: 0.50
+          xoay: -1.7
+          mo: 0
+          an: 0
+        - id: ampoule
+          ten: "LOPOE Better Balance Ampoule"
+          anh: "/chien-dich/lopoe-better-balance/ampoule-than.webp"
+          nap_anh: "/chien-dich/lopoe-better-balance/ampoule-nap.webp"
+          ty_le_khung: 2.33
+          x: 0.50
+          y: 0.52
+          co: 0.66
+          xoay: 0
+          mo: 0
+          an: 0
+        - id: kem
+          ten: "LOPOE Moisture Cream"
+          anh: "/chien-dich/lopoe-better-balance/kem.webp"
+          ty_le_khung: 2.66
+          x: 0.83
+          y: 0.56
+          co: 0.50
+          xoay: 1.7
+          mo: 0
+          an: 0
+      doc:
+        - id: srm
+          ten: "LOPOE Cleansing Foam"
+          anh: "/chien-dich/lopoe-better-balance/srm.webp"
+          ty_le_khung: 2.70
+          x: 0.20
+          y: 0.56
+          co: 0.72
+          xoay: -1.7
+          mo: 0
+          an: 0
+        - id: ampoule
+          ten: "LOPOE Better Balance Ampoule"
+          anh: "/chien-dich/lopoe-better-balance/ampoule-than.webp"
+          nap_anh: "/chien-dich/lopoe-better-balance/ampoule-nap.webp"
+          ty_le_khung: 2.33
+          x: 0.50
+          y: 0.52
+          co: 0.86
+          xoay: 0
+          mo: 0
+          an: 0
+        - id: kem
+          ten: "LOPOE Moisture Cream"
+          anh: "/chien-dich/lopoe-better-balance/kem.webp"
+          ty_le_khung: 2.66
+          x: 0.80
+          y: 0.56
+          co: 0.72
+          xoay: 1.7
+          mo: 0
+          an: 0
+
+  - loai: chuong-trinh
+    tieu_de: "Đang chạy tại booth"
+    deal:
+      - "COMBO-PINK"
+      - "DC-05"
+      - "KM-08"
+      - "KM-13"
+    o_to: "COMBO-PINK"
+
+  - loai: doi-tac
+    doi_tac: "pawlette"
+    tieu_de: "Tông nào hợp bạn?"
+    mo_ta: "Đo personal color cùng Pawlette, rồi thử lớp nền đúng tông ngay tại booth."
+    gia_goi: 378000
+    link: "/personal-color"
+
+  - loai: booth
+    tieu_de: "VIVE | K-Beauty Experience"
+    dia_chi: "Tầng LL2 Union Square, 171 Đồng Khởi, Quận 1"
+    gio: "10:00 – 21:00"
+    ngay_cuoi: "đến 29/11"
