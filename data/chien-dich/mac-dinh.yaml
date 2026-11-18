@@ -31,64 +31,33 @@ khoi:
       - "/chien-dich/lopoe-better-balance/ampoule-than.webp"
       - "/chien-dich/lopoe-better-balance/kem.webp"
     vat_the:
-      dien_thoai:
-        x: 50
-        y: 25
-        co: 44
-        xoay: 0
-        mo: 0
-        vat_pham:
-          - id: srm
-            anh: "/chien-dich/lopoe-better-balance/srm.webp"
-            ty_le_khung: 2.70
-            dx: -12
-            dy: 2
-            ty_le: 0.78
-            xoay: -10
-          - id: ampoule
-            anh: "/chien-dich/lopoe-better-balance/ampoule-than.webp"
-            nap_anh: "/chien-dich/lopoe-better-balance/ampoule-nap.webp"
-            ty_le_khung: 2.33
-            dx: 0
-            dy: -1
-            ty_le: 0.95
-            xoay: 3
-          - id: kem
-            anh: "/chien-dich/lopoe-better-balance/kem.webp"
-            ty_le_khung: 2.66
-            dx: 12
-            dy: 3
-            ty_le: 0.80
-            xoay: 10
-      may_tinh:
-        x: 72
-        y: 50
-        co: 44
-        xoay: 0
-        mo: 0
-        vat_pham:
-          - id: srm
-            anh: "/chien-dich/lopoe-better-balance/srm.webp"
-            ty_le_khung: 2.70
-            dx: -11
-            dy: 2
-            ty_le: 0.82
-            xoay: -12
-          - id: ampoule
-            anh: "/chien-dich/lopoe-better-balance/ampoule-than.webp"
-            nap_anh: "/chien-dich/lopoe-better-balance/ampoule-nap.webp"
-            ty_le_khung: 2.33
-            dx: 0
-            dy: -2
-            ty_le: 1.0
-            xoay: 4
-          - id: kem
-            anh: "/chien-dich/lopoe-better-balance/kem.webp"
-            ty_le_khung: 2.66
-            dx: 11
-            dy: 3
-            ty_le: 0.85
-            xoay: 12
+      ngang:
+        - id: srm
+          anh: "/chien-dich/lopoe-better-balance/srm.webp"
+          ty_le_khung: 2.70
+          x: 0.16
+          y: 0.56
+          co: 0.52
+          xoay: -11.5
+          an: 0
+        - id: ampoule
+          anh: "/chien-dich/lopoe-better-balance/ampoule-than.webp"
+          nap_anh: "/chien-dich/lopoe-better-balance/ampoule-nap.webp"
+          ty_le_khung: 2.33
+          x: 0.52
+          y: 0.52
+          co: 0.80
+          xoay: 1.7
+          mo: 0
+          an: 0
+        - id: kem
+          anh: "/chien-dich/lopoe-better-balance/kem.webp"
+          ty_le_khung: 2.66
+          x: 0.86
+          y: 0.58
+          co: 0.52
+          xoay: 10.3
+          an: 0
   - loai: tieu-diem
     id: ampoule-mac-dinh
     nhan_phu: "AMPOULE · 50ML"
@@ -104,44 +73,33 @@ khoi:
     anh:
       - "/chien-dich/lopoe-better-balance/ampoule-than.webp"
     vat_the:
-      dien_thoai:
-        x: 50
-        y: 25
-        co: 44
-        xoay: -2
-        mo: 1
-      may_tinh:
-        x: 27
-        y: 50
-        co: 46
-        xoay: -3
-        mo: 1
-        vat_pham:
-          - id: srm
-            anh: "/chien-dich/lopoe-better-balance/srm.webp"
-            ty_le_khung: 2.70
-            dx: -14
-            dy: 2
-            ty_le: 0.68
-            xoay: -22
-            an: true
-          - id: ampoule
-            anh: "/chien-dich/lopoe-better-balance/ampoule-than.webp"
-            nap_anh: "/chien-dich/lopoe-better-balance/ampoule-nap.webp"
-            ty_le_khung: 2.33
-            dx: 0
-            dy: 0
-            ty_le: 1.04
-            xoay: -4
-            mo: 1
-          - id: kem
-            anh: "/chien-dich/lopoe-better-balance/kem.webp"
-            ty_le_khung: 2.66
-            dx: 14
-            dy: 3
-            ty_le: 0.68
-            xoay: 22
-            an: true
+      ngang:
+        - id: srm
+          anh: "/chien-dich/lopoe-better-balance/srm.webp"
+          ty_le_khung: 2.70
+          x: 0.30
+          y: 0.40
+          co: 0.40
+          xoay: -40
+          an: 1
+        - id: ampoule
+          anh: "/chien-dich/lopoe-better-balance/ampoule-than.webp"
+          nap_anh: "/chien-dich/lopoe-better-balance/ampoule-nap.webp"
+          ty_le_khung: 2.33
+          x: 0.50
+          y: 0.54
+          co: 0.92
+          xoay: -2.9
+          mo: 1
+          an: 0
+        - id: kem
+          anh: "/chien-dich/lopoe-better-balance/kem.webp"
+          ty_le_khung: 2.66
+          x: 0.70
+          y: 0.66
+          co: 0.40
+          xoay: 40
+          an: 1
   - loai: bang-chu
     chu: "K-BEAUTY EXPERIENCE · NỘI ĐỊA HÀN · MỚI TẠI VIVE · LL2 UNION SQUARE · "
     mau_nen: "#CFE3D5"

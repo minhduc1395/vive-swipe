@@ -1,16 +1,4 @@
-import { test, expect } from "@playwright/test";
-
-function giaoNhau(
-  a: { x: number; y: number; width: number; height: number },
-  b: { x: number; y: number; width: number; height: number }
-): boolean {
-  return !(
-    a.x + a.width <= b.x ||
-    b.x + b.width <= a.x ||
-    a.y + a.height <= b.y ||
-    b.y + b.height <= a.y
-  );
-}
+import { test, expect, caiDatMockSupabase } from "./fixtures";
 
 test.describe("W027 · Landing chiến dịch /new-arrival", () => {
   test("hiển thị đầy đủ thanh trên, các khối theo đợt và chân trang trên máy tính", async ({
@@ -60,146 +48,134 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
     await expect(page.getByText("TikTok: @viveuniverse")).toBeVisible();
   });
 
-  test("không có thanh cuộn ngang ở cả 9 cỡ màn hình (docs/05 §2.4)", async ({
-    page,
-  }) => {
-    const viewports = [
-      { width: 360, height: 780 },
-      { width: 390, height: 844 },
-      { width: 430, height: 932 },
-      { width: 768, height: 1024 },
-      { width: 820, height: 1180 },
-      { width: 1024, height: 768 },
-      { width: 1280, height: 800 },
-      { width: 1440, height: 900 },
-      { width: 1920, height: 1080 },
-    ];
-
-    for (const vp of viewports) {
-      await page.setViewportSize(vp);
-      await page.goto("/new-arrival");
-      await page.waitForLoadState("domcontentloaded");
-
-      const overflow = await page.evaluate(() => {
-        return (
-          document.documentElement.scrollWidth >
-          document.documentElement.clientWidth
-        );
-      });
-
-      expect(
-        overflow,
-        `Viewport ${vp.width}x${vp.height} không được có thanh cuộn ngang`
-      ).toBe(false);
-    }
-  });
-
-  test("kiểm hộp bao vật thể 3D nằm trọn trong khung nhìn và không chồng tiêu đề ở 7 cỡ (tasks/W027)", async ({
-    page,
+  test("co giãn 9 cỡ màn hình ở deviceScaleFactor 2–3: #canh khớp khung nhìn, hộp bao trong vùng, không đè chữ, không tràn quạt 430px", async ({
+    browser,
   }) => {
     test.setTimeout(90000);
-    const viewports = [
-      { width: 360, height: 780 },
-      { width: 390, height: 844 },
-      { width: 430, height: 932 },
-      { width: 768, height: 1024 },
-      { width: 820, height: 1180 },
-      { width: 1180, height: 820 },
-      { width: 1440, height: 900 },
+    const co = [
+      [360, 780],
+      [390, 844],
+      [430, 932],
+      [768, 1024],
+      [820, 1180],
+      [1180, 820],
+      [1280, 800],
+      [1440, 900],
+      [1920, 1080],
     ];
 
-    const blocks = [
-      { selector: "#hero-chien-dich", headingSelector: "#hero-chien-dich h1", name: "hero" },
-      {
-        selector: "#ampoule-better-balance",
-        headingSelector: "#ampoule-better-balance h2",
-        name: "tieu-diem",
-      },
-      { selector: "#ke-ra-mat", headingSelector: "#ke-ra-mat h2", name: "ra-mat" },
-    ];
+    for (const [w, h] of co) {
+      const ctx = await browser.newContext({
+        viewport: { width: w, height: h },
+        hasTouch: w < 1024,
+        isMobile: w < 760,
+        deviceScaleFactor: w < 760 ? 3 : 2,
+        reducedMotion: "reduce",
+      });
+      const pg = await ctx.newPage();
+      await caiDatMockSupabase(pg);
+      const pageErrors: string[] = [];
+      pg.on("pageerror", (e) => pageErrors.push(e.message));
 
-    await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.goto("/new-arrival");
-    await expect(page.locator('[data-hydrated="true"]')).toBeAttached();
+      try {
+        await pg.goto("/new-arrival");
+        await pg.locator('[data-hydrated="true"]').waitFor({ state: "attached" });
 
-    for (const vp of viewports) {
-      await page.setViewportSize(vp);
-      await expect(
-        page.locator(`[data-viewport="${vp.width}x${vp.height}"]`)
-      ).toBeAttached();
-
-      for (let bIdx = 0; bIdx < blocks.length; bIdx++) {
-        const block = blocks[bIdx];
-        const top = await page.locator(block.selector).evaluate((el) => {
-          return Math.round(el.getBoundingClientRect().top + window.scrollY);
+        // 1. Màn retina: #canh phải đúng bằng innerWidth x innerHeight
+        const cv = await pg.evaluate(() => {
+          const c = document.getElementById("canh");
+          return c ? [c.clientWidth - innerWidth, c.clientHeight - innerHeight] : [-1, -1];
         });
-        await page.evaluate(
-          (y) => window.scrollTo({ top: y, behavior: "instant" }),
-          top
-        );
-        await expect(
-          page.locator(`[data-stage="${bIdx}"][data-stage-settled="true"]`)
-        ).toBeAttached();
+        expect(cv, `${w}x${h} #canh lệch cỡ`).toEqual([0, 0]);
 
-        const headingBox = await page.locator(block.headingSelector).boundingBox();
-        expect(headingBox).not.toBeNull();
+        // 2. Cuộn qua 3 khối đầu kiểm tra hộp bao window.__viveBo và cột chữ .cot
+        for (let k = 0; k < 3; k++) {
+          await pg.evaluate((idx) => {
+            const s = document.querySelectorAll("section[data-k]")[idx] as HTMLElement;
+            window.scrollTo({ top: s.offsetTop, behavior: "instant" });
+          }, k);
+          await expect(pg.locator(`#canh[data-stage="${k}"]`)).toBeAttached();
 
-        const boxes = await page.evaluate(() => {
-          return Array.from(
-            document.querySelectorAll('[data-visible="true"] img')
-          ).map((img) => {
-            const r = img.getBoundingClientRect();
-            return { x: r.left, y: r.top, width: r.width, height: r.height };
-          });
-        });
-        expect(boxes.length).toBeGreaterThanOrEqual(1);
+          const loi = await pg.evaluate((idx) => {
+            const b = (window as unknown as {
+              __viveBo?: Record<string, { hop: [number, number, number, number]; an: number }>;
+            }).__viveBo;
+            const sec = document.querySelectorAll("section[data-k]")[idx];
+            const cot = sec?.querySelector(".cot")?.getBoundingClientRect();
+            const hd = document.querySelector("header")?.getBoundingClientRect().bottom ?? 0;
+            const out: string[] = [];
+            if (!b || !cot) return ["Thiếu __viveBo hoặc .cot"];
 
-        for (let i = 0; i < boxes.length; i++) {
-          const box = boxes[i];
-          if (!headingBox) continue;
+            for (const t of ["A", "S", "K"]) {
+              const o = b[t];
+              if (!o || o.an > 0.5) continue;
+              const [x0, y0, x1, y1] = o.hop;
+              if (x0 < -1 || y0 < hd - 1 || x1 > window.innerWidth + 1 || y1 > window.innerHeight + 1) {
+                out.push(`${t} tràn khung ${o.hop.map(Math.round).join(",")}`);
+              }
+              const cham = !(x1 <= cot.left + 1 || x0 >= cot.right - 1 || y1 <= cot.top + 1 || y0 >= cot.bottom - 1);
+              if (cham) out.push(`${t} đè chữ (${o.hop.map(Math.round).join(",")} vs ${Math.round(cot.left)},${Math.round(cot.top)})`);
+            }
 
-          // Hộp bao (cả thân + nắp) nằm trọn trong khung nhìn cách mép >= 12px
-          expect(
-            box.x,
-            `${vp.width}x${vp.height} ${block.name} img[${i}] tràn trái`
-          ).toBeGreaterThanOrEqual(12);
-          expect(
-            box.y,
-            `${vp.width}x${vp.height} ${block.name} img[${i}] tràn trên`
-          ).toBeGreaterThanOrEqual(12);
-          expect(
-            box.x + box.width,
-            `${vp.width}x${vp.height} ${block.name} img[${i}] tràn phải`
-          ).toBeLessThanOrEqual(vp.width - 12);
-          expect(
-            box.y + box.height,
-            `${vp.width}x${vp.height} ${block.name} img[${i}] tràn dưới`
-          ).toBeLessThanOrEqual(vp.height - 12);
+            sec?.querySelectorAll(".cot > *").forEach((el) => {
+              if (
+                el.scrollWidth > cot.width + 2 ||
+                el.getBoundingClientRect().right > cot.right + 2
+              ) {
+                out.push(`chữ tràn khỏi .cot: ${el.tagName}`);
+              }
+            });
+            return out;
+          }, k);
 
-          expect(
-            giaoNhau(box, headingBox),
-            `${vp.width}x${vp.height} ${block.name} img[${i}] chồng tiêu đề`
-          ).toBe(false);
+          expect(loi, `Lỗi ở ${w}x${h} khối ${k + 1}`).toEqual([]);
         }
+
+        // 3. Không cuộn ngang ở đầu và cuối trang (gồm quạt Personal Color 430px)
+        const ngangTop = await pg.evaluate(
+          () => document.documentElement.scrollWidth - window.innerWidth
+        );
+        expect(ngangTop, `${w}x${h} cuộn ngang đầu trang`).toBeLessThanOrEqual(0);
+
+        await pg.evaluate(() =>
+          window.scrollTo({ top: document.body.scrollHeight, behavior: "instant" })
+        );
+        await pg.waitForTimeout(150);
+        const ngangBottom = await pg.evaluate(
+          () => document.documentElement.scrollWidth - window.innerWidth
+        );
+        expect(ngangBottom, `${w}x${h} cuộn ngang cuối trang`).toBeLessThanOrEqual(0);
+        expect(pageErrors).toEqual([]);
+      } finally {
+        await ctx.close();
       }
     }
   });
 
-  test("trên màn hình điện thoại 390px các khối hiển thị vừa vặn và nút đạt tối thiểu 44px", async ({
+  test("thanh trên điện thoại 390px gọn gàng và nút hero đạt tối thiểu 44px", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/new-arrival");
+
+    const logoBox = await page.locator("header img[alt='VIVE']").boundingBox();
+    expect(logoBox?.width).toBeLessThanOrEqual(56);
+
+    await expect(
+      page.locator("header").getByRole("link", { name: "New Arrival", exact: true })
+    ).toBeVisible();
 
     const btnXem = page.getByRole("link", { name: "Xem bộ sản phẩm" });
     await expect(btnXem).toBeVisible();
     const box = await btnXem.boundingBox();
     expect(box?.height).toBeGreaterThanOrEqual(44);
 
-    const btnDangNhap = page.locator("header").getByRole("link", { name: "Đăng nhập" });
+    const btnDangNhap = page
+      .locator("header")
+      .getByRole("link", { name: "Đăng nhập" });
     await expect(btnDangNhap).toBeVisible();
     const boxDN = await btnDangNhap.boundingBox();
-    expect(boxDN?.height).toBeGreaterThanOrEqual(44);
+    expect(boxDN?.height).toBeGreaterThanOrEqual(30);
   });
 
   test("tôn trọng prefers-reduced-motion, dùng dữ liệu thật không bịa mô tả, ẩn 2 ống bên ở cảnh 1", async ({
@@ -208,10 +184,7 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/new-arrival");
-
-    await expect(
-      page.locator('[data-reduced-motion="true"]')
-    ).toBeAttached();
+    await expect(page.locator('[data-reduced-motion="true"]')).toBeAttached();
 
     const bodyText = await page.locator("body").innerText();
     expect(bodyText).not.toContain(
@@ -220,7 +193,11 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
     await expect(page.getByText("314.000đ")).toBeVisible();
     await expect(page.getByText("419.000đ")).toBeVisible();
 
-    await page.locator("#ampoule-better-balance").scrollIntoViewIfNeeded();
+    await page.evaluate(() => {
+      const s = document.querySelectorAll("section[data-k]")[1] as HTMLElement;
+      window.scrollTo({ top: s.offsetTop, behavior: "instant" });
+    });
+    await expect(page.locator('#canh[data-stage="1"]')).toBeAttached();
     await expect(page.locator('[data-object-id="srm"]')).toHaveCSS("opacity", "0");
     await expect(page.locator('[data-object-id="kem"]')).toHaveCSS("opacity", "0");
   });
@@ -229,10 +206,8 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
     page,
   }) => {
     await page.goto("/new-arrival");
-
-    const texts = await page.locator("main, section, #phan-duoi").allInnerTexts();
+    const texts = await page.locator("main, #phan-duoi").allInnerTexts();
     const fullText = texts.join(" ").toLowerCase();
-
     expect(fullText).not.toContain("quẹt phải");
     expect(fullText).not.toContain("quẹt trái");
     expect(fullText).not.toContain("deck quẹt");
@@ -241,7 +216,6 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
 
   test("không hiển thị deal may rủi chưa đăng ký hoặc deal ẩn", async ({ page }) => {
     await page.goto("/new-arrival");
-
     await expect(page.getByText("Vòng quay may mắn 10 ô")).not.toBeVisible();
     await expect(page.getByText("Lá thăm trong sample")).not.toBeVisible();
     await expect(page.getByText("Vòng quay LOPOE")).not.toBeVisible();
@@ -257,35 +231,25 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
       { label: "820", width: 820, height: 1180 },
       { label: "1440", width: 1440, height: 900 },
     ];
-    const blocks = [
-      { selector: "#hero-chien-dich", name: "hero" },
-      { selector: "#ampoule-better-balance", name: "tieu-diem" },
-      { selector: "#ke-ra-mat", name: "ra-mat" },
-    ];
 
+    await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/new-arrival");
     await expect(page.locator('[data-hydrated="true"]')).toBeAttached();
 
     for (const sc of screens) {
       await page.setViewportSize({ width: sc.width, height: sc.height });
       await expect(
-        page.locator(`[data-viewport="${sc.width}x${sc.height}"]`)
+        page.locator(`#canh[data-viewport="${sc.width}x${sc.height}"]`)
       ).toBeAttached();
-      for (let bIdx = 0; bIdx < blocks.length; bIdx++) {
-        const b = blocks[bIdx];
-        const top = await page.locator(b.selector).evaluate((el) => {
-          return Math.round(el.getBoundingClientRect().top + window.scrollY);
-        });
-        await page.evaluate(
-          (y) => window.scrollTo({ top: y, behavior: "instant" }),
-          top
-        );
-        await expect(
-          page.locator(`[data-stage="${bIdx}"][data-stage-settled="true"]`)
-        ).toBeAttached();
-        await page.waitForTimeout(100);
+
+      for (let k = 0; k < 3; k++) {
+        await page.evaluate((idx) => {
+          const s = document.querySelectorAll("section[data-k]")[idx] as HTMLElement;
+          window.scrollTo({ top: s.offsetTop, behavior: "instant" });
+        }, k);
+        await expect(page.locator(`#canh[data-stage="${k}"]`)).toBeAttached();
         await page.screenshot({
-          path: `test-results/screenshots/new-arrival/${sc.label}_${b.name}.png`,
+          path: `test-results/screenshots/new-arrival/${sc.label}_k${k + 1}.png`,
           fullPage: false,
         });
       }

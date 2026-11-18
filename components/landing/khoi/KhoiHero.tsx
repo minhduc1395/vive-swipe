@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import type { KhoiHero } from "@/lib/chien-dich/types";
+import type { KhoiHero as KhoiHeroType } from "@/lib/chien-dich/types";
 
 interface KhoiHeroProps {
-  khoi: KhoiHero;
+  khoi: KhoiHeroType;
 }
 
 export function KhoiHero({ khoi }: KhoiHeroProps) {
@@ -13,10 +13,11 @@ export function KhoiHero({ khoi }: KhoiHeroProps) {
   return (
     <section
       id="hero-chien-dich"
+      data-k="0"
       aria-label="Phần đầu chiến dịch"
-      className="relative min-h-[100dvh] flex items-end lg:items-center justify-start px-5 sm:px-8 md:pl-[120px] md:pr-8 lg:px-16 pt-[46dvh] lg:pt-28 pb-10 lg:pb-16 z-10"
+      className="vq-k trai relative z-10"
     >
-      <div className="w-full lg:max-w-[44%] max-w-[540px] flex flex-col gap-3.5 md:gap-5 bg-hong-nhat/65 lg:bg-transparent backdrop-blur-[2px] lg:backdrop-blur-none rounded-[24px] p-4 lg:p-0">
+      <div className="cot flex flex-col gap-3.5 md:gap-5">
         {nhan_tren && (
           <div className="self-start inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white text-[12px] md:text-[13px] font-bold tracking-[1.5px] text-den shadow-xs">
             <span className="w-2 h-2 rounded-full bg-[#8FBF9F]" />
@@ -24,7 +25,7 @@ export function KhoiHero({ khoi }: KhoiHeroProps) {
           </div>
         )}
 
-        <h1 className="m-0 font-bold text-[clamp(30px,8vw,44px)] sm:text-[54px] lg:text-[84px] xl:text-[100px] leading-[0.94] tracking-[-0.045em] text-den">
+        <h1 className="m-0 font-bold text-[clamp(44px,13vw,72px)] lg:text-[clamp(56px,7.4vw,112px)] leading-[0.9] tracking-[-0.045em] text-den">
           {tieu_de.map((line, idx) => {
             const isOutline = line.startsWith("~");
             const cleanLine = isOutline ? line.slice(1) : line;
@@ -43,15 +44,10 @@ export function KhoiHero({ khoi }: KhoiHeroProps) {
               );
             }
 
-            // Normal line
             return (
               <span
                 key={idx}
-                className={`block ${
-                  idx === tieu_de.length - 1
-                    ? "vet-hong"
-                    : ""
-                }`}
+                className={`block ${idx === tieu_de.length - 1 ? "vet-hong" : ""}`}
               >
                 {cleanLine}
               </span>
@@ -60,20 +56,20 @@ export function KhoiHero({ khoi }: KhoiHeroProps) {
         </h1>
 
         {mo_ta && (
-          <p className="m-0 text-[16px] sm:text-[18px] md:text-[19px] leading-[1.6] text-xam max-w-[460px]">
+          <p className="m-0 text-[16px] lg:text-[18px] leading-[1.55] lg:leading-[1.6] text-xam">
             {mo_ta}
           </p>
         )}
 
         {nut.length > 0 && (
-          <div className="flex flex-wrap items-center gap-3 pt-2">
+          <div className="flex flex-wrap items-center gap-3 pt-1">
             {nut.map((n, i) => {
               const isChinh = i === 0;
               return (
                 <Link
                   key={i}
                   href={n.den}
-                  className={`min-h-[44px] h-11 sm:h-14 px-5 sm:px-7 rounded-full inline-flex items-center gap-2 font-semibold text-[14px] sm:text-[16px] transition-transform active:scale-95 ${
+                  className={`min-h-[44px] h-[52px] lg:h-[56px] px-5 lg:px-7 rounded-full inline-flex items-center gap-2 font-semibold text-[15px] lg:text-[16px] transition-transform active:scale-95 ${
                     isChinh
                       ? "bg-den text-white hover:bg-black shadow-sm"
                       : "bg-white text-den hover:bg-white/80 border border-den/10 shadow-xs"

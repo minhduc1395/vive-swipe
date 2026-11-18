@@ -7,7 +7,12 @@ import type { ChienDich } from "./types";
 
 export * from "./types";
 export * from "./schema";
-export { layMocVatTheTheoManHinh } from "./vat-the";
+export {
+  layVatTheTheoCheDo,
+  datVaoVung,
+  type VungVatThe,
+  type KetQuaDatVung,
+} from "./vat-the";
 
 export const CHIEN_DICH_MAC_DINH_LIST = (chienDichJson as unknown as ChienDich[]).map((cd) =>
   ChienDichSchema.parse(cd)

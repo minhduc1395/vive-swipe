@@ -3,12 +3,13 @@ import {
   parseChienDichYaml,
   layChienDichHienTai,
   docDanhSachChienDichTuDisk,
-  layMocVatTheTheoManHinh,
+  layVatTheTheoCheDo,
+  datVaoVung,
   ChienDich,
 } from "@/lib/chien-dich";
 
 describe("Chiến dịch - cấu hình và nạp dữ liệu", () => {
-  it("nạp thành công file lopoe-better-balance và mac-dinh từ disk kèm vat_the 3 mốc và anh", () => {
+  it("nạp thành công file lopoe-better-balance và mac-dinh từ disk kèm vat_the {ngang, doc} và datVaoVung", () => {
     const list = docDanhSachChienDichTuDisk();
     expect(list.length).toBeGreaterThanOrEqual(2);
     const lopoe = list.find((c) => c.ma === "lopoe-better-balance");
@@ -18,11 +19,19 @@ describe("Chiến dịch - cấu hình và nạp dữ liệu", () => {
 
     const hero = lopoe?.khoi.find((k) => k.loai === "hero");
     expect(hero?.loai).toBe("hero");
-    if (hero?.loai === "hero") {
+    if (hero?.loai === "hero" && hero.vat_the) {
       expect(hero.anh?.length).toBeGreaterThanOrEqual(3);
-      expect(hero.vat_the?.may_tinh.vat_pham?.length).toBe(3);
-      expect(hero.vat_the?.dien_thoai?.x).toBeGreaterThanOrEqual(35);
-      expect(hero.vat_the?.dien_thoai?.x).toBeLessThanOrEqual(65);
+      expect(hero.vat_the.ngang.length).toBe(3);
+      expect(hero.vat_the.doc?.length).toBe(3);
+
+      const vNho = { x0: 16, x1: 344, y0: 64, y1: 350 };
+      for (const vp of layVatTheTheoCheDo(hero.vat_the, "doc")) {
+        const res = datVaoVung(vp, vNho, "doc");
+        expect(res.hop[0]).toBeGreaterThanOrEqual(vNho.x0 - 0.5);
+        expect(res.hop[1]).toBeGreaterThanOrEqual(vNho.y0 - 0.5);
+        expect(res.hop[2]).toBeLessThanOrEqual(vNho.x1 + 0.5);
+        expect(res.hop[3]).toBeLessThanOrEqual(vNho.y1 + 0.5);
+      }
     }
 
     const tieuDiem = lopoe?.khoi.find((k) => k.loai === "tieu-diem");
@@ -31,12 +40,12 @@ describe("Chiến dịch - cấu hình và nạp dữ liệu", () => {
       expect(tieuDiem.san_pham_id).toBe("LOPOE-AMP");
       expect(tieuDiem.deal_id).toBe("LOPOE-25");
       expect(tieuDiem.mo_ta || "").not.toContain("hàng rào bảo vệ da");
-      const sideObjects = (tieuDiem.vat_the?.may_tinh.vat_pham || []).filter(
+      const sideObjects = (tieuDiem.vat_the?.ngang || []).filter(
         (v) => v.id !== "ampoule"
       );
       expect(sideObjects.length).toBe(2);
       for (const s of sideObjects) {
-        expect(s.an).toBe(true);
+        expect(s.an).toBe(1);
       }
     }
 
@@ -44,13 +53,13 @@ describe("Chiến dịch - cấu hình và nạp dữ liệu", () => {
     expect(macDinh).toBeDefined();
     const heroMacDinh = macDinh?.khoi.find((k) => k.loai === "hero");
     if (heroMacDinh?.loai === "hero" && heroMacDinh.vat_the) {
-      // Kiểm tra tự suy ra mốc thiếu (may_tinh_bang) từ mốc lớn hơn
-      const mocTablet = layMocVatTheTheoManHinh(
-        heroMacDinh.vat_the,
-        "may_tinh_bang"
-      );
-      expect(mocTablet.co).toBeLessThanOrEqual(heroMacDinh.vat_the.may_tinh.co);
-      expect(mocTablet.y).toBeLessThanOrEqual(25);
+      // Tự suy ra chế độ dọc nếu YAML chỉ khai báo ngang
+      const docDerived = layVatTheTheoCheDo(heroMacDinh.vat_the, "doc");
+      expect(docDerived.length).toBe(3);
+      for (const vp of docDerived) {
+        expect(vp.x).toBeGreaterThanOrEqual(0.18);
+        expect(vp.x).toBeLessThanOrEqual(0.82);
+      }
     }
   });
 
@@ -71,17 +80,13 @@ khoi:
     tieu_de: ["TEST", "~Outline", "Normal"]
     anh: ["/chien-dich/lopoe-better-balance/srm.webp"]
     vat_the:
-      may_tinh:
-        x: 70
-        y: 50
-        co: 40
-        xoay: 0
-        vat_pham:
-          - id: srm
-            anh: "/chien-dich/lopoe-better-balance/srm.webp"
-            dx: 0
-            dy: 0
-            ty_le: 1
+      ngang:
+        - id: srm
+          anh: "/chien-dich/lopoe-better-balance/srm.webp"
+          x: 0.5
+          y: 0.5
+          co: 0.6
+          an: 0
   - loai: tieu-diem
     id: focus-1
     tieu_de: ["Focus", "~Item"]

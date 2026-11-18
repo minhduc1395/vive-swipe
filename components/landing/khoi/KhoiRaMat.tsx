@@ -11,7 +11,7 @@ interface KhoiRaMatProps {
 }
 
 export function KhoiRaMat({ khoi }: KhoiRaMatProps) {
-  const { tieu_de, mo_ta, deal: dealIds = [], anh_san_pham = {} } = khoi;
+  const { tieu_de, mo_ta, deal: dealIds = [] } = khoi;
 
   const resolvedDeals = dealIds
     .map((id) => timDealTheoId(id))
@@ -23,122 +23,74 @@ export function KhoiRaMat({ khoi }: KhoiRaMatProps) {
   return (
     <section
       id="ke-ra-mat"
+      data-k="2"
       aria-label="Kệ ra mắt"
-      className="relative z-10 bg-transparent"
+      className="vq-k trai relative z-10"
     >
-      {/* Phần tiêu đề kệ nằm dưới vùng 3D trên màn nhỏ và bên trái trên máy tính */}
-      <div className="max-w-[1360px] mx-auto px-5 sm:px-8 md:pl-[120px] md:pr-8 lg:px-16 pt-[46dvh] lg:pt-20 pb-8 lg:pb-12">
-        <div className="w-full lg:max-w-[44%] lg:min-h-[30dvh] flex flex-col justify-center gap-3 md:gap-4 bg-hong-nhat/65 lg:bg-transparent backdrop-blur-[2px] lg:backdrop-blur-none rounded-[24px] p-4 lg:p-0">
-          <h2 className="m-0 font-bold text-[clamp(30px,7.5vw,42px)] sm:text-[50px] lg:text-[64px] leading-[0.95] tracking-[-0.04em] text-den">
-            {tieu_de}
-          </h2>
-          {mo_ta && (
-            <p className="m-0 text-[15px] sm:text-[17px] leading-[1.6] text-xam max-w-[420px]">
-              {mo_ta}
-            </p>
-          )}
-        </div>
-      </div>
+      <div className="cot flex flex-col gap-3.5 md:gap-4">
+        <h2 className="m-0 font-bold text-[clamp(34px,9.5vw,56px)] lg:text-[clamp(44px,5.6vw,76px)] leading-[0.95] tracking-[-0.04em] text-den">
+          {tieu_de}
+        </h2>
 
-      {/* Kệ sản phẩm nền trắng phía dưới tiêu đề */}
-      <div className="bg-white rounded-t-[32px] md:rounded-t-[44px] py-14 sm:py-18 px-5 sm:px-8 md:pl-[120px] md:pr-8 lg:px-16 shadow-[0_-12px_40px_rgba(43,43,42,0.04)]">
-        <div className="max-w-[1360px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-7">
-          {resolvedDeals.map((d, idx) => {
+        <div className="flex flex-col gap-2.5 w-full">
+          {resolvedDeals.map((d) => {
             const thanhPhan = (d.thanh_phan || []).map((tp) => {
               const sp = timSanPhamTheoId(tp.id);
               return { ...tp, sp };
             });
-
             const giaGoc = thanhPhan.reduce(
               (acc, item) => acc + (item.sp?.gia_ban || 0) * item.so_luong,
               0
             );
             const giaBan = d.gia_combo || giaGoc;
-            const rotY =
-              idx === 0
-                ? "md:rotate-y-[6deg]"
-                : idx === 2
-                ? "md:rotate-y-[-6deg]"
-                : "";
 
             return (
-              <article
+              <div
                 key={d.id}
-                className="perspective-1000 group transition-all duration-300"
+                className="rounded-[20px] lg:rounded-[24px] bg-white px-4 py-3.5 lg:px-5 lg:py-4 shadow-[0_10px_24px_rgba(43,43,42,0.06)] flex items-center justify-between gap-3"
               >
-                <div
-                  className={`rounded-[30px] bg-linear-to-b from-white to-hong-nhat p-7 flex flex-col gap-4 shadow-[0_20px_45px_rgba(43,43,42,0.08)] min-h-[420px] transition-transform duration-300 hover:scale-[1.02] ${rotY}`}
-                >
-                  <div className="h-[200px] flex items-end justify-center gap-3 pb-3">
-                    {thanhPhan.map((item, itemIdx) => {
-                      const imgPath =
-                        anh_san_pham[item.id] ??
-                        (item.sp?.anh
-                          ? item.sp.anh.startsWith("/")
-                            ? item.sp.anh
-                            : `/products/${item.sp.anh}`
-                          : null);
-
-                      if (!imgPath) return null;
-
-                      return (
-                        <div
-                          key={itemIdx}
-                          className="relative flex flex-col items-center"
-                          style={{
-                            transform: `rotate(${
-                              itemIdx === 0 ? -4 : itemIdx === 1 ? 4 : 0
-                            }deg)`,
-                          }}
-                        >
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={imgPath}
-                            alt={item.sp?.ten_hien_thi || ""}
-                            className="max-h-[160px] w-auto object-contain drop-shadow-md select-none"
-                            loading="lazy"
-                          />
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  <span className="text-[12px] font-bold tracking-[1px] text-xam uppercase">
-                    COMBO ƯU ĐÃI
-                  </span>
-                  <h3 className="m-0 text-[22px] sm:text-[24px] font-bold tracking-[-0.4px] text-den leading-[1.2]">
+                <div className="min-w-0 flex flex-col gap-0.5">
+                  <span className="text-[15px] lg:text-[16px] font-semibold text-den leading-snug">
                     {d.ten}
-                  </h3>
-
-                  <div className="mt-auto pt-4 flex items-baseline gap-2.5">
-                    <span className="text-[26px] sm:text-[28px] font-bold text-den">
-                      {dinhDangTienGio(giaBan)}
+                  </span>
+                  {d.qua && (
+                    <span className="text-[12px] text-xam leading-snug">
+                      {d.qua} (khi còn quà)
                     </span>
+                  )}
+                </div>
+
+                <div className="shrink-0 flex items-center gap-2.5">
+                  <div className="text-right flex flex-col">
+                    <b className="text-[18px] lg:text-[20px] font-bold text-den leading-none">
+                      {dinhDangTienGio(giaBan)}
+                    </b>
                     {giaGoc > giaBan && (
-                      <span className="text-[15px] text-xam line-through">
+                      <s className="text-[12px] text-xam mt-0.5">
                         {dinhDangTienGio(giaGoc)}
-                      </span>
+                      </s>
                     )}
                   </div>
-
-                  {d.qua && (
-                    <p className="m-0 text-[13px] text-xam">
-                      {d.qua} (khi còn quà)
-                    </p>
-                  )}
 
                   <Link
                     href="/gio"
                     onClick={() => themComboVaoGio(d.id, 1)}
-                    className="mt-2 w-full min-h-[44px] h-11 rounded-full bg-den text-white font-semibold text-[14px] flex items-center justify-center gap-2 hover:bg-black transition-colors"
+                    aria-label={`Thêm vào giỏ ${d.ten}`}
+                    className="min-h-[44px] h-11 px-3.5 rounded-full bg-den text-white font-semibold text-[13px] inline-flex items-center justify-center hover:bg-black transition-colors whitespace-nowrap"
                   >
                     Thêm vào giỏ
                   </Link>
                 </div>
-              </article>
+              </div>
             );
           })}
         </div>
+
+        {mo_ta && (
+          <p className="m-0 text-[14px] lg:text-[15px] leading-[1.55] text-xam">
+            {mo_ta}
+          </p>
+        )}
       </div>
     </section>
   );

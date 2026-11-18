@@ -1,56 +1,114 @@
-import type { MocManHinh3D, MocVatThe3D, VatThe3D } from "./types";
+import type { CheDoVung3D, VatPham3D, VatThe3D } from "./types";
+
+export interface VungVatThe {
+  x0: number;
+  x1: number;
+  y0: number;
+  y1: number;
+}
+
+export interface KetQuaDatVung {
+  cx: number;
+  cy: number;
+  bodyW: number;
+  bodyH: number;
+  boxW: number;
+  boxH: number;
+  totalH: number;
+  capImgW: number;
+  capImgH: number;
+  pipetteGapPx: number;
+  xoayDeg: number;
+  mo: number;
+  an: number;
+  hop: [number, number, number, number];
+}
+
+function clamp(v: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, v));
+}
 
 /**
- * Lấy mốc vị trí/kích thước 3D theo cỡ màn hình (chạy được cả trên trình duyệt và server).
- * Nếu thiếu mốc nhỏ hơn (`dien_thoai` hoặc `may_tinh_bang`), tự lấy từ mốc lớn hơn gần nhất rồi thu gọn hợp lý.
+ * Lấy danh sách mốc vật thể theo chế độ ("ngang" | "doc").
+ * Nếu YAML thiếu `doc`, tự suy từ `ngang` với bố cục gọn trong dải trên.
  */
-export function layMocVatTheTheoManHinh(
+export function layVatTheTheoCheDo(
   vatThe: VatThe3D,
-  moc: MocManHinh3D
-): MocVatThe3D {
-  const mayTinh = vatThe.may_tinh;
-  const mayTinhBang: MocVatThe3D = vatThe.may_tinh_bang ?? {
-    x: Math.min(Math.max(mayTinh.x, 22), 78),
-    y: Math.min(mayTinh.y, 25),
-    co: Math.round(mayTinh.co * 0.82 * 10) / 10,
-    xoay: mayTinh.xoay ?? 0,
-    mo: mayTinh.mo ?? 0,
-    vat_pham: mayTinh.vat_pham?.map((vp) => ({
-      ...vp,
-      dx: vp.dx !== undefined ? Math.round(vp.dx * 0.78 * 10) / 10 : 0,
-      dy: vp.dy !== undefined ? Math.round(vp.dy * 0.75 * 10) / 10 : 0,
-    })),
-  };
+  cheDo: CheDoVung3D
+): VatPham3D[] {
+  if (cheDo === "ngang") return vatThe.ngang;
+  if (vatThe.doc && vatThe.doc.length > 0) return vatThe.doc;
 
-  if (moc === "may_tinh") return mayTinh;
-  if (moc === "may_tinh_bang") {
-    return {
-      ...mayTinhBang,
-      vat_pham: mayTinhBang.vat_pham ?? mayTinh.vat_pham,
-    };
-  }
+  return vatThe.ngang.map((vp) => ({
+    ...vp,
+    x: clamp(0.5 + (vp.x - 0.5) * 0.85, 0.18, 0.82),
+    y: clamp(vp.y, 0.25, 0.72),
+    co: Math.min(vp.co * 1.05, 0.96),
+  }));
+}
 
-  // Điện thoại (< 768px): mặc định nửa trên, lệch ngang trong ±15% tâm
-  const nguon = vatThe.may_tinh_bang ?? mayTinh;
-  const baseVatPham = vatThe.dien_thoai?.vat_pham ?? nguon.vat_pham;
-  if (vatThe.dien_thoai) {
-    return {
-      ...vatThe.dien_thoai,
-      x: Math.min(Math.max(vatThe.dien_thoai.x, 35), 65),
-      vat_pham: baseVatPham,
-    };
-  }
+/**
+ * Đặt một vật thể theo mốc trong vùng V, kẹp hộp bao (cả thân + nắp đang nhấc) vào trong vùng V.
+ * Không đủ chỗ thì tự thu nhỏ. (Đối chiếu `datVaoVung` trong design/landing-3d/index.html)
+ */
+export function datVaoVung(
+  item: VatPham3D,
+  V: VungVatThe,
+  cheDo: CheDoVung3D
+): KetQuaDatVung {
+  const vr = Math.max(40, V.x1 - V.x0);
+  const vc = Math.max(40, V.y1 - V.y0);
+  const aspect = item.ty_le_khung ?? 2.5; // height / width của thân
+  const mo = clamp(item.mo ?? 0, 0, 1);
+  const an = clamp(item.an ?? 0, 0, 1);
+  const xoayDeg =
+    item.xoay !== undefined
+      ? item.xoay
+      : item.rz !== undefined
+      ? (-item.rz * 180) / Math.PI
+      : 0;
+
+  // Khi có nắp/bóp rời: nhấc tối đa 12% chiều cao chai ở chế độ dọc (docs: NHAC.doc ≈ 12%)
+  const capRatio = item.nap_anh ? 0.38 / aspect : 0;
+  const maxLiftRatio = item.nap_anh ? (cheDo === "doc" ? 0.12 : 0.28) : 0;
+  const liftFrac = mo * maxLiftRatio;
+
+  const targetTotalH = Math.max(24, item.co * vc);
+  const rawBodyH = targetTotalH / (1 + capRatio + liftFrac);
+  const rawBodyW = rawBodyH / aspect;
+
+  const rad = Math.abs((xoayDeg * Math.PI) / 180);
+  const rotW = rawBodyW * Math.cos(rad) + targetTotalH * Math.sin(rad);
+  const rotH = targetTotalH * Math.cos(rad) + rawBodyW * Math.sin(rad);
+
+  const shrink = Math.min(1, (vr - 4) / rotW, (vc - 4) / rotH);
+  const bodyH = rawBodyH * shrink;
+  const bodyW = rawBodyW * shrink;
+  const totalH = targetTotalH * shrink;
+  const boxW = rotW * shrink;
+  const boxH = rotH * shrink;
+
+  const cx = clamp(V.x0 + item.x * vr, V.x0 + boxW / 2, V.x1 - boxW / 2);
+  const cy = clamp(V.y0 + item.y * vc, V.y0 + boxH / 2, V.y1 - boxH / 2);
+
+  const capImgW = bodyW * 0.42;
+  const capImgH = capImgW * 0.85;
+  const pipetteGapPx = bodyH * liftFrac;
 
   return {
-    x: Math.min(Math.max(nguon.x, 35), 65),
-    y: Math.min(nguon.y, 24),
-    co: Math.min(Math.round(nguon.co * 0.85 * 10) / 10, 44),
-    xoay: nguon.xoay ?? 0,
-    mo: nguon.mo ?? 0,
-    vat_pham: baseVatPham?.map((vp) => ({
-      ...vp,
-      dx: vp.dx !== undefined ? Math.min(Math.max(vp.dx * 0.65, -14), 14) : 0,
-      dy: vp.dy !== undefined ? Math.round(vp.dy * 0.65 * 10) / 10 : 0,
-    })),
+    cx,
+    cy,
+    bodyW,
+    bodyH,
+    boxW,
+    boxH,
+    totalH,
+    capImgW,
+    capImgH,
+    pipetteGapPx,
+    xoayDeg,
+    mo,
+    an,
+    hop: [cx - boxW / 2, cy - boxH / 2, cx + boxW / 2, cy + boxH / 2],
   };
 }

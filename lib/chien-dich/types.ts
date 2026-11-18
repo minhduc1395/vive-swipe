@@ -6,35 +6,28 @@ export interface NutBam {
 }
 
 export interface VatPham3D {
-  id: string;
+  id: string; // vd: "ampoule", "srm", "kem"
   anh: string;
   nap_anh?: string;
   ten?: string;
-  dx?: number; // % lệch ngang so với tâm cụm
-  dy?: number; // % lệch dọc so với tâm cụm
-  ty_le?: number; // tỉ lệ kích thước so với co của cụm (mặc định 1)
-  ty_le_khung?: number; // height/width aspect ratio thực của ảnh
-  xoay?: number;
-  mo?: number;
-  an?: boolean;
-}
-
-export interface MocVatThe3D {
-  x: number; // % tâm ngang khung nhìn (0..100)
-  y: number; // % tâm dọc khung nhìn (0..100)
-  co: number; // % cạnh ngắn khung nhìn min(100vw, 100dvh)
-  xoay?: number;
-  mo?: number;
-  vat_pham?: VatPham3D[];
+  ty_le_khung?: number; // natural height/width aspect ratio
+  x: number; // 0..1 tâm ngang trong vùng vật thể V
+  y: number; // 0..1 tâm dọc trong vùng vật thể V
+  co: number; // chiều cao vật thể / chiều cao vùng V
+  xoay?: number; // độ (deg)
+  ry?: number; // radian
+  rz?: number; // radian
+  z?: number;
+  mo?: number; // 0..1 độ nhấc bóp/nắp
+  an?: number; // 0..1 độ ẩn mờ (1 = ẩn hoàn toàn)
 }
 
 export interface VatThe3D {
-  dien_thoai?: MocVatThe3D;
-  may_tinh_bang?: MocVatThe3D;
-  may_tinh: MocVatThe3D;
+  ngang: VatPham3D[];
+  doc?: VatPham3D[];
 }
 
-export type MocManHinh3D = "dien_thoai" | "may_tinh_bang" | "may_tinh";
+export type CheDoVung3D = "ngang" | "doc";
 
 export interface VideoMedia {
   mp4?: string;

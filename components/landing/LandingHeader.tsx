@@ -8,7 +8,9 @@ interface LandingHeaderProps {
   scrolled?: boolean;
 }
 
-export function LandingHeader({ scrolled: initialScrolled = false }: LandingHeaderProps) {
+export function LandingHeader({
+  scrolled: initialScrolled = false,
+}: LandingHeaderProps) {
   const [scrolled, setScrolled] = useState(initialScrolled);
   const [soMonGio, setSoMonGio] = useState(0);
 
@@ -34,58 +36,58 @@ export function LandingHeader({ scrolled: initialScrolled = false }: LandingHead
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 flex items-center gap-3 md:gap-5 px-4 md:px-8 py-3.5 ${
+      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 flex items-center gap-2 md:gap-5 px-3.5 md:px-10 py-2 md:py-3.5 ${
         scrolled
           ? "bg-white/85 backdrop-blur-md shadow-xs"
-          : "bg-transparent"
+          : "bg-white/75 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none"
       }`}
     >
       <Link
         href="/new-arrival"
-        className="flex items-center h-11 shrink-0"
+        className="flex items-center h-10 md:h-11 shrink-0"
         aria-label="VIVE New Arrival, về đầu trang"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/brand/vive-logo-chu.png"
           alt="VIVE"
-          className="h-7 w-auto object-contain"
+          className="w-[52px] md:w-[64px] h-auto object-contain block"
         />
       </Link>
 
-      {/* Nav desktop */}
+      {/* Điều hướng thống nhất trên bản mẫu (desktop + thanh gọn điện thoại theo tasks/W027) */}
       <nav
         aria-label="Điều hướng chính"
-        className="ml-auto hidden md:flex items-center gap-1.5 flex-wrap"
+        className="ml-auto flex items-center gap-0.5 md:gap-1.5 flex-wrap"
       >
         <Link
           href="/new-arrival"
-          className="h-10 px-3.5 rounded-full flex items-center text-[15px] font-bold bg-white text-den shadow-xs"
           aria-current="page"
+          className="h-10 px-2.5 md:px-3.5 rounded-full flex items-center text-[13px] md:text-[15px] font-bold text-den bg-transparent md:bg-white md:shadow-xs underline md:no-underline decoration-2 underline-offset-[6px] decoration-[#E8D2CC]"
         >
           New Arrival
         </Link>
         <Link
           href="/"
-          className="h-10 px-3.5 rounded-full flex items-center text-[15px] font-medium text-den hover:bg-white/60 transition-colors"
+          className="hidden md:flex h-11 px-3.5 rounded-full items-center text-[15px] font-medium text-den hover:bg-white/60 transition-colors"
         >
           Home
         </Link>
         <Link
           href="/quet"
-          className="h-10 px-3.5 rounded-full flex items-center text-[15px] font-medium text-den hover:bg-white/60 transition-colors"
+          className="hidden md:flex h-11 px-3.5 rounded-full items-center text-[15px] font-medium text-den hover:bg-white/60 transition-colors"
         >
           Quẹt
         </Link>
         <Link
           href="/danh-muc"
-          className="h-10 px-3.5 rounded-full flex items-center text-[15px] font-medium text-den hover:bg-white/60 transition-colors"
+          className="hidden md:flex h-11 px-3.5 rounded-full items-center text-[15px] font-medium text-den hover:bg-white/60 transition-colors"
         >
           Sản phẩm
         </Link>
         <Link
           href="/gio"
-          className="h-10 px-4 rounded-full flex items-center gap-1.5 text-[14px] font-semibold text-den border border-den/20 hover:bg-white transition-colors"
+          className="hidden md:flex h-11 px-4 rounded-full items-center gap-1.5 text-[14px] font-semibold text-den border border-den/20 hover:bg-white transition-colors"
         >
           <svg
             width="16"
@@ -105,42 +107,11 @@ export function LandingHeader({ scrolled: initialScrolled = false }: LandingHead
         </Link>
         <Link
           href="/dang-nhap"
-          className="h-10 px-5 rounded-full bg-den text-white flex items-center text-[14px] font-semibold hover:bg-black transition-colors"
+          className="relative h-8 md:h-11 px-3 md:px-5 ml-1 rounded-full bg-transparent md:bg-den text-den md:text-white border border-den/25 md:border-transparent flex items-center text-[13px] md:text-[14px] font-semibold hover:opacity-90 transition-colors after:content-[''] after:absolute after:-inset-y-[6px] after:-inset-x-[2px] md:after:hidden"
         >
           Đăng nhập
         </Link>
       </nav>
-
-      {/* Nav mobile */}
-      <div className="ml-auto flex md:hidden items-center gap-2">
-        <Link
-          href="/gio"
-          className="min-h-[44px] h-11 px-3.5 rounded-full flex items-center gap-1 text-[13px] font-semibold text-den bg-white shadow-xs border border-den/10"
-          aria-label={`Giỏ hàng, ${soMonGio} món`}
-        >
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-            <line x1="3" y1="6" x2="21" y2="6" />
-            <path d="M16 10a4 4 0 0 1-8 0" />
-          </svg>
-          {soMonGio > 0 && <span>{soMonGio}</span>}
-        </Link>
-        <Link
-          href="/dang-nhap"
-          className="min-h-[44px] h-11 px-4 rounded-full bg-den text-white flex items-center text-[13px] font-semibold"
-        >
-          Đăng nhập
-        </Link>
-      </div>
     </header>
   );
 }

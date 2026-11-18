@@ -42,17 +42,17 @@ export function KhoiDoiTac({ khoi }: KhoiDoiTacProps) {
       ref={sectionRef}
       id="personal-color"
       aria-label="Đối tác Pawlette"
-      className="relative z-10 bg-white py-20 sm:py-24 px-5 sm:px-8 md:px-16"
+      className="relative z-10 bg-white overflow-x-clip py-20 sm:py-24 px-5 sm:px-8 md:px-16"
     >
-      <div className="max-w-[1360px] mx-auto flex flex-col md:flex-row items-center justify-between gap-12 md:gap-16">
+      <div className="max-w-[1360px] mx-auto flex flex-col md:flex-row items-center justify-between gap-8 md:gap-16">
         {/* Animated 4 Seasonal Color Fan */}
         <div
           aria-hidden="true"
-          className="relative w-[300px] sm:w-[360px] h-[340px] shrink-0"
+          className="relative w-[300px] md:w-[340px] max-w-full h-[270px] md:h-[300px] mx-auto md:mx-0 shrink-0"
         >
           {/* Fan Blade 1: Xuân ấm */}
           <div
-            className="absolute left-1/2 bottom-8 w-[120px] h-[240px] -ml-[60px] rounded-[22px] bg-white shadow-[0_16px_34px_rgba(43,43,42,0.14)] p-3 flex flex-col gap-2 origin-[50%_110%] transition-transform duration-700 ease-out"
+            className="absolute left-1/2 bottom-8 w-[120px] h-[240px] -ml-[60px] rounded-[22px] bg-white shadow-[0_16px_34px_rgba(43,43,42,0.14)] p-3 flex flex-col gap-2 origin-[50%_110%] transition-transform duration-700 ease-out motion-reduce:transition-none"
             style={{
               transform: inView ? "rotate(-36deg)" : "rotate(0deg)",
             }}

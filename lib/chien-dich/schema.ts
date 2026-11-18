@@ -10,28 +10,21 @@ export const VatPham3DSchema = z.object({
   anh: z.string().min(1),
   nap_anh: z.string().min(1).optional(),
   ten: z.string().optional(),
-  dx: z.number().default(0).optional(),
-  dy: z.number().default(0).optional(),
-  ty_le: z.number().positive().default(1).optional(),
   ty_le_khung: z.number().positive().default(2.5).optional(),
-  xoay: z.number().default(0).optional(),
+  x: z.number().min(0).max(1),
+  y: z.number().min(0).max(1),
+  co: z.number().min(0).max(1.5),
+  xoay: z.number().optional(),
+  ry: z.number().optional(),
+  rz: z.number().optional(),
+  z: z.number().optional(),
   mo: z.number().min(0).max(1).optional(),
-  an: z.boolean().optional(),
-});
-
-export const MocVatThe3DSchema = z.object({
-  x: z.number(),
-  y: z.number(),
-  co: z.number().min(0).max(100),
-  xoay: z.number().default(0).optional(),
-  mo: z.number().min(0).max(1).optional(),
-  vat_pham: z.array(VatPham3DSchema).optional(),
+  an: z.number().min(0).max(1).optional(),
 });
 
 export const VatThe3DSchema = z.object({
-  dien_thoai: MocVatThe3DSchema.optional(),
-  may_tinh_bang: MocVatThe3DSchema.optional(),
-  may_tinh: MocVatThe3DSchema,
+  ngang: z.array(VatPham3DSchema).min(1),
+  doc: z.array(VatPham3DSchema).min(1).optional(),
 });
 
 export const VideoMediaSchema = z

@@ -1,12 +1,8 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { layMocVatTheTheoManHinh } from "@/lib/chien-dich/vat-the";
-import type {
-  MocManHinh3D,
-  VatPham3D,
-  VatThe3D,
-} from "@/lib/chien-dich/types";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { datVaoVung, layVatTheTheoCheDo, type KetQuaDatVung, type VungVatThe } from "@/lib/chien-dich/vat-the";
+import type { CheDoVung3D, VatPham3D, VatThe3D } from "@/lib/chien-dich/types";
 
 export interface CanhStage3D {
   mauNen?: string;
@@ -15,8 +11,34 @@ export interface CanhStage3D {
 
 interface LandingStage3DProps {
   cacCanh: CanhStage3D[];
-  stageProgress: number; // continuous float 0..(cacCanh.length - 1)
-  stageFade?: number; // 0..1 overall opacity multiplier when scrolled to lower sections
+}
+
+interface BoCucVungRender {
+  cheDo: CheDoVung3D;
+  vw: number;
+  vh: number;
+  vuot: number;
+  hienKhung: boolean;
+  vung: VungVatThe;
+  stageIdx: number;
+  items: Array<{
+    item: VatPham3D;
+    dat: KetQuaDatVung;
+  }>;
+}
+
+declare global {
+  interface Window {
+    __viveBo?: {
+      V: VungVatThe;
+      cheDo: CheDoVung3D;
+      [key: string]:
+        | VungVatThe
+        | CheDoVung3D
+        | { hop: [number, number, number, number]; an: number }
+        | undefined;
+    };
+  }
 }
 
 function clamp(v: number, min: number, max: number): number {
@@ -32,373 +54,462 @@ function smoothstep(t: number): number {
   return c * c * (3 - 2 * c);
 }
 
-function layMocManHinh(width: number): MocManHinh3D {
-  if (width < 768) return "dien_thoai";
-  if (width < 1024) return "may_tinh_bang";
-  return "may_tinh";
+function khoaTenKhoi(id: string): string {
+  if (id === "ampoule" || id === "A") return "A";
+  if (id === "srm" || id === "S") return "S";
+  if (id === "kem" || id === "K") return "K";
+  return id;
 }
 
-export function LandingStage3D({
-  cacCanh,
-  stageProgress,
-  stageFade = 1,
-}: LandingStage3DProps) {
+export function LandingStage3D({ cacCanh }: LandingStage3DProps) {
   const [mounted, setMounted] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [reducedMotion, setReducedMotion] = useState(false);
   const [isTouch, setIsTouch] = useState(false);
-  const [viewport, setViewport] = useState({ width: 390, height: 844 });
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [renderState, setRenderState] = useState<BoCucVungRender | null>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+
+  const tinhBoCuc = useCallback(() => {
+    if (typeof window === "undefined" || cacCanh.length === 0) return;
+
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const cheDo: CheDoVung3D =
+      vw < 760 || (vw < 1024 && vh >= vw) ? "doc" : "ngang";
+
+    const headerEl = document.querySelector<HTMLElement>("header, [role='banner']");
+    const headerBottom = headerEl ? headerEl.getBoundingClientRect().bottom : 56;
+    const tabletRail = document.querySelector<HTMLElement>(
+      'nav[aria-label="Điều hướng máy tính bảng"]'
+    );
+    const railRight =
+      tabletRail && getComputedStyle(tabletRail).display !== "none"
+        ? tabletRail.getBoundingClientRect().right
+        : 0;
+    const bottomNav = Array.from(document.querySelectorAll<HTMLElement>("nav")).find(
+      (n) => {
+        const r = n.getBoundingClientRect();
+        return getComputedStyle(n).display !== "none" && r.top > vh * 0.5 && r.height > 20;
+      }
+    );
+    const tabTop = bottomNav ? bottomNav.getBoundingClientRect().top : vh;
+    const xMin = Math.max(16, railRight + 16);
+
+    const sections = Array.from(
+      document.querySelectorAll<HTMLElement>("section[data-k]")
+    );
+
+    const tinhVungChoKhoi = (k: number): VungVatThe => {
+      const sec = sections[k];
+      if (!sec) {
+        return {
+          x0: xMin,
+          x1: vw - 16,
+          y0: Math.max(16, headerBottom + 8),
+          y1: Math.max(120, vh * 0.44),
+        };
+      }
+      const tren = Math.max(16, headerBottom + 8);
+      if (cheDo === "doc") {
+        const padTop =
+          parseFloat(getComputedStyle(sec).paddingTop) ||
+          (vw >= 760 ? vh * 0.56 : vh * 0.46);
+        const yMax = Math.min(tabTop - 8, Math.max(tren + 80, padTop - 8));
+        return { x0: xMin, x1: vw - 16, y0: tren, y1: yMax };
+      }
+
+      const cot = sec.querySelector<HTMLElement>(".cot");
+      const r = cot?.getBoundingClientRect();
+      const duoi = vh - 56;
+      if (sec.classList.contains("phai") && r) {
+        return {
+          x0: xMin,
+          x1: Math.max(xMin + 80, r.left - 32),
+          y0: tren,
+          y1: Math.max(tren + 80, duoi),
+        };
+      }
+      if (r) {
+        return {
+          x0: Math.max(xMin, r.right + 32),
+          x1: vw - 16,
+          y0: tren,
+          y1: Math.max(tren + 80, duoi),
+        };
+      }
+      return {
+        x0: vw * 0.5,
+        x1: vw - 16,
+        y0: tren,
+        y1: Math.max(tren + 80, duoi),
+      };
+    };
+
+    // Theo dõi tiến trình cuộn giống design/landing-3d/index.html
+    const giua = vh * 0.5;
+    let k = 0;
+    let f = 0;
+    for (let i = 0; i < sections.length; i++) {
+      const r = sections[i].getBoundingClientRect();
+      if (r.top <= giua) {
+        k = i;
+        f = clamp((giua - r.top) / Math.max(1, r.height), 0, 1);
+      }
+    }
+
+    const mqReduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const nextIdx = Math.min(k + 1, Math.max(0, cacCanh.length - 1));
+    const rawT = clamp((f - 0.52) / 0.48, 0, 1);
+    const t = mqReduce ? (rawT >= 0.5 ? 1 : 0) : smoothstep(rawT);
+
+    const kClamp = Math.min(k, cacCanh.length - 1);
+    const VA = tinhVungChoKhoi(kClamp);
+    const VB = tinhVungChoKhoi(nextIdx);
+    const VActive = t > 0.5 ? VB : VA;
+
+    const listA = layVatTheTheoCheDo(cacCanh[kClamp].vatThe, cheDo);
+    const listB = layVatTheTheoCheDo(cacCanh[nextIdx].vatThe, cheDo);
+
+    const day3 =
+      sections[sections.length - 1]?.getBoundingClientRect().bottom ?? vh * 3;
+    const vuot = Math.max(0, vh - day3);
+    const hienKhung = new URLSearchParams(window.location.search).has("khung");
+
+    const renderedItems: BoCucVungRender["items"] = [];
+    const ids: string[] = [];
+    for (const obj of listA) if (!ids.includes(obj.id)) ids.push(obj.id);
+    for (const obj of listB) if (!ids.includes(obj.id)) ids.push(obj.id);
+
+    const viveBoObj: NonNullable<Window["__viveBo"]> = {
+      V: { ...VActive },
+      cheDo,
+    };
+
+    for (const id of ids) {
+      const a = listA.find((x) => x.id === id) ?? listB.find((x) => x.id === id);
+      const b = listB.find((x) => x.id === id) ?? a;
+      if (!a || !b) continue;
+
+      const datA = datVaoVung(a, VA, cheDo);
+      const datB = datVaoVung(b, VB, cheDo);
+
+      const cx = lerp(datA.cx, datB.cx, t);
+      const cy = lerp(datA.cy, datB.cy, t);
+      const bodyW = lerp(datA.bodyW, datB.bodyW, t);
+      const bodyH = lerp(datA.bodyH, datB.bodyH, t);
+      const boxW = lerp(datA.boxW, datB.boxW, t);
+      const boxH = lerp(datA.boxH, datB.boxH, t);
+      const totalH = lerp(datA.totalH, datB.totalH, t);
+      const capImgW = lerp(datA.capImgW, datB.capImgW, t);
+      const capImgH = lerp(datA.capImgH, datB.capImgH, t);
+      const pipetteGapPx = lerp(datA.pipetteGapPx, datB.pipetteGapPx, t);
+      const xoayDeg = lerp(datA.xoayDeg, datB.xoayDeg, t);
+      const mo = lerp(datA.mo, datB.mo, t);
+      const an = lerp(datA.an, datB.an, t);
+
+      const hop: [number, number, number, number] = [
+        cx - boxW / 2,
+        cy - boxH / 2 - vuot,
+        cx + boxW / 2,
+        cy + boxH / 2 - vuot,
+      ];
+
+      const key = khoaTenKhoi(id);
+      viveBoObj[key] = { hop, an };
+
+      renderedItems.push({
+        item: a,
+        dat: {
+          cx,
+          cy,
+          bodyW,
+          bodyH,
+          boxW,
+          boxH,
+          totalH,
+          capImgW,
+          capImgH,
+          pipetteGapPx,
+          xoayDeg,
+          mo,
+          an,
+          hop,
+        },
+      });
+    }
+
+    window.__viveBo = viveBoObj;
+
+    setRenderState({
+      cheDo,
+      vw,
+      vh,
+      vuot,
+      hienKhung,
+      vung: VActive,
+      stageIdx: t > 0.5 ? nextIdx : kClamp,
+      items: renderedItems,
+    });
+  }, [cacCanh]);
 
   useLayoutEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setViewport({ width: window.innerWidth, height: window.innerHeight });
     setMounted(true);
-  }, []);
+    tinhBoCuc();
+  }, [tinhBoCuc]);
 
   useEffect(() => {
     const mqMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const mqTouch = window.matchMedia("(hover: none)");
 
-    const syncPreferences = () => {
+    const syncPrefs = () => {
       setReducedMotion(mqMotion.matches);
       setIsTouch(mqTouch.matches);
+      tinhBoCuc();
     };
-    syncPreferences();
+    syncPrefs();
+    mqMotion.addEventListener("change", syncPrefs);
+    mqTouch.addEventListener("change", syncPrefs);
 
-    mqMotion.addEventListener("change", syncPreferences);
-    mqTouch.addEventListener("change", syncPreferences);
+    let rafId = 0;
+    const onScroll = () => {
+      if (!rafId) {
+        rafId = window.requestAnimationFrame(() => {
+          rafId = 0;
+          tinhBoCuc();
+        });
+      }
+    };
 
     let resizeTimer: ReturnType<typeof setTimeout> | null = null;
-    const updateSize = () => {
-      setViewport({ width: window.innerWidth, height: window.innerHeight });
-    };
-    const handleResizeDebounced = () => {
+    const onResize = () => {
       if (resizeTimer) clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(updateSize, 100);
+      resizeTimer = setTimeout(() => {
+        tinhBoCuc();
+      }, 100);
     };
 
-    updateSize();
-    window.addEventListener("resize", handleResizeDebounced, { passive: true });
-    window.addEventListener("orientationchange", handleResizeDebounced, {
-      passive: true,
-    });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize, { passive: true });
+    window.addEventListener("orientationchange", onResize, { passive: true });
 
     return () => {
-      mqMotion.removeEventListener("change", syncPreferences);
-      mqTouch.removeEventListener("change", syncPreferences);
-      window.removeEventListener("resize", handleResizeDebounced);
-      window.removeEventListener("orientationchange", handleResizeDebounced);
+      mqMotion.removeEventListener("change", syncPrefs);
+      mqTouch.removeEventListener("change", syncPrefs);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("orientationchange", onResize);
+      if (rafId) window.cancelAnimationFrame(rafId);
       if (resizeTimer) clearTimeout(resizeTimer);
     };
-  }, []);
+  }, [tinhBoCuc]);
 
   useEffect(() => {
     if (reducedMotion || isTouch) return;
-
-    function handlePointerMove(e: PointerEvent) {
+    function onPointerMove(e: PointerEvent) {
       if (e.pointerType === "touch") return;
       const x = (e.clientX / window.innerWidth) * 2 - 1;
       const y = (e.clientY / window.innerHeight) * 2 - 1;
       setMousePos({ x, y });
     }
-
-    window.addEventListener("pointermove", handlePointerMove, { passive: true });
-    return () => window.removeEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
+    return () => window.removeEventListener("pointermove", onPointerMove);
   }, [reducedMotion, isTouch]);
 
-  const moc = layMocManHinh(viewport.width);
-
-  // Giải quyết tọa độ % theo mốc hiện tại cho từng cảnh
-  const danhSachCanhTheoMoc = useMemo(() => {
-    return cacCanh.map((c) => layMocVatTheTheoManHinh(c.vatThe, moc));
-  }, [cacCanh, moc]);
-
-  // Tập các object id duy nhất xuất hiện ở các cảnh
-  const objectIds = useMemo(() => {
-    const ids: string[] = [];
-    for (const m of danhSachCanhTheoMoc) {
-      for (const vp of m.vat_pham ?? []) {
-        if (!ids.includes(vp.id)) ids.push(vp.id);
-      }
-    }
-    return ids;
-  }, [danhSachCanhTheoMoc]);
-
-  if (danhSachCanhTheoMoc.length === 0 || objectIds.length === 0) {
-    return null;
-  }
-
-  const maxStage = Math.max(0, danhSachCanhTheoMoc.length - 1);
-  const clampedStage = clamp(stageProgress, 0, maxStage);
-  const idxA = Math.floor(clampedStage);
-  const idxB = Math.min(maxStage, idxA + 1);
-  const localT = reducedMotion
-    ? clampedStage - idxA >= 0.5
-      ? 1
-      : 0
-    : smoothstep(clampedStage - idxA);
-
-  const vw = viewport.width;
-  const vh = viewport.height;
-  const shortEdge = Math.min(vw, vh);
-  const isMobile = vw < 768;
-  const isTablet = vw >= 768 && vw < 1024;
-  const nearestIdx = Math.round(clampedStage);
-
-  const mocA = danhSachCanhTheoMoc[idxA];
-  const mocB = danhSachCanhTheoMoc[idxB];
-
-  const clusterX = lerp(mocA.x, mocB.x, localT);
-  const clusterY = lerp(mocA.y, mocB.y, localT);
-  const clusterCo = lerp(mocA.co, mocB.co, localT);
-  const clusterXoay = lerp(mocA.xoay ?? 0, mocB.xoay ?? 0, localT);
-  const clusterMo = lerp(mocA.mo ?? 0, mocB.mo ?? 0, localT);
-
-  // Khung an toàn tránh mép 16px, thanh tab dưới điện thoại, rail trái tablet và tiêu đề khối
-  let safeLeft = isTablet ? 120 : 16;
-  let safeRight = vw - 16;
-  const safeTop = isMobile ? 64 : 80;
-  let safeBottom = isMobile || isTablet ? Math.min(vh - 96, vh * 0.43) : vh - 16;
-
-  if (!isMobile && !isTablet) {
-    // Máy tính (>= 1024px): mỗi khối có vùng an toàn tách biệt hoàn toàn khỏi cột tiêu đề
-    if (nearestIdx === 0) {
-      safeLeft = Math.max(vw * 0.52, 540);
-    } else if (nearestIdx === 1) {
-      safeRight = Math.min(vw * 0.46, vw - 540);
-    } else {
-      safeLeft = Math.max(vw * 0.52, 540);
-      safeBottom = Math.min(vh * 0.40, vh - 16);
-    }
-  }
-
-  // Dự phòng khoảng trôi nhẹ ±4px trên cảm ứng để luôn nằm trong khung an toàn
-  const floatPad = isTouch && !reducedMotion ? 5 : 0;
-  const clampedSafeTop = safeTop + floatPad;
-  const clampedSafeBottom = Math.max(clampedSafeTop + 60, safeBottom - floatPad);
+  const cheDo = renderState?.cheDo ?? "doc";
+  const stageIdx = renderState?.stageIdx ?? 0;
+  const vuot = renderState?.vuot ?? 0;
+  const vh = renderState?.vh ?? 800;
+  const vw = renderState?.vw ?? 390;
+  const hiddenPastShelf = vuot > vh * 1.2;
 
   const tiltX = reducedMotion || isTouch ? 0 : -mousePos.y * 5;
   const tiltY = reducedMotion || isTouch ? 0 : mousePos.x * 8;
 
   return (
-    <div
-      ref={containerRef}
-      aria-hidden="true"
-      data-stage={nearestIdx}
-      data-stage-settled={Math.abs(clampedStage - nearestIdx) < 0.12 ? "true" : "false"}
-      data-viewport={`${vw}x${vh}`}
-      data-moc={moc}
-      data-hydrated={mounted ? "true" : "false"}
-      data-reduced-motion={reducedMotion ? "true" : "false"}
-      data-touch={isTouch ? "true" : "false"}
-      className="pointer-events-none fixed inset-0 z-0 overflow-hidden select-none"
-      style={{
-        perspective: !reducedMotion && !isTouch ? "1200px" : undefined,
-        opacity: mounted ? clamp(stageFade, 0, 1) : 0,
-      }}
-    >
-      {/* Quầng sáng nền chỉ bật từ md trở lên để tối ưu GPU điện thoại */}
+    <>
       <div
-        className="hidden md:block absolute right-[-10%] top-[-10%] w-[760px] h-[760px] rounded-full blur-3xl opacity-60"
+        id="canh"
+        ref={stageRef}
+        aria-hidden="true"
+        data-stage={stageIdx}
+        data-che-do={cheDo}
+        data-viewport={`${vw}x${vh}`}
+        data-hydrated={mounted ? "true" : "false"}
+        data-reduced-motion={reducedMotion ? "true" : "false"}
         style={{
-          background:
-            nearestIdx === 1
-              ? "radial-gradient(circle, rgba(207,227,213,0.85) 0%, rgba(234,243,237,0.4) 50%, rgba(255,255,255,0) 75%)"
-              : "radial-gradient(circle, rgba(232,210,204,0.85) 0%, rgba(247,238,235,0.4) 50%, rgba(255,255,255,0) 75%)",
+          position: "fixed",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          display: "block",
+          zIndex: 1,
+          pointerEvents: "none",
+          overflow: "hidden",
+          visibility: hiddenPastShelf ? "hidden" : "visible",
+          opacity: mounted ? 1 : 0,
+          perspective: !reducedMotion && !isTouch ? "1200px" : undefined,
+          transition: "none",
         }}
-      />
-      <div
-        className="hidden md:block absolute left-[20%] bottom-[5%] w-[560px] h-[560px] rounded-full blur-3xl opacity-50"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(207,227,213,0.7) 0%, rgba(255,255,255,0) 70%)",
-        }}
-      />
-
-      <style>{`
-        @keyframes vq-float-touch {
-          0%, 100% { transform: translate3d(0, -4px, 0); }
-          50% { transform: translate3d(0, 4px, 0); }
-        }
-      `}</style>
-
-      {/* Khung 3D sản phẩm */}
-      <div
-        className="relative w-full h-full"
-        style={
-          !reducedMotion && !isTouch
-            ? {
-                transform: `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`,
-                transformStyle: "preserve-3d",
-              }
-            : undefined
-        }
       >
-        {objectIds.map((id) => {
-          const itemA: VatPham3D | undefined = mocA.vat_pham?.find((v) => v.id === id);
-          const itemB: VatPham3D | undefined = mocB.vat_pham?.find((v) => v.id === id);
-          const refItem = itemA ?? itemB;
-          if (!refItem) return null;
+        {/* Quầng sáng nền chỉ hiện trên màn vừa/lớn để tối ưu điện thoại */}
+        <div
+          className="hidden md:block absolute right-[-10%] top-[-10%] w-[760px] h-[760px] rounded-full blur-3xl opacity-60"
+          style={{
+            background:
+              stageIdx === 1
+                ? "radial-gradient(circle, rgba(207,227,213,0.85) 0%, rgba(234,243,237,0.4) 50%, rgba(255,255,255,0) 75%)"
+                : "radial-gradient(circle, rgba(232,210,204,0.85) 0%, rgba(247,238,235,0.4) 50%, rgba(255,255,255,0) 75%)",
+          }}
+        />
 
-          const baseA = itemA ?? { ...refItem, an: true };
-          const baseB = itemB ?? { ...refItem, an: true };
+        <style>{`
+          @keyframes vq-float-touch {
+            0%, 100% { transform: translate3d(0, -3px, 0); }
+            50% { transform: translate3d(0, 3px, 0); }
+          }
+        `}</style>
 
-          // Ẩn mượt khi mục đặt an: true (ví dụ hai ống bên ở cảnh 1 tiêu điểm)
-          const visA = baseA.an ? 0 : 1;
-          const visB = baseB.an ? 0 : 1;
-          const opacity = clamp(lerp(visA, visB, localT), 0, 1);
+        <div
+          className="relative w-full h-full"
+          style={{
+            transform: `${
+              !reducedMotion && !isTouch
+                ? `rotateX(${tiltX}deg) rotateY(${tiltY}deg) `
+                : ""
+            }translateY(${(-vuot).toFixed(1)}px)`,
+            transformStyle: !reducedMotion && !isTouch ? "preserve-3d" : undefined,
+          }}
+        >
+          {renderState?.items.map(({ item, dat }) => {
+            const opacity = clamp(1 - dat.an, 0, 1);
+            const showDroplet = cheDo === "ngang" && dat.mo > 0.9;
 
-          const dx = lerp(baseA.dx ?? 0, baseB.dx ?? 0, localT);
-          const dy = lerp(baseA.dy ?? 0, baseB.dy ?? 0, localT);
-          const tyLe = lerp(baseA.ty_le ?? 1, baseB.ty_le ?? 1, localT);
-          const xoay = clusterXoay + lerp(baseA.xoay ?? 0, baseB.xoay ?? 0, localT);
-          const mo = clamp(lerp(baseA.mo ?? clusterMo, baseB.mo ?? clusterMo, localT), 0, 1);
-          const aspect = refItem.ty_le_khung ?? 2.5; // height / width
-
-          // Kích thước cơ sở tính theo % cạnh ngắn khung nhìn min(vw, vh)
-          const rawBodyH = Math.max(40, (clusterCo / 100) * shortEdge * tyLe);
-          const rawBodyW = rawBodyH / aspect;
-
-          // Nếu có nắp/bóp rời: chiều cao nắp ~0.38 * bodyW; độ nhấc tối đa 12% chiều cao vật thể
-          const capRatio = refItem.nap_anh ? 0.38 / aspect : 0;
-          const maxLiftRatio = refItem.nap_anh ? 0.12 : 0;
-          const liftFraction = mo * maxLiftRatio;
-
-          const rad = Math.abs((xoay * Math.PI) / 180);
-          const rawTotalH = rawBodyH * (1 + capRatio + liftFraction);
-          const rawTotalW = rawBodyW;
-          const rotW = rawTotalW * Math.cos(rad) + rawTotalH * Math.sin(rad);
-          const rotH = rawTotalH * Math.cos(rad) + rawTotalW * Math.sin(rad);
-
-          const availW = Math.max(48, safeRight - safeLeft);
-          const availH = Math.max(48, clampedSafeBottom - clampedSafeTop);
-          const shrink = Math.min(1, availW / rotW, availH / rotH);
-
-          const bodyH = rawBodyH * shrink;
-          const bodyW = rawBodyW * shrink;
-          const boxW = rotW * shrink;
-          const boxH = rotH * shrink;
-
-          // Tọa độ tâm % khung nhìn (trên điện thoại lệch ngang giữ trong 50% ± 15%)
-          const rawPctX = isMobile ? clamp(clusterX + dx, 35, 65) : clusterX + dx;
-          const rawPctY = clusterY + dy;
-
-          const rawCx = (rawPctX / 100) * vw;
-          const rawCy = (rawPctY / 100) * vh;
-
-          // Kẹp hộp bao (cả thân + nắp) vào vùng an toàn
-          const clampedCx = clamp(rawCx, safeLeft + boxW / 2, safeRight - boxW / 2);
-          const clampedCy = clamp(
-            rawCy,
-            clampedSafeTop + boxH / 2,
-            clampedSafeBottom - boxH / 2
-          );
-
-          const totalItemH = bodyH * (1 + capRatio + liftFraction);
-          const capImgW = bodyW * 0.42;
-          const capImgH = capImgW * 0.85;
-          const pipetteGapPx = bodyH * liftFraction;
-
-          return (
-            <div
-              key={id}
-              data-object-id={id}
-              data-visible={opacity > 0.05 ? "true" : "false"}
-              className="absolute left-0 top-0"
-              style={{
-                width: `${bodyW.toFixed(1)}px`,
-                height: `${totalItemH.toFixed(1)}px`,
-                opacity,
-                transition: "none",
-                transform: `translate(${(clampedCx - bodyW / 2).toFixed(1)}px, ${(
-                  clampedCy -
-                  totalItemH / 2
-                ).toFixed(1)}px) rotate(${xoay.toFixed(1)}deg)`,
-                filter: isMobile
-                  ? "drop-shadow(0 12px 16px rgba(43,43,42,0.14))"
-                  : "drop-shadow(0 24px 30px rgba(43,43,42,0.18))",
-              }}
-            >
+            return (
               <div
-                className="w-full h-full flex flex-col items-center justify-end"
+                key={item.id}
+                data-object-id={item.id}
+                data-visible={dat.an <= 0.5 ? "true" : "false"}
+                className="absolute left-0 top-0"
                 style={{
-                  animation:
-                    isTouch && !reducedMotion
-                      ? "vq-float-touch 4.2s ease-in-out infinite"
-                      : undefined,
+                  width: `${dat.bodyW.toFixed(1)}px`,
+                  height: `${dat.totalH.toFixed(1)}px`,
+                  opacity,
+                  transition: "none",
+                  transform: `translate(${(dat.cx - dat.bodyW / 2).toFixed(1)}px, ${(
+                    dat.cy -
+                    dat.totalH / 2
+                  ).toFixed(1)}px) rotate(${dat.xoayDeg.toFixed(1)}deg)`,
+                  filter:
+                    cheDo === "doc"
+                      ? "drop-shadow(0 12px 16px rgba(43,43,42,0.14))"
+                      : "drop-shadow(0 24px 30px rgba(43,43,42,0.18))",
                 }}
               >
-                {refItem.nap_anh ? (
-                  <>
-                    <div
-                      className="flex flex-col items-center shrink-0"
-                      style={{
-                        transform: `translateY(${(-mo * 2).toFixed(1)}px) rotate(${(
-                          -mo * 4
-                        ).toFixed(1)}deg)`,
-                      }}
-                    >
+                <div
+                  className="w-full h-full flex flex-col items-center justify-end"
+                  style={{
+                    animation:
+                      isTouch && !reducedMotion
+                        ? "vq-float-touch 4.2s ease-in-out infinite"
+                        : undefined,
+                  }}
+                >
+                  {item.nap_anh ? (
+                    <>
+                      <div
+                        className="flex flex-col items-center shrink-0"
+                        style={{
+                          transform: `translateY(${(-dat.mo * 2).toFixed(
+                            1
+                          )}px) rotate(${(-dat.mo * (cheDo === "doc" ? 3 : 6)).toFixed(
+                            1
+                          )}deg)`,
+                        }}
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={item.nap_anh}
+                          srcSet={`${item.nap_anh} 600w, ${item.nap_anh} 1200w`}
+                          sizes="(max-width: 759px) 90px, 140px"
+                          alt=""
+                          data-part="nap"
+                          style={{
+                            width: `${dat.capImgW.toFixed(1)}px`,
+                            height: `${dat.capImgH.toFixed(1)}px`,
+                          }}
+                          className="object-contain select-none z-10"
+                          loading="eager"
+                        />
+                        {dat.pipetteGapPx > 1 && (
+                          <div
+                            className="w-[6px] md:w-[8px] rounded-b-full bg-linear-to-b from-blue-200/80 to-blue-300/40 border border-white/60 overflow-hidden"
+                            style={{
+                              height: `${dat.pipetteGapPx.toFixed(1)}px`,
+                              opacity: clamp(dat.mo * 1.15, 0, 0.92),
+                            }}
+                          >
+                            {showDroplet && (
+                              <div className="w-3 h-3 rounded-full bg-blue-400/90 shadow-xs mx-auto mt-auto mb-1" />
+                            )}
+                          </div>
+                        )}
+                      </div>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
-                        src={refItem.nap_anh}
-                        srcSet={`${refItem.nap_anh} 600w, ${refItem.nap_anh} 1200w`}
-                        sizes="(max-width: 767px) 90px, 140px"
-                        alt=""
-                        data-part="nap"
+                        src={item.anh}
+                        srcSet={`${item.anh} 600w, ${item.anh} 1200w`}
+                        sizes="(max-width: 759px) 180px, 320px"
+                        alt={item.ten || item.id}
+                        data-part="than"
                         style={{
-                          width: `${capImgW.toFixed(1)}px`,
-                          height: `${capImgH.toFixed(1)}px`,
+                          width: `${dat.bodyW.toFixed(1)}px`,
+                          height: `${dat.bodyH.toFixed(1)}px`,
                         }}
-                        className="object-contain select-none z-10"
+                        className="object-contain select-none shrink-0"
                         loading="eager"
                       />
-                      {pipetteGapPx > 1 && (
-                        <div
-                          className="w-[6px] md:w-[8px] rounded-b-full bg-linear-to-b from-blue-200/80 to-blue-300/40 border border-white/60 overflow-hidden"
-                          style={{
-                            height: `${pipetteGapPx.toFixed(1)}px`,
-                            opacity: clamp(mo * 1.15, 0, 0.92),
-                          }}
-                        />
-                      )}
-                    </div>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    </>
+                  ) : (
+                    /* eslint-disable-next-line @next/next/no-img-element */
                     <img
-                      src={refItem.anh}
-                      srcSet={`${refItem.anh} 600w, ${refItem.anh} 1200w`}
-                      sizes="(max-width: 767px) 180px, 320px"
-                      alt={refItem.ten || id}
+                      src={item.anh}
+                      srcSet={`${item.anh} 600w, ${item.anh} 1200w`}
+                      sizes="(max-width: 759px) 180px, 320px"
+                      alt={item.ten || item.id}
                       data-part="than"
                       style={{
-                        width: `${bodyW.toFixed(1)}px`,
-                        height: `${bodyH.toFixed(1)}px`,
+                        width: `${dat.bodyW.toFixed(1)}px`,
+                        height: `${dat.bodyH.toFixed(1)}px`,
                       }}
                       className="object-contain select-none shrink-0"
                       loading="eager"
                     />
-                  </>
-                ) : (
-                  /* eslint-disable-next-line @next/next/no-img-element */
-                  <img
-                    src={refItem.anh}
-                    srcSet={`${refItem.anh} 600w, ${refItem.anh} 1200w`}
-                    sizes="(max-width: 767px) 180px, 320px"
-                    alt={refItem.ten || id}
-                    data-part="than"
-                    style={{
-                      width: `${bodyW.toFixed(1)}px`,
-                      height: `${bodyH.toFixed(1)}px`,
-                    }}
-                    className="object-contain select-none shrink-0"
-                    loading="eager"
-                  />
-                )}
+                  )}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
-    </div>
+
+      {/* ?khung=1: hiện khung vùng vật thể để đối chiếu giống bản mẫu */}
+      {renderState?.hienKhung && vuot === 0 && (
+        <div
+          id="khung-vung"
+          aria-hidden="true"
+          style={{
+            position: "fixed",
+            zIndex: 4,
+            pointerEvents: "none",
+            outline: "2px dashed #D9534F",
+            left: `${renderState.vung.x0}px`,
+            top: `${renderState.vung.y0}px`,
+            width: `${renderState.vung.x1 - renderState.vung.x0}px`,
+            height: `${renderState.vung.y1 - renderState.vung.y0}px`,
+          }}
+        />
+      )}
+    </>
   );
 }
