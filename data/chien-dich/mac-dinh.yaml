@@ -1,5 +1,6 @@
 ma: mac-dinh
 ten: VIVE New Arrival
+ten_en: VIVE New Arrival
 bat_dau: "2026-01-01"
 ket_thuc: "2026-12-31"
 uu_tien: 1
@@ -11,11 +12,13 @@ khoi:
   - loai: hero
     kieu: san-pham-3d
     nhan_tren: "MỚI TẠI VIVE · NỘI ĐỊA HÀN"
+    nhan_tren_en: "NEW AT VIVE · KOREAN EXCLUSIVE"
     tieu_de:
       - "K-BEAUTY"
       - "~New"
       - "Arrival"
     mo_ta: "Trải nghiệm mỹ phẩm nội địa Hàn Quốc thịnh hành nhất ngay tại Tầng LL2 Union Square."
+    mo_ta_en: "Experience trending Korean domestic cosmetics right at Level LL2 Union Square."
     san_pham:
       - "LOPOE-CF"
       - "LOPOE-AMP"
@@ -61,6 +64,7 @@ khoi:
   - loai: tieu-diem
     id: ampoule-mac-dinh
     nhan_phu: "AMPOULE · 50ML"
+    nhan_phu_en: "AMPOULE · 50ML"
     tieu_de:
       - "Better Balance"
       - "~Ampoule"
@@ -69,6 +73,7 @@ khoi:
     deal_id: "LOPOE-25"
     cta_chinh:
       chu: "Khám phá sản phẩm"
+      chu_en: "Discover products"
       den: "/danh-muc"
     anh:
       - "/chien-dich/lopoe-better-balance/ampoule-than.webp"
@@ -102,6 +107,7 @@ khoi:
           an: 1
   - loai: bang-chu
     chu: "K-BEAUTY EXPERIENCE · NỘI ĐỊA HÀN · MỚI TẠI VIVE · LL2 UNION SQUARE · "
+    chu_en: "K-BEAUTY EXPERIENCE · KOREAN EXCLUSIVE · NEW AT VIVE · LL2 UNION SQUARE · "
     mau_nen: "#CFE3D5"
   - loai: chuong-trinh
     tieu_de: "Đang có tại"
@@ -115,11 +121,16 @@ khoi:
   - loai: doi-tac
     doi_tac: "pawlette"
     tieu_de: "Tone bạn màu nào?"
+    tieu_de_en: "Which season is your skin tone?"
     mo_ta: "Đo personal color cùng Pawlette, rồi thử lớp nền đúng tone ngay tại booth."
+    mo_ta_en: "Personal color analysis with Pawlette, then test matching foundation right at the booth."
     gia_goi: 378000
     link: "/personal-color"
   - loai: booth
     tieu_de: "VIVE | K-Beauty Experience"
     dia_chi: "Tầng LL2 Union Square, 171 Đồng Khởi, Phường Sài Gòn"
+    dia_chi_en: "Level LL2 Union Square, 171 Dong Khoi, Ben Nghe Ward, District 1, HCMC"
     gio: "10:00 – 21:00"
+    gio_en: "10:00 AM – 9:00 PM"
     ngay_cuoi: "đến 29/11"
+    ngay_cuoi_en: "until Nov 29"

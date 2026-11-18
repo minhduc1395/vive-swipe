@@ -1,5 +1,6 @@
 ma: lopoe-better-balance
 ten: LOPOE Better Balance
+ten_en: LOPOE Better Balance
 bat_dau: "2026-11-14"
 ket_thuc: "2026-11-29"
 uu_tien: 10
@@ -11,11 +12,13 @@ khoi:
   - loai: hero
     kieu: san-pham-3d
     nhan_tren: "MỚI TẠI VIVE · NỘI ĐỊA HÀN"
+    nhan_tren_en: "NEW AT VIVE · KOREAN EXCLUSIVE"
     tieu_de:
       - "LOPOE"
       - "~Better"
       - "Balance"
     mo_ta: "Bộ ba sữa rửa mặt, ampoule, kem dưỡng. Mua kèm sản phẩm bất kỳ, LOPOE giảm 25%."
+    mo_ta_en: "Trio of cleansing foam, ampoule, and barrier cream. Get 25% off LOPOE when purchased with any item."
     san_pham:
       - "LOPOE-CF"
       - "LOPOE-AMP"
@@ -100,6 +103,7 @@ khoi:
   - loai: tieu-diem
     id: ampoule-better-balance
     nhan_phu: "AMPOULE · 50ML"
+    nhan_phu_en: "AMPOULE · 50ML"
     tieu_de:
       - "Better Balance"
       - "~Ampoule"
@@ -108,6 +112,7 @@ khoi:
     deal_id: "LOPOE-25"
     cta_chinh:
       chu: "Xem sản phẩm"
+      chu_en: "View product"
       den: "/danh-muc?thuong-hieu=LOPOE&sp=LOPOE-AMP"
     anh:
       - "/chien-dich/lopoe-better-balance/ampoule-than.webp"
@@ -281,12 +286,17 @@ khoi:
   - loai: doi-tac
     doi_tac: "pawlette"
     tieu_de: "Tone bạn màu nào?"
+    tieu_de_en: "Which season is your skin tone?"
     mo_ta: "Đo personal color cùng Pawlette, rồi thử lớp nền đúng tone ngay tại booth."
+    mo_ta_en: "Personal color analysis with Pawlette, then test matching foundation right at the booth."
     gia_goi: 378000
     link: "/personal-color"
 
   - loai: booth
     tieu_de: "VIVE | K-Beauty Experience"
     dia_chi: "Tầng LL2 Union Square, 171 Đồng Khởi, Phường Sài Gòn"
+    dia_chi_en: "Level LL2 Union Square, 171 Dong Khoi, Ben Nghe Ward, District 1, HCMC"
     gio: "10:00 – 21:00"
+    gio_en: "10:00 AM – 9:00 PM"
     ngay_cuoi: "đến 29/11"
+    ngay_cuoi_en: "until Nov 29"
