@@ -5,7 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { KhungDienThoai } from "@/components/KhungDienThoai";
 import { ThanhTab } from "@/components/ThanhTab";
 import { BangChiTiet } from "@/components/deck/BangChiTiet";
-import { SAN_PHAM, DEALS, laySanPhamHienThi } from "@/lib/data";
+import { laySanPhamHienThi } from "@/lib/data";
+import { useDuLieu } from "@/lib/du-lieu-context";
 import type { SanPham } from "@/lib/data/types";
 import { dinhDangTien, chuanHoaTimKiem } from "@/lib/dinh-dang";
 import { layGhiChuDeal } from "@/lib/deals/ghi-chu";
@@ -78,7 +79,8 @@ function DanhMucNoiDung() {
   }, [timUrl, loaiUrl, vanDeUrl, thuongHieuUrl, xepUrl]);
 
   // Tất cả sản phẩm hiển thị hợp lệ
-  const tatCaSanPhamHienThi = useMemo(() => laySanPhamHienThi(SAN_PHAM), []);
+  const { sanPham, deals } = useDuLieu();
+  const tatCaSanPhamHienThi = useMemo(() => laySanPhamHienThi(sanPham), [sanPham]);
 
   // Đếm số món trên từng loại sản phẩm
   const soLuongTheoLoai = useMemo(() => {
@@ -577,7 +579,7 @@ function DanhMucNoiDung() {
                       i % 4 === 0 || i % 4 === 3
                         ? "bg-[#F7EEEB]"
                         : "bg-[#EAF3ED]";
-                    const ghiChuDeal = layGhiChuDeal(sp, DEALS);
+                    const ghiChuDeal = layGhiChuDeal(sp, deals);
 
                     return (
                       <article
