@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Deal: dạng thẻ (máy tính) – bản mẫu W039</title>
+<title>Deal: dạng thẻ (mọi màn hình) – bản mẫu W039</title>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* Bản mẫu tĩnh cho W039. Mở thẳng bằng trình duyệt. Số liệu lấy từ data/deals.yaml. */
+/* Bản mẫu tĩnh cho W039, W040. Mở thẳng bằng trình duyệt; kéo hẹp cửa sổ để xem bản điện thoại (cùng 1 thẻ). Số liệu lấy từ data/deals.yaml.
+   Nút theo docs/05 §2.5: không nền đen, không viền. */
 :root{--hong:#E8D2CC;--hong-n:#F7EEEB;--bh:#CFE3D5;--bh-n:#EAF3ED;--den:#2B2B2A;--xam:#737373;--vien:#EEE5E2}
 *{box-sizing:border-box}body{margin:0;font-family:'Be Vietnam Pro',sans-serif;color:var(--den);background:#fff}
 .trang{max-width:1280px;margin:0 auto;padding:28px 32px 64px}
 .dau{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:18px}
 h1{font-size:28px;margin:0;letter-spacing:-.02em}.dau p{margin:4px 0 0;color:var(--xam);font-size:14px}
-.loc{display:flex;gap:8px;flex-wrap:wrap}.loc button{height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--vien);background:#fff;font:500 13px inherit;font-family:inherit;color:var(--den);cursor:pointer}
-.loc button.on{background:var(--den);color:#fff;border-color:var(--den)}
+.loc{display:flex;gap:8px;flex-wrap:wrap}.loc button{height:36px;padding:0 14px;border-radius:999px;border:0;background:#F4F2F1;font:500 13px inherit;font-family:inherit;color:var(--den);cursor:pointer}
+.loc button.on{background:var(--hong);font-weight:600}
 .luoi{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 @media (max-width:1279px){.luoi{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:767px){.luoi{grid-template-columns:1fr}.trang{padding:20px 16px 48px}.dau{flex-direction:column;align-items:flex-start}}
@@ -35,12 +36,17 @@ h1{font-size:28px;margin:0;letter-spacing:-.02em}.dau p{margin:4px 0 0;color:var
 .tk{font-size:12px;font-weight:600;color:#2F6B45;background:var(--bh-n);padding:3px 8px;border-radius:999px}
 .chan{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:8px}
 .chan a{font-size:13px;color:var(--xam);text-decoration:underline;text-underline-offset:3px}
-.nut{height:40px;padding:0 16px;border-radius:999px;border:0;background:var(--den);color:#fff;font:600 13px inherit;font-family:inherit;cursor:pointer}
-.nut.phu{background:#fff;color:var(--den);border:1px solid var(--vien)}
+.nut{height:40px;padding:0 16px;border-radius:999px;border:0;background:var(--hong);color:var(--den);font:600 13px inherit;font-family:inherit;cursor:pointer;transition:background .15s}
+.nut:hover{background:#DFC3BB}
+.nut.phu{background:var(--hong-n)}.nut.phu:hover{background:#F0E2DD}
+.combo .nut{background:var(--bh)}.combo .nut:hover{background:#BFD9C7}
+@media (max-width:767px){.nut{height:44px}.loc{flex-wrap:nowrap;overflow-x:auto;max-width:100%;scrollbar-width:none}.loc button{flex:none}}
+.nut{white-space:nowrap;flex:none}
 /* Ngăn kéo chi tiết bên phải (mở khi bấm thẻ) */
 .keo{visibility:hidden;position:fixed;top:0;right:0;bottom:0;width:420px;max-width:100%;background:#fff;box-shadow:-12px 0 40px rgba(0,0,0,.12);padding:24px;display:flex;flex-direction:column;gap:14px;transform:translateX(105%);transition:transform .25s}
-.keo.mo-ra{transform:none;visibility:visible}.keo h2{font-size:20px;margin:0}.keo .dong{display:flex;gap:12px;align-items:center;padding:10px;border:1px solid var(--vien);border-radius:14px;font-size:13px}.keo .dong b{display:block;font-size:14px}
-.keo .dong button{margin-left:auto}.dong-keo{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;border:1px solid var(--vien);background:#fff;cursor:pointer}
+.keo.mo-ra{transform:none;visibility:visible}
+@media (max-width:767px){.keo{top:auto;left:0;width:100%;max-height:85dvh;overflow:auto;border-radius:24px 24px 0 0;transform:translateY(105%)}.the{min-height:0}}.keo h2{font-size:20px;margin:0}.keo .dong{display:flex;gap:12px;align-items:center;padding:10px;border:1px solid var(--vien);border-radius:14px;font-size:13px}.keo .dong b{display:block;font-size:14px}
+.keo .dong button{margin-left:auto}.dong-keo{position:absolute;top:16px;right:16px;width:40px;height:40px;border-radius:50%;border:0;background:#F4F2F1;cursor:pointer}
 .ghi{font-size:12px;color:var(--xam)}
 </style></head><body>
 <div class="trang">

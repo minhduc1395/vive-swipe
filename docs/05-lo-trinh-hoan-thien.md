@@ -34,6 +34,32 @@ Lập 18/11/2026 (Claude). Mốc cứng: chạy thử tại booth 26/11, Black F
 - Trình duyệt: Chromium và WebKit (Safari iOS) trong Playwright; kiểm tay 1 iPhone và 1 Android thật trước 26/11.
 - Mỗi trang: không cuộn ngang, chụp ảnh so sánh, luồng chính chạy hết (quẹt → giỏ → giữ hàng → mã), không lỗi console.
 
+### 2.5 Một bộ giao diện cho mọi màn hình (thêm 18/11)
+Mục tiêu: sửa một chỗ là điện thoại, máy tính bảng, máy tính cùng đổi. Không làm trang riêng cho máy tính.
+- **Token dùng chung** khai báo một lần trong `app/globals.css` (`@theme` của Tailwind v4):
+  - màu: `--hong #E8D2CC`, `--hong-nhat #F7EEEB`, `--bac-ha #CFE3D5`, `--bac-ha-nhat #EAF3ED`, `--den #2B2B2A`, `--xam #737373`, `--vien #EEE5E2`, `--nen-phu #F4F2F1`;
+  - bo góc: thẻ 20px, nút 999px;
+  - khoảng cách: bậc 4px;
+  - cỡ chữ: 12 / 13 / 14 / 17 / 22 / 28.
+  Không gõ mã màu hay cỡ chữ lẻ trong component.
+- **Component dùng chung**, mỗi thứ một file trong `components/ui/`:
+  - `Nut`, `The`, `Nhan`, `DuongMoc`, `GiaTien`, `KhungChiTiet`;
+  - `KhungChiTiet` tự chọn kiểu theo cỡ màn hình: ngăn kéo phải 420px từ 768px trở lên, bottom sheet trên điện thoại.
+- **Co giãn bằng lưới hoặc container query**, không viết hai phiên bản giao diện:
+  - Cùng một thẻ: máy tính 3 cột, máy tính bảng 2 cột, điện thoại 1 cột.
+  - Hàng bộ lọc trên điện thoại cuộn ngang, không xuống dòng.
+- **Bản mẫu mới** viết bằng HTML co giãn (như `design/DealPC-the.html`); kéo hẹp cửa sổ để xem bản điện thoại. Ảnh trong PR luôn có 390, 820, 1440.
+- **Nút** (chủ dự án 18/11: hạn chế nút đen, viền tối):
+  | Loại | Nền | Chữ | Viền | Dùng cho |
+  |---|---|---|---|---|
+  | Chính | `--hong` (combo, sản phẩm: `--bac-ha`) | `--den`, 600 | không | Thêm vào giỏ, hành động chính của thẻ |
+  | Phụ | `--hong-nhat` hoặc `--nen-phu` | `--den` | không | Xem giỏ, xem sản phẩm, bộ lọc |
+  | Chữ | trong suốt | `--xam`, gạch chân | không | Xem điều kiện, link phụ |
+  | Đậm | `--den` | trắng | không | **Chỉ 1 nút trên mỗi màn**, cho bước chốt: "Giữ hàng" ở giỏ, "Xác nhận" ở form giữ hàng |
+  - Không dùng viền đen/xám đậm quanh nút. Chỉ ô nhập và thẻ có viền 1px `--vien`.
+  - Chiều cao nút: 40px trên máy tính, 44px trên điện thoại; chữ không xuống dòng.
+  - Thanh trên: "Đăng nhập" là nút Phụ, không còn nút đen.
+
 ## 3. Thứ tự làm (Antigravity) và mốc ngày
 | Giai đoạn | Ngày | Việc | Ghi chú |
 |---|---|---|---|
@@ -64,6 +90,7 @@ Làm đúng thứ tự, mỗi việc một nhánh mới tách từ `main` mới 
 | 3 | **W017** làm lại | Quản trị phải đăng nhập Supabase (dùng lại `lib/nhan-vien/xac-thuc-server.ts`, chỉ `vai_tro = 'quan_tri'`), ghi qua server action + `layAdmin()`, không dùng localStorage | Tài khoản `nhan_vien` thường bị chặn; sửa giá/deal lưu được vào DB |
 | 4 | **W019** | Trang chính sách + chân trang. Thông tin doanh nghiệp chưa có (W001) thì để chỗ trống ghi rõ `[chờ W001]` | Chân trang hiện ở cả 3 mốc màn hình |
 | 1c | **W038** | Khung trang dùng chung trong layout (logo không nhấp nháy), logo về New Arrival, danh mục giữ menu + quay lại | tasks/W038.md |
+| 1c2 | **W040** | Token + nút dùng chung, bỏ nút đen/viền tối (docs/05 §2.5) | tasks/W040.md |
 | 1d | **W039** | Trang Deal dạng thẻ gọn theo `design/DealPC-the.html` | tasks/W039.md |
 | 4b | **W005** | Web đọc ảnh từ kho media Supabase (tasks/W005.md, docs/06) | Đổi ảnh trong kho là web đổi, không cần deploy |
 | 5 | **W029** | Trang `/personal-color` bản tạm theo `design/Pawlette.dc.html` | Có link từ New Arrival |
