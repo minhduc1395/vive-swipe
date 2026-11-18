@@ -28,6 +28,7 @@ Các file `.dc.html` ở đây là mã nguồn của từng màn, chép ra để
 | QuetPC.dc.html | 4.2 Quẹt trên máy tính: thanh trên, 3 cột (gu, deck, deal + giỏ mini) | W028 |
 | DanhMucPC.dc.html | 4.3 Danh mục trên máy tính: bộ lọc bên trái, lưới sản phẩm | W028 |
 | DealPC-the.html | 4.8 Trang Deal dạng thẻ trên máy tính (bản mẫu HTML chạy thẳng trong trình duyệt), ngăn kéo chi tiết bên phải | W039 |
+| ChanTrang.html | Chân trang gọn theo cụm (Thương hiệu, Ghé booth, Hỗ trợ, dải pháp lý), 3 mốc màn hình; bản mẫu HTML chạy thẳng, kéo hẹp cửa sổ để xem điện thoại | W049 |
 | QuetTablet.dc.html | 4.4 Quẹt trên máy tính bảng ngang: thanh điều hướng dọc bên trái | W028 |
 
 Quy ước rút ra từ thiết kế (bổ sung docs/03):

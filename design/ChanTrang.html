@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chân trang gọn – bản mẫu W049</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Bản mẫu tĩnh cho W049 (chủ dự án 18/11: chân trang gọn, chữ nhỏ hơn phần khác, xếp theo cụm, điện thoại phải gọn nhất).
+   Mở thẳng bằng trình duyệt, kéo hẹp cửa sổ để xem bản máy tính bảng (< 1024px) và điện thoại (< 768px).
+   Chữ lấy từ data/doanh-nghiep.yaml và lib/cau-hinh.ts. Token theo docs/05 §2.5. */
+:root{--hong:#E8D2CC;--hong-n:#F7EEEB;--bh:#CFE3D5;--bh-n:#EAF3ED;--den:#2B2B2A;--xam:#737373;--xam-dam:#5C5C5B;--vien:#EEE5E2;--nen-phu:#F4F2F1}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Be Vietnam Pro',sans-serif;color:var(--den);background:#fff}
+.noi-dung{min-height:40vh;display:grid;place-items:center;color:var(--xam);font-size:14px;padding:24px;text-align:center}
+
+/* ===== Chân trang ===== */
+.chan{background:var(--nen-phu);color:var(--xam-dam);font-size:13px;line-height:1.5}
+.khung{max-width:1280px;margin:0 auto;padding:40px 32px 28px}
+
+/* 3 cụm: Thương hiệu | Ghé booth | Hỗ trợ */
+.cum-chinh{display:grid;grid-template-columns:1.1fr 1.3fr .8fr;gap:40px}
+.cum h3{margin:0 0 10px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--xam)}
+.cum p{margin:0}
+
+.logo{height:26px;width:auto;display:block}
+.cau{margin:12px 0 16px !important;max-width:44ch}
+.mxh{display:flex;gap:8px;flex-wrap:wrap}
+.mxh a{display:inline-flex;align-items:center;height:40px;padding:0 16px;border-radius:999px;background:#fff;color:var(--den);font-weight:600;font-size:13px;text-decoration:none;white-space:nowrap}
+.mxh a:hover{background:var(--hong-n)}
+
+.booth b{display:block;color:var(--den);font-weight:600}
+.booth .gio{margin-top:6px !important}
+.lien-ket{display:inline-flex;align-items:center;gap:4px;margin-top:8px;color:var(--den);font-weight:500;text-decoration:underline;text-underline-offset:3px;min-height:32px}
+
+.ds{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.ds a{display:inline-flex;align-items:center;min-height:32px;color:var(--xam-dam);text-decoration:none}
+.ds a:hover{color:var(--den);text-decoration:underline;text-underline-offset:3px}
+
+/* Dải pháp lý: chữ nhỏ nhất, 1 dòng trên máy tính */
+.phap-ly{margin-top:32px;padding-top:16px;border-top:1px solid var(--vien);display:flex;justify-content:space-between;align-items:flex-start;gap:24px;font-size:12px;color:var(--xam)}
+.phap-ly p{margin:0}
+.phap-ly .cty{color:var(--xam-dam);font-weight:600}
+.phap-ly .ban-quyen{white-space:nowrap}
+.giu{white-space:nowrap}
+
+/* Máy tính bảng 768–1023: 2 cột, cụm thương hiệu chiếm cả hàng trên */
+@media (max-width:1023px){
+  .khung{padding:32px 28px 24px}
+  .cum-chinh{grid-template-columns:1fr 1fr;gap:28px 32px}
+  .thuong-hieu{grid-column:1 / -1;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .thuong-hieu .cau{margin:0 !important}
+  .phap-ly{flex-direction:column;gap:8px}
+}
+
+/* Điện thoại < 768: thanh tab dưới đã có điều hướng, chân trang chỉ giữ thông tin không có chỗ khác */
+@media (max-width:767px){
+  .khung{padding:24px 16px calc(24px + 72px + env(safe-area-inset-bottom))} /* chừa thanh tab dưới */
+  .cum-chinh{grid-template-columns:1fr;gap:20px}
+  .thuong-hieu{display:block}
+  .thuong-hieu .dong-dau{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .cau{display:none}
+  .mxh{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+  .mxh a{justify-content:center;height:44px;padding:0 8px}
+  /* Booth: thẻ trắng gọn, nút Chỉ đường bên phải */
+  .booth{background:#fff;border-radius:16px;padding:14px 14px 14px 16px;display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:center}
+  .booth h3{display:none}
+  .booth .gio{margin-top:2px !important}
+  .booth .lien-ket{grid-column:2;grid-row:1 / span 3;margin:0;height:44px;padding:0 14px;border-radius:999px;background:var(--hong-n);text-decoration:none;font-weight:600}
+  /* Hỗ trợ: 1 hàng liên kết ngang, vùng bấm 44px */
+  .ho-tro h3{display:none}
+  .ds{flex-direction:row;flex-wrap:wrap;gap:0 4px}
+  .ds li+li::before{content:'·';color:var(--xam);margin-right:6px}
+  .ds li{display:flex;align-items:center}
+  .ds a{min-height:44px}
+  .phap-ly{margin-top:8px;padding-top:14px}
+  .phap-ly .cty{display:block}
+  .phap-ly .cham-dau{display:none}
+}
+</style></head><body>
+
+<div class="noi-dung">(Nội dung trang)<br>Kéo hẹp cửa sổ để xem chân trang ở máy tính bảng và điện thoại.</div>
+
+<footer class="chan" aria-label="Thông tin VIVE">
+  <div class="khung">
+    <div class="cum-chinh">
+
+      <!-- Cụm 1: Thương hiệu + mạng xã hội -->
+      <section class="cum thuong-hieu" aria-label="VIVE">
+        <div class="dong-dau">
+          <img class="logo" src="../public/brand/vive-logo-chu.png" alt="VIVE">
+        </div>
+        <p class="cau">Mỹ phẩm nội địa Hàn, thử và mua tại booth.</p>
+        <nav class="mxh" aria-label="Mạng xã hội">
+          <a href="https://www.facebook.com/weareVIVE" aria-label="Facebook VIVE - K Beauty Experience">Facebook</a>
+          <a href="https://www.instagram.com/vive.k_beauty" aria-label="Instagram @vive.k_beauty">Instagram</a>
+          <a href="https://www.tiktok.com/@viveuniverse" aria-label="TikTok @viveuniverse">TikTok</a>
+        </nav>
+      </section>
+
+      <!-- Cụm 2: Ghé booth -->
+      <section class="cum booth" aria-label="Ghé booth">
+        <h3>Ghé booth</h3>
+        <b>VIVE | K-Beauty Experience</b>
+        <p>Tầng LL2 Union Square, 171 Đồng Khởi, Phường Sài Gòn</p>
+        <p class="gio">Mở cửa 10:00 – 21:00</p>
+        <a class="lien-ket" href="https://maps.google.com/?q=Union+Square+171+Dong+Khoi+Ho+Chi+Minh">Chỉ đường</a>
+      </section>
+
+      <!-- Cụm 3: Hỗ trợ -->
+      <section class="cum ho-tro" aria-label="Hỗ trợ">
+        <h3>Hỗ trợ</h3>
+        <ul class="ds">
+          <li><a href="/chinh-sach#muc-giu-hang">Giữ hàng tại booth</a></li>
+          <li><a href="/chinh-sach#muc-doi-tra">Đổi trả</a></li>
+          <li><a href="/chinh-sach#muc-bao-mat">Bảo mật dữ liệu</a></li>
+        </ul>
+      </section>
+    </div>
+
+    <!-- Dải pháp lý -->
+    <div class="phap-ly">
+      <p><span class="cty">CÔNG TY CP GIẢI PHÁP QUỐC TẾ VIỆT HÀN</span><span class="cham-dau"> · </span><span class="giu">MST 0319121217</span> · <a class="giu" href="mailto:vkis.business@gmail.com" style="color:inherit">vkis.business@gmail.com</a><br>
+        <span class="dia-chi">Lầu 1, 456 Xô Viết Nghệ Tĩnh, Phường Thạnh Mỹ Tây, TP Hồ Chí Minh</span></p>
+      <p class="ban-quyen">© 2026 VIVE</p>
+    </div>
+  </div>
+</footer>
+</body></html>

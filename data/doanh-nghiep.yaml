@@ -7,3 +7,12 @@ email: "vkis.business@gmail.com"
 so_dien_thoai: null   # chưa có, chờ chủ dự án. Khi null thì không hiện dòng này.
 ten_cua_hang: "VIVE | K-Beauty Experience"
 dia_diem_booth: "Tầng LL2, Union Square, TP Hồ Chí Minh"
+
+# Thêm 18/11/2026 cho chân trang mới (W049). Địa chỉ booth theo docs/03 §5.
+dia_chi_booth: "Tầng LL2 Union Square, 171 Đồng Khởi, Phường Sài Gòn, TP Hồ Chí Minh"
+dia_chi_booth_en: "Level LL2, Union Square, 171 Dong Khoi, Sai Gon Ward, Ho Chi Minh City"
+ban_do: "https://maps.google.com/?q=Union+Square+171+Dong+Khoi+Ho+Chi+Minh"
+mang_xa_hoi:
+  - {ten: Facebook, tai_khoan: "VIVE - K Beauty Experience", url: "https://www.facebook.com/weareVIVE"}
+  - {ten: Instagram, tai_khoan: "@vive.k_beauty", url: "https://www.instagram.com/vive.k_beauty"}
+  - {ten: TikTok, tai_khoan: "@viveuniverse", url: "https://www.tiktok.com/@viveuniverse"}
