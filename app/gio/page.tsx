@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { KhungDienThoai } from "@/components/KhungDienThoai";
 import { ThanhTab } from "@/components/ThanhTab";
-import { DEALS, SAN_PHAM, timSanPhamTheoId } from "@/lib/data";
+import { useDuLieu } from "@/lib/du-lieu-context";
 import { dinhDangTien } from "@/lib/dinh-dang";
 import { chuanHoaNgay } from "@/lib/deals/hien-thi";
 import {
@@ -22,12 +22,14 @@ import {
   doiSangCombo,
   type ItemGioHang,
 } from "@/lib/kho-luu-tru";
+import { ghiSuKien } from "@/lib/supabase/su-kien";
 
 function layNgayTinhGio(): string {
   return chuanHoaNgay(new Date());
 }
 
 export default function TrangGio() {
+  const { sanPham, deals, timSanPham } = useDuLieu();
   const [gioHang, setGioHang] = useState<ItemGioHang[]>([]);
   const [danhSachThich, setDanhSachThich] = useState<string[]>([]);
   const [daSanSang, setDaSanSang] = useState(false);
@@ -70,10 +72,10 @@ export default function TrangGio() {
 
   const ketQua: KetQuaTinhGio = useMemo(() => {
     const ngay = layNgayTinhGio();
-    return tinhGio(gioInput, SAN_PHAM, DEALS, ngay, {
+    return tinhGio(gioInput, sanPham, deals, ngay, {
       daThich: danhSachThich,
     });
-  }, [gioInput, danhSachThich]);
+  }, [gioInput, sanPham, deals, danhSachThich]);
 
   const tongSoLuongGio = useMemo(() => {
     return gioHang.reduce((sum, item) => sum + item.soLuong, 0);
@@ -100,6 +102,7 @@ export default function TrangGio() {
   ) => {
     doiSangCombo(dealId, thanhPhan);
     setGioHang(layGioHang());
+    ghiSuKien("them_combo", { deal_id: dealId });
   };
 
   return (
@@ -353,7 +356,7 @@ export default function TrangGio() {
             >
               {ketQua.cac_dong.map((dong) => {
                 const sp =
-                  dong.loai === "san_pham" ? timSanPhamTheoId(dong.id) : null;
+                  dong.loai === "san_pham" ? timSanPham(dong.id) : null;
 
                 const bgAnh =
                   sp?.danh_muc === "mat-na" || sp?.danh_muc === "kem-duong"
@@ -511,6 +514,12 @@ export default function TrangGio() {
             <div className="flex flex-col gap-2 items-center pt-2">
               <Link
                 href="/giu-hang"
+                onClick={() =>
+                  ghiSuKien("bat_dau_giu_hang", {
+                    so_luong: tongSoLuongGio,
+                    tong_tam_tinh: ketQua.tong_tam_tinh,
+                  })
+                }
                 className="w-full h-14 rounded-full bg-den hover:bg-black text-trang flex items-center justify-center font-semibold text-[17px] shadow-sm transition-transform active:scale-[0.99] no-underline"
               >
                 Giữ hàng tại booth

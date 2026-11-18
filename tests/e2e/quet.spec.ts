@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test.describe("Deck quẹt sản phẩm (W011)", () => {
   test.beforeEach(async ({ page }) => {

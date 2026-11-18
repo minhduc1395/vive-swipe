@@ -8,7 +8,6 @@ import { ThanhTab } from "@/components/ThanhTab";
 import { TheSanPham } from "@/components/deck/TheSanPham";
 import { TheDealDacBiet } from "@/components/deck/TheDealDacBiet";
 import { BangChiTiet } from "@/components/deck/BangChiTiet";
-import { SAN_PHAM, DEALS } from "@/lib/data";
 import type { SanPham } from "@/lib/data/types";
 import { xepDeck, type TheDeck } from "@/lib/goi-y/deck";
 import {
@@ -21,6 +20,9 @@ import {
 import { layTraLoiLocal } from "@/lib/khao-sat";
 import { layNhanVanDe, layLyDoGoiY } from "@/lib/nhan";
 import { layGhiChuDeal } from "@/lib/deals/ghi-chu";
+import { ghiLuotQuet } from "@/lib/supabase/luot-quet";
+import { danhDauCanDongBoHoSo } from "@/lib/supabase/auth";
+import { useDuLieu } from "@/lib/du-lieu-context";
 import {
   layDanhSachDaThich,
   themDaThich,
@@ -51,6 +53,11 @@ const HEARTS = [
 ];
 
 export default function TrangQuet() {
+  const {
+    sanPham: danhSachSanPham,
+    deals: danhSachDeals,
+    daSanSang,
+  } = useDuLieu();
   const [deck, setDeck] = useState<TheDeck[]>([]);
   const [indexHienTai, setIndexHienTai] = useState<number>(0);
   const [daThich, setDaThich] = useState<string[]>([]);
@@ -77,10 +84,14 @@ export default function TrangQuet() {
     dy: 0,
   });
   const [moiQuanTamLabels, setMoiQuanTamLabels] = useState<string[]>([]);
+  const deckKhoiTaoRef = useRef(false);
 
   // Khởi tạo deck và dữ liệu lưu trữ
   useEffect(() => {
-    /* eslint-disable react-hooks/set-state-in-effect */
+    if (!daSanSang) return;
+    if (deckKhoiTaoRef.current) return;
+    deckKhoiTaoRef.current = true;
+
     const listThich = layDanhSachDaThich();
     const listGio = layGioHang();
     const listBoQua = layDanhSachDaBoQua();
@@ -108,7 +119,7 @@ export default function TrangQuet() {
 
     // Xếp deck
     const dsThe = xepDeck({
-      sanPham: SAN_PHAM,
+      sanPham: danhSachSanPham,
       hoSo: hs,
       daThich: listThich,
       daVaoGio: listGio
@@ -117,8 +128,7 @@ export default function TrangQuet() {
       daBoQua: listBoQua,
     });
     setDeck(dsThe);
-    /* eslint-enable react-hooks/set-state-in-effect */
-  }, []);
+  }, [daSanSang, danhSachSanPham]);
 
   // Preload ảnh của 3 thẻ kế tiếp
   useEffect(() => {
@@ -153,10 +163,18 @@ export default function TrangQuet() {
       themDaThich(sp.id);
       setDaThich((prev) => (prev.includes(sp.id) ? prev : [sp.id, ...prev]));
 
+      ghiLuotQuet({
+        san_pham_id: sp.id,
+        hanh_dong: "thich",
+        nguon: theHienTai.nguon,
+        vi_tri: indexHienTai + 1,
+      });
+
       const soLuotDaQuet = lichSu.length;
       const hoSoMoi = capNhatHoSo(hoSo, sp, "thich", soLuotDaQuet);
       setHoSo(hoSoMoi);
       luuHoSoLocal(hoSoMoi);
+      danhDauCanDongBoHoSo();
 
       setLichSu((prev) => [
         ...prev,
@@ -201,7 +219,14 @@ export default function TrangQuet() {
     setTimeout(() => {
       setBurst(false);
     }, 900);
-  }, [theHienTai, capNhatAnimState, hoSo, lichSu.length, daThich.length]);
+  }, [
+    theHienTai,
+    capNhatAnimState,
+    hoSo,
+    lichSu.length,
+    daThich.length,
+    indexHienTai,
+  ]);
 
   // Xử lý Bỏ qua
   const xuLyBoQua = useCallback(() => {
@@ -215,10 +240,18 @@ export default function TrangQuet() {
     const hoanTat = () => {
       themDaBoQua(sp.id);
 
+      ghiLuotQuet({
+        san_pham_id: sp.id,
+        hanh_dong: "bo_qua",
+        nguon: theHienTai.nguon,
+        vi_tri: indexHienTai + 1,
+      });
+
       const soLuotDaQuet = lichSu.length;
       const hoSoMoi = capNhatHoSo(hoSo, sp, "bo_qua", soLuotDaQuet);
       setHoSo(hoSoMoi);
       luuHoSoLocal(hoSoMoi);
+      danhDauCanDongBoHoSo();
 
       setLichSu((prev) => [
         ...prev,
@@ -239,7 +272,7 @@ export default function TrangQuet() {
     setTimeout(() => {
       hoanTat();
     }, 380);
-  }, [theHienTai, capNhatAnimState, hoSo, lichSu.length]);
+  }, [theHienTai, capNhatAnimState, hoSo, lichSu.length, indexHienTai]);
 
   // Xử lý Vào giỏ
   const xuLyVaoGio = useCallback(() => {
@@ -258,10 +291,18 @@ export default function TrangQuet() {
       themDaThich(sp.id);
       setDaThich((prev) => (prev.includes(sp.id) ? prev : [sp.id, ...prev]));
 
+      ghiLuotQuet({
+        san_pham_id: sp.id,
+        hanh_dong: "gio",
+        nguon: theHienTai.nguon,
+        vi_tri: indexHienTai + 1,
+      });
+
       const soLuotDaQuet = lichSu.length;
       const hoSoMoi = capNhatHoSo(hoSo, sp, "gio", soLuotDaQuet);
       setHoSo(hoSoMoi);
       luuHoSoLocal(hoSoMoi);
+      danhDauCanDongBoHoSo();
 
       setLichSu((prev) => [
         ...prev,
@@ -288,7 +329,7 @@ export default function TrangQuet() {
     setTimeout(() => {
       setToast("");
     }, 900);
-  }, [theHienTai, capNhatAnimState, hoSo, lichSu.length]);
+  }, [theHienTai, capNhatAnimState, hoSo, lichSu.length, indexHienTai]);
 
   // Xử lý Hoàn tác
   const xuLyHoanTac = useCallback(() => {
@@ -306,6 +347,13 @@ export default function TrangQuet() {
     );
     setHoSo(hoSoPhucHoi);
     luuHoSoLocal(hoSoPhucHoi);
+    danhDauCanDongBoHoSo();
+
+    ghiLuotQuet({
+      san_pham_id: sp.id,
+      hanh_dong: "hoan_tac",
+      vi_tri: indexHienTai,
+    });
 
     // Gỡ khỏi danh sách tương ứng
     if (buocCuoi.hanhDong === "thich") {
@@ -373,8 +421,8 @@ export default function TrangQuet() {
 
   const ghiChuDealHienTai = useMemo(() => {
     if (!theHienTai) return undefined;
-    return layGhiChuDeal(theHienTai.san_pham, DEALS);
-  }, [theHienTai]);
+    return layGhiChuDeal(theHienTai.san_pham, danhSachDeals);
+  }, [theHienTai, danhSachDeals]);
 
   return (
     <KhungDienThoai className="h-dvh">
@@ -433,6 +481,13 @@ export default function TrangQuet() {
         >
           {hienTheDealDacBiet ? (
             <TheDealDacBiet onBoQua={() => setHienTheDealDacBiet(false)} />
+          ) : !daSanSang ? (
+            <div className="absolute inset-0 rounded-[28px] bg-hong-nhat border border-vien p-8 flex flex-col items-center justify-center gap-3 text-center">
+              <div className="w-10 h-10 rounded-full border-2 border-primary border-t-transparent animate-spin mb-1" />
+              <span className="font-bold text-[16px] tracking-[-0.3px] text-chu">
+                Đang chuẩn bị sản phẩm...
+              </span>
+            </div>
           ) : theHienTai ? (
             <>
               {/* Thẻ phía dưới tạo chiều sâu */}
@@ -452,7 +507,15 @@ export default function TrangQuet() {
                 onThich={xuLyThich}
                 onBoQua={xuLyBoQua}
                 onVaoGio={xuLyVaoGio}
-                onMoChiTiet={() => setSanPhamChiTiet(theHienTai.san_pham)}
+                onMoChiTiet={() => {
+                  ghiLuotQuet({
+                    san_pham_id: theHienTai.san_pham.id,
+                    hanh_dong: "xem_chi_tiet",
+                    nguon: theHienTai.nguon,
+                    vi_tri: indexHienTai + 1,
+                  });
+                  setSanPhamChiTiet(theHienTai.san_pham);
+                }}
                 isTopCard={true}
                 animState={animState}
                 onDragStateChange={(dragX, dragY) =>

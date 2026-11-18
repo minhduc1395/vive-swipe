@@ -4,18 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>VIVE – Landing 3D (bản thử)</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap">
 <style>
   :root{--hong:#E8D2CC;--hong-nhat:#F7EEEB;--bac-ha:#CFE3D5;--bac-ha-nhat:#EAF3ED;--den:#2B2B2A;--xam:#5C5C5B;}
   *{box-sizing:border-box}
-  html,body{margin:0;background:var(--hong-nhat);color:var(--den);font-family:'Be Vietnam Pro',sans-serif;-webkit-font-smoothing:antialiased}
-  #nen{position:fixed;inset:0;z-index:0;transition:none}
+  html,body{margin:0;background:var(--bac-ha-nhat);color:var(--den);font-family:'Be Vietnam Pro',sans-serif;-webkit-font-smoothing:antialiased}
+  #nen{position:fixed;inset:0;z-index:0}
   #canh{position:fixed;inset:0;z-index:1;pointer-events:none}
-  header{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;align-items:center;gap:20px;padding:16px clamp(16px,4vw,48px)}
-  header .logo{font-size:30px;font-weight:700;font-style:italic;letter-spacing:-1px}
+  header{position:fixed;top:0;left:0;right:0;z-index:5;transition:background .3s;display:flex;align-items:center;gap:20px;padding:16px clamp(16px,4vw,48px)}
+  header.nen{background:rgba(255,255,255,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  header .logo{display:flex;align-items:center;height:44px}
+  header .logo img{width:64px;height:auto;display:block}
   header nav{margin-left:auto;display:flex;gap:4px;flex-wrap:wrap}
-  header nav a{height:44px;padding:0 12px;display:flex;align-items:center;color:var(--den);text-decoration:none;font-size:15px;font-weight:500}
+  header nav a{height:44px;padding:0 12px;display:flex;align-items:center;color:var(--den);text-decoration:none;font-size:15px;font-weight:500;border-radius:999px}
+  header nav a.on{background:#fff;font-weight:700}
+  header .tieu-de{height:36px;padding:0 14px;border-radius:999px;background:#fff;display:flex;align-items:center;font-size:14px;font-weight:700;letter-spacing:.5px}
+  header nav a.dn{background:var(--den);color:#fff;padding:0 18px;font-weight:600}
   header .gio{height:44px;padding:0 18px;border-radius:999px;background:var(--den);color:#fff;display:flex;align-items:center;font-weight:600;font-size:14px;text-decoration:none}
   main{position:relative;z-index:2}
   section{min-height:100vh;display:flex;align-items:center;padding:96px clamp(20px,6vw,96px)}
@@ -35,26 +39,33 @@
   .gia b{font-size:34px}.gia s{color:#737373;font-size:16px}
   .the{background:#fff;border-radius:24px;padding:20px 22px;display:flex;justify-content:space-between;align-items:center;gap:16px}
   .the span{font-size:16px;font-weight:600}.the b{font-size:20px}
-  .luoi{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:min(720px,100%)}
-  .o{border-radius:24px;padding:22px;min-height:170px;display:flex;flex-direction:column;gap:8px;text-decoration:none;color:var(--den)}
-  .o.to{grid-row:span 2;min-height:354px}
-  .o em{font-style:normal;align-self:flex-start;padding:5px 11px;border-radius:999px;background:rgba(255,255,255,.75);font-size:12px;font-weight:700}
-  .o strong{font-size:22px;line-height:1.15}.o.to strong{font-size:34px}
-  .o small{font-size:14px;color:var(--xam);line-height:1.5}
-  .o .g{margin-top:auto;font-size:22px;font-weight:700}
-  .quat{position:relative;width:340px;height:300px}
-  .quat div{position:absolute;left:50%;bottom:0;width:120px;height:240px;margin-left:-60px;transform-origin:50% 110%;border-radius:18px;background:#fff;box-shadow:0 14px 30px rgba(43,43,42,.14);padding:10px;display:flex;flex-direction:column;gap:6px;transition:transform .1s linear}
-  .quat div span{border-radius:10px}.quat div span:first-child{flex:2}.quat div span:last-child{flex:1}
-  .ll2{font-size:clamp(140px,22vw,300px);line-height:.8;font-weight:700;letter-spacing:-.06em;color:transparent;-webkit-text-stroke:2px var(--den)}
   .gach{position:fixed;left:clamp(16px,4vw,48px);bottom:24px;z-index:5;display:flex;gap:8px}
   .gach i{display:block;width:10px;height:4px;border-radius:4px;background:rgba(43,43,42,.18);transition:width .3s,background .3s}
   .gach i.on{width:28px;background:var(--den)}
   .ghichu{position:fixed;right:clamp(16px,4vw,48px);bottom:20px;z-index:5;font-size:12px;color:var(--xam);background:rgba(255,255,255,.8);padding:6px 10px;border-radius:8px}
+
+  /* trang Tại booth */
+  #phan-duoi{position:relative;z-index:3;background:#fff;border-radius:40px 40px 0 0;box-shadow:0 -20px 60px rgba(43,43,42,.06)}
+  .khoi{max-width:1280px;margin:0 auto;padding:120px clamp(20px,5vw,64px) 80px}
+  .luoi{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));grid-auto-flow:dense;gap:18px}
+  .o{border-radius:28px;padding:26px;min-height:200px;display:flex;flex-direction:column;gap:10px;text-decoration:none;color:var(--den)}
+  .o.to{grid-column:span 2;grid-row:span 2;min-height:420px}
+  .o em{font-style:normal;align-self:flex-start;padding:5px 11px;border-radius:999px;background:rgba(255,255,255,.75);font-size:12px;font-weight:700}
+  .o strong{font-size:24px;line-height:1.15}.o.to strong{font-size:40px;letter-spacing:-.02em}
+  .o small{font-size:15px;color:var(--xam);line-height:1.5}
+  .o .g{margin-top:auto;font-size:24px;font-weight:700}
+  .hien{opacity:0;transform:translateY(40px);transition:opacity .7s ease,transform .7s ease}
+  .hien.da{opacity:1;transform:none}
+  .quat{position:relative;width:340px;height:300px}
+  .quat div{position:absolute;left:50%;bottom:0;width:120px;height:240px;margin-left:-60px;transform-origin:50% 110%;border-radius:18px;background:#fff;box-shadow:0 14px 30px rgba(43,43,42,.14);padding:10px;display:flex;flex-direction:column;gap:6px;transition:transform 1s cubic-bezier(.2,.8,.2,1)}
+  .quat div span{border-radius:10px}.quat div span:first-child{flex:2}.quat div span:last-child{flex:1}
+  .ll2{font-size:clamp(140px,22vw,300px);line-height:.8;font-weight:700;letter-spacing:-.06em;color:transparent;-webkit-text-stroke:2px var(--den)}
+  @media (prefers-reduced-motion:reduce){.hien{opacity:1;transform:none;transition:none}.quat div{transition:none}}
   @media (max-width:760px){
-    header nav{display:none}
+    header nav a:not(.dn):not(.on){display:none}
     section{align-items:flex-end;padding-bottom:56px}
     .phai{justify-content:flex-start}
-    .luoi{grid-template-columns:1fr}.o.to{grid-row:auto;min-height:220px}
+    .o.to{grid-column:auto;grid-row:auto;min-height:260px}
     .ghichu{display:none}
   }
 </style>
@@ -64,11 +75,11 @@
 <div id="nen"></div>
 <canvas id="canh" aria-hidden="true"></canvas>
 <header>
-  <span class="logo" aria-label="VIVE">vive</span>
-  <nav aria-label="Điều hướng chính"><a href="#">Mới về</a><a href="#">Chương trình</a><a href="#">Danh mục</a><a href="#">Personal Color</a><a href="#">Booth</a></nav>
-  <a class="gio" href="#">Giỏ · 0</a>
+  <a class="logo" href="#" aria-label="VIVE, về đầu trang"><img src="img/vive-logo-chu.png" alt="VIVE"></a>
+  <nav aria-label="Điều hướng chính"><a href="#" class="on" aria-current="page">New Arrival</a><a href="https://claude.ai/artifact/RM3NbvY1uZ4pFibYCk1AxG" data-den="/">Home</a><a href="https://claude.ai/artifact/RM3NbvY1uZ4pFibYCk1AxG" data-den="/quet">Quẹt</a><a href="https://claude.ai/artifact/RM3NbvY1uZ4pFibYCk1AxG" data-den="/danh-muc">Sản phẩm</a><a href="https://claude.ai/artifact/RM3NbvY1uZ4pFibYCk1AxG" data-den="/gio">Giỏ</a><a href="#" data-den="/dang-nhap" class="dn">Đăng nhập</a></nav>
 </header>
-<main>
+
+<main id="trang-landing">
   <section class="trai" data-k="0">
     <div class="cot">
       <span class="nhan"><i></i>MỚI TẠI VIVE · NỘI ĐỊA HÀN</span>
@@ -79,10 +90,10 @@
   </section>
   <section class="phai" data-k="1">
     <div class="cot">
-      <span class="nhan"><i></i>KEM DƯỠNG · 80ML</span>
-      <h2>Better Balance<br><span class="vet">Moisture Cream</span></h2>
-      <p>Hũ kem trong bộ ba Better Balance. Giá niêm yết 549.000đ, mua kèm sản phẩm khác còn 411.000đ.</p>
-      <div class="gia"><b>411.000đ</b><s>549.000đ</s><span style="font-size:14px;color:#5C5C5B">khi mua kèm</span></div>
+      <span class="nhan"><i></i>AMPOULE · 50ML</span>
+      <h2>Better Balance<br><span class="vet">Ampoule</span></h2>
+      <p>Chai ampoule trong bộ ba Better Balance. Giá niêm yết 419.000đ, mua kèm sản phẩm khác còn 314.000đ.</p>
+      <div class="gia"><b>314.000đ</b><s>419.000đ</s><span style="font-size:14px;color:#5C5C5B">khi mua kèm</span></div>
     </div>
   </section>
   <section class="trai" data-k="2">
@@ -92,237 +103,202 @@
       <div class="the"><span>Kem dưỡng + ampoule</span><b>725.000đ</b></div>
       <div class="the"><span>Bộ 3 Better Balance</span><b>911.000đ</b></div>
       <p style="font-size:14px">Kèm quà khi còn quà. Giá combo không cộng thêm giảm 25%.</p>
+      <div class="nut"><a class="chinh" href="#dang-chay">Xem deal đang chạy tại booth ↓</a></div>
     </div>
   </section>
-  <section class="phai" data-k="3">
-    <div class="cot" style="width:min(720px,100%)">
-      <h2>Đang chạy<br>tại booth</h2>
-      <div class="luoi">
-        <a class="o to" href="#" style="background:#E8D2CC"><em>Combo</em><strong>COMBO PINK Medicube PDRN</strong><small>Tinh chất PDRN Pink Peptide và kem PDRN Pink Collagen.</small><span class="g">999.000đ</span></a>
-        <a class="o" href="#" style="background:#CFE3D5"><em>Mua 4 tặng 1</em><strong>Mặt nạ Uniura</strong><small>5 miếng trộn loại tùy ý.</small><span class="g">396.000đ</span></a>
-        <a class="o" href="#" style="background:#fff"><em>Quà</em><strong>Medicube, Celimax, SKINFOOD từ 700K</strong><small>Tặng sữa rửa mặt LOPOE.</small></a>
-      </div>
+</main>
+<div id="phan-duoi">
+  <div class="khoi" id="dang-chay">
+    <h2 class="hien" style="margin-bottom:32px">Đang chạy<br>tại booth</h2>
+    <div class="luoi">
+      <a class="o to hien" href="#" style="background:#E8D2CC"><em>Combo</em><strong>COMBO PINK Medicube PDRN</strong><small>Tinh chất PDRN Pink Peptide và kem PDRN Pink Collagen.</small><span class="g">999.000đ <s style="font-size:16px;font-weight:500;color:#5C5C5B">1.145.000đ</s></span></a>
+      <a class="o hien" href="#" style="background:#CFE3D5"><em>Mua 4 tặng 1</em><strong>Mặt nạ Uniura</strong><small>5 miếng trộn loại tùy ý.</small><span class="g">396.000đ</span></a>
+      <a class="o hien" href="#" style="background:#F7EEEB"><em>Đến −50%</em><strong>Mặt nạ Rep!el Capsule</strong><small>Hyaluronic, S.O.S Heartleaf, Vita C 2X.</small><span class="g">190.000đ</span></a>
+      <a class="o hien" href="#" style="background:#EAF3ED;grid-column:span 2"><em>Quà</em><strong>Mua Medicube, Celimax, SKINFOOD tặng LOPOE</strong><small>Từ 700.000 tặng sữa rửa mặt LOPOE; mốc 1,1 triệu và 1,3 triệu quà lớn hơn.</small></a>
     </div>
-  </section>
-  <section class="trai" data-k="4">
-    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:48px;width:100%">
+  </div>
+  <div style="background:#F7EEEB">
+    <div class="khoi" id="personal-color" style="display:flex;flex-wrap:wrap;align-items:center;gap:56px;padding-top:96px">
       <div class="quat" id="quat" aria-hidden="true">
         <div><span style="background:#F6C9A9"></span><span style="background:#F9E0A8"></span></div>
         <div><span style="background:#C9D6EA"></span><span style="background:#E7C6D9"></span></div>
         <div><span style="background:#C98B5E"></span><span style="background:#D6B46A"></span></div>
         <div><span style="background:#2F3A66"></span><span style="background:#B3264B"></span></div>
       </div>
-      <div class="cot">
+      <div class="cot hien">
         <span class="nhan"><i></i>TRẢI NGHIỆM · PAWLETTE</span>
         <h2>Tông nào<br>hợp bạn?</h2>
         <p>Đo personal color cùng Pawlette, rồi thử lớp nền đúng tông ngay tại booth. Gói trải nghiệm 378.000đ.</p>
         <div class="nut"><a class="chinh" href="#">Tìm hiểu Personal Color →</a></div>
       </div>
     </div>
-  </section>
-  <section class="phai" data-k="5">
-    <div class="cot">
-      <span class="ll2" id="ll2" aria-hidden="true">LL2</span>
-      <h2 style="font-size:clamp(32px,4vw,48px)">VIVE | K-Beauty Experience</h2>
-      <p>Tầng LL2 Union Square, 171 Đồng Khởi, Quận 1 · 10:00 – 21:00 · đến 29/11</p>
-      <div class="nut"><a class="chinh" href="#">Chỉ đường</a><a class="phu" href="#">Giữ hàng trước khi đến</a></div>
-    </div>
-  </section>
-</main>
-<div class="gach" id="gach" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i><i></i></div>
-<div class="ghichu">Bản thử · hũ kem dựng bằng code, thay bằng mô hình thật khi có</div>
+  </div>
+  <div class="khoi" id="booth" style="display:flex;flex-direction:column;gap:14px;padding-top:96px">
+    <span class="ll2 hien" aria-hidden="true">LL2</span>
+    <h2 class="hien" style="font-size:clamp(32px,4vw,48px)">VIVE | K-Beauty Experience</h2>
+    <p class="hien">Tầng LL2 Union Square, 171 Đồng Khởi, Quận 1 · 10:00 – 21:00 · đến 29/11</p>
+    <div class="nut hien"><a class="chinh" href="#">Chỉ đường</a><a class="phu" href="#">Giữ hàng trước khi đến</a></div>
+  </div>
+</div>
+
+<div class="gach" id="gach" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
+<div class="ghichu" id="ghichu">Bản thử · ảnh thật LOPOE, dựng thành lớp 3D</div>
 
 <script type="module">
 import * as THREE from 'three';
-import { RoomEnvironment } from './lib/RoomEnvironment.js';
 
 const giamChuyenDong = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// ---------- hiện dần các khối phía dưới ----------
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('da'); if (e.target.id === 'quat') xoeQuat(); } }), { threshold: 0.2 });
+function xoeQuat() { document.querySelectorAll('#quat div').forEach((q, i) => q.style.transform = `rotate(${-45 + i * 30}deg)`); }
+document.querySelectorAll('.hien, #quat').forEach(el => io.observe(el));
+
+// ---------- cảnh 3D ----------
 const canvas = document.getElementById('canh');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 const scene = new THREE.Scene();
-scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
 const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
-camera.position.set(0, 0.6, 12);
-camera.lookAt(0, 0, 0);
-scene.add(new THREE.HemisphereLight(0xffffff, 0xF7EEEB, 0.6));
-const den = new THREE.DirectionalLight(0xffffff, 1.6); den.position.set(3, 5, 4); scene.add(den);
+camera.position.set(0, 0, 14);
 
-// ---------- nhãn vẽ bằng canvas ----------
-function nhan(chuChinh, chuPhu, nen, chu, rong = 1024, cao = 512) {
-  const c = document.createElement('canvas'); c.width = rong; c.height = cao;
-  const g = c.getContext('2d');
-  g.fillStyle = nen; g.fillRect(0, 0, rong, cao);
-  g.fillStyle = chu; g.textAlign = 'center';
-  g.font = `700 ${cao * 0.2}px "Be Vietnam Pro", sans-serif`;
-  g.fillText(chuChinh, rong * 0.25, cao * 0.52);
-  g.font = `500 ${cao * 0.065}px "Be Vietnam Pro", sans-serif`;
-  g.fillText(chuPhu, rong * 0.25, cao * 0.66);
-  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4;
-  return t;
+function taiAnh(src) {
+  return new Promise(ok => { const im = new Image(); im.onload = () => ok(im); im.src = src; });
 }
+// mặt nạ alpha (trắng chỗ có sản phẩm) cho vệt sáng
+function matNa(im) {
+  const c = document.createElement('canvas'); c.width = im.width; c.height = im.height;
+  const g = c.getContext('2d'); g.drawImage(im, 0, 0);
+  const d = g.getImageData(0, 0, c.width, c.height);
+  for (let i = 0; i < d.data.length; i += 4) { const a = d.data[i + 3]; d.data[i] = d.data[i + 1] = d.data[i + 2] = a; d.data[i + 3] = 255; }
+  g.putImageData(d, 0, 0); return new THREE.CanvasTexture(c);
+}
+// vệt sáng chạy ngang
+const vc = document.createElement('canvas'); vc.width = 256; vc.height = 4;
+const vg = vc.getContext('2d'); const gr = vg.createLinearGradient(0, 0, 256, 0);
+gr.addColorStop(0, 'rgba(255,255,255,0)'); gr.addColorStop(0.44, 'rgba(255,255,255,0)'); gr.addColorStop(0.5, 'rgba(255,255,255,1)'); gr.addColorStop(0.56, 'rgba(255,255,255,0)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+vg.fillStyle = gr; vg.fillRect(0, 0, 256, 4);
 
-// ---------- hũ kem: thân, kem, nắp ----------
-const huKem = new THREE.Group();
-const thanProfile = [];
-for (let i = 0; i <= 20; i++) {
-  const t = i / 20, y = -0.6 + t * 1.15;
-  const r = 1.0 - 0.06 * Math.pow(Math.abs(t - 0.5) * 2, 6) - (t < 0.06 ? (0.06 - t) * 1.2 : 0);
-  thanProfile.push(new THREE.Vector2(Math.max(r, 0.01), y));
-}
-thanProfile.unshift(new THREE.Vector2(0, -0.6));
-const than = new THREE.Mesh(
-  new THREE.LatheGeometry(thanProfile, 96),
-  new THREE.MeshPhysicalMaterial({ map: nhan('LOPOE', 'BETTER BALANCE · MOISTURE CREAM', '#FBF6F4', '#2B2B2A'), roughness: 0.25, clearcoat: 1, clearcoatRoughness: 0.15 })
-);
-than.rotation.y = -Math.PI / 2;
-huKem.add(than);
-const kem = new THREE.Mesh(new THREE.SphereGeometry(0.93, 64, 24, 0, Math.PI * 2, 0, Math.PI / 2),
-  new THREE.MeshPhysicalMaterial({ color: 0xF9EFEC, roughness: 0.55, sheen: 1, sheenColor: new THREE.Color(0xE8D2CC) }));
-kem.scale.y = 0.18; kem.position.y = 0.52; huKem.add(kem);
-const dinhKem = new THREE.Mesh(new THREE.ConeGeometry(0.22, 0.32, 48, 1, false), kem.material);
-dinhKem.position.y = 0.66; huKem.add(dinhKem);
-const nap = new THREE.Group();
-const vatLieuNap = new THREE.MeshPhysicalMaterial({ color: 0x2B2B2A, roughness: 0.35, metalness: 0.1, clearcoat: 0.6 });
-const napThan = new THREE.Mesh(new THREE.CylinderGeometry(1.05, 1.05, 0.42, 96), vatLieuNap);
-const napMat = new THREE.Mesh(new THREE.CylinderGeometry(1.02, 1.05, 0.04, 96), vatLieuNap);
-napMat.position.y = 0.23; nap.add(napThan, napMat);
-for (let i = 0; i < 64; i++) { // gờ vặn quanh nắp
-  const go = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.36, 0.03), vatLieuNap);
-  const a = i / 64 * Math.PI * 2; go.position.set(Math.cos(a) * 1.055, 0, Math.sin(a) * 1.055); nap.add(go);
-}
-nap.position.y = 0.78; huKem.add(nap);
-scene.add(huKem);
-
-// ---------- tuýp sữa rửa mặt và chai ampoule (bay vào ở khối "Đủ bộ") ----------
-function tuyp() {
+const PX = 4.6 / 921; // 921px ảnh ampoule = 4,6 đơn vị
+const vets = [];
+// "lớp ảnh dày": ảnh thật phía trước + vài lớp tối dần phía sau tạo độ dày khi nghiêng + vệt sáng
+function lopAnh(im, rong, cao, doDay = 0.16) {
   const g = new THREE.Group();
-  const than = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 2.4, 64, 1, true),
-    new THREE.MeshPhysicalMaterial({ map: nhan('LOPOE', 'CLEANSING FOAM', '#FFFFFF', '#2B2B2A'), roughness: 0.3, clearcoat: 0.8, side: THREE.DoubleSide }));
-  than.scale.z = 0.55; than.rotation.y = -Math.PI / 2;
-  const dau = new THREE.Mesh(new THREE.BoxGeometry(0.84, 0.06, 0.24), than.material); dau.position.y = 1.22;
-  const nap = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 0.42, 48), vatLieuNap); nap.position.y = -1.4;
-  g.add(than, dau, nap); return g;
+  const tex = new THREE.Texture(im); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8; tex.needsUpdate = true;
+  const hinh = new THREE.PlaneGeometry(rong, cao);
+  const N = 7;
+  for (let i = N; i >= 1; i--) {
+    const lop = new THREE.Mesh(hinh, new THREE.MeshBasicMaterial({ map: tex, color: new THREE.Color().setScalar(0.6 + 0.06 * (N - i) / N), transparent: true, alphaTest: 0.5 }));
+    lop.position.z = -doDay * i / N; g.add(lop);
+  }
+  g.add(new THREE.Mesh(hinh, new THREE.MeshBasicMaterial({ map: tex, transparent: true, alphaTest: 0.08 })));
+  const tv = new THREE.CanvasTexture(vc); tv.wrapS = THREE.RepeatWrapping;
+  const vet = new THREE.Mesh(hinh, new THREE.MeshBasicMaterial({ map: tv, alphaMap: matNa(im), transparent: true, opacity: 0.3, blending: THREE.AdditiveBlending, depthWrite: false }));
+  vet.position.z = 0.002; g.add(vet); vets.push(vet);
+  return g;
 }
-function chaiAmpoule() {
-  const g = new THREE.Group();
-  const p = []; for (let i = 0; i <= 24; i++) { const t = i / 24; p.push(new THREE.Vector2(t < 0.85 ? 0.55 - 0.05 * Math.pow(Math.abs(t - 0.4) * 2.2, 4) : 0.55 - (t - 0.85) * 2.4, -0.8 + t * 1.6)); }
-  p.unshift(new THREE.Vector2(0, -0.8));
-  const than = new THREE.Mesh(new THREE.LatheGeometry(p, 64),
-    new THREE.MeshPhysicalMaterial({ color: 0xE8D2CC, roughness: 0.08, transmission: 0.6, thickness: 0.8, ior: 1.45, clearcoat: 1 }));
-  const co = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.26, 0.28, 48), new THREE.MeshPhysicalMaterial({ color: 0xD9C7C1, metalness: 0.6, roughness: 0.25 }));
-  co.position.y = 0.92;
-  const bop = new THREE.Mesh(new THREE.CapsuleGeometry(0.17, 0.35, 8, 24), vatLieuNap); bop.position.y = 1.32;
-  g.add(than, co, bop); return g;
-}
-const tuypSRM = tuyp(); const ampoule = chaiAmpoule();
-scene.add(tuypSRM, ampoule);
-
-// ---------- bóng đổ mềm dưới hũ ----------
+// bóng mềm
 const bc = document.createElement('canvas'); bc.width = bc.height = 128;
-const bg = bc.getContext('2d'); const gr = bg.createRadialGradient(64, 64, 0, 64, 64, 64);
-gr.addColorStop(0, 'rgba(43,43,42,0.35)'); gr.addColorStop(1, 'rgba(43,43,42,0)'); bg.fillStyle = gr; bg.fillRect(0, 0, 128, 128);
-const bong = new THREE.Mesh(new THREE.PlaneGeometry(3.4, 3.4), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(bc), transparent: true, depthWrite: false }));
-bong.rotation.x = -Math.PI / 2; scene.add(bong);
+const bg2 = bc.getContext('2d'); const rg = bg2.createRadialGradient(64, 64, 0, 64, 64, 64);
+rg.addColorStop(0, 'rgba(43,43,42,0.32)'); rg.addColorStop(1, 'rgba(43,43,42,0)'); bg2.fillStyle = rg; bg2.fillRect(0, 0, 128, 128);
+const texBong = new THREE.CanvasTexture(bc);
+function bong(r) { const m = new THREE.Mesh(new THREE.PlaneGeometry(r, r * 0.28), new THREE.MeshBasicMaterial({ map: texBong, transparent: true, depthWrite: false })); scene.add(m); return m; }
 
-// ---------- các mốc theo khối: x,y (tỉ lệ nửa màn), xoay, cỡ, nắp mở, 2 chai phụ ----------
-// x: -1 mép trái, +1 mép phải của vùng nhìn thấy
+const [imNap, imThan, imSrm, imKem] = await Promise.all(['img/ampoule-nap.webp', 'img/ampoule-than.webp', 'img/srm.webp', 'img/kem.webp'].map(taiAnh));
+
+// ampoule: thân + bóp nhỏ giọt tách rời, ống thủy tinh, giọt
+const ampoule = new THREE.Group();
+const H = (imNap.height + imThan.height) * PX;
+const than = lopAnh(imThan, imThan.width * PX, imThan.height * PX, 0.5);
+than.position.y = -H / 2 + imThan.height * PX / 2; ampoule.add(than);
+const bopG = new THREE.Group();
+bopG.add(lopAnh(imNap, imNap.width * PX, imNap.height * PX, 0.3));
+const dayBop = -imNap.height * PX / 2;
+const ong = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.06, 2.6, 24, 1, true),
+  new THREE.MeshBasicMaterial({ color: 0xBFD6F2, transparent: true, opacity: 0.6, side: THREE.DoubleSide }));
+ong.position.set(0, dayBop - 1.3, -0.25); bopG.add(ong);
+const giot = new THREE.Mesh(new THREE.SphereGeometry(0.09, 24, 16), new THREE.MeshBasicMaterial({ color: 0x9CC3EE, transparent: true, opacity: 0.9 }));
+bopG.add(giot);
+const goc = H / 2 - imNap.height * PX / 2; // vị trí bóp khi đóng
+bopG.position.y = goc; ampoule.add(bopG);
+scene.add(ampoule);
+const srm = lopAnh(imSrm, imSrm.width * PX, imSrm.height * PX, 0.45); scene.add(srm);
+const kem = lopAnh(imKem, imKem.width * PX, imKem.height * PX, 0.45); scene.add(kem);
+const bA = bong(3.2), bS = bong(3.4), bK = bong(3.4);
+
+// ---------- mốc theo khối ----------
+// x,y theo tỉ lệ nửa màn; mo = độ nhấc bóp ampoule (0–1)
 const MOC = [
-  { x: 0.52, y: -0.05, rx: 0.18, ry: -0.12, rz: 0.06, s: 1.1, nap: 0, phu: 1,  nen: '#F7EEEB' }, // 0 phần đầu: hũ đóng, 2 chai phụ bên cạnh
-  { x: -0.45, y: -0.18, rx: 0.42, ry: 0.5, rz: -0.06, s: 1.35, nap: 1, phu: 0, nen: '#FFFFFF' }, // 1 hũ sang trái, hạ xuống, mở nắp
-  { x: 0.5, y: -0.02, rx: 0.2, ry: 6.2, rz: 0.04, s: 0.95, nap: 0.35, phu: 1, nen: '#F7EEEB' }, // 2 đủ bộ: hũ sang phải, 2 chai bay về
-  { x: -0.78, y: -0.42, rx: 0.3, ry: 6.9, rz: 0.12, s: 0.5, nap: 0, phu: 0, nen: '#EAF3ED' },    // 3 lưới deal: hũ thu nhỏ góc trên trái
-  { x: 0.82, y: -0.38, rx: 0.15, ry: 7.6, rz: -0.1, s: 0.42, nap: 0.15, phu: 0, nen: '#FFFFFF' },    // 4 Pawlette: hũ nhỏ góc phải
-  { x: -0.45, y: -0.1, rx: 0.2, ry: 6.15, rz: 0.05, s: 0.9, nap: 0, phu: 0, nen: '#F7EEEB' },     // 5 booth: hũ quay về, đóng nắp
+  { nen: '#EAF3ED', A: { x: 0.42, y: -0.02, ry: -0.18, rz: 0.03, s: 1.0, mo: 0, z: 0 }, S: { x: 0.15, y: 0.04, ry: 0.3, rz: -0.2, s: 0.9, z: -2 }, K: { x: 0.72, y: 0.06, ry: -0.3, rz: 0.18, s: 0.9, z: -2.4 } },
+  { nen: '#FFFFFF', A: { x: -0.42, y: -0.26, ry: 0.22, rz: -0.05, s: 1.12, mo: 1, z: 0 }, S: { x: -1.6, y: 0.7, ry: 0.6, rz: -0.7, s: 0.8, z: -2 }, K: { x: 1.6, y: -0.7, ry: -0.6, rz: 0.7, s: 0.8, z: -2.4 } },
+  { nen: '#F7EEEB', A: { x: 0.43, y: -0.06, ry: 0, rz: 0, s: 0.86, mo: 0, z: 0 }, S: { x: 0.14, y: -0.02, ry: 0.12, rz: -0.03, s: 0.8, z: -0.6 }, K: { x: 0.72, y: -0.02, ry: -0.12, rz: 0.03, s: 0.8, z: -0.6 } },
 ];
-const hex = h => new THREE.Color(h);
-const sections = [...document.querySelectorAll('section[data-k]')];
+const sections = [...document.querySelectorAll('#trang-landing section[data-k]')];
 const gach = [...document.querySelectorAll('#gach i')];
 const nenEl = document.getElementById('nen');
-const quat = [...document.querySelectorAll('#quat div')];
-const ll2 = document.getElementById('ll2');
 const muot = t => t * t * (3 - 2 * t);
 const lerp = (a, b, t) => a + (b - a) * t;
-
-let hienTai = { ...MOC[0] }, chuot = { x: 0, y: 0 }, chuotMuot = { x: 0, y: 0 };
+const tron = (a, b, t) => { const o = {}; for (const k in a) o[k] = lerp(a[k], b[k] ?? a[k], t); return o; };
+let cur = null; const chuot = { x: 0, y: 0 }, cm = { x: 0, y: 0 };
 addEventListener('pointermove', e => { chuot.x = e.clientX / innerWidth * 2 - 1; chuot.y = e.clientY / innerHeight * 2 - 1; });
-
-function dichKhung() {
-  const w = innerWidth, h = innerHeight;
-  renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
-}
-addEventListener('resize', dichKhung); dichKhung();
+function coKhung() { renderer.setSize(innerWidth, innerHeight, false); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); }
+addEventListener('resize', coKhung); coKhung();
 
 function mucTieu() {
-  // tiến trình cuộn liên tục: k + phần lẻ giữa 2 khối
-  const giua = innerHeight * 0.5;
-  let k = 0, f = 0;
-  for (let i = 0; i < sections.length; i++) {
-    const r = sections[i].getBoundingClientRect();
-    if (r.top <= giua) { k = i; f = Math.min(Math.max((giua - r.top) / r.height, 0), 1); }
-  }
-  // giữ yên ở giữa khối, chuyển ở nửa sau
-  const t = muot(Math.min(Math.max((f - 0.45) / 0.55, 0), 1));
+  const giua = innerHeight * 0.5; let k = 0, f = 0;
+  sections.forEach((s, i) => { const r = s.getBoundingClientRect(); if (r.top <= giua) { k = i; f = Math.min(Math.max((giua - r.top) / r.height, 0), 1); } });
+  const t = muot(Math.min(Math.max((f - 0.4) / 0.6, 0), 1));
   const a = MOC[k], b = MOC[Math.min(k + 1, MOC.length - 1)];
-  const o = {}; for (const key of ['x', 'y', 'rx', 'ry', 'rz', 's', 'nap', 'phu']) o[key] = lerp(a[key], b[key], t);
-  o.nen = hex(a.nen).lerp(hex(b.nen), t);
-  gach.forEach((g, i) => g.classList.toggle('on', i === (t > 0.5 ? Math.min(k + 1, 5) : k)));
-  // hiệu ứng DOM nối tiếp: quạt màu xòe, LL2 phóng to
-  const r4 = sections[4].getBoundingClientRect(); const x4 = Math.min(Math.max(1 - r4.top / innerHeight, 0), 1);
-  quat.forEach((q, i) => q.style.transform = `rotate(${(-45 + i * 30) * muot(x4)}deg)`);
-  const r5 = sections[5].getBoundingClientRect(); const x5 = Math.min(Math.max(1 - r5.top / innerHeight, 0), 1);
-  ll2.style.transform = `scale(${0.6 + 0.4 * muot(x5)})`; ll2.style.transformOrigin = 'left bottom';
-  return o;
+  gach.forEach((g, i) => g.classList.toggle('on', i === (t > 0.5 ? Math.min(k + 1, 2) : k)));
+  return { A: tron(a.A, b.A, t), S: tron(a.S, b.S, t), K: tron(a.K, b.K, t), nen: new THREE.Color(a.nen).lerp(new THREE.Color(b.nen), t) };
 }
 
 const dongHo = new THREE.Clock();
+function dat(obj, bg, v, tg, pha, nuaR, nuaC, hep) {
+  const X = (hep ? (Math.abs(v.x) > 1 ? v.x * 1.5 : v.x * 0.38) : v.x) * nuaR, Y = (hep ? 0.42 + v.y * 0.3 : v.y) * nuaC;
+  const troi = giamChuyenDong ? 0 : Math.sin(tg * 1.1 + pha) * 0.08;
+  const s = v.s * (hep ? 0.6 : 1);
+  obj.position.set(X + cm.x * 0.2, Y + troi, v.z);
+  obj.rotation.set(-cm.y * 0.12, v.ry + cm.x * 0.28, v.rz);
+  obj.scale.setScalar(s);
+  bg.position.set(X, Y - 2.25 * s, v.z - 0.3); bg.scale.setScalar(s * (1 - troi));
+}
 function ve() {
+  requestAnimationFrame(ve);
   const tg = dongHo.getElapsedTime();
   const m = mucTieu();
-  const he = giamChuyenDong ? 1 : 0.08;
-  for (const key of ['x', 'y', 'rx', 'ry', 'rz', 's', 'nap', 'phu']) hienTai[key] = lerp(hienTai[key], m[key], he);
-  nenEl.style.background = `#${m.nen.getHexString()}`;
-  chuotMuot.x = lerp(chuotMuot.x, giamChuyenDong ? 0 : chuot.x, 0.06);
-  chuotMuot.y = lerp(chuotMuot.y, giamChuyenDong ? 0 : chuot.y, 0.06);
-
-  // đổi tỉ lệ màn hình sang toạ độ 3D
-  const nuaCao = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.position.z;
-  const nuaRong = nuaCao * camera.aspect;
+  if (!cur) cur = m;
+  const he = giamChuyenDong ? 1 : 0.09;
+  cur = { A: tron(cur.A, m.A, he), S: tron(cur.S, m.S, he), K: tron(cur.K, m.K, he) };
+  nenEl.style.background = '#' + m.nen.getHexString();
+  cm.x = lerp(cm.x, giamChuyenDong ? 0 : chuot.x, 0.06); cm.y = lerp(cm.y, giamChuyenDong ? 0 : chuot.y, 0.06);
+  const nuaC = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.position.z, nuaR = nuaC * camera.aspect;
   const hep = innerWidth < 760;
-  const X = (hep ? hienTai.x * 0.15 : hienTai.x) * nuaRong;
-  const Y = (hep ? 0.45 + hienTai.y * 0.3 : hienTai.y) * nuaCao;
-  const troi = giamChuyenDong ? 0 : Math.sin(tg * 1.1) * 0.08;
-  const s = hienTai.s * (hep ? 0.8 : 1);
-
-  huKem.position.set(X + chuotMuot.x * 0.25, Y + troi, 0);
-  huKem.rotation.set(hienTai.rx + chuotMuot.y * 0.18, hienTai.ry + chuotMuot.x * 0.35, hienTai.rz);
-  huKem.scale.setScalar(s);
-  // nắp: vừa nhấc vừa vặn, nghiêng ra sau khi mở hẳn
-  const n = hienTai.nap;
-  nap.position.set(n * 0.35, 0.78 + n * 1.25, -n * 0.25);
-  nap.rotation.set(-n * 0.55, n * Math.PI * 1.5, n * 0.15);
-  kem.visible = dinhKem.visible = n > 0.02;
-  dinhKem.rotation.y = tg * 0.6;
-
-  bong.position.set(X, Y - 0.75 * s, -0.2); bong.scale.setScalar(s * (1 - (troi + 0.08) * 0.6));
-  bong.material.opacity = 0.9 - Math.abs(hienTai.rx) * 0.4;
-
-  // 2 chai phụ: bay ra khỏi khung khi phu = 0
-  const p = hienTai.phu, ra = (1 - p);
-  tuypSRM.visible = ampoule.visible = p > 0.03;
-  tuypSRM.position.set(X - (1.6 + ra * 9) * s, Y + 0.4 * s + ra * 2 + Math.sin(tg * 0.9 + 1) * 0.06, -0.6);
-  tuypSRM.rotation.set(0.1, -0.4 + tg * 0.05 * (giamChuyenDong ? 0 : 1), -0.18 - ra);
-  tuypSRM.scale.setScalar(s * 0.75);
-  ampoule.position.set(X + (1.6 + ra * 9) * s, Y + 0.55 * s - ra * 2 + Math.sin(tg * 1.3 + 2) * 0.07, -0.4);
-  ampoule.rotation.set(0.05, 0.3, 0.12 + ra);
-  ampoule.scale.setScalar(s * 0.85);
-
+  // qua hết khối 3 thì sản phẩm đứng yên trên kệ và trôi lên theo trang
+  const day3 = sections[2].getBoundingClientRect().bottom;
+  const vuot = Math.max(0, innerHeight - day3);
+  scene.position.y = vuot * (2 * nuaC / innerHeight);
+  canvas.style.visibility = vuot > innerHeight * 1.2 ? 'hidden' : 'visible';
+  document.querySelector('header').classList.toggle('nen', vuot > innerHeight * 0.6);
+  document.getElementById('gach').style.opacity = vuot > 0 ? 0 : 1;
+  dat(ampoule, bA, cur.A, tg, 0, nuaR, nuaC, hep);
+  dat(srm, bS, cur.S, tg, 1.3, nuaR, nuaC, hep);
+  dat(kem, bK, cur.K, tg, 2.6, nuaR, nuaC, hep);
+  // bóp nhỏ giọt: nhấc lên, nghiêng nhẹ; ống thủy tinh lộ ra; giọt lớn dần rồi rơi
+  const mo = cur.A.mo;
+  bopG.position.set(mo * 0.3, goc + mo * 1.55, 0.05 * mo);
+  bopG.rotation.z = -mo * 0.12;
+  ong.visible = mo > 0.05;
+  const chu = giamChuyenDong ? 0.5 : (tg * 0.6) % 1;
+  giot.visible = mo > 0.9;
+  giot.position.set(0, dayBop - 2.62 - (chu > 0.6 ? (chu - 0.6) * 9 : 0), -0.25);
+  giot.scale.set(1, 1.25, 1).multiplyScalar(chu > 0.6 ? 1 : 0.4 + chu);
+  // vệt sáng chạy theo cuộn và chuột
+  const lech = scrollY / innerHeight * 0.35 + cm.x * 0.15;
+  vets.forEach((v, i) => v.material.map.offset.x = -lech - i * 0.07);
   renderer.render(scene, camera);
-  requestAnimationFrame(ve);
 }
-document.fonts.ready.then(() => { than.material.map = nhan('LOPOE', 'BETTER BALANCE · MOISTURE CREAM', '#FBF6F4', '#2B2B2A'); than.material.needsUpdate = true; });
 ve();
 </script>
 </body>
