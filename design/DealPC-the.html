@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Deal: dạng thẻ (máy tính) – bản mẫu W039</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Bản mẫu tĩnh cho W039. Mở thẳng bằng trình duyệt. Số liệu lấy từ data/deals.yaml. */
+:root{--hong:#E8D2CC;--hong-n:#F7EEEB;--bh:#CFE3D5;--bh-n:#EAF3ED;--den:#2B2B2A;--xam:#737373;--vien:#EEE5E2}
+*{box-sizing:border-box}body{margin:0;font-family:'Be Vietnam Pro',sans-serif;color:var(--den);background:#fff}
+.trang{max-width:1280px;margin:0 auto;padding:28px 32px 64px}
+.dau{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:18px}
+h1{font-size:28px;margin:0;letter-spacing:-.02em}.dau p{margin:4px 0 0;color:var(--xam);font-size:14px}
+.loc{display:flex;gap:8px;flex-wrap:wrap}.loc button{height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--vien);background:#fff;font:500 13px inherit;font-family:inherit;color:var(--den);cursor:pointer}
+.loc button.on{background:var(--den);color:#fff;border-color:var(--den)}
+.luoi{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:1279px){.luoi{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:767px){.luoi{grid-template-columns:1fr}.trang{padding:20px 16px 48px}.dau{flex-direction:column;align-items:flex-start}}
+.the{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--vien);border-radius:20px;background:#fff;min-height:236px;transition:box-shadow .2s,transform .2s;cursor:pointer}
+.the:hover{box-shadow:0 8px 28px rgba(43,43,42,.08);transform:translateY(-2px)}
+.nhan{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--xam)}
+.loai{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:999px;font-weight:600;font-size:12px;color:var(--den)}
+.qua .loai{background:var(--hong-n)}.combo .loai{background:var(--bh-n)}.giam .loai{background:#FFF4D6}
+.han::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:#D9895F;margin-right:6px;vertical-align:1px}
+.ten{font-size:17px;font-weight:600;line-height:1.35;margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.moc{display:flex;align-items:flex-start;gap:0;position:relative;margin-top:2px}
+.moc::before{content:'';position:absolute;left:6px;right:6px;top:6px;height:2px;background:var(--hong)}
+.moc div{flex:1;position:relative;padding-top:18px;font-size:12px;line-height:1.35}
+.moc div::before{content:'';position:absolute;left:0;top:1px;width:12px;height:12px;border-radius:50%;background:#fff;border:2px solid #C9A79D}
+.moc b{display:block;font-size:13px}.moc span{color:var(--xam)}
+.sp{display:flex;gap:12px;align-items:center}
+.anh{width:64px;height:64px;border-radius:14px;background:var(--hong-n);display:grid;place-items:center;flex:none;overflow:hidden}
+.anh img{width:80%;height:80%;object-fit:contain}
+.anh.chong{display:flex;width:auto;background:none;gap:0}.anh.chong i{width:44px;height:56px;border-radius:12px;background:var(--bh-n);margin-left:-14px;border:2px solid #fff}.anh.chong i:first-child{margin-left:0}
+.mo{font-size:13px;color:var(--xam);line-height:1.4}
+.gia{display:flex;align-items:baseline;gap:8px}.gia b{font-size:22px;letter-spacing:-.01em}.gia s{color:var(--xam);font-size:13px}
+.tk{font-size:12px;font-weight:600;color:#2F6B45;background:var(--bh-n);padding:3px 8px;border-radius:999px}
+.chan{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.chan a{font-size:13px;color:var(--xam);text-decoration:underline;text-underline-offset:3px}
+.nut{height:40px;padding:0 16px;border-radius:999px;border:0;background:var(--den);color:#fff;font:600 13px inherit;font-family:inherit;cursor:pointer}
+.nut.phu{background:#fff;color:var(--den);border:1px solid var(--vien)}
+/* Ngăn kéo chi tiết bên phải (mở khi bấm thẻ) */
+.keo{visibility:hidden;position:fixed;top:0;right:0;bottom:0;width:420px;max-width:100%;background:#fff;box-shadow:-12px 0 40px rgba(0,0,0,.12);padding:24px;display:flex;flex-direction:column;gap:14px;transform:translateX(105%);transition:transform .25s}
+.keo.mo-ra{transform:none;visibility:visible}.keo h2{font-size:20px;margin:0}.keo .dong{display:flex;gap:12px;align-items:center;padding:10px;border:1px solid var(--vien);border-radius:14px;font-size:13px}.keo .dong b{display:block;font-size:14px}
+.keo .dong button{margin-left:auto}.dong-keo{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;border:1px solid var(--vien);background:#fff;cursor:pointer}
+.ghi{font-size:12px;color:var(--xam)}
+</style></head><body>
+<div class="trang">
+  <div class="dau">
+    <div><h1>Deal tại VIVE</h1><p>Áp dụng tại booth LL2 Union Square đến 29/11. Nhân viên xác nhận khi thanh toán.</p></div>
+    <div class="loc"><button class="on">Tất cả · 9</button><button>Quà theo hóa đơn · 3</button><button>Combo · 5</button><button>Giảm giá · 1</button></div>
+  </div>
+
+  <div class="luoi">
+    <!-- 1. Quà theo ngưỡng nhãn -->
+    <article class="the qua" onclick="moKeo()">
+      <div class="nhan"><span class="loai">🎁 Quà theo hóa đơn</span><span class="han">Số lượng có hạn</span></div>
+      <h3 class="ten">Mua Medicube, Celimax, SKINFOOD tặng LOPOE</h3>
+      <div class="moc"><div><b>700K</b><span>Sữa rửa mặt</span></div><div><b>1,1 triệu</b><span>Ampoule</span></div><div><b>1,3 triệu</b><span>Kem dưỡng</span></div></div>
+      <div class="chan"><a>12 bộ gợi ý vừa mốc</a><button class="nut" onclick="event.stopPropagation()">Thêm COMBO PINK</button></div>
+    </article>
+    <!-- 2. Quà theo hóa đơn -->
+    <article class="the qua">
+      <div class="nhan"><span class="loai">🎁 Quà theo hóa đơn</span><span class="han">Số lượng có hạn</span></div>
+      <h3 class="ten">Quà theo hóa đơn từ 800K</h3>
+      <div class="moc"><div><b>800K</b><span>Sữa rửa mặt LOPOE</span></div><div><b>1,2 triệu</b><span>Ampoule LOPOE</span></div></div>
+      <div class="chan"><a>Xem điều kiện</a><button class="nut phu">Xem giỏ</button></div>
+    </article>
+    <!-- 3. Combo -->
+    <article class="the combo">
+      <div class="nhan"><span class="loai">Combo</span><span class="han">Quà có hạn</span></div>
+      <div class="sp"><div class="anh"><img src="../public/chien-dich/lopoe-better-balance/srm.webp" alt=""></div>
+        <div><h3 class="ten">Combo 2 sữa rửa mặt LOPOE</h3><div class="mo">Tặng túi sample và 1 kem chống nắng hoặc kem mềm da</div></div></div>
+      <div class="chan"><div class="gia"><b>349.000</b><s>498.000</s><span class="tk">−149K</span></div><button class="nut">Thêm vào giỏ</button></div>
+    </article>
+    <!-- 4. Combo -->
+    <article class="the combo">
+      <div class="nhan"><span class="loai">Combo</span><span class="han">Quà có hạn</span></div>
+      <div class="sp"><div class="anh chong"><i></i><i></i><i></i></div>
+        <div><h3 class="ten">Bộ 3 LOPOE</h3><div class="mo">Tặng thêm 1 kem dưỡng LOPOE</div></div></div>
+      <div class="chan"><div class="gia"><b>911.000</b></div><button class="nut">Thêm vào giỏ</button></div>
+    </article>
+    <!-- 5. Giảm khi mua kèm -->
+    <article class="the giam">
+      <div class="nhan"><span class="loai">Giảm giá</span><span></span></div>
+      <h3 class="ten">LOPOE giảm 25% khi mua kèm</h3>
+      <div class="mo">Hóa đơn có thêm ít nhất 1 sản phẩm không phải LOPOE.</div>
+      <div class="mo">Sữa rửa mặt <b>186K</b> · Ampoule <b>314K</b> · Kem <b>411K</b></div>
+      <div class="chan"><a>Không cộng với combo LOPOE</a><button class="nut phu">Xem sản phẩm</button></div>
+    </article>
+    <!-- 6. Combo POS -->
+    <article class="the combo">
+      <div class="nhan"><span class="loai">Combo</span><span></span></div>
+      <div class="sp"><div class="anh chong"><i></i><i></i></div>
+        <div><h3 class="ten">COMBO PINK Medicube PDRN</h3><div class="mo">Đạt mốc 700K, nhận thêm sữa rửa mặt LOPOE</div></div></div>
+      <div class="chan"><div class="gia"><b>999.000</b></div><button class="nut">Thêm vào giỏ</button></div>
+    </article>
+  </div>
+  <p class="ghi" style="margin-top:24px">Bản mẫu W039: mỗi deal là 1 thẻ cao ~240px; chi tiết dài (bộ gợi ý, điều kiện) mở trong ngăn kéo bên phải khi bấm thẻ (thử bấm thẻ đầu tiên).</p>
+</div>
+
+<aside class="keo" id="keo">
+  <button class="dong-keo" onclick="dongKeo()" aria-label="Đóng">✕</button>
+  <span class="ghi">Quà theo hóa đơn · Số lượng có hạn</span>
+  <h2>Mua Medicube, Celimax, SKINFOOD tặng LOPOE</h2>
+  <div class="moc"><div><b>700K</b><span>Sữa rửa mặt</span></div><div><b>1,1 triệu</b><span>Ampoule</span></div><div><b>1,3 triệu</b><span>Kem dưỡng</span></div></div>
+  <b style="font-size:14px;margin-top:6px">Bộ gợi ý vừa mốc 700K</b>
+  <div class="dong"><div class="anh" style="width:48px;height:48px"></div><div><b>COMBO PINK · 999.000</b>Đạt mốc tặng quà</div><button class="nut">Thêm</button></div>
+  <div class="dong"><div class="anh" style="width:48px;height:48px"></div><div><b>COMBO VAMPIRE GLOW · 896.000</b>Đạt mốc tặng quà</div><button class="nut">Thêm</button></div>
+  <div class="dong"><div class="anh" style="width:48px;height:48px"></div><div><b>Bộ toner pad mix · 838.000</b>Đạt mốc tặng quà</div><button class="nut">Thêm</button></div>
+  <span class="ghi">Mốc 1,1 triệu và 1,3 triệu: chọn tab để xem bộ gợi ý.</span>
+</aside>
+<script>function moKeo(){document.getElementById('keo').classList.add('mo-ra')}function dongKeo(){document.getElementById('keo').classList.remove('mo-ra')}</script>
+</body></html>

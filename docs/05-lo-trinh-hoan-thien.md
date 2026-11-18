@@ -63,6 +63,8 @@ Làm đúng thứ tự, mỗi việc một nhánh mới tách từ `main` mới 
 | 2 | **W027** sửa | Theo handoff 18/11 10:51: bỏ câu công dụng tự viết, chữ lấy từ yaml; vị trí lọ đọc từ `vat_the` trong yaml; sửa chồng chữ trên điện thoại; lọ không đè chữ ở khối 1 | Đổi yaml là đổi nội dung, không sửa code |
 | 3 | **W017** làm lại | Quản trị phải đăng nhập Supabase (dùng lại `lib/nhan-vien/xac-thuc-server.ts`, chỉ `vai_tro = 'quan_tri'`), ghi qua server action + `layAdmin()`, không dùng localStorage | Tài khoản `nhan_vien` thường bị chặn; sửa giá/deal lưu được vào DB |
 | 4 | **W019** | Trang chính sách + chân trang. Thông tin doanh nghiệp chưa có (W001) thì để chỗ trống ghi rõ `[chờ W001]` | Chân trang hiện ở cả 3 mốc màn hình |
+| 1c | **W038** | Khung trang dùng chung trong layout (logo không nhấp nháy), logo về New Arrival, danh mục giữ menu + quay lại | tasks/W038.md |
+| 1d | **W039** | Trang Deal dạng thẻ gọn theo `design/DealPC-the.html` | tasks/W039.md |
 | 4b | **W005** | Web đọc ảnh từ kho media Supabase (tasks/W005.md, docs/06) | Đổi ảnh trong kho là web đổi, không cần deploy |
 | 5 | **W029** | Trang `/personal-color` bản tạm theo `design/Pawlette.dc.html` | Có link từ New Arrival |
 | 6 | **W032** | Sau khi W028 merge: ma trận §2.4 vào CI, đo hiệu năng §2.3 | CI xanh cả Chromium và WebKit |
