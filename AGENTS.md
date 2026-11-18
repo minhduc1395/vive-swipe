@@ -14,6 +14,13 @@ Repo code của web quẹt sản phẩm VIVE (kiểu Tinder). Claude = Lead (k�
 - Tạo handoff bằng `python scripts/new_handoff.py ...` (không cần bash). Terminal mặc định PowerShell là được.
 - Đặt repo ngoài thư mục đồng bộ OneDrive (ví dụ `C:\code\vive-swipe`). Git đã có `.gitattributes` giữ xuống dòng kiểu LF, không đổi `core.autocrlf`.
 
+## Antigravity Media (chat thứ hai, làm ảnh và video)
+- Tên trong handoff: `media`; Chủ trì trong task: `Antigravity Media`. Hộp thư: `python scripts/inbox.py media`.
+- Làm trong **worktree riêng** để không đụng thư mục của Antigravity code:
+  `git worktree add ../vive-swipe-media main`, rồi mở thư mục `vive-swipe-media` trong chat Media. Chép `.env.local` sang.
+- Chỉ sửa `scripts/media/`, `media/`, task W035–W037 và handoff của mình. Không sửa `app/`, `components/`, `lib/`, `data/`, `docs/`.
+- Quy trình, nguồn ảnh được phép, quy chuẩn: `docs/06-anh-va-video.md`.
+
 ## Lộ trình
 Thứ tự làm và nguyên tắc co giãn mọi cỡ màn hình: `docs/05-lo-trinh-hoan-thien.md`. Mọi PR có giao diện phải đạt mục 2.2 (mobile-first, không khóa độ rộng, dvh, nút ≥ 44px, chỉ animate transform/opacity).
 

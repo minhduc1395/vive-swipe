@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Hộp thư cho từng agent: việc phải xử lý trước khi làm việc mới.
 
-Dùng: python3 scripts/inbox.py antigravity   (hoặc claude)
+Dùng: python3 scripts/inbox.py antigravity   (hoặc claude, media)
 
 In ra:
 1. Task của mình đang QA = Fail: sửa trước mọi việc khác (kèm handoff qa-fail mới nhất).
@@ -18,14 +18,14 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "scripts"))
 from board import parse  # noqa: E402
 
-TEN = {"antigravity": "Antigravity", "claude": "Claude"}
+TEN = {"antigravity": "Antigravity", "claude": "Claude", "media": "Antigravity Media"}
 
 
 def main():
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
     if len(sys.argv) < 2 or sys.argv[1].lower() not in TEN:
-        print("Dùng: python3 scripts/inbox.py antigravity|claude")
+        print("Dùng: python3 scripts/inbox.py antigravity|claude|media")
         sys.exit(1)
     me = sys.argv[1].lower()
     files = sorted(os.path.basename(f) for f in glob.glob(os.path.join(ROOT, "handoff", "2*.md")))

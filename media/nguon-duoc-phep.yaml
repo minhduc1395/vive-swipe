@@ -1,0 +1,7 @@
+# Thương hiệu được phép dùng ảnh từ website chính hãng hoặc nhà phân phối (docs/06 mục 3).
+# Chỉ chủ dự án hoặc Claude sửa. Trống = chưa thương hiệu nào được phép, chỉ dùng ảnh Drive và ảnh chụp tại booth.
+duoc_phep: []
+# Mẫu:
+# - thuong_hieu: LOPOE
+#   trang: https://...      # website chính hãng
+#   xac_nhan: "chủ dự án, 18/11"
