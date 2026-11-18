@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Chân trang gọn – bản mẫu W049</title>
+<title>Chân trang gọn – bản mẫu W049 (v2)</title>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* Bản mẫu tĩnh cho W049 (chủ dự án 18/11: chân trang gọn, chữ nhỏ hơn phần khác, xếp theo cụm, điện thoại phải gọn nhất).
-   Mở thẳng bằng trình duyệt, kéo hẹp cửa sổ để xem bản máy tính bảng (< 1024px) và điện thoại (< 768px).
-   Chữ lấy từ data/doanh-nghiep.yaml và lib/cau-hinh.ts. Token theo docs/05 §2.5. */
+/* Bản mẫu tĩnh cho W049, bản 2 (chủ dự án 18/11):
+   - mạng xã hội là logo đơn sắc, cùng tone thương hiệu;
+   - thông tin công ty xuống dòng, không viết một dòng dài;
+   - máy tính bảng dùng cùng bố cục với máy tính (máy tính là chuẩn), chỉ khác tỉ lệ;
+   - "© 2026 VIVE" căn giữa ở cuối;
+   - điện thoại: thông tin công ty chữ nhỏ hơn nữa (11px).
+   Logo mạng xã hội: bộ Simple Icons (CC0), tô màu bằng CSS mask; ở app thật chép 3 file SVG vào public/icons/mxh/.
+   Mở thẳng bằng trình duyệt, kéo hẹp cửa sổ để xem các mốc. Token theo docs/05 §2.5. */
 :root{--hong:#E8D2CC;--hong-n:#F7EEEB;--bh:#CFE3D5;--bh-n:#EAF3ED;--den:#2B2B2A;--xam:#737373;--xam-dam:#5C5C5B;--vien:#EEE5E2;--nen-phu:#F4F2F1}
 *{box-sizing:border-box}
 body{margin:0;font-family:'Be Vietnam Pro',sans-serif;color:var(--den);background:#fff}
@@ -13,66 +18,75 @@ body{margin:0;font-family:'Be Vietnam Pro',sans-serif;color:var(--den);backgroun
 
 /* ===== Chân trang ===== */
 .chan{background:var(--nen-phu);color:var(--xam-dam);font-size:13px;line-height:1.5}
-.khung{max-width:1280px;margin:0 auto;padding:40px 32px 28px}
+.khung{max-width:1280px;margin:0 auto;padding:40px 32px 20px}
 
-/* 3 cụm: Thương hiệu | Ghé booth | Hỗ trợ */
-.cum-chinh{display:grid;grid-template-columns:1.1fr 1.3fr .8fr;gap:40px}
+/* Máy tính (chuẩn): 4 cụm cùng một hàng */
+.cum-chinh{display:grid;grid-template-columns:1.15fr 1.2fr .8fr 1.25fr;gap:40px}
 .cum h3{margin:0 0 10px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--xam)}
 .cum p{margin:0}
 
 .logo{height:26px;width:auto;display:block}
-.cau{margin:12px 0 16px !important;max-width:44ch}
-.mxh{display:flex;gap:8px;flex-wrap:wrap}
-.mxh a{display:inline-flex;align-items:center;height:40px;padding:0 16px;border-radius:999px;background:#fff;color:var(--den);font-weight:600;font-size:13px;text-decoration:none;white-space:nowrap}
-.mxh a:hover{background:var(--hong-n)}
+.cau{margin:12px 0 16px !important;max-width:30ch}
+
+/* Logo mạng xã hội: nút tròn trắng, biểu tượng đơn sắc màu --den, rê chuột nền hồng nhạt */
+.mxh{display:flex;gap:8px}
+.mxh a{width:40px;height:40px;border-radius:50%;background:#fff;display:grid;place-items:center;transition:background .15s}
+.mxh a:hover{background:var(--hong)}
+.mxh i{width:18px;height:18px;display:block;background:var(--den);-webkit-mask:var(--icon) center/contain no-repeat;mask:var(--icon) center/contain no-repeat}
+.fb{--icon:url(https://cdn.jsdelivr.net/npm/simple-icons@14.0.0/icons/facebook.svg)}
+.ig{--icon:url(https://cdn.jsdelivr.net/npm/simple-icons@14.0.0/icons/instagram.svg)}
+.tt{--icon:url(https://cdn.jsdelivr.net/npm/simple-icons@14.0.0/icons/tiktok.svg)}
 
 .booth b{display:block;color:var(--den);font-weight:600}
 .booth .gio{margin-top:6px !important}
-.lien-ket{display:inline-flex;align-items:center;gap:4px;margin-top:8px;color:var(--den);font-weight:500;text-decoration:underline;text-underline-offset:3px;min-height:32px}
+.lien-ket{display:inline-flex;align-items:center;margin-top:8px;color:var(--den);font-weight:500;text-decoration:underline;text-underline-offset:3px;min-height:32px}
 
 .ds{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
 .ds a{display:inline-flex;align-items:center;min-height:32px;color:var(--xam-dam);text-decoration:none}
 .ds a:hover{color:var(--den);text-decoration:underline;text-underline-offset:3px}
 
-/* Dải pháp lý: chữ nhỏ nhất, 1 dòng trên máy tính */
-.phap-ly{margin-top:32px;padding-top:16px;border-top:1px solid var(--vien);display:flex;justify-content:space-between;align-items:flex-start;gap:24px;font-size:12px;color:var(--xam)}
-.phap-ly p{margin:0}
-.phap-ly .cty{color:var(--xam-dam);font-weight:600}
-.phap-ly .ban-quyen{white-space:nowrap}
-.giu{white-space:nowrap}
+/* Thông tin công ty: mỗi ý một dòng, chữ 12px */
+.cong-ty p{font-size:12px;line-height:1.55;color:var(--xam)}
+.cong-ty .ten{color:var(--xam-dam);font-weight:600;margin-bottom:2px}
+.cong-ty a{color:inherit}
 
-/* Máy tính bảng 768–1023: 2 cột, cụm thương hiệu chiếm cả hàng trên */
+/* © căn giữa */
+.ban-quyen{margin:32px 0 0;padding-top:16px;border-top:1px solid var(--vien);text-align:center;font-size:12px;color:var(--xam)}
+
+/* Máy tính bảng 768–1023: cùng bố cục 4 cụm, thu khoảng cách và chữ giới thiệu */
 @media (max-width:1023px){
-  .khung{padding:32px 28px 24px}
-  .cum-chinh{grid-template-columns:1fr 1fr;gap:28px 32px}
-  .thuong-hieu{grid-column:1 / -1;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
-  .thuong-hieu .cau{margin:0 !important}
-  .phap-ly{flex-direction:column;gap:8px}
+  .khung{padding:32px 24px 18px}
+  .cum-chinh{grid-template-columns:1fr 1.15fr .85fr 1.15fr;gap:24px}
+  .cau{max-width:none;font-size:12px}
+  .mxh{gap:6px}
+  .mxh a{width:36px;height:36px}
+  .mxh i{width:16px;height:16px}
+  .ban-quyen{margin-top:24px}
 }
 
-/* Điện thoại < 768: thanh tab dưới đã có điều hướng, chân trang chỉ giữ thông tin không có chỗ khác */
+/* Điện thoại < 768: thanh tab dưới đã có điều hướng; chỉ giữ thông tin không có chỗ khác, xếp dọc gọn */
 @media (max-width:767px){
-  .khung{padding:24px 16px calc(24px + 72px + env(safe-area-inset-bottom))} /* chừa thanh tab dưới */
-  .cum-chinh{grid-template-columns:1fr;gap:20px}
-  .thuong-hieu{display:block}
-  .thuong-hieu .dong-dau{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .khung{padding:20px 16px calc(16px + 72px + env(safe-area-inset-bottom))} /* chừa thanh tab dưới */
+  .cum-chinh{grid-template-columns:1fr;gap:14px}
+  /* Logo trái, mạng xã hội phải, cùng một hàng */
+  .thuong-hieu{display:flex;align-items:center;justify-content:space-between}
   .cau{display:none}
-  .mxh{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
-  .mxh a{justify-content:center;height:44px;padding:0 8px}
-  /* Booth: thẻ trắng gọn, nút Chỉ đường bên phải */
-  .booth{background:#fff;border-radius:16px;padding:14px 14px 14px 16px;display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:center}
-  .booth h3{display:none}
+  .mxh a{width:44px;height:44px}
+  .mxh i{width:18px;height:18px}
+  /* Booth: thẻ trắng, nút Chỉ đường bên phải */
+  .booth{background:#fff;border-radius:16px;padding:12px 12px 12px 14px;display:grid;grid-template-columns:1fr auto;gap:1px 10px;align-items:center}
+  .booth h3,.ho-tro h3,.cong-ty h3{display:none}
   .booth .gio{margin-top:2px !important}
   .booth .lien-ket{grid-column:2;grid-row:1 / span 3;margin:0;height:44px;padding:0 14px;border-radius:999px;background:var(--hong-n);text-decoration:none;font-weight:600}
-  /* Hỗ trợ: 1 hàng liên kết ngang, vùng bấm 44px */
-  .ho-tro h3{display:none}
-  .ds{flex-direction:row;flex-wrap:wrap;gap:0 4px}
-  .ds li+li::before{content:'·';color:var(--xam);margin-right:6px}
+  /* Hỗ trợ: 1 hàng, vùng bấm 44px */
+  .ds{flex-direction:row;flex-wrap:wrap;gap:0 6px}
   .ds li{display:flex;align-items:center}
+  .ds li+li::before{content:'·';color:var(--xam);margin-right:6px}
   .ds a{min-height:44px}
-  .phap-ly{margin-top:8px;padding-top:14px}
-  .phap-ly .cty{display:block}
-  .phap-ly .cham-dau{display:none}
+  /* Công ty: chữ nhỏ hơn nữa */
+  .cong-ty{padding-top:12px;border-top:1px solid var(--vien)}
+  .cong-ty p{font-size:11px;line-height:1.5}
+  .ban-quyen{margin-top:12px;padding-top:0;border-top:0;font-size:11px}
 }
 </style></head><body>
 
@@ -84,14 +98,14 @@ body{margin:0;font-family:'Be Vietnam Pro',sans-serif;color:var(--den);backgroun
 
       <!-- Cụm 1: Thương hiệu + mạng xã hội -->
       <section class="cum thuong-hieu" aria-label="VIVE">
-        <div class="dong-dau">
+        <div>
           <img class="logo" src="../public/brand/vive-logo-chu.png" alt="VIVE">
+          <p class="cau">Mỹ phẩm nội địa Hàn, thử và mua tại booth.</p>
         </div>
-        <p class="cau">Mỹ phẩm nội địa Hàn, thử và mua tại booth.</p>
         <nav class="mxh" aria-label="Mạng xã hội">
-          <a href="https://www.facebook.com/weareVIVE" aria-label="Facebook VIVE - K Beauty Experience">Facebook</a>
-          <a href="https://www.instagram.com/vive.k_beauty" aria-label="Instagram @vive.k_beauty">Instagram</a>
-          <a href="https://www.tiktok.com/@viveuniverse" aria-label="TikTok @viveuniverse">TikTok</a>
+          <a href="https://www.facebook.com/weareVIVE" aria-label="Facebook VIVE - K Beauty Experience" title="Facebook · VIVE - K Beauty Experience"><i class="fb"></i></a>
+          <a href="https://www.instagram.com/vive.k_beauty" aria-label="Instagram @vive.k_beauty" title="Instagram · @vive.k_beauty"><i class="ig"></i></a>
+          <a href="https://www.tiktok.com/@viveuniverse" aria-label="TikTok @viveuniverse" title="TikTok · @viveuniverse"><i class="tt"></i></a>
         </nav>
       </section>
 
@@ -113,14 +127,18 @@ body{margin:0;font-family:'Be Vietnam Pro',sans-serif;color:var(--den);backgroun
           <li><a href="/chinh-sach#muc-bao-mat">Bảo mật dữ liệu</a></li>
         </ul>
       </section>
+
+      <!-- Cụm 4: Đơn vị vận hành, mỗi ý một dòng -->
+      <section class="cum cong-ty" aria-label="Đơn vị vận hành">
+        <h3>Đơn vị vận hành</h3>
+        <p class="ten">CÔNG TY CP GIẢI PHÁP QUỐC TẾ VIỆT HÀN</p>
+        <p>MST 0319121217</p>
+        <p>Lầu 1, 456 Xô Viết Nghệ Tĩnh,<br>Phường Thạnh Mỹ Tây, TP Hồ Chí Minh</p>
+        <p><a href="mailto:vkis.business@gmail.com">vkis.business@gmail.com</a></p>
+      </section>
     </div>
 
-    <!-- Dải pháp lý -->
-    <div class="phap-ly">
-      <p><span class="cty">CÔNG TY CP GIẢI PHÁP QUỐC TẾ VIỆT HÀN</span><span class="cham-dau"> · </span><span class="giu">MST 0319121217</span> · <a class="giu" href="mailto:vkis.business@gmail.com" style="color:inherit">vkis.business@gmail.com</a><br>
-        <span class="dia-chi">Lầu 1, 456 Xô Viết Nghệ Tĩnh, Phường Thạnh Mỹ Tây, TP Hồ Chí Minh</span></p>
-      <p class="ban-quyen">© 2026 VIVE</p>
-    </div>
+    <p class="ban-quyen">© 2026 VIVE</p>
   </div>
 </footer>
 </body></html>

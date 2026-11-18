@@ -19,6 +19,7 @@ Không thêm màu ngoài bảng này (kể cả đỏ cho giảm giá). Nhãn gi
 - **Không dùng font có chân (serif)** trên web, kể cả Playfair Display (chủ dự án chốt 15/11/2026). Tiêu đề dùng Be Vietnam Pro 700, khoảng cách chữ −0,5 đến −1,2px.
 - Chữ cần nhấn: vệt hồng `#E8D2CC` sau chữ (`box-shadow: inset 0 -10px 0 #E8D2CC`), không dùng chữ nghiêng.
 - Cỡ tối thiểu 14px cho chữ đọc, 12px cho chú thích. Giá bán 24–28px, đậm.
+- Ngoại lệ (chủ dự án 18/11): thông tin công ty và dòng © ở chân trang trên điện thoại dùng 11px.
 
 ## 3. Logo
 - Dùng đúng file gốc: `public/brand/vive-logo-black.png` (nền sáng) và `public/brand/vive-logo-white.png` (nền tối). Hai file cắt từ "VIVE LOGO FINAL_VIVE BLACK.png" trên Drive, giữ nguyên hình.
