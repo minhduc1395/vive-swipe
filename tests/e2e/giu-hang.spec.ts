@@ -95,7 +95,8 @@ test.describe("W014 · Giữ hàng tại booth, màn mã giữ hàng, email xác
     await expect(page.getByText(/Sữa rửa mặt.*× 1/)).toBeVisible();
     await expect(page.getByText("249.000đ")).toBeVisible();
     await expect(page.getByText(/LL2 Union Square/i)).toBeVisible();
-    await expect(page.getByText("duc.test@vive.vn")).toBeVisible();
+    // Trang mã ai cũng mở được nên email được che bớt
+    await expect(page.getByText("d•••@vive.vn")).toBeVisible();
 
     // Hai nút Lưu ảnh và Thêm vào lịch
     await expect(page.getByRole("button", { name: "Lưu ảnh màn hình" })).toBeVisible();

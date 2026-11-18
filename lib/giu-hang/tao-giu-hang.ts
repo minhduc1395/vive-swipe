@@ -1,4 +1,12 @@
 import { DEALS, SAN_PHAM } from "@/lib/data";
+import {
+  SanPhamSchema,
+  DealSchema,
+  type SanPham,
+  type Deal,
+} from "@/lib/data/types";
+import { layAdmin } from "@/lib/supabase/admin";
+import { hopNhatDongDeal } from "@/lib/supabase/du-lieu";
 import { CAU_HINH_BOOTH } from "@/lib/cau-hinh";
 import { tinhGio, type MucGioInput } from "@/lib/deals/gio-hang";
 import { guiEmailXacNhanGiuHang } from "@/lib/email/xac-nhan-giu-hang";
@@ -6,6 +14,7 @@ import {
   demSoDonDangGiuTheoSdt,
   kiemTraMaDaTonTai,
   luuDonGiuHang,
+  LoiKhoGiuHang,
 } from "./kho-giu-hang";
 import type {
   DonGiuHangChiTiet,
@@ -79,22 +88,38 @@ export async function sinhMaGiuHang(): Promise<string> {
   return `VIVE-${Date.now().toString().slice(-4)}`;
 }
 
+/** Giá và deal lấy từ database (quản trị sửa ở W017); máy dev không có khóa thì dùng dữ liệu tĩnh. */
+async function taiGiaTuDatabase(): Promise<{
+  sanPham: SanPham[];
+  deals: Deal[];
+}> {
+  const admin = layAdmin();
+  if (!admin) return { sanPham: SAN_PHAM, deals: DEALS };
+  const [sp, dl] = await Promise.all([
+    admin.from("san_pham").select("*"),
+    admin.from("deal").select("*"),
+  ]);
+  if (sp.error || dl.error)
+    throw new LoiKhoGiuHang((sp.error || dl.error)!.message);
+  const sanPham = (sp.data ?? []).flatMap((r) => {
+    const p = SanPhamSchema.safeParse(r);
+    return p.success ? [p.data] : [];
+  });
+  const deals = (dl.data ?? []).flatMap((r) => {
+    const p = DealSchema.safeParse(hopNhatDongDeal(r));
+    return p.success ? [p.data] : [];
+  });
+  return { sanPham, deals };
+}
+
 /**
  * Server Action / Logic trung tâm tạo đơn giữ hàng tại booth.
  * Tính lại giá và quà hoàn toàn trên server; không tin giá từ trình duyệt.
  */
 export async function xuLyTaoGiuHang(
-  input: ThongTinDatGiuHangInput
+  input: ThongTinDatGiuHangInput,
 ): Promise<KetQuaTaoGiuHang> {
-  const {
-    ten,
-    sdt,
-    email,
-    ngayDen,
-    dongYChinhSach,
-    gio,
-    khachId,
-  } = input;
+  const { ten, sdt, email, ngayDen, dongYChinhSach, gio, khachId } = input;
 
   // 1. Kiểm tra chính sách
   if (!dongYChinhSach) {
@@ -139,104 +164,133 @@ export async function xuLyTaoGiuHang(
     };
   }
 
-  // 6. Kiểm tra giới hạn 3 mã đang giữ cho số điện thoại này
-  const soDonDangGiu = await demSoDonDangGiuTheoSdt(sdtChuanHoa);
-  if (soDonDangGiu >= 3) {
-    return {
-      ok: false,
-      loi: "Mỗi số điện thoại giữ tối đa 3 mã cùng lúc tại booth. Vui lòng lấy các món đã giữ trước đó hoặc chờ đơn hết hạn.",
-    };
-  }
-
-  // 7. Tính lại giá toàn bộ trên server bằng tinhGio
-  const mucGioInput: MucGioInput[] = gio.map((item) => {
-    if (item.loai === "combo" && item.dealId) {
+  try {
+    // 6. Kiểm tra giới hạn 3 mã đang giữ cho số điện thoại này
+    const soDonDangGiu = await demSoDonDangGiuTheoSdt(sdtChuanHoa);
+    if (soDonDangGiu >= 3) {
       return {
-        loai: "combo",
-        deal_id: item.dealId,
-        so_luong: item.soLuong,
+        ok: false,
+        loi: "Mỗi số điện thoại giữ tối đa 3 mã cùng lúc tại booth. Vui lòng lấy các món đã giữ trước đó hoặc chờ đơn hết hạn.",
       };
     }
-    return {
-      loai: "san_pham",
-      san_pham_id: item.sanPhamId || "",
-      so_luong: item.soLuong,
+
+    // 7. Tính lại giá toàn bộ trên server bằng tinhGio
+    const mucGioInput: MucGioInput[] = gio.map((item) => {
+      if (item.loai === "combo" && item.dealId) {
+        return {
+          loai: "combo",
+          deal_id: item.dealId,
+          so_luong: item.soLuong,
+        };
+      }
+      return {
+        loai: "san_pham",
+        san_pham_id: item.sanPhamId || "",
+        so_luong: item.soLuong,
+      };
+    });
+
+    const { sanPham, deals } = await taiGiaTuDatabase();
+    const ketQuaGio = tinhGio(mucGioInput, sanPham, deals);
+
+    if (ketQuaGio.cac_dong.length === 0) {
+      return {
+        ok: false,
+        loi: "Không có sản phẩm hợp lệ trong giỏ hàng.",
+      };
+    }
+
+    // 8. Chuẩn bị thông tin đơn giữ hàng
+    let ma = await sinhMaGiuHang();
+    const { ngayDenStr, hetHanIso, hanGiuText } = tinhNgayVaHetHan(ngayDen);
+    const diaChi = CAU_HINH_BOOTH.diaChiDayDu;
+
+    const cacDongXacNhan: DongGiuHangXacNhan[] = ketQuaGio.cac_dong.map(
+      (d) => ({
+        id: d.id,
+        ten: d.ten,
+        thuongHieu: d.thuong_hieu,
+        soLuong: d.so_luong,
+        giaSauUuDai: d.gia_sau_uu_dai,
+        loai: d.loai,
+      }),
+    );
+
+    const donMoi: DonGiuHangChiTiet = {
+      id: crypto.randomUUID(),
+      ma,
+      khachId: khachId || null,
+      ten: tenClean,
+      sdt: sdtChuanHoa,
+      email: emailClean || null,
+      ngayDen: ngayDenStr,
+      hetHan: hetHanIso,
+      trangThai: "moi",
+      tongUocTinh: ketQuaGio.tong_tam_tinh,
+      quaDuKien: ketQuaGio.qua_du_kien,
+      ghiChu: null,
+      taoLuc: new Date().toISOString(),
+      cacDong: cacDongXacNhan,
     };
-  });
 
-  const ketQuaGio = tinhGio(mucGioInput, SAN_PHAM, DEALS);
+    // 9. Lưu vào database; trùng mã (23505) thì sinh mã khác, thử tối đa 3 lần
+    for (let lan = 0; ; lan++) {
+      try {
+        await luuDonGiuHang(donMoi);
+        break;
+      } catch (e) {
+        if (e instanceof LoiKhoGiuHang && e.ma === "23505" && lan < 2) {
+          ma = await sinhMaGiuHang();
+          donMoi.ma = ma;
+          continue;
+        }
+        throw e;
+      }
+    }
 
-  if (ketQuaGio.cac_dong.length === 0) {
+    // 10. Gửi email xác nhận nếu có email
+    if (emailClean) {
+      await guiEmailXacNhanGiuHang({
+        to: emailClean,
+        ten: tenClean,
+        ma,
+        hanGiuText,
+        tongTien: ketQuaGio.tong_tam_tinh,
+        quaDuKien: ketQuaGio.qua_du_kien,
+        diaChi,
+        cacDong: cacDongXacNhan.map((d) => ({
+          ten: d.ten,
+          so_luong: d.soLuong,
+          gia_sau_uu_dai: d.giaSauUuDai,
+        })),
+      });
+    }
+
+    return {
+      ok: true,
+      ma,
+      ngayDenStr,
+      hetHanIso,
+      hanGiuText,
+      tongUocTinh: ketQuaGio.tong_tam_tinh,
+      quaDuKien: ketQuaGio.qua_du_kien,
+      cacDong: cacDongXacNhan,
+      diaChi,
+      ten: tenClean,
+      sdt: sdtChuanHoa,
+      email: emailClean,
+    };
+  } catch (e) {
+    if (e instanceof LoiKhoGiuHang && e.ma === "P0001") {
+      return {
+        ok: false,
+        loi: "Mỗi số điện thoại giữ tối đa 3 mã cùng lúc tại booth. Vui lòng lấy các món đã giữ trước đó hoặc chờ đơn hết hạn.",
+      };
+    }
+    console.error("[GiuHang] Không lưu được đơn giữ hàng:", e);
     return {
       ok: false,
-      loi: "Không có sản phẩm hợp lệ trong giỏ hàng.",
+      loi: "Chưa giữ hàng được do lỗi hệ thống. Bạn thử lại sau ít phút hoặc đến thẳng booth để nhân viên hỗ trợ.",
     };
   }
-
-  // 8. Chuẩn bị thông tin đơn giữ hàng
-  const ma = await sinhMaGiuHang();
-  const { ngayDenStr, hetHanIso, hanGiuText } = tinhNgayVaHetHan(ngayDen);
-  const diaChi = CAU_HINH_BOOTH.diaChiDayDu;
-
-  const cacDongXacNhan: DongGiuHangXacNhan[] = ketQuaGio.cac_dong.map((d) => ({
-    id: d.id,
-    ten: d.ten,
-    thuongHieu: d.thuong_hieu,
-    soLuong: d.so_luong,
-    giaSauUuDai: d.gia_sau_uu_dai,
-    loai: d.loai,
-  }));
-
-  const donMoi: DonGiuHangChiTiet = {
-    id: `gh-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-    ma,
-    khachId: khachId || null,
-    ten: tenClean,
-    sdt: sdtChuanHoa,
-    email: emailClean || null,
-    ngayDen: ngayDenStr,
-    hetHan: hetHanIso,
-    trangThai: "moi",
-    tongUocTinh: ketQuaGio.tong_tam_tinh,
-    quaDuKien: ketQuaGio.qua_du_kien,
-    ghiChu: null,
-    taoLuc: new Date().toISOString(),
-    cacDong: cacDongXacNhan,
-  };
-
-  // 9. Lưu vào cơ sở dữ liệu (Supabase + local memory fallback)
-  await luuDonGiuHang(donMoi);
-
-  // 10. Gửi email xác nhận nếu có email
-  if (emailClean) {
-    await guiEmailXacNhanGiuHang({
-      to: emailClean,
-      ten: tenClean,
-      ma,
-      hanGiuText,
-      tongTien: ketQuaGio.tong_tam_tinh,
-      quaDuKien: ketQuaGio.qua_du_kien,
-      diaChi,
-      cacDong: cacDongXacNhan.map((d) => ({
-        ten: d.ten,
-        so_luong: d.soLuong,
-        gia_sau_uu_dai: d.giaSauUuDai,
-      })),
-    });
-  }
-
-  return {
-    ok: true,
-    ma,
-    ngayDenStr,
-    hetHanIso,
-    hanGiuText,
-    tongUocTinh: ketQuaGio.tong_tam_tinh,
-    quaDuKien: ketQuaGio.qua_du_kien,
-    cacDong: cacDongXacNhan,
-    diaChi,
-    ten: tenClean,
-    sdt: sdtChuanHoa,
-    email: emailClean,
-  };
 }
