@@ -18,14 +18,6 @@ export interface AppShellProps {
   className?: string;
   noiDungClassName?: string;
   khoaChieuCao?: boolean;
-  /** @deprecated W038: điều hướng dùng chung tự quản lý theo route khách */
-  hienDieuHuong?: boolean;
-  /** @deprecated W038 */
-  hienThanhTrenDesktop?: boolean;
-  /** @deprecated W038 */
-  hienThanhDocTablet?: boolean;
-  /** @deprecated W038 */
-  hienThanhTabMobile?: boolean;
 }
 
 /**
@@ -75,6 +67,8 @@ export function AppShell({
   const tongThich = propSoLuongThich ?? soThich;
   const tongGio = propSoLuongGio ?? soGio;
 
+  const isLanding = pathname === "/" || pathname === "/new-arrival";
+
   const isFixedH =
     khoaChieuCao ||
     pathname === "/quet" ||
@@ -99,13 +93,15 @@ export function AppShell({
             aria-label="Trang chủ VIVE"
             className="inline-flex items-center min-h-[44px]"
           >
-            <LogoVive rong={58} />
+            <LogoVive rong={56} />
           </Link>
           <Link
             href="/dang-nhap"
-            className="h-8 px-3 rounded-full bg-[#F7EEEB] text-den text-[13px] font-semibold inline-flex items-center hover:bg-[#E8D2CC] transition-colors"
+            className="min-h-[44px] inline-flex items-center justify-center"
           >
-            Đăng nhập
+            <span className="h-8 px-3 rounded-full bg-[#F7EEEB] text-den text-[13px] font-semibold inline-flex items-center hover:bg-[#E8D2CC] transition-colors">
+              Đăng nhập
+            </span>
           </Link>
         </header>
       )}
@@ -128,7 +124,7 @@ export function AppShell({
           } ${noiDungClassName}`}
         >
           {children}
-          {coHienDieuHuong && !isFixedH && hienChanTrang && (
+          {coHienDieuHuong && !isFixedH && !isLanding && hienChanTrang && (
             <ChanTrang className="mt-auto" />
           )}
         </div>

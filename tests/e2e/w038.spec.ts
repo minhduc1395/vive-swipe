@@ -51,7 +51,6 @@ test.describe("W038 · Khung trang cố định & điều hướng dùng chung",
 
   test("1. Logo giữ nguyên DOM node không nhấp nháy khi chuyển trang (1440x900)", async ({
     page,
-    context,
   }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await datDaKhaoSat(page);

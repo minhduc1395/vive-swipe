@@ -11,8 +11,8 @@ interface KhoiDoiTacProps {
 
 export function KhoiDoiTac({ khoi }: KhoiDoiTacProps) {
   const {
-    tieu_de = "Tông nào hợp bạn?",
-    mo_ta = "Đo personal color cùng Pawlette, rồi thử lớp nền đúng tông ngay tại booth.",
+    tieu_de = "Tone bạn màu nào?",
+    mo_ta = "Đo personal color cùng Pawlette, rồi thử lớp nền đúng tone ngay tại booth.",
     gia_goi = 378000,
     link = "/personal-color",
   } = khoi;
