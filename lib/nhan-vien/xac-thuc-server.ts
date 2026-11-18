@@ -15,8 +15,15 @@ export async function xacThucNhanVien(
 ): Promise<NhanVienDaXacThuc> {
   const admin = layAdmin();
   if (!admin) {
-    if (choPhepKhoTam())
-      return { id: "dev", ten: "Quầy VIVE (thử)", vaiTro: "quan_tri" };
+    if (choPhepKhoTam()) {
+      if (token === "thu:nhan_vien") {
+        return { id: "dev-nv", ten: "Quầy VIVE (thử)", vaiTro: "nhan_vien" };
+      }
+      if (!token || token === "thu" || token === "thu:quan_tri") {
+        return { id: "dev", ten: "Quản trị VIVE (thử)", vaiTro: "quan_tri" };
+      }
+      throw new Error("Phiên đăng nhập không hợp lệ");
+    }
     throw new Error("Chưa cấu hình xác thực nhân viên");
   }
   if (!token) throw new Error("Chưa đăng nhập");
@@ -29,4 +36,19 @@ export async function xacThucNhanVien(
     .maybeSingle();
   if (!nv) throw new Error("Tài khoản không có quyền nhân viên");
   return { id: data.user.id, ten: nv.ten, vaiTro: nv.vai_tro };
+}
+
+/**
+ * Kiểm tra người gọi Server Action có vai trò quản trị (`quan_tri`) hay không.
+ * Chặn cả khách chưa đăng nhập lẫn tài khoản nhân viên thường (`nhan_vien`).
+ */
+export async function xacThucQuanTri(
+  token: string | null | undefined,
+): Promise<NhanVienDaXacThuc> {
+  if (!token) throw new Error("Chưa đăng nhập quản trị");
+  const nv = await xacThucNhanVien(token);
+  if (nv.vaiTro !== "quan_tri") {
+    throw new Error("Chỉ tài khoản quản trị mới có quyền thực hiện thao tác này");
+  }
+  return nv;
 }

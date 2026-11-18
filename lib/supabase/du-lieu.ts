@@ -13,6 +13,12 @@ export function hopNhatDongDeal(row: Record<string, unknown>): Record<string, un
   return {
     ...dealGoc,
     id: row.id,
+    trang_thai: row.trang_thai || dealGoc.trang_thai,
+    may_rui: typeof row.may_rui === "boolean" ? row.may_rui : (dealGoc.may_rui ?? false),
+    da_dang_ky:
+      typeof row.da_dang_ky === "boolean" ? row.da_dang_ky : (dealGoc.da_dang_ky ?? false),
+    hien_thi:
+      typeof row.hien_thi === "boolean" ? row.hien_thi : (dealGoc.hien_thi ?? true),
     het_qua: typeof row.het_qua === "boolean" ? row.het_qua : (dealGoc.het_qua ?? false),
     bat_dau: row.bat_dau || dealGoc.bat_dau,
     ket_thuc: row.ket_thuc || dealGoc.ket_thuc,
