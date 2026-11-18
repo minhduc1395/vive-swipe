@@ -107,7 +107,7 @@ Quy tắc bắt buộc (lặp lại vì đã sai nhiều lần):
 Sau lượt này (chưa làm): W018 email deal (cần tên miền), W030 đăng nhập (Claude thiết kế trước), W021 QA giữa kỳ (Claude, 22/11), W023 nghiệm thu tại booth (26/11).
 
 ## 6. Ảnh và video (từ 18/11)
-Chat thứ hai **Antigravity Media** lo ảnh thẻ, ảnh bối cảnh, video: W035 → W036 → W037. Quy trình và kho tập trung xem `docs/06-anh-va-video.md`. Drive Inbox cho ảnh chụp ở booth: https://drive.google.com/drive/folders/1EgROHqS-Nfg0lFpe7lK2B64u4N3c_df6
+Chat thứ hai **Antigravity Media** lo ảnh thẻ, ảnh bối cảnh, video: W035 → W036 → W037. Quy trình và kho tập trung xem `docs/06-anh-va-video.md`. Inbox chung cho ảnh và thông tin sản phẩm: https://drive.google.com/drive/folders/1-SEBvf5iv1D1lVYi81eXogjsenpuOm5n
 
 ## 7. Song ngữ và nhập liệu (từ 18/11)
 Xem `docs/07-song-ngu-va-nhap-lieu.md`. Antigravity làm sau W039: W044 (song ngữ) → W045 (trang kho) → W046 (Excel). Antigravity Media: W047 song song.
