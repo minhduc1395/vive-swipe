@@ -43,51 +43,128 @@
           "/chien-dich/lopoe-better-balance/ampoule-nap.webp",
           "/chien-dich/lopoe-better-balance/kem.webp"
         ],
-        "vat_the": [
-          {
-            "id": "srm",
-            "ten": "LOPOE Cleansing Foam",
-            "anh": "/chien-dich/lopoe-better-balance/srm.webp",
-            "rong_px": 135,
-            "x": 0.14,
-            "y": 0.04,
-            "z": 30,
-            "rx": 0,
-            "ry": -8,
-            "rz": -12,
-            "scale": 0.9,
-            "mo": 0
+        "vat_the": {
+          "dien_thoai": {
+            "x": 50,
+            "y": 25,
+            "co": 44,
+            "xoay": 0,
+            "mo": 0,
+            "vat_pham": [
+              {
+                "id": "srm",
+                "ten": "LOPOE Cleansing Foam",
+                "anh": "/chien-dich/lopoe-better-balance/srm.webp",
+                "ty_le_khung": 2.7,
+                "dx": -12,
+                "dy": 2,
+                "ty_le": 0.78,
+                "xoay": -10
+              },
+              {
+                "id": "ampoule",
+                "ten": "LOPOE Better Balance Ampoule",
+                "anh": "/chien-dich/lopoe-better-balance/ampoule-than.webp",
+                "nap_anh": "/chien-dich/lopoe-better-balance/ampoule-nap.webp",
+                "ty_le_khung": 2.33,
+                "dx": 0,
+                "dy": -1,
+                "ty_le": 0.95,
+                "xoay": 3
+              },
+              {
+                "id": "kem",
+                "ten": "LOPOE Moisture Cream",
+                "anh": "/chien-dich/lopoe-better-balance/kem.webp",
+                "ty_le_khung": 2.66,
+                "dx": 12,
+                "dy": 3,
+                "ty_le": 0.8,
+                "xoay": 10
+              }
+            ]
           },
-          {
-            "id": "ampoule",
-            "ten": "LOPOE Better Balance Ampoule",
-            "anh": "/chien-dich/lopoe-better-balance/ampoule-than.webp",
-            "nap_anh": "/chien-dich/lopoe-better-balance/ampoule-nap.webp",
-            "rong_px": 165,
-            "x": 0.48,
-            "y": -0.06,
-            "z": 120,
-            "rx": 0,
-            "ry": 4,
-            "rz": 4,
-            "scale": 1.05,
-            "mo": 0
+          "may_tinh_bang": {
+            "x": 56,
+            "y": 25,
+            "co": 40,
+            "xoay": 0,
+            "mo": 0,
+            "vat_pham": [
+              {
+                "id": "srm",
+                "ten": "LOPOE Cleansing Foam",
+                "anh": "/chien-dich/lopoe-better-balance/srm.webp",
+                "ty_le_khung": 2.7,
+                "dx": -12,
+                "dy": 2,
+                "ty_le": 0.8,
+                "xoay": -11
+              },
+              {
+                "id": "ampoule",
+                "ten": "LOPOE Better Balance Ampoule",
+                "anh": "/chien-dich/lopoe-better-balance/ampoule-than.webp",
+                "nap_anh": "/chien-dich/lopoe-better-balance/ampoule-nap.webp",
+                "ty_le_khung": 2.33,
+                "dx": 0,
+                "dy": -1,
+                "ty_le": 0.96,
+                "xoay": 4
+              },
+              {
+                "id": "kem",
+                "ten": "LOPOE Moisture Cream",
+                "anh": "/chien-dich/lopoe-better-balance/kem.webp",
+                "ty_le_khung": 2.66,
+                "dx": 12,
+                "dy": 3,
+                "ty_le": 0.82,
+                "xoay": 11
+              }
+            ]
           },
-          {
-            "id": "kem",
-            "ten": "LOPOE Moisture Cream",
-            "anh": "/chien-dich/lopoe-better-balance/kem.webp",
-            "rong_px": 185,
-            "x": 0.8,
-            "y": 0.08,
-            "z": 45,
-            "rx": 0,
-            "ry": -12,
-            "rz": 12,
-            "scale": 0.92,
-            "mo": 0
+          "may_tinh": {
+            "x": 72,
+            "y": 50,
+            "co": 44,
+            "xoay": 0,
+            "mo": 0,
+            "vat_pham": [
+              {
+                "id": "srm",
+                "ten": "LOPOE Cleansing Foam",
+                "anh": "/chien-dich/lopoe-better-balance/srm.webp",
+                "ty_le_khung": 2.7,
+                "dx": -11,
+                "dy": 2,
+                "ty_le": 0.82,
+                "xoay": -12
+              },
+              {
+                "id": "ampoule",
+                "ten": "LOPOE Better Balance Ampoule",
+                "anh": "/chien-dich/lopoe-better-balance/ampoule-than.webp",
+                "nap_anh": "/chien-dich/lopoe-better-balance/ampoule-nap.webp",
+                "ty_le_khung": 2.33,
+                "dx": 0,
+                "dy": -2,
+                "ty_le": 1,
+                "xoay": 4
+              },
+              {
+                "id": "kem",
+                "ten": "LOPOE Moisture Cream",
+                "anh": "/chien-dich/lopoe-better-balance/kem.webp",
+                "ty_le_khung": 2.66,
+                "dx": 11,
+                "dy": 3,
+                "ty_le": 0.85,
+                "xoay": 12
+              }
+            ]
           }
-        ]
+        }
       },
       {
         "loai": "tieu-diem",
@@ -108,51 +185,137 @@
           "/chien-dich/lopoe-better-balance/ampoule-than.webp",
           "/chien-dich/lopoe-better-balance/ampoule-nap.webp"
         ],
-        "vat_the": [
-          {
-            "id": "srm",
-            "ten": "LOPOE Cleansing Foam",
-            "anh": "/chien-dich/lopoe-better-balance/srm.webp",
-            "rong_px": 135,
-            "x": -1.45,
-            "y": 0.06,
-            "z": -40,
-            "rx": 0,
-            "ry": -18,
-            "rz": -24,
-            "scale": 0.72,
-            "mo": 0
+        "vat_the": {
+          "dien_thoai": {
+            "x": 50,
+            "y": 25,
+            "co": 44,
+            "xoay": -2,
+            "mo": 1,
+            "vat_pham": [
+              {
+                "id": "srm",
+                "ten": "LOPOE Cleansing Foam",
+                "anh": "/chien-dich/lopoe-better-balance/srm.webp",
+                "ty_le_khung": 2.7,
+                "dx": -14,
+                "dy": 2,
+                "ty_le": 0.65,
+                "xoay": -18,
+                "an": true
+              },
+              {
+                "id": "ampoule",
+                "ten": "LOPOE Better Balance Ampoule",
+                "anh": "/chien-dich/lopoe-better-balance/ampoule-than.webp",
+                "nap_anh": "/chien-dich/lopoe-better-balance/ampoule-nap.webp",
+                "ty_le_khung": 2.33,
+                "dx": 0,
+                "dy": 0,
+                "ty_le": 1,
+                "xoay": -2,
+                "mo": 1
+              },
+              {
+                "id": "kem",
+                "ten": "LOPOE Moisture Cream",
+                "anh": "/chien-dich/lopoe-better-balance/kem.webp",
+                "ty_le_khung": 2.66,
+                "dx": 14,
+                "dy": 3,
+                "ty_le": 0.65,
+                "xoay": 18,
+                "an": true
+              }
+            ]
           },
-          {
-            "id": "ampoule",
-            "ten": "LOPOE Better Balance Ampoule",
-            "anh": "/chien-dich/lopoe-better-balance/ampoule-than.webp",
-            "nap_anh": "/chien-dich/lopoe-better-balance/ampoule-nap.webp",
-            "rong_px": 165,
-            "x": -0.46,
-            "y": -0.04,
-            "z": 160,
-            "rx": 0,
-            "ry": 6,
-            "rz": -4,
-            "scale": 1.18,
-            "mo": 1
+          "may_tinh_bang": {
+            "x": 56,
+            "y": 25,
+            "co": 40,
+            "xoay": -2,
+            "mo": 1,
+            "vat_pham": [
+              {
+                "id": "srm",
+                "ten": "LOPOE Cleansing Foam",
+                "anh": "/chien-dich/lopoe-better-balance/srm.webp",
+                "ty_le_khung": 2.7,
+                "dx": -14,
+                "dy": 2,
+                "ty_le": 0.65,
+                "xoay": -18,
+                "an": true
+              },
+              {
+                "id": "ampoule",
+                "ten": "LOPOE Better Balance Ampoule",
+                "anh": "/chien-dich/lopoe-better-balance/ampoule-than.webp",
+                "nap_anh": "/chien-dich/lopoe-better-balance/ampoule-nap.webp",
+                "ty_le_khung": 2.33,
+                "dx": 0,
+                "dy": 0,
+                "ty_le": 1,
+                "xoay": -3,
+                "mo": 1
+              },
+              {
+                "id": "kem",
+                "ten": "LOPOE Moisture Cream",
+                "anh": "/chien-dich/lopoe-better-balance/kem.webp",
+                "ty_le_khung": 2.66,
+                "dx": 14,
+                "dy": 3,
+                "ty_le": 0.65,
+                "xoay": 18,
+                "an": true
+              }
+            ]
           },
-          {
-            "id": "kem",
-            "ten": "LOPOE Moisture Cream",
-            "anh": "/chien-dich/lopoe-better-balance/kem.webp",
-            "rong_px": 185,
-            "x": 1.45,
-            "y": 0.12,
-            "z": -40,
-            "rx": 0,
-            "ry": 18,
-            "rz": 24,
-            "scale": 0.72,
-            "mo": 0
+          "may_tinh": {
+            "x": 27,
+            "y": 50,
+            "co": 46,
+            "xoay": -3,
+            "mo": 1,
+            "vat_pham": [
+              {
+                "id": "srm",
+                "ten": "LOPOE Cleansing Foam",
+                "anh": "/chien-dich/lopoe-better-balance/srm.webp",
+                "ty_le_khung": 2.7,
+                "dx": -14,
+                "dy": 2,
+                "ty_le": 0.68,
+                "xoay": -22,
+                "an": true
+              },
+              {
+                "id": "ampoule",
+                "ten": "LOPOE Better Balance Ampoule",
+                "anh": "/chien-dich/lopoe-better-balance/ampoule-than.webp",
+                "nap_anh": "/chien-dich/lopoe-better-balance/ampoule-nap.webp",
+                "ty_le_khung": 2.33,
+                "dx": 0,
+                "dy": 0,
+                "ty_le": 1.04,
+                "xoay": -4,
+                "mo": 1
+              },
+              {
+                "id": "kem",
+                "ten": "LOPOE Moisture Cream",
+                "anh": "/chien-dich/lopoe-better-balance/kem.webp",
+                "ty_le_khung": 2.66,
+                "dx": 14,
+                "dy": 3,
+                "ty_le": 0.68,
+                "xoay": 22,
+                "an": true
+              }
+            ]
           }
-        ]
+        }
       },
       {
         "loai": "bang-chu",
@@ -183,51 +346,128 @@
           "/chien-dich/lopoe-better-balance/ampoule-than.webp",
           "/chien-dich/lopoe-better-balance/kem.webp"
         ],
-        "vat_the": [
-          {
-            "id": "srm",
-            "ten": "LOPOE Cleansing Foam",
-            "anh": "/chien-dich/lopoe-better-balance/srm.webp",
-            "rong_px": 135,
-            "x": -0.52,
-            "y": 0.04,
-            "z": 20,
-            "rx": 0,
-            "ry": 8,
-            "rz": -6,
-            "scale": 0.85,
-            "mo": 0
+        "vat_the": {
+          "dien_thoai": {
+            "x": 50,
+            "y": 23,
+            "co": 40,
+            "xoay": 0,
+            "mo": 0,
+            "vat_pham": [
+              {
+                "id": "srm",
+                "ten": "LOPOE Cleansing Foam",
+                "anh": "/chien-dich/lopoe-better-balance/srm.webp",
+                "ty_le_khung": 2.7,
+                "dx": -12,
+                "dy": 1,
+                "ty_le": 0.76,
+                "xoay": -6
+              },
+              {
+                "id": "ampoule",
+                "ten": "LOPOE Better Balance Ampoule",
+                "anh": "/chien-dich/lopoe-better-balance/ampoule-than.webp",
+                "nap_anh": "/chien-dich/lopoe-better-balance/ampoule-nap.webp",
+                "ty_le_khung": 2.33,
+                "dx": 0,
+                "dy": 0,
+                "ty_le": 0.9,
+                "xoay": 0
+              },
+              {
+                "id": "kem",
+                "ten": "LOPOE Moisture Cream",
+                "anh": "/chien-dich/lopoe-better-balance/kem.webp",
+                "ty_le_khung": 2.66,
+                "dx": 12,
+                "dy": 1,
+                "ty_le": 0.78,
+                "xoay": 6
+              }
+            ]
           },
-          {
-            "id": "ampoule",
-            "ten": "LOPOE Better Balance Ampoule",
-            "anh": "/chien-dich/lopoe-better-balance/ampoule-than.webp",
-            "nap_anh": "/chien-dich/lopoe-better-balance/ampoule-nap.webp",
-            "rong_px": 165,
-            "x": 0,
-            "y": -0.02,
-            "z": 80,
-            "rx": 0,
-            "ry": 0,
-            "rz": 0,
-            "scale": 0.95,
-            "mo": 0
+          "may_tinh_bang": {
+            "x": 56,
+            "y": 23,
+            "co": 36,
+            "xoay": 0,
+            "mo": 0,
+            "vat_pham": [
+              {
+                "id": "srm",
+                "ten": "LOPOE Cleansing Foam",
+                "anh": "/chien-dich/lopoe-better-balance/srm.webp",
+                "ty_le_khung": 2.7,
+                "dx": -12,
+                "dy": 1,
+                "ty_le": 0.78,
+                "xoay": -6
+              },
+              {
+                "id": "ampoule",
+                "ten": "LOPOE Better Balance Ampoule",
+                "anh": "/chien-dich/lopoe-better-balance/ampoule-than.webp",
+                "nap_anh": "/chien-dich/lopoe-better-balance/ampoule-nap.webp",
+                "ty_le_khung": 2.33,
+                "dx": 0,
+                "dy": 0,
+                "ty_le": 0.92,
+                "xoay": 0
+              },
+              {
+                "id": "kem",
+                "ten": "LOPOE Moisture Cream",
+                "anh": "/chien-dich/lopoe-better-balance/kem.webp",
+                "ty_le_khung": 2.66,
+                "dx": 12,
+                "dy": 1,
+                "ty_le": 0.8,
+                "xoay": 6
+              }
+            ]
           },
-          {
-            "id": "kem",
-            "ten": "LOPOE Moisture Cream",
-            "anh": "/chien-dich/lopoe-better-balance/kem.webp",
-            "rong_px": 185,
-            "x": 0.52,
-            "y": 0.04,
-            "z": 30,
-            "rx": 0,
-            "ry": -8,
-            "rz": 6,
-            "scale": 0.85,
-            "mo": 0
+          "may_tinh": {
+            "x": 73,
+            "y": 25,
+            "co": 34,
+            "xoay": 0,
+            "mo": 0,
+            "vat_pham": [
+              {
+                "id": "srm",
+                "ten": "LOPOE Cleansing Foam",
+                "anh": "/chien-dich/lopoe-better-balance/srm.webp",
+                "ty_le_khung": 2.7,
+                "dx": -10,
+                "dy": 1,
+                "ty_le": 0.8,
+                "xoay": -6
+              },
+              {
+                "id": "ampoule",
+                "ten": "LOPOE Better Balance Ampoule",
+                "anh": "/chien-dich/lopoe-better-balance/ampoule-than.webp",
+                "nap_anh": "/chien-dich/lopoe-better-balance/ampoule-nap.webp",
+                "ty_le_khung": 2.33,
+                "dx": 0,
+                "dy": 0,
+                "ty_le": 0.95,
+                "xoay": 0
+              },
+              {
+                "id": "kem",
+                "ten": "LOPOE Moisture Cream",
+                "anh": "/chien-dich/lopoe-better-balance/kem.webp",
+                "ty_le_khung": 2.66,
+                "dx": 10,
+                "dy": 1,
+                "ty_le": 0.82,
+                "xoay": 6
+              }
+            ]
           }
-        ]
+        }
       },
       {
         "loai": "chuong-trinh",
@@ -300,51 +540,82 @@
           "/chien-dich/lopoe-better-balance/ampoule-than.webp",
           "/chien-dich/lopoe-better-balance/kem.webp"
         ],
-        "vat_the": [
-          {
-            "id": "srm",
-            "ten": "LOPOE Cleansing Foam",
-            "anh": "/chien-dich/lopoe-better-balance/srm.webp",
-            "rong_px": 135,
-            "x": 0.14,
-            "y": 0.04,
-            "z": 30,
-            "rx": 0,
-            "ry": -8,
-            "rz": -12,
-            "scale": 0.9,
-            "mo": 0
+        "vat_the": {
+          "dien_thoai": {
+            "x": 50,
+            "y": 25,
+            "co": 44,
+            "xoay": 0,
+            "mo": 0,
+            "vat_pham": [
+              {
+                "id": "srm",
+                "anh": "/chien-dich/lopoe-better-balance/srm.webp",
+                "ty_le_khung": 2.7,
+                "dx": -12,
+                "dy": 2,
+                "ty_le": 0.78,
+                "xoay": -10
+              },
+              {
+                "id": "ampoule",
+                "anh": "/chien-dich/lopoe-better-balance/ampoule-than.webp",
+                "nap_anh": "/chien-dich/lopoe-better-balance/ampoule-nap.webp",
+                "ty_le_khung": 2.33,
+                "dx": 0,
+                "dy": -1,
+                "ty_le": 0.95,
+                "xoay": 3
+              },
+              {
+                "id": "kem",
+                "anh": "/chien-dich/lopoe-better-balance/kem.webp",
+                "ty_le_khung": 2.66,
+                "dx": 12,
+                "dy": 3,
+                "ty_le": 0.8,
+                "xoay": 10
+              }
+            ]
           },
-          {
-            "id": "ampoule",
-            "ten": "LOPOE Better Balance Ampoule",
-            "anh": "/chien-dich/lopoe-better-balance/ampoule-than.webp",
-            "nap_anh": "/chien-dich/lopoe-better-balance/ampoule-nap.webp",
-            "rong_px": 165,
-            "x": 0.48,
-            "y": -0.06,
-            "z": 120,
-            "rx": 0,
-            "ry": 4,
-            "rz": 4,
-            "scale": 1.05,
-            "mo": 0
-          },
-          {
-            "id": "kem",
-            "ten": "LOPOE Moisture Cream",
-            "anh": "/chien-dich/lopoe-better-balance/kem.webp",
-            "rong_px": 185,
-            "x": 0.8,
-            "y": 0.08,
-            "z": 45,
-            "rx": 0,
-            "ry": -12,
-            "rz": 12,
-            "scale": 0.92,
-            "mo": 0
+          "may_tinh": {
+            "x": 72,
+            "y": 50,
+            "co": 44,
+            "xoay": 0,
+            "mo": 0,
+            "vat_pham": [
+              {
+                "id": "srm",
+                "anh": "/chien-dich/lopoe-better-balance/srm.webp",
+                "ty_le_khung": 2.7,
+                "dx": -11,
+                "dy": 2,
+                "ty_le": 0.82,
+                "xoay": -12
+              },
+              {
+                "id": "ampoule",
+                "anh": "/chien-dich/lopoe-better-balance/ampoule-than.webp",
+                "nap_anh": "/chien-dich/lopoe-better-balance/ampoule-nap.webp",
+                "ty_le_khung": 2.33,
+                "dx": 0,
+                "dy": -2,
+                "ty_le": 1,
+                "xoay": 4
+              },
+              {
+                "id": "kem",
+                "anh": "/chien-dich/lopoe-better-balance/kem.webp",
+                "ty_le_khung": 2.66,
+                "dx": 11,
+                "dy": 3,
+                "ty_le": 0.85,
+                "xoay": 12
+              }
+            ]
           }
-        ]
+        }
       },
       {
         "loai": "tieu-diem",
@@ -364,34 +635,55 @@
         "anh": [
           "/chien-dich/lopoe-better-balance/ampoule-than.webp"
         ],
-        "vat_the": [
-          {
-            "id": "srm",
-            "anh": "/chien-dich/lopoe-better-balance/srm.webp",
-            "x": -1.45,
-            "y": 0.06,
-            "z": -40,
-            "scale": 0.72
-          },
-          {
-            "id": "ampoule",
-            "anh": "/chien-dich/lopoe-better-balance/ampoule-than.webp",
-            "nap_anh": "/chien-dich/lopoe-better-balance/ampoule-nap.webp",
-            "x": -0.46,
-            "y": -0.04,
-            "z": 160,
-            "scale": 1.18,
+        "vat_the": {
+          "dien_thoai": {
+            "x": 50,
+            "y": 25,
+            "co": 44,
+            "xoay": -2,
             "mo": 1
           },
-          {
-            "id": "kem",
-            "anh": "/chien-dich/lopoe-better-balance/kem.webp",
-            "x": 1.45,
-            "y": 0.12,
-            "z": -40,
-            "scale": 0.72
+          "may_tinh": {
+            "x": 27,
+            "y": 50,
+            "co": 46,
+            "xoay": -3,
+            "mo": 1,
+            "vat_pham": [
+              {
+                "id": "srm",
+                "anh": "/chien-dich/lopoe-better-balance/srm.webp",
+                "ty_le_khung": 2.7,
+                "dx": -14,
+                "dy": 2,
+                "ty_le": 0.68,
+                "xoay": -22,
+                "an": true
+              },
+              {
+                "id": "ampoule",
+                "anh": "/chien-dich/lopoe-better-balance/ampoule-than.webp",
+                "nap_anh": "/chien-dich/lopoe-better-balance/ampoule-nap.webp",
+                "ty_le_khung": 2.33,
+                "dx": 0,
+                "dy": 0,
+                "ty_le": 1.04,
+                "xoay": -4,
+                "mo": 1
+              },
+              {
+                "id": "kem",
+                "anh": "/chien-dich/lopoe-better-balance/kem.webp",
+                "ty_le_khung": 2.66,
+                "dx": 14,
+                "dy": 3,
+                "ty_le": 0.68,
+                "xoay": 22,
+                "an": true
+              }
+            ]
           }
-        ]
+        }
       },
       {
         "loai": "bang-chu",

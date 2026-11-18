@@ -12,10 +12,11 @@ export function KhoiHero({ khoi }: KhoiHeroProps) {
 
   return (
     <section
+      id="hero-chien-dich"
       aria-label="Phần đầu chiến dịch"
-      className="relative min-h-[100dvh] flex items-end md:items-center justify-start px-5 sm:px-8 md:px-16 pt-[42dvh] md:pt-28 pb-10 md:pb-16 z-10"
+      className="relative min-h-[100dvh] flex items-end lg:items-center justify-start px-5 sm:px-8 md:pl-[120px] md:pr-8 lg:px-16 pt-[46dvh] lg:pt-28 pb-10 lg:pb-16 z-10"
     >
-      <div className="w-full max-w-[540px] flex flex-col gap-3.5 md:gap-6 bg-hong-nhat/65 md:bg-transparent backdrop-blur-[2px] md:backdrop-blur-none rounded-[24px] p-4 md:p-0">
+      <div className="w-full lg:max-w-[44%] max-w-[540px] flex flex-col gap-3.5 md:gap-5 bg-hong-nhat/65 lg:bg-transparent backdrop-blur-[2px] lg:backdrop-blur-none rounded-[24px] p-4 lg:p-0">
         {nhan_tren && (
           <div className="self-start inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white text-[12px] md:text-[13px] font-bold tracking-[1.5px] text-den shadow-xs">
             <span className="w-2 h-2 rounded-full bg-[#8FBF9F]" />
@@ -23,7 +24,7 @@ export function KhoiHero({ khoi }: KhoiHeroProps) {
           </div>
         )}
 
-        <h1 className="m-0 font-bold text-[clamp(30px,8.5vw,44px)] sm:text-[64px] md:text-[104px] leading-[0.94] tracking-[-0.045em] text-den">
+        <h1 className="m-0 font-bold text-[clamp(30px,8vw,44px)] sm:text-[54px] lg:text-[84px] xl:text-[100px] leading-[0.94] tracking-[-0.045em] text-den">
           {tieu_de.map((line, idx) => {
             const isOutline = line.startsWith("~");
             const cleanLine = isOutline ? line.slice(1) : line;

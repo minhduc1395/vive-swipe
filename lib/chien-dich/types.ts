@@ -5,21 +5,36 @@ export interface NutBam {
   den: string;
 }
 
-export interface VatThe3D {
+export interface VatPham3D {
   id: string;
   anh: string;
   nap_anh?: string;
   ten?: string;
-  rong_px?: number;
-  x: number;
-  y: number;
-  z: number;
-  rx?: number;
-  ry?: number;
-  rz?: number;
-  scale: number;
+  dx?: number; // % lệch ngang so với tâm cụm
+  dy?: number; // % lệch dọc so với tâm cụm
+  ty_le?: number; // tỉ lệ kích thước so với co của cụm (mặc định 1)
+  ty_le_khung?: number; // height/width aspect ratio thực của ảnh
+  xoay?: number;
   mo?: number;
+  an?: boolean;
 }
+
+export interface MocVatThe3D {
+  x: number; // % tâm ngang khung nhìn (0..100)
+  y: number; // % tâm dọc khung nhìn (0..100)
+  co: number; // % cạnh ngắn khung nhìn min(100vw, 100dvh)
+  xoay?: number;
+  mo?: number;
+  vat_pham?: VatPham3D[];
+}
+
+export interface VatThe3D {
+  dien_thoai?: MocVatThe3D;
+  may_tinh_bang?: MocVatThe3D;
+  may_tinh: MocVatThe3D;
+}
+
+export type MocManHinh3D = "dien_thoai" | "may_tinh_bang" | "may_tinh";
 
 export interface VideoMedia {
   mp4?: string;
@@ -40,7 +55,7 @@ export interface KhoiHero {
   anh_tinh?: string | null;
   hieu_ung?: string;
   anh?: string[];
-  vat_the?: VatThe3D[];
+  vat_the?: VatThe3D;
 }
 
 export interface KhoiTieuDiem {
@@ -53,7 +68,7 @@ export interface KhoiTieuDiem {
   deal_id?: string;
   cta_chinh?: NutBam;
   anh?: string[];
-  vat_the?: VatThe3D[];
+  vat_the?: VatThe3D;
 }
 
 export interface KhoiBangChu {
@@ -70,7 +85,7 @@ export interface KhoiRaMat {
   san_pham?: string[];
   anh_san_pham?: Record<string, string>;
   anh?: string[];
-  vat_the?: VatThe3D[];
+  vat_the?: VatThe3D;
 }
 
 export interface KhoiChuongTrinh {

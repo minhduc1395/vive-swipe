@@ -22,12 +22,14 @@ export function KhoiRaMat({ khoi }: KhoiRaMatProps) {
 
   return (
     <section
+      id="ke-ra-mat"
       aria-label="Kệ ra mắt"
-      className="relative z-10 bg-white py-20 sm:py-24 px-5 sm:px-8 md:px-16"
+      className="relative z-10 bg-transparent"
     >
-      <div className="max-w-[1360px] mx-auto flex flex-col gap-10 md:gap-14">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <h2 className="m-0 font-bold text-[clamp(32px,8vw,44px)] sm:text-[54px] md:text-[68px] leading-[0.95] tracking-[-0.04em] text-den">
+      {/* Phần tiêu đề kệ nằm dưới vùng 3D trên màn nhỏ và bên trái trên máy tính */}
+      <div className="max-w-[1360px] mx-auto px-5 sm:px-8 md:pl-[120px] md:pr-8 lg:px-16 pt-[46dvh] lg:pt-20 pb-8 lg:pb-12">
+        <div className="w-full lg:max-w-[44%] lg:min-h-[30dvh] flex flex-col justify-center gap-3 md:gap-4 bg-hong-nhat/65 lg:bg-transparent backdrop-blur-[2px] lg:backdrop-blur-none rounded-[24px] p-4 lg:p-0">
+          <h2 className="m-0 font-bold text-[clamp(30px,7.5vw,42px)] sm:text-[50px] lg:text-[64px] leading-[0.95] tracking-[-0.04em] text-den">
             {tieu_de}
           </h2>
           {mo_ta && (
@@ -36,8 +38,11 @@ export function KhoiRaMat({ khoi }: KhoiRaMatProps) {
             </p>
           )}
         </div>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-7">
+      {/* Kệ sản phẩm nền trắng phía dưới tiêu đề */}
+      <div className="bg-white rounded-t-[32px] md:rounded-t-[44px] py-14 sm:py-18 px-5 sm:px-8 md:pl-[120px] md:pr-8 lg:px-16 shadow-[0_-12px_40px_rgba(43,43,42,0.04)]">
+        <div className="max-w-[1360px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-7">
           {resolvedDeals.map((d, idx) => {
             const thanhPhan = (d.thanh_phan || []).map((tp) => {
               const sp = timSanPhamTheoId(tp.id);

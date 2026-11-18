@@ -3,11 +3,12 @@ import {
   parseChienDichYaml,
   layChienDichHienTai,
   docDanhSachChienDichTuDisk,
+  layMocVatTheTheoManHinh,
   ChienDich,
 } from "@/lib/chien-dich";
 
 describe("Chiến dịch - cấu hình và nạp dữ liệu", () => {
-  it("nạp thành công file lopoe-better-balance và mac-dinh từ disk kèm vat_the và anh", () => {
+  it("nạp thành công file lopoe-better-balance và mac-dinh từ disk kèm vat_the 3 mốc và anh", () => {
     const list = docDanhSachChienDichTuDisk();
     expect(list.length).toBeGreaterThanOrEqual(2);
     const lopoe = list.find((c) => c.ma === "lopoe-better-balance");
@@ -19,7 +20,9 @@ describe("Chiến dịch - cấu hình và nạp dữ liệu", () => {
     expect(hero?.loai).toBe("hero");
     if (hero?.loai === "hero") {
       expect(hero.anh?.length).toBeGreaterThanOrEqual(3);
-      expect(hero.vat_the?.length).toBe(3);
+      expect(hero.vat_the?.may_tinh.vat_pham?.length).toBe(3);
+      expect(hero.vat_the?.dien_thoai?.x).toBeGreaterThanOrEqual(35);
+      expect(hero.vat_the?.dien_thoai?.x).toBeLessThanOrEqual(65);
     }
 
     const tieuDiem = lopoe?.khoi.find((k) => k.loai === "tieu-diem");
@@ -28,17 +31,27 @@ describe("Chiến dịch - cấu hình và nạp dữ liệu", () => {
       expect(tieuDiem.san_pham_id).toBe("LOPOE-AMP");
       expect(tieuDiem.deal_id).toBe("LOPOE-25");
       expect(tieuDiem.mo_ta || "").not.toContain("hàng rào bảo vệ da");
-      const sideObjects = (tieuDiem.vat_the || []).filter(
+      const sideObjects = (tieuDiem.vat_the?.may_tinh.vat_pham || []).filter(
         (v) => v.id !== "ampoule"
       );
       expect(sideObjects.length).toBe(2);
       for (const s of sideObjects) {
-        expect(Math.abs(s.x)).toBeGreaterThan(1.15);
+        expect(s.an).toBe(true);
       }
     }
 
     const macDinh = list.find((c) => c.ma === "mac-dinh");
     expect(macDinh).toBeDefined();
+    const heroMacDinh = macDinh?.khoi.find((k) => k.loai === "hero");
+    if (heroMacDinh?.loai === "hero" && heroMacDinh.vat_the) {
+      // Kiểm tra tự suy ra mốc thiếu (may_tinh_bang) từ mốc lớn hơn
+      const mocTablet = layMocVatTheTheoManHinh(
+        heroMacDinh.vat_the,
+        "may_tinh_bang"
+      );
+      expect(mocTablet.co).toBeLessThanOrEqual(heroMacDinh.vat_the.may_tinh.co);
+      expect(mocTablet.y).toBeLessThanOrEqual(25);
+    }
   });
 
   it("kiểm tra parseChienDichYaml hợp lệ với đầy đủ các khối", () => {
@@ -58,12 +71,17 @@ khoi:
     tieu_de: ["TEST", "~Outline", "Normal"]
     anh: ["/chien-dich/lopoe-better-balance/srm.webp"]
     vat_the:
-      - id: srm
-        anh: "/chien-dich/lopoe-better-balance/srm.webp"
-        x: 0.4
-        y: 0
-        z: 10
-        scale: 1
+      may_tinh:
+        x: 70
+        y: 50
+        co: 40
+        xoay: 0
+        vat_pham:
+          - id: srm
+            anh: "/chien-dich/lopoe-better-balance/srm.webp"
+            dx: 0
+            dy: 0
+            ty_le: 1
   - loai: tieu-diem
     id: focus-1
     tieu_de: ["Focus", "~Item"]

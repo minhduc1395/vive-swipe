@@ -5,20 +5,33 @@ export const NutBamSchema = z.object({
   den: z.string().min(1),
 });
 
-export const VatThe3DSchema = z.object({
+export const VatPham3DSchema = z.object({
   id: z.string().min(1),
   anh: z.string().min(1),
   nap_anh: z.string().min(1).optional(),
   ten: z.string().optional(),
-  rong_px: z.number().positive().optional(),
+  dx: z.number().default(0).optional(),
+  dy: z.number().default(0).optional(),
+  ty_le: z.number().positive().default(1).optional(),
+  ty_le_khung: z.number().positive().default(2.5).optional(),
+  xoay: z.number().default(0).optional(),
+  mo: z.number().min(0).max(1).optional(),
+  an: z.boolean().optional(),
+});
+
+export const MocVatThe3DSchema = z.object({
   x: z.number(),
   y: z.number(),
-  z: z.number().default(0),
-  rx: z.number().default(0).optional(),
-  ry: z.number().default(0).optional(),
-  rz: z.number().default(0).optional(),
-  scale: z.number().positive().default(1),
+  co: z.number().min(0).max(100),
+  xoay: z.number().default(0).optional(),
   mo: z.number().min(0).max(1).optional(),
+  vat_pham: z.array(VatPham3DSchema).optional(),
+});
+
+export const VatThe3DSchema = z.object({
+  dien_thoai: MocVatThe3DSchema.optional(),
+  may_tinh_bang: MocVatThe3DSchema.optional(),
+  may_tinh: MocVatThe3DSchema,
 });
 
 export const VideoMediaSchema = z
@@ -42,7 +55,7 @@ export const KhoiHeroSchema = z.object({
   anh_tinh: z.string().nullable().optional(),
   hieu_ung: z.string().optional(),
   anh: z.array(z.string().min(1)).optional(),
-  vat_the: z.array(VatThe3DSchema).optional(),
+  vat_the: VatThe3DSchema.optional(),
 });
 
 export const KhoiTieuDiemSchema = z.object({
@@ -55,7 +68,7 @@ export const KhoiTieuDiemSchema = z.object({
   deal_id: z.string().optional(),
   cta_chinh: NutBamSchema.optional(),
   anh: z.array(z.string().min(1)).optional(),
-  vat_the: z.array(VatThe3DSchema).optional(),
+  vat_the: VatThe3DSchema.optional(),
 });
 
 export const KhoiBangChuSchema = z.object({
@@ -72,7 +85,7 @@ export const KhoiRaMatSchema = z.object({
   san_pham: z.array(z.string()).optional(),
   anh_san_pham: z.record(z.string().min(1)).optional(),
   anh: z.array(z.string().min(1)).optional(),
-  vat_the: z.array(VatThe3DSchema).optional(),
+  vat_the: VatThe3DSchema.optional(),
 });
 
 export const KhoiChuongTrinhSchema = z.object({

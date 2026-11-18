@@ -1,5 +1,17 @@
 import { test, expect } from "@playwright/test";
 
+function giaoNhau(
+  a: { x: number; y: number; width: number; height: number },
+  b: { x: number; y: number; width: number; height: number }
+): boolean {
+  return !(
+    a.x + a.width <= b.x ||
+    b.x + b.width <= a.x ||
+    a.y + a.height <= b.y ||
+    b.y + b.height <= a.y
+  );
+}
+
 test.describe("W027 · Landing chiến dịch /new-arrival", () => {
   test("hiển thị đầy đủ thanh trên, các khối theo đợt và chân trang trên máy tính", async ({
     page,
@@ -7,7 +19,6 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto("/new-arrival");
 
-    // 1. Header có logo và các link điều hướng
     const header = page.locator("header");
     await expect(header).toBeVisible();
     await expect(
@@ -21,35 +32,28 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
     await expect(header.getByRole("link", { name: /Giỏ/ })).toBeVisible();
     await expect(header.getByRole("link", { name: "Đăng nhập" })).toBeVisible();
 
-    // 2. Khối Hero có nhãn đợt và tiêu đề LOPOE Better Balance
     await expect(page.getByText("MỚI TẠI VIVE · NỘI ĐỊA HÀN")).toBeVisible();
     await expect(page.getByRole("heading", { name: /LOPOE/i, level: 1 })).toBeVisible();
     await expect(page.getByRole("link", { name: "Xem bộ sản phẩm" })).toBeVisible();
     await expect(page.getByRole("link", { name: "Giữ hàng tại booth" })).toBeVisible();
 
-    // 3. Khối chữ chạy marquee
     await expect(page.getByText(/BETTER BALANCE · NỘI ĐỊA HÀN/).first()).toBeVisible();
 
-    // 4. Khối kệ ra mắt "Đủ bộ, đỡ tốn." và các combo
     await expect(page.getByRole("heading", { name: "Đủ bộ, đỡ tốn." })).toBeVisible();
     await expect(page.getByText("Combo 2 sữa rửa mặt LOPOE")).toBeVisible();
     await expect(page.getByText("Combo kem dưỡng và ampoule LOPOE")).toBeVisible();
     await expect(page.getByText("Bộ 3 LOPOE")).toBeVisible();
 
-    // 5. Khối chương trình "Đang chạy tại booth"
     await expect(page.getByRole("heading", { name: "Đang chạy tại booth" })).toBeVisible();
     await expect(page.getByText("COMBO PINK Medicube PDRN")).toBeVisible();
 
-    // 6. Khối trải nghiệm đối tác Pawlette
     await expect(page.getByRole("heading", { name: "Tông nào hợp bạn?" })).toBeVisible();
     await expect(page.getByRole("link", { name: "Tìm hiểu Personal Color" })).toBeVisible();
 
-    // 7. Khối thông tin booth
     await expect(page.getByText("LL2").first()).toBeVisible();
     await expect(page.getByText("VIVE | K-Beauty Experience").first()).toBeVisible();
     await expect(page.getByRole("link", { name: "Chỉ đường" })).toBeVisible();
 
-    // 8. Chân trang
     await expect(page.locator("footer")).toBeVisible();
     await expect(page.getByText("Facebook: VIVE - K Beauty Experience")).toBeVisible();
     await expect(page.getByText("Instagram: @vive.k_beauty")).toBeVisible();
@@ -90,6 +94,97 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
     }
   });
 
+  test("kiểm hộp bao vật thể 3D nằm trọn trong khung nhìn và không chồng tiêu đề ở 7 cỡ (tasks/W027)", async ({
+    page,
+  }) => {
+    test.setTimeout(90000);
+    const viewports = [
+      { width: 360, height: 780 },
+      { width: 390, height: 844 },
+      { width: 430, height: 932 },
+      { width: 768, height: 1024 },
+      { width: 820, height: 1180 },
+      { width: 1180, height: 820 },
+      { width: 1440, height: 900 },
+    ];
+
+    const blocks = [
+      { selector: "#hero-chien-dich", headingSelector: "#hero-chien-dich h1", name: "hero" },
+      {
+        selector: "#ampoule-better-balance",
+        headingSelector: "#ampoule-better-balance h2",
+        name: "tieu-diem",
+      },
+      { selector: "#ke-ra-mat", headingSelector: "#ke-ra-mat h2", name: "ra-mat" },
+    ];
+
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/new-arrival");
+    await expect(page.locator('[data-hydrated="true"]')).toBeAttached();
+
+    for (const vp of viewports) {
+      await page.setViewportSize(vp);
+      await expect(
+        page.locator(`[data-viewport="${vp.width}x${vp.height}"]`)
+      ).toBeAttached();
+
+      for (let bIdx = 0; bIdx < blocks.length; bIdx++) {
+        const block = blocks[bIdx];
+        const top = await page.locator(block.selector).evaluate((el) => {
+          return Math.round(el.getBoundingClientRect().top + window.scrollY);
+        });
+        await page.evaluate(
+          (y) => window.scrollTo({ top: y, behavior: "instant" }),
+          top
+        );
+        await expect(
+          page.locator(`[data-stage="${bIdx}"][data-stage-settled="true"]`)
+        ).toBeAttached();
+
+        const headingBox = await page.locator(block.headingSelector).boundingBox();
+        expect(headingBox).not.toBeNull();
+
+        const boxes = await page.evaluate(() => {
+          return Array.from(
+            document.querySelectorAll('[data-visible="true"] img')
+          ).map((img) => {
+            const r = img.getBoundingClientRect();
+            return { x: r.left, y: r.top, width: r.width, height: r.height };
+          });
+        });
+        expect(boxes.length).toBeGreaterThanOrEqual(1);
+
+        for (let i = 0; i < boxes.length; i++) {
+          const box = boxes[i];
+          if (!headingBox) continue;
+
+          // Hộp bao (cả thân + nắp) nằm trọn trong khung nhìn cách mép >= 12px
+          expect(
+            box.x,
+            `${vp.width}x${vp.height} ${block.name} img[${i}] tràn trái`
+          ).toBeGreaterThanOrEqual(12);
+          expect(
+            box.y,
+            `${vp.width}x${vp.height} ${block.name} img[${i}] tràn trên`
+          ).toBeGreaterThanOrEqual(12);
+          expect(
+            box.x + box.width,
+            `${vp.width}x${vp.height} ${block.name} img[${i}] tràn phải`
+          ).toBeLessThanOrEqual(vp.width - 12);
+          expect(
+            box.y + box.height,
+            `${vp.width}x${vp.height} ${block.name} img[${i}] tràn dưới`
+          ).toBeLessThanOrEqual(vp.height - 12);
+
+          expect(
+            giaoNhau(box, headingBox),
+            `${vp.width}x${vp.height} ${block.name} img[${i}] chồng tiêu đề`
+          ).toBe(false);
+        }
+      }
+    }
+  });
+
   test("trên màn hình điện thoại 390px các khối hiển thị vừa vặn và nút đạt tối thiểu 44px", async ({
     page,
   }) => {
@@ -118,16 +213,13 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
       page.locator('[data-reduced-motion="true"]')
     ).toBeAttached();
 
-    // Không chứa mô tả tự bịa đã bị QA gắn cờ
     const bodyText = await page.locator("body").innerText();
     expect(bodyText).not.toContain(
       "Cấp ẩm sâu, phục hồi hàng rào bảo vệ da với kết cấu mỏng nhẹ, thấm nhanh."
     );
-    // Hiện giá thật của LOPOE-AMP từ dữ liệu + deal LOPOE-25
     await expect(page.getByText("314.000đ")).toBeVisible();
     await expect(page.getByText("419.000đ")).toBeVisible();
 
-    // Cuộn tới tiêu điểm (cảnh 1) -> hai ống bên phải ẩn hoàn toàn (opacity 0)
     await page.locator("#ampoule-better-balance").scrollIntoViewIfNeeded();
     await expect(page.locator('[data-object-id="srm"]')).toHaveCSS("opacity", "0");
     await expect(page.locator('[data-object-id="kem"]')).toHaveCSS("opacity", "0");
@@ -155,24 +247,48 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
     await expect(page.getByText("Vòng quay LOPOE")).not.toBeVisible();
   });
 
-  test("chụp ảnh màn hình tại 390px, 820px, 1280px, 1440px vào test-results/screenshots/new-arrival/", async ({
+  test("chụp ảnh 3 khối đầu tại 360px, 390px, 820px, 1440px vào test-results/screenshots/new-arrival/", async ({
     page,
   }) => {
+    test.setTimeout(90000);
     const screens = [
-      { name: "mobile-390px.png", width: 390, height: 844 },
-      { name: "tablet-820px.png", width: 820, height: 1180 },
-      { name: "desktop-1280px.png", width: 1280, height: 800 },
-      { name: "desktop-1440px.png", width: 1440, height: 900 },
+      { label: "360", width: 360, height: 780 },
+      { label: "390", width: 390, height: 844 },
+      { label: "820", width: 820, height: 1180 },
+      { label: "1440", width: 1440, height: 900 },
     ];
+    const blocks = [
+      { selector: "#hero-chien-dich", name: "hero" },
+      { selector: "#ampoule-better-balance", name: "tieu-diem" },
+      { selector: "#ke-ra-mat", name: "ra-mat" },
+    ];
+
+    await page.goto("/new-arrival");
+    await expect(page.locator('[data-hydrated="true"]')).toBeAttached();
 
     for (const sc of screens) {
       await page.setViewportSize({ width: sc.width, height: sc.height });
-      await page.goto("/new-arrival");
-      await page.waitForLoadState("networkidle");
-      await page.screenshot({
-        path: `test-results/screenshots/new-arrival/${sc.name}`,
-        fullPage: false,
-      });
+      await expect(
+        page.locator(`[data-viewport="${sc.width}x${sc.height}"]`)
+      ).toBeAttached();
+      for (let bIdx = 0; bIdx < blocks.length; bIdx++) {
+        const b = blocks[bIdx];
+        const top = await page.locator(b.selector).evaluate((el) => {
+          return Math.round(el.getBoundingClientRect().top + window.scrollY);
+        });
+        await page.evaluate(
+          (y) => window.scrollTo({ top: y, behavior: "instant" }),
+          top
+        );
+        await expect(
+          page.locator(`[data-stage="${bIdx}"][data-stage-settled="true"]`)
+        ).toBeAttached();
+        await page.waitForTimeout(100);
+        await page.screenshot({
+          path: `test-results/screenshots/new-arrival/${sc.label}_${b.name}.png`,
+          fullPage: false,
+        });
+      }
     }
   });
 });

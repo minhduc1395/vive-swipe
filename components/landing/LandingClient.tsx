@@ -17,9 +17,13 @@ import { LandingFooter } from "./LandingFooter";
 
 interface LandingClientProps {
   chienDich: ChienDich;
+  hienHeaderRieng?: boolean;
 }
 
-export function LandingClient({ chienDich }: LandingClientProps) {
+export function LandingClient({
+  chienDich,
+  hienHeaderRieng = true,
+}: LandingClientProps) {
   const [stageProgress, setStageProgress] = useState(0);
   const [stageFade, setStageFade] = useState(1);
   const [showStageDashes, setShowStageDashes] = useState(true);
@@ -27,6 +31,7 @@ export function LandingClient({ chienDich }: LandingClientProps) {
   const heroRef = useRef<HTMLDivElement>(null);
   const tieuDiemRef = useRef<HTMLDivElement>(null);
   const raMatRef = useRef<HTMLDivElement>(null);
+  const phanDuoiRef = useRef<HTMLDivElement>(null);
 
   const heroBlock = chienDich.khoi.find((k) => k.loai === "hero");
   const tieuDiemBlock = chienDich.khoi.find((k) => k.loai === "tieu-diem");
@@ -40,16 +45,16 @@ export function LandingClient({ chienDich }: LandingClientProps) {
       k.loai !== "ra-mat"
   );
 
-  // Dựng các cảnh 3D hoàn toàn từ dữ liệu YAML của đợt chiến dịch
+  // Dựng danh sách cảnh 3D từ YAML (mỗi cảnh có cấu hình 3 mốc dien_thoai / may_tinh_bang / may_tinh)
   const cacCanh: CanhStage3D[] = useMemo(() => {
     const result: CanhStage3D[] = [];
-    if (heroBlock?.vat_the && heroBlock.vat_the.length > 0) {
+    if (heroBlock?.vat_the) {
       result.push({ mauNen: chienDich.mau.nen, vatThe: heroBlock.vat_the });
     }
-    if (tieuDiemBlock?.vat_the && tieuDiemBlock.vat_the.length > 0) {
+    if (tieuDiemBlock?.vat_the) {
       result.push({ mauNen: chienDich.mau.nen, vatThe: tieuDiemBlock.vat_the });
     }
-    if (raMatBlock?.vat_the && raMatBlock.vat_the.length > 0) {
+    if (raMatBlock?.vat_the) {
       result.push({ mauNen: chienDich.mau.nen, vatThe: raMatBlock.vat_the });
     }
     return result;
@@ -57,22 +62,23 @@ export function LandingClient({ chienDich }: LandingClientProps) {
 
   useEffect(() => {
     let rafId = 0;
+    let resizeTimer: ReturnType<typeof setTimeout> | null = null;
 
     const updateScroll = () => {
       rafId = 0;
       const scrollY = window.scrollY;
       const vh = window.innerHeight || 800;
 
-      // Xác định mốc cuộn thực tế của từng khối đầu trang để nội suy mượt
+      // Xác định mốc cuộn thực tế của từng khối trong 3 cảnh đầu
       const landmarks: number[] = [0];
       if (tieuDiemBlock && tieuDiemRef.current) {
         const top = tieuDiemRef.current.offsetTop;
-        landmarks.push(Math.max(vh * 0.4, top - vh * 0.12));
+        landmarks.push(Math.max(vh * 0.4, top));
       }
       if (raMatBlock && raMatRef.current) {
         const top = raMatRef.current.offsetTop;
         const prev = landmarks[landmarks.length - 1];
-        landmarks.push(Math.max(prev + vh * 0.5, top - vh * 0.2));
+        landmarks.push(Math.max(prev + vh * 0.4, top));
       }
 
       let continuousStage = 0;
@@ -92,10 +98,15 @@ export function LandingClient({ chienDich }: LandingClientProps) {
 
       setStageProgress(continuousStage);
 
-      // Ẩn mượt stage 3D khi người dùng cuộn xuống phần dưới / kệ nền trắng
-      const lastStageScroll = landmarks[landmarks.length - 1] ?? vh;
-      if (scrollY > lastStageScroll + vh * 0.1) {
-        const fade = Math.max(0, 1 - (scrollY - (lastStageScroll + vh * 0.1)) / (vh * 0.35));
+      // Giữ stage 3D hiện đầy đủ ở 3 khối đầu, chỉ mờ dần khi cuộn tới #phan-duoi
+      const phanDuoiTop = phanDuoiRef.current?.offsetTop;
+      const fadeStart =
+        phanDuoiTop !== undefined
+          ? Math.max(landmarks[landmarks.length - 1] + vh * 0.25, phanDuoiTop - vh * 0.7)
+          : landmarks[landmarks.length - 1] + vh * 0.35;
+
+      if (scrollY > fadeStart) {
+        const fade = Math.max(0, 1 - (scrollY - fadeStart) / (vh * 0.35));
         setStageFade(fade);
         setShowStageDashes(fade > 0.2);
       } else {
@@ -110,14 +121,24 @@ export function LandingClient({ chienDich }: LandingClientProps) {
       }
     };
 
+    const handleResizeDebounced = () => {
+      if (resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(updateScroll, 100);
+    };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", handleScroll, { passive: true });
+    window.addEventListener("resize", handleResizeDebounced, { passive: true });
+    window.addEventListener("orientationchange", handleResizeDebounced, {
+      passive: true,
+    });
     updateScroll();
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleScroll);
+      window.removeEventListener("resize", handleResizeDebounced);
+      window.removeEventListener("orientationchange", handleResizeDebounced);
       if (rafId) window.cancelAnimationFrame(rafId);
+      if (resizeTimer) clearTimeout(resizeTimer);
     };
   }, [tieuDiemBlock, raMatBlock]);
 
@@ -130,9 +151,9 @@ export function LandingClient({ chienDich }: LandingClientProps) {
         backgroundColor: chienDich.mau.nen || "#F7EEEB",
       }}
     >
-      <LandingHeader />
+      {hienHeaderRieng && <LandingHeader />}
 
-      {/* Sân khấu 3D đọc trực tiếp tọa độ & ảnh từ YAML, chuyển cảnh mượt theo tiến trình cuộn */}
+      {/* Sân khấu 3D kẹp hộp bao trong khung nhìn an toàn, đọc từ YAML */}
       <LandingStage3D
         cacCanh={cacCanh}
         stageProgress={stageProgress}
@@ -144,7 +165,7 @@ export function LandingClient({ chienDich }: LandingClientProps) {
         {heroBlock && <KhoiHero khoi={heroBlock} />}
       </div>
 
-      {/* Cảnh 1: Tiêu điểm sản phẩm (đọc hoàn toàn từ YAML + dữ liệu thật) */}
+      {/* Cảnh 1: Tiêu điểm sản phẩm */}
       {tieuDiemBlock && (
         <div ref={tieuDiemRef} className="relative z-10">
           <KhoiTieuDiem khoi={tieuDiemBlock} />
@@ -163,6 +184,7 @@ export function LandingClient({ chienDich }: LandingClientProps) {
 
       {/* Phần dưới: thẻ trắng bo tròn */}
       <div
+        ref={phanDuoiRef}
         id="phan-duoi"
         className="relative z-20 bg-white rounded-t-[36px] md:rounded-t-[48px] shadow-[0_-20px_60px_rgba(43,43,42,0.06)] overflow-hidden"
       >

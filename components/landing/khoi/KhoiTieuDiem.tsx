@@ -27,11 +27,11 @@ export function KhoiTieuDiem({ khoi }: KhoiTieuDiemProps) {
 
   return (
     <section
-      id={khoi.id}
+      id={khoi.id || "tieu-diem"}
       aria-label="Tiêu điểm sản phẩm"
-      className="relative z-10 min-h-[100dvh] flex items-end md:items-center justify-end px-5 sm:px-8 md:px-16 pt-[42dvh] md:pt-16 pb-10 md:pb-16"
+      className="relative z-10 min-h-[100dvh] flex items-end lg:items-center justify-start lg:justify-end px-5 sm:px-8 md:pl-[120px] md:pr-8 lg:px-16 pt-[46dvh] lg:pt-20 pb-10 lg:pb-16"
     >
-      <div className="w-full max-w-[500px] flex flex-col gap-3 md:gap-4 text-left bg-hong-nhat/65 md:bg-transparent backdrop-blur-[2px] md:backdrop-blur-none rounded-[24px] p-4 md:p-0">
+      <div className="w-full lg:max-w-[44%] max-w-[520px] flex flex-col gap-3 md:gap-4 text-left bg-hong-nhat/65 lg:bg-transparent backdrop-blur-[2px] lg:backdrop-blur-none rounded-[24px] p-4 lg:p-0">
         {nhan_phu && (
           <span className="self-start inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-[12px] md:text-[13px] font-bold tracking-[1.5px] text-den shadow-xs">
             <span className="w-2 h-2 rounded-full bg-[#8FBF9F]" />
@@ -39,7 +39,7 @@ export function KhoiTieuDiem({ khoi }: KhoiTieuDiemProps) {
           </span>
         )}
 
-        <h2 className="m-0 font-bold text-[clamp(28px,8vw,40px)] sm:text-[56px] md:text-[76px] leading-[0.95] tracking-[-0.04em] text-den">
+        <h2 className="m-0 font-bold text-[clamp(28px,7.5vw,40px)] sm:text-[50px] lg:text-[68px] leading-[0.95] tracking-[-0.04em] text-den">
           {tieu_de.map((line, idx) => {
             const isOutline = line.startsWith("~");
             const clean = isOutline ? line.slice(1) : line;
