@@ -104,7 +104,9 @@ khoi:
     chu: "K-BEAUTY EXPERIENCE · NỘI ĐỊA HÀN · MỚI TẠI VIVE · LL2 UNION SQUARE · "
     mau_nen: "#CFE3D5"
   - loai: chuong-trinh
-    tieu_de: "Chương trình nổi bật"
+    tieu_de: "Đang có tại"
+    tieu_de_en: "Now at"
+    logo_sau_tieu_de: true   # logo VIVE (public/brand/vive-logo-chu.png) đứng sau chữ, cao bằng chữ hoa
     deal:
       - "COMBO-PINK"
       - "DC-05"

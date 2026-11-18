@@ -110,6 +110,7 @@ deals:
     hien_thi: true
     <<: *popup
     dieu_kien: Mua lẻ 1 món LOPOE. Quà theo giá khách trả cho món LOPOE
+    anh_san_pham: [LOPOE-CF, LOPOE-AMP, LOPOE-CR]
     bang_qua:   # nội bộ để web ước tính; công khai chỉ ghi "tặng sản phẩm fullsize", không ghi tên món
       - {id: LOPOE-CF, gia_tra: 249000, qua: 1 muối tắm salTherapy}
       - {id: LOPOE-CF, gia_tra: 186000, qua: null}
@@ -145,6 +146,7 @@ deals:
     hien_thi: true
     <<: *popup
     nhan_tinh: [Medicube, Celimax, SKINFOOD]   # cộng chung tiền 3 nhãn trong 1 hóa đơn
+    anh_san_pham: [LOPOE-CF, LOPOE-AMP, LOPOE-CR]   # ảnh hiện trên thẻ deal: quà LOPOE theo mốc
     moc:
       - {tu: 700000, qua: 1 sữa rửa mặt LOPOE, gioi_han: 40}
       - {tu: 1100000, qua: 1 ampoule LOPOE, gioi_han: 20}

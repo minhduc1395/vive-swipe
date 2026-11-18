@@ -268,7 +268,9 @@ khoi:
           an: 0
 
   - loai: chuong-trinh
-    tieu_de: "Đang chạy tại booth"
+    tieu_de: "Đang có tại"
+    tieu_de_en: "Now at"
+    logo_sau_tieu_de: true   # logo VIVE (public/brand/vive-logo-chu.png) đứng sau chữ, cao bằng chữ hoa
     deal:
       - "COMBO-PINK"
       - "DC-05"
