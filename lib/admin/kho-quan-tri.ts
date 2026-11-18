@@ -518,6 +518,10 @@ export async function ghiNhanGuiEmailQuanTriServer(input: {
     throw new Error("Vui lòng nhập đủ tiêu đề, nội dung và email nhận.");
   }
 
+  if (process.env.VIVE_BAT_GUI_EMAIL !== "1") {
+    throw new Error("Chưa gửi được email: cần tên miền và task W018.");
+  }
+
   const admin = layAdmin();
   if (!admin) {
     if (!choPhepKhoTam()) {

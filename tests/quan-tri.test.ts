@@ -8,6 +8,7 @@ import { xacThucQuanTri } from "@/lib/nhan-vien/xac-thuc-server";
 import {
   actionCapNhatDeal,
   actionCapNhatSanPham,
+  actionGuiEmailThuQuanTri,
   actionLayDuLieuKhachDev,
   actionTaiDuLieuQuanTri,
   actionXacNhanNhapTonKiotViet,
@@ -133,5 +134,15 @@ describe("W017 · Trang quản trị và xác thực quyền server", () => {
     expect(qtData.lichSu.some((l) => l.ten === "quan_tri_nhap_ton_kiotviet")).toBe(
       true,
     );
+
+    // Chặn gửi email khi chưa cấu hình VIVE_BAT_GUI_EMAIL=1 (chờ W018)
+    await expect(
+      actionGuiEmailThuQuanTri("thu:quan_tri", {
+        tieuDe: "Test",
+        noiDung: "Test",
+        emailNhan: "test@example.com",
+        guiThat: false,
+      }),
+    ).rejects.toThrow(/Chưa gửi được email: cần tên miền và task W018/i);
   });
 });

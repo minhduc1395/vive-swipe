@@ -1015,20 +1015,23 @@ export function QuanTriClient() {
                     className="rounded-[12px] border border-[#E8D2CC] p-3 text-[14px] font-normal"
                   />
                 </label>
+                <p className="m-0 text-[13px] text-xam italic">
+                  Chưa gửi được email: cần tên miền và task W018.
+                </p>
                 <div className="flex flex-wrap gap-2.5 pt-1">
                   <button
                     type="button"
-                    disabled={isPending}
+                    disabled={true}
                     onClick={() => xuLyGuiEmail(false)}
-                    className="min-h-[44px] px-5 rounded-full bg-hong-nhat text-den text-[14px] font-semibold cursor-pointer"
+                    className="min-h-[44px] px-5 rounded-full bg-hong-nhat text-den text-[14px] font-semibold opacity-50 cursor-not-allowed"
                   >
                     Gửi thử cho mình
                   </button>
                   <button
                     type="button"
-                    disabled={isPending}
+                    disabled={true}
                     onClick={() => xuLyGuiEmail(true)}
-                    className="min-h-[44px] px-5 rounded-full bg-den text-trang text-[14px] font-semibold cursor-pointer hover:bg-black"
+                    className="min-h-[44px] px-5 rounded-full bg-den text-trang text-[14px] font-semibold opacity-50 cursor-not-allowed"
                   >
                     Gửi email thật ({duLieu.danhSachEmail.length} khách)
                   </button>
