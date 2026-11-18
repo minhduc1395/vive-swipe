@@ -365,66 +365,74 @@ export async function capNhatHetHanCacDon(): Promise<number> {
   return soLuong;
 }
 
-export async function layDanhSachDonGiuHangHomNay(): Promise<DonGiuHangChiTiet[]> {
-  const kho = layKhoGiuHangLocal();
-  if (coTheGoiSupabase()) {
-    const supabase = laySupabase();
-    if (supabase) {
-      try {
-        const { data, error } = await supabase
-          .from("giu_hang")
-          .select("*, giu_hang_dong(*)")
-          .order("tao_luc", { ascending: false });
-
-        if (!error && data && data.length > 0) {
-          return data.map((gh) => ({
-            id: gh.id,
-            ma: gh.ma,
-            khachId: gh.khach_id,
-            ten: gh.ten,
-            sdt: gh.sdt,
-            email: gh.email,
-            ngayDen: gh.ngay_den,
-            hetHan: gh.het_han,
-            trangThai: gh.trang_thai,
-            tongUocTinh: gh.tong_uoc_tinh,
-            quaDuKien: gh.qua_du_kien,
-            ghiChu: gh.ghi_chu,
-            taoLuc: gh.tao_luc,
-            cacDong: (
-              (gh.giu_hang_dong || []) as Array<{
-                san_pham_id: string | null;
-                deal_id: string | null;
-                so_luong: number;
-                gia_uoc_tinh: number;
-              }>
-            ).map((d) => ({
-              id: d.san_pham_id || d.deal_id || "",
-              ten: d.san_pham_id || d.deal_id || "",
-              thuongHieu: "",
-              soLuong: d.so_luong,
-              giaSauUuDai: d.gia_uoc_tinh,
-              loai: d.deal_id ? ("combo" as const) : ("san_pham" as const),
-            })),
-          }));
-        }
-      } catch {
-        // Fallback
-      }
-    }
-  }
-  return [...kho];
+export async function layDanhSachDonGiuHangHomNay(): Promise<
+  DonGiuHangChiTiet[]
+> {
+  const admin = canAdminHoacKhoTam();
+  if (!admin) return [...layKhoGiuHangLocal()];
+  // Đơn còn liên quan: ngày đến từ hôm qua trở đi (giờ Việt Nam)
+  const homQua = new Date(Date.now() + 7 * 3600000 - 86400000)
+    .toISOString()
+    .slice(0, 10);
+  const { data, error } = await admin
+    .from("giu_hang")
+    .select(
+      "*, giu_hang_dong(*, san_pham(ten_hien_thi, thuong_hieu), deal(ten))",
+    )
+    .gte("ngay_den", homQua)
+    .order("tao_luc", { ascending: false })
+    .limit(300);
+  if (error) throw new LoiKhoGiuHang(error.message, error.code);
+  return (data ?? []).map((gh) => ({
+    id: gh.id,
+    ma: gh.ma,
+    khachId: gh.khach_id,
+    ten: gh.ten,
+    sdt: gh.sdt,
+    email: gh.email,
+    ngayDen: gh.ngay_den,
+    hetHan: gh.het_han,
+    trangThai: gh.trang_thai,
+    tongUocTinh: gh.tong_uoc_tinh,
+    quaDuKien: gh.qua_du_kien,
+    ghiChu: gh.ghi_chu,
+    taoLuc: gh.tao_luc,
+    cacDong: (
+      (gh.giu_hang_dong || []) as Array<{
+        san_pham_id: string | null;
+        deal_id: string | null;
+        so_luong: number;
+        gia_uoc_tinh: number;
+        san_pham?: { ten_hien_thi?: string; thuong_hieu?: string } | null;
+        deal?: { ten?: string } | null;
+      }>
+    ).map((d) => ({
+      id: d.san_pham_id || d.deal_id || "",
+      ten:
+        d.san_pham?.ten_hien_thi ||
+        d.deal?.ten ||
+        d.san_pham_id ||
+        d.deal_id ||
+        "",
+      thuongHieu: d.san_pham?.thuong_hieu || "",
+      soLuong: d.so_luong,
+      giaSauUuDai: d.gia_uoc_tinh,
+      loai: d.deal_id ? ("combo" as const) : ("san_pham" as const),
+    })),
+  }));
 }
 
 export async function capNhatTrangThaiDon(
   ma: string,
   trangThai: DonGiuHangChiTiet["trangThai"],
-  nguoiCapNhat = "Quầy VIVE"
+  nguoiCapNhat = "Quầy VIVE",
+  nguoiCapNhatId: string | null = null,
 ): Promise<boolean> {
   const now = new Date();
   const gioPhut = now.toLocaleTimeString("vi-VN", {
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: "Asia/Ho_Chi_Minh",
   });
   const nhanTrangThai: Record<string, string> = {
     moi: "Mới",
@@ -433,34 +441,37 @@ export async function capNhatTrangThaiDon(
     huy: "Hủy",
     het_han: "Hết hạn",
   };
-  const nhan = nhanTrangThai[trangThai] || trangThai;
-  const logStr = `${nhan} bởi ${nguoiCapNhat} lúc ${gioPhut}`;
+  const logStr = `${nhanTrangThai[trangThai] || trangThai} bởi ${nguoiCapNhat} lúc ${gioPhut}`;
 
-  // Cập nhật local
-  const kho = layKhoGiuHangLocal();
-  const don = kho.find((d) => d.ma.toUpperCase() === ma.toUpperCase());
-  if (don) {
+  const admin = canAdminHoacKhoTam();
+  if (!admin) {
+    const don = layKhoGiuHangLocal().find(
+      (d) => d.ma.toUpperCase() === ma.toUpperCase(),
+    );
+    if (!don) return false;
     don.trangThai = trangThai;
     don.ghiChu = don.ghiChu ? `${don.ghiChu} · ${logStr}` : logStr;
+    return true;
   }
-
-  if (coTheGoiSupabase()) {
-    const supabase = laySupabase();
-    if (supabase) {
-      try {
-        await supabase
-          .from("giu_hang")
-          .update({
-            trang_thai: trangThai,
-            ghi_chu: don?.ghiChu || logStr,
-            cap_nhat_luc: now.toISOString(),
-          })
-          .eq("ma", ma);
-      } catch {
-        // Fallback
-      }
-    }
-  }
-
+  // Chỉ đổi đơn đang hiệu lực mới nhất mang mã này (mã 4 số có thể được dùng lại sau khi hết hạn)
+  const { data: don, error: errDoc } = await admin
+    .from("giu_hang")
+    .select("id, ghi_chu")
+    .eq("ma", ma.toUpperCase())
+    .order("tao_luc", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (errDoc) throw new LoiKhoGiuHang(errDoc.message, errDoc.code);
+  if (!don) return false;
+  const { error } = await admin
+    .from("giu_hang")
+    .update({
+      trang_thai: trangThai,
+      ghi_chu: don.ghi_chu ? `${don.ghi_chu} · ${logStr}` : logStr,
+      cap_nhat_luc: now.toISOString(),
+      cap_nhat_boi: nguoiCapNhatId,
+    })
+    .eq("id", don.id);
+  if (error) throw new LoiKhoGiuHang(error.message, error.code);
   return true;
 }

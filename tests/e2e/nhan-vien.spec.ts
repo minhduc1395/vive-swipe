@@ -27,7 +27,7 @@ test.describe("W015 · Trang nhân viên /nhan-vien", () => {
     await page.locator("input#staff-password").fill("sai123");
     await page.getByRole("button", { name: "Đăng nhập quầy" }).click();
 
-    await expect(page.getByRole("alert")).toBeVisible();
+    await expect(page.getByRole("alert").filter({ hasText: /không chính xác/i })).toBeVisible();
     await expect(page.getByText(/không chính xác/i)).toBeVisible();
   });
 
@@ -39,7 +39,7 @@ test.describe("W015 · Trang nhân viên /nhan-vien", () => {
 
     // Đăng nhập nhanh bằng tài khoản ca trực
     await page
-      .getByRole("button", { name: /Đăng nhập nhanh ca trực/i })
+      .getByRole("button", { name: /Đăng nhập thử/i })
       .click();
 
     // Phải mở bảng nhân viên
@@ -146,7 +146,7 @@ test.describe("W015 · Trang nhân viên /nhan-vien", () => {
     await inputTim.fill("2112");
 
     // Kết quả phải thấy đơn VIVE-3307
-    await expect(page.getByText("VIVE-3307")).toBeVisible();
+    await expect(page.getByText("VIVE-3307").first()).toBeVisible();
 
     // Bấm nút Đăng xuất
     await page.getByRole("button", { name: "Đăng xuất" }).click();

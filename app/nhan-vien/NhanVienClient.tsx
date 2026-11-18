@@ -6,15 +6,10 @@ import {
   dangXuatNhanVienLocal,
   type PhienNhanVien,
 } from "@/lib/nhan-vien/auth";
-import type { DonGiuHangChiTiet } from "@/lib/giu-hang/types";
 import { DangNhapNhanVien } from "./DangNhapNhanVien";
 import { BangNhanVien } from "./BangNhanVien";
 
-interface Props {
-  danhSachBanDau: DonGiuHangChiTiet[];
-}
-
-export function NhanVienClient({ danhSachBanDau }: Props) {
+export function NhanVienClient() {
   const [phien, setPhien] = useState<PhienNhanVien | null>(null);
   const [daKiemTra, setDaKiemTra] = useState(false);
 
@@ -60,11 +55,7 @@ export function NhanVienClient({ danhSachBanDau }: Props) {
         </div>
       }
     >
-      <BangNhanVien
-        phien={phien}
-        danhSachBanDau={danhSachBanDau}
-        onDangXuat={() => dangXuatNhanVienLocal()}
-      />
+      <BangNhanVien phien={phien} onDangXuat={() => dangXuatNhanVienLocal()} />
     </Suspense>
   );
 }

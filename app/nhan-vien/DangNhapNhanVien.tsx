@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { dangNhapNhanVien, type PhienNhanVien } from "@/lib/nhan-vien/auth";
+import {
+  cheDoThu,
+  dangNhapNhanVien,
+  type PhienNhanVien,
+} from "@/lib/nhan-vien/auth";
 
 interface Props {
   onDangNhapThanhCong: (phien: PhienNhanVien) => void;
@@ -24,7 +28,9 @@ export function DangNhapNhanVien({ onDangNhapThanhCong }: Props) {
       if (res.ok && res.phien) {
         onDangNhapThanhCong(res.phien);
       } else {
-        setLoi(res.loi || "Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.");
+        setLoi(
+          res.loi || "Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.",
+        );
       }
     } catch {
       setLoi("Không thể kết nối máy chủ. Vui lòng thử lại.");
@@ -46,7 +52,7 @@ export function DangNhapNhanVien({ onDangNhapThanhCong }: Props) {
   return (
     <div className="w-full max-w-[420px] mx-auto my-12 bg-trang rounded-[24px] p-6 md:p-8 border border-[#E8D2CC] shadow-sm flex flex-col items-center">
       <Image
-        src="/brand/vive-logo-black.png"
+        src="/brand/vive-logo-chu.png"
         alt="VIVE"
         width={76}
         height={28}
@@ -56,7 +62,8 @@ export function DangNhapNhanVien({ onDangNhapThanhCong }: Props) {
         Quầy nhân viên VIVE
       </h1>
       <p className="text-[14px] text-xam mt-1 mb-6 text-center">
-        Trang dành riêng cho nhân viên điều phối giữ hàng tại booth LL2 Union Square.
+        Trang dành riêng cho nhân viên điều phối giữ hàng tại booth LL2 Union
+        Square.
       </p>
 
       {loi && (
@@ -70,7 +77,10 @@ export function DangNhapNhanVien({ onDangNhapThanhCong }: Props) {
 
       <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="staff-email" className="text-[14px] font-semibold text-den">
+          <label
+            htmlFor="staff-email"
+            className="text-[14px] font-semibold text-den"
+          >
             Email nhân viên
           </label>
           <input
@@ -86,7 +96,10 @@ export function DangNhapNhanVien({ onDangNhapThanhCong }: Props) {
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="staff-password" className="text-[14px] font-semibold text-den">
+          <label
+            htmlFor="staff-password"
+            className="text-[14px] font-semibold text-den"
+          >
             Mật khẩu
           </label>
           <input
@@ -109,13 +122,15 @@ export function DangNhapNhanVien({ onDangNhapThanhCong }: Props) {
           {dangXuLy ? "Đang xác thực..." : "Đăng nhập quầy"}
         </button>
 
-        <button
-          type="button"
-          onClick={handleDangNhapNhanh}
-          className="w-full h-[46px] rounded-full border border-[#E8D2CC] bg-hong-nhat text-den font-medium text-[14px] flex items-center justify-center hover:bg-[#ebdcd7] transition-colors cursor-pointer"
-        >
-          ⚡ Đăng nhập nhanh ca trực (booth@vive.vn)
-        </button>
+        {cheDoThu() && (
+          <button
+            type="button"
+            onClick={handleDangNhapNhanh}
+            className="w-full h-[46px] rounded-full border border-[#E8D2CC] bg-hong-nhat text-den font-medium text-[14px] flex items-center justify-center hover:bg-[#ebdcd7] transition-colors cursor-pointer"
+          >
+            Đăng nhập thử (chỉ máy dev)
+          </button>
+        )}
       </form>
     </div>
   );

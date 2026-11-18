@@ -7,11 +7,11 @@ import { dinhDangTien, dinhDangTienGio } from "@/lib/dinh-dang";
 import type { DonGiuHangChiTiet, TrangThaiGiuHang } from "@/lib/giu-hang/types";
 import type { PhienNhanVien } from "@/lib/nhan-vien/auth";
 import { actionCapNhatTrangThai, actionLayDanhSachDon } from "./actions";
+import { layTokenNhanVien } from "@/lib/nhan-vien/auth";
 
 interface Props {
   phien: PhienNhanVien;
   onDangXuat: () => void;
-  danhSachBanDau: DonGiuHangChiTiet[];
 }
 
 type TabTrangThai = "moi" | "da_soan" | "da_lay" | "dong" | "tat_ca";
@@ -24,16 +24,15 @@ const NHAN_TRANG_THAI: Record<TrangThaiGiuHang, string> = {
   het_han: "Hết hạn",
 };
 
-export function BangNhanVien({ phien, onDangXuat, danhSachBanDau }: Props) {
+export function BangNhanVien({ phien, onDangXuat }: Props) {
   const searchParams = useSearchParams();
   const maTuUrl = searchParams.get("ma")?.toUpperCase();
 
-  const [danhSach, setDanhSach] = useState<DonGiuHangChiTiet[]>(danhSachBanDau);
+  const [danhSach, setDanhSach] = useState<DonGiuHangChiTiet[]>([]);
+  const [loiTai, setLoiTai] = useState<string | null>(null);
   const [tuKhoa, setTuKhoa] = useState(maTuUrl || "");
   const [tabHienTai, setTabHienTai] = useState<TabTrangThai>("moi");
-  const [maDangChon, setMaDangChon] = useState<string>(
-    maTuUrl || (danhSachBanDau.length > 0 ? danhSachBanDau[0].ma : "")
-  );
+  const [maDangChon, setMaDangChon] = useState<string>(maTuUrl || "");
 
   const [isPending, startTransition] = useTransition();
 
@@ -41,12 +40,16 @@ export function BangNhanVien({ phien, onDangXuat, danhSachBanDau }: Props) {
   useEffect(() => {
     const lamMoi = async () => {
       try {
-        const moi = await actionLayDanhSachDon();
+        const moi = await actionLayDanhSachDon(await layTokenNhanVien());
         setDanhSach(moi);
+        setLoiTai(null);
       } catch {
-        // Bỏ qua lỗi làm mới ngầm
+        setLoiTai(
+          "Không tải được danh sách. Kiểm tra mạng hoặc đăng nhập lại.",
+        );
       }
     };
+    lamMoi();
 
     const interval = setInterval(lamMoi, 30000);
     return () => clearInterval(interval);
@@ -73,7 +76,7 @@ export function BangNhanVien({ phien, onDangXuat, danhSachBanDau }: Props) {
       da_soan: danhSach.filter((d) => d.trangThai === "da_soan").length,
       da_lay: danhSach.filter((d) => d.trangThai === "da_lay").length,
       dong: danhSach.filter(
-        (d) => d.trangThai === "huy" || d.trangThai === "het_han"
+        (d) => d.trangThai === "huy" || d.trangThai === "het_han",
       ).length,
       tat_ca: danhSach.length,
     };
@@ -98,9 +101,9 @@ export function BangNhanVien({ phien, onDangXuat, danhSachBanDau }: Props) {
   // Đơn hàng đang chọn để xem chi tiết
   const donDangChon = useMemo(() => {
     return (
-      danhSach.find(
-        (d) => d.ma.toUpperCase() === maDangChon.toUpperCase()
-      ) || danhSachHienThi[0] || danhSach[0]
+      danhSach.find((d) => d.ma.toUpperCase() === maDangChon.toUpperCase()) ||
+      danhSachHienThi[0] ||
+      danhSach[0]
     );
   }, [danhSach, danhSachHienThi, maDangChon]);
 
@@ -109,7 +112,16 @@ export function BangNhanVien({ phien, onDangXuat, danhSachBanDau }: Props) {
     if (!donDangChon) return;
 
     startTransition(async () => {
-      await actionCapNhatTrangThai(donDangChon.ma, trangThaiMoi, phien.ten);
+      try {
+        await actionCapNhatTrangThai(
+          await layTokenNhanVien(),
+          donDangChon.ma,
+          trangThaiMoi,
+        );
+      } catch {
+        setLoiTai("Chưa lưu được trạng thái. Thử lại hoặc đăng nhập lại.");
+        return;
+      }
       // Cập nhật state lạc quan
       setDanhSach((truoc) =>
         truoc.map((d) => {
@@ -127,7 +139,7 @@ export function BangNhanVien({ phien, onDangXuat, danhSachBanDau }: Props) {
             };
           }
           return d;
-        })
+        }),
       );
     });
   };
@@ -156,11 +168,19 @@ export function BangNhanVien({ phien, onDangXuat, danhSachBanDau }: Props) {
   ];
 
   return (
-    <div className="w-full max-w-[1280px] min-h-[768px] mx-auto bg-trang text-den flex flex-col border border-[#F2E4E0] rounded-[24px] shadow-sm overflow-hidden my-4">
+    <div className="w-full max-w-[1280px] min-h-[768px] mx-auto bg-trang text-den flex flex-col border border-[#F7EEEB] rounded-[24px] shadow-sm overflow-hidden my-4">
+      {loiTai && (
+        <p
+          role="alert"
+          className="m-0 px-6 py-3 bg-[#F7EEEB] text-[14px] font-medium"
+        >
+          {loiTai}
+        </p>
+      )}
       {/* Header thanh trên */}
-      <header className="h-[72px] px-6 border-b border-[#F2E4E0] flex items-center gap-4 bg-trang shrink-0">
+      <header className="h-[72px] px-6 border-b border-[#F7EEEB] flex items-center gap-4 bg-trang shrink-0">
         <Image
-          src="/brand/vive-logo-black.png"
+          src="/brand/vive-logo-chu.png"
           alt="VIVE"
           width={52}
           height={20}
@@ -210,9 +230,7 @@ export function BangNhanVien({ phien, onDangXuat, danhSachBanDau }: Props) {
 
         {/* Thông tin nhân viên và đăng xuất */}
         <div className="flex items-center gap-3 pl-2">
-          <span className="text-[14px] text-xam font-medium">
-            {phien.ten}
-          </span>
+          <span className="text-[14px] text-xam font-medium">{phien.ten}</span>
           <button
             type="button"
             onClick={onDangXuat}
@@ -228,7 +246,7 @@ export function BangNhanVien({ phien, onDangXuat, danhSachBanDau }: Props) {
         {/* Cột trái: Danh sách giữ hàng */}
         <section
           aria-label="Danh sách giữ hàng"
-          className="w-full md:w-[612px] p-5 flex flex-col gap-3.5 border-r border-[#F2E4E0] shrink-0"
+          className="w-full md:w-[612px] p-5 flex flex-col gap-3.5 border-r border-[#F7EEEB] shrink-0"
         >
           {/* Nhóm tab trạng thái */}
           <div
@@ -282,7 +300,7 @@ export function BangNhanVien({ phien, onDangXuat, danhSachBanDau }: Props) {
                   className={`grid grid-cols-[116px_1fr_88px_104px_92px] gap-2 items-center min-h-[60px] p-2.5 px-3.5 rounded-[14px] transition-colors text-left cursor-pointer border ${
                     dangChon
                       ? "bg-[#F7EEEB] border-[1.5px] border-den"
-                      : "bg-trang border-[#F2E4E0] hover:bg-hong-nhat/30"
+                      : "bg-trang border-[#F7EEEB] hover:bg-hong-nhat/30"
                   }`}
                 >
                   <strong className="text-[15px] font-bold tracking-tight text-den">
@@ -304,7 +322,7 @@ export function BangNhanVien({ phien, onDangXuat, danhSachBanDau }: Props) {
                   </span>
                   <span
                     className={`h-[28px] px-2.5 rounded-full text-[12px] font-semibold inline-flex items-center justify-center shrink-0 ${layBadgePill(
-                      r.trangThai
+                      r.trangThai,
                     )}`}
                   >
                     {NHAN_TRANG_THAI[r.trangThai]}
@@ -338,7 +356,7 @@ export function BangNhanVien({ phien, onDangXuat, danhSachBanDau }: Props) {
               </span>
               <span
                 className={`h-[30px] px-3.5 rounded-full text-[13px] font-semibold inline-flex items-center justify-center ${layBadgePill(
-                  donDangChon.trangThai
+                  donDangChon.trangThai,
                 )}`}
               >
                 {NHAN_TRANG_THAI[donDangChon.trangThai]}
@@ -347,13 +365,13 @@ export function BangNhanVien({ phien, onDangXuat, danhSachBanDau }: Props) {
 
             {/* 2 thẻ: Khách và Hạn giữ */}
             <div className="grid grid-cols-2 gap-2 text-[13px]">
-              <div className="bg-trang rounded-[12px] p-2.5 px-3 flex flex-col gap-0.5 border border-[#F2E4E0]">
+              <div className="bg-trang rounded-[12px] p-2.5 px-3 flex flex-col gap-0.5 border border-[#F7EEEB]">
                 <span className="text-xam">Khách</span>
                 <strong className="font-semibold text-den">
                   {donDangChon.ten} · {donDangChon.sdt}
                 </strong>
               </div>
-              <div className="bg-trang rounded-[12px] p-2.5 px-3 flex flex-col gap-0.5 border border-[#F2E4E0]">
+              <div className="bg-trang rounded-[12px] p-2.5 px-3 flex flex-col gap-0.5 border border-[#F7EEEB]">
                 <span className="text-xam">Hạn giữ</span>
                 <strong className="font-semibold text-den">
                   21:00 {donDangChon.ngayDen}
@@ -362,7 +380,7 @@ export function BangNhanVien({ phien, onDangXuat, danhSachBanDau }: Props) {
             </div>
 
             {/* Thẻ danh sách món */}
-            <div className="bg-trang rounded-[16px] p-3.5 px-4 flex flex-col gap-2 text-[14px] border border-[#F2E4E0]">
+            <div className="bg-trang rounded-[16px] p-3.5 px-4 flex flex-col gap-2 text-[14px] border border-[#F7EEEB]">
               <div className="flex flex-col gap-2 max-h-[220px] overflow-y-auto">
                 {donDangChon.cacDong.map((i, idx) => (
                   <div
@@ -379,7 +397,7 @@ export function BangNhanVien({ phien, onDangXuat, danhSachBanDau }: Props) {
                 ))}
               </div>
 
-              <div className="h-[1px] bg-[#F2E4E0] my-1" />
+              <div className="h-[1px] bg-[#F7EEEB] my-1" />
 
               <div className="flex justify-between font-bold text-[15px] text-den">
                 <span>Tổng ước tính</span>
@@ -394,7 +412,8 @@ export function BangNhanVien({ phien, onDangXuat, danhSachBanDau }: Props) {
             </div>
 
             <p className="m-0 text-[12px] leading-relaxed text-[#5C5C5B]">
-              Tính tiền trên POS KiotViet như bình thường. Giá và quà trên đây là ước tính từ web.
+              Tính tiền trên POS KiotViet như bình thường. Giá và quà trên đây
+              là ước tính từ web.
             </p>
 
             {/* 3 nút chuyển trạng thái */}

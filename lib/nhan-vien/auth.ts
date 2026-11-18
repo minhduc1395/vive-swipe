@@ -36,79 +36,73 @@ export function dangXuatNhanVienLocal(): void {
   window.dispatchEvent(new Event("vive_staff_auth_changed"));
 }
 
+/** Máy dev/e2e chưa có Supabase thật thì cho đăng nhập bằng tài khoản thử. */
+export function cheDoThu(): boolean {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+  return !url || url.includes("e2e.test") || url.includes("localhost.invalid");
+}
+
+/** Token phiên Supabase gửi kèm mỗi Server Action để server kiểm quyền. */
+export async function layTokenNhanVien(): Promise<string | null> {
+  if (cheDoThu()) return "thu";
+  const supabase = laySupabase();
+  if (!supabase) return null;
+  const { data } = await supabase.auth.getSession();
+  return data.session?.access_token ?? null;
+}
+
 /**
- * Đăng nhập nhân viên:
- * 1. Thử qua Supabase Auth nếu có cấu hình.
- * 2. Hỗ trợ tài khoản booth nội bộ (booth@vive.vn / mật khẩu booth hoặc tài khoản demo).
+ * Đăng nhập nhân viên bằng Supabase Auth (email + mật khẩu do quản trị tạo, có dòng trong bảng nhan_vien).
+ * Chế độ thử (dev/e2e): booth@vive.vn, mật khẩu bất kỳ từ 4 ký tự.
  */
 export async function dangNhapNhanVien(
   email: string,
-  matKhau: string
+  matKhau: string,
 ): Promise<{ ok: boolean; loi?: string; phien?: PhienNhanVien }> {
   const emailChuanHoa = email.trim().toLowerCase();
-
-  // 1. Kiểm tra tài khoản nội bộ booth tiện lợi cho ca trực
-  if (
-    (emailChuanHoa === "booth@vive.vn" || emailChuanHoa === "nhanvien@vive.vn") &&
-    matKhau.length >= 4
-  ) {
-    const phien: PhienNhanVien = {
-      email: emailChuanHoa,
-      ten: "Quầy VIVE",
-      vaiTro: "nhan_vien",
-      dangNhapLuc: new Date().toISOString(),
-    };
-    luuPhienNhanVienLocal(phien);
-    return { ok: true, phien };
-  }
-
-  // 2. Thử qua Supabase Auth
-  const supabase = laySupabase();
-  if (supabase) {
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: emailChuanHoa,
-        password: matKhau,
-      });
-
-      if (!error && data.user) {
-        // Kiểm tra quyền trong bảng nhan_vien (chỉ người có trong bảng nhan_vien mới được vào)
-        const { data: nv } = await supabase
-          .from("nhan_vien")
-          .select("ten, vai_tro")
-          .eq("id", data.user.id)
-          .single();
-
-        if (nv && (nv.vai_tro === "nhan_vien" || nv.vai_tro === "quan_tri")) {
-          const phien: PhienNhanVien = {
-            email: emailChuanHoa,
-            ten: nv.ten || "Quầy VIVE",
-            vaiTro: nv.vai_tro,
-            dangNhapLuc: new Date().toISOString(),
-          };
-          luuPhienNhanVienLocal(phien);
-          return { ok: true, phien };
-        }
-      }
-    } catch {
-      // Tiếp tục xuống báo lỗi
-    }
-  }
-
-  // 3. Cho phép đăng nhập chế độ test nếu mật khẩu đúng quy ước test
-  if (matKhau === "vive2026" || matKhau === "booth123") {
-    const phien: PhienNhanVien = {
-      email: emailChuanHoa,
-      ten: "Quầy VIVE",
-      vaiTro: "nhan_vien",
-      dangNhapLuc: new Date().toISOString(),
-    };
-    luuPhienNhanVienLocal(phien);
-    return { ok: true, phien };
-  }
-
-  return {
+  const sai = {
     ok: false,
     loi: "Email hoặc mật khẩu không chính xác. Vui lòng liên hệ quản lý booth.",
   };
+
+  if (cheDoThu()) {
+    if (emailChuanHoa === "booth@vive.vn" && matKhau.length >= 4) {
+      const phien: PhienNhanVien = {
+        email: emailChuanHoa,
+        ten: "Quầy VIVE",
+        vaiTro: "nhan_vien",
+        dangNhapLuc: new Date().toISOString(),
+      };
+      luuPhienNhanVienLocal(phien);
+      return { ok: true, phien };
+    }
+    return sai;
+  }
+
+  const supabase = laySupabase();
+  if (!supabase) return sai;
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: emailChuanHoa,
+    password: matKhau,
+  });
+  if (error || !data.user) return sai;
+  const { data: nv } = await supabase
+    .from("nhan_vien")
+    .select("ten, vai_tro")
+    .eq("id", data.user.id)
+    .maybeSingle();
+  if (!nv) {
+    await supabase.auth.signOut();
+    // Đăng nhập lại khách ẩn danh để web khách vẫn chạy
+    await supabase.auth.signInAnonymously().catch(() => {});
+    return { ok: false, loi: "Tài khoản này chưa được cấp quyền nhân viên." };
+  }
+  const phien: PhienNhanVien = {
+    email: emailChuanHoa,
+    ten: nv.ten || "Quầy VIVE",
+    vaiTro: nv.vai_tro,
+    dangNhapLuc: new Date().toISOString(),
+  };
+  luuPhienNhanVienLocal(phien);
+  return { ok: true, phien };
 }
