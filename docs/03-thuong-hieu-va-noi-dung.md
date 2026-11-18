@@ -33,6 +33,7 @@ Không thêm màu ngoài bảng này (kể cả đỏ cho giảm giá). Nhãn gi
 - Ảnh phải đúng mã (đúng màu, đúng dung tích).
 
 ## 5. Quy tắc chữ trên web
+- Personal color: viết **"tone"** (từ quen với khách), không viết "tông". Tiêu đề khối Pawlette: "Tone bạn màu nào?" (chủ dự án chốt 18/11).
 - Viết tiếng Việt, câu ngắn, ít chữ, sản phẩm là trung tâm. Hạn chế tiếng Anh, trừ từ quen hoặc chuyên ngành (PDRN, Cica, serum, toner pad, K-pop, check-in) và tên sản phẩm gốc.
 - Viết "nội địa Hàn", không viết "local".
 - Thông điệp: trải nghiệm mua sắm độc đáo; thương hiệu nội địa Hàn bán ngay tại Việt Nam; chất lượng và phù hợp làn da châu Á.
