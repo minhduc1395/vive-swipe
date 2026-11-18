@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { KHOA_LICH_SU_NOI_BO } from "./NutQuayLai";
 import {
   damBaoKhachAnDanh,
   dongBoHoSo,
@@ -18,6 +20,27 @@ import {
 import { layHoSoLocal } from "@/lib/kho-luu-tru";
 
 export function KhoiTaoSupabase() {
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const raw = window.sessionStorage.getItem(KHOA_LICH_SU_NOI_BO);
+      const arr: string[] = raw ? JSON.parse(raw) : [];
+      const dich = Array.isArray(arr) ? arr : [];
+      const hienTai = window.location.pathname + window.location.search;
+      if (dich[dich.length - 1] !== hienTai) {
+        dich.push(hienTai);
+        window.sessionStorage.setItem(
+          KHOA_LICH_SU_NOI_BO,
+          JSON.stringify(dich.slice(-30))
+        );
+      }
+    } catch {
+      // bỏ qua lỗi sessionStorage
+    }
+  }, [pathname]);
+
   useEffect(() => {
     if (typeof window === "undefined") return;
 

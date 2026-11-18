@@ -1,7 +1,8 @@
-import { expect, test } from "./fixtures";
+import { expect, test, datDaKhaoSat } from "./fixtures";
 
 const CAC_ROUTE_KHACH = [
   "/",
+  "/chao",
   "/bat-dau",
   "/quet",
   "/danh-muc",
@@ -11,11 +12,16 @@ const CAC_ROUTE_KHACH = [
   "/giu-hang",
   "/giu-hang/VIVE-4821",
   "/chinh-sach",
+  "/dang-nhap",
   "/nhan-vien",
   "/quan-tri",
 ];
 
 test.describe("Khung ứng dụng VIVE Quẹt", () => {
+  test.beforeEach(async ({ page }) => {
+    await datDaKhaoSat(page);
+  });
+
   for (const route of CAC_ROUTE_KHACH) {
     test(`mở được route ${route}`, async ({ page }) => {
       const loiConsole: string[] = [];

@@ -150,6 +150,12 @@ export async function caiDatMockSupabase(
   );
 }
 
+export async function datDaKhaoSat(page: Page) {
+  await page.addInitScript(() => {
+    window.localStorage.setItem("vive_da_khao_sat", "true");
+  });
+}
+
 export const test = base.extend<{ mockSupabase: void }>({
   mockSupabase: [
     async ({ page }, use) => {

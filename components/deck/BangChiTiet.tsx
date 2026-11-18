@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { SanPham } from "@/lib/data/types";
 import { useDuLieu } from "@/lib/du-lieu-context";
+import { NutQuayLai } from "@/components/NutQuayLai";
 import { dinhDangTien } from "@/lib/dinh-dang";
 import { layNhanLoaiDa, layNhanVanDe } from "@/lib/nhan";
 import { layCacDealCuaSanPham } from "@/lib/deals/ghi-chu";
@@ -56,6 +57,13 @@ export function BangChiTiet({
         >
           <div className="w-10 h-1 rounded-full bg-[#E8D2CC]" />
         </div>
+
+        {/* Nút quay lại (góc trên trái) */}
+        <NutQuayLai
+          fallback="/quet"
+          onClick={onDong}
+          className="absolute top-2.5 left-4 z-10"
+        />
 
         {/* Nút đóng */}
         <button

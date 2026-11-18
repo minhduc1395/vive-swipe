@@ -77,8 +77,14 @@ export function LandingStage3D({ cacCanh }: LandingStage3DProps) {
     const cheDo: CheDoVung3D =
       vw < 760 || (vw < 1024 && vh >= vw) ? "doc" : "ngang";
 
-    const headerEl = document.querySelector<HTMLElement>("header, [role='banner']");
-    const headerBottom = headerEl ? headerEl.getBoundingClientRect().bottom : 56;
+    const headerEl = Array.from(
+      document.querySelectorAll<HTMLElement>("header, [role='banner']")
+    ).find(
+      (el) =>
+        getComputedStyle(el).display !== "none" &&
+        el.getBoundingClientRect().height > 0
+    );
+    const headerBottom = headerEl ? headerEl.getBoundingClientRect().bottom : 0;
     const tabletRail = document.querySelector<HTMLElement>(
       'nav[aria-label="Điều hướng máy tính bảng"]'
     );

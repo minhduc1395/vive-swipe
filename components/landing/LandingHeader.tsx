@@ -36,34 +36,34 @@ export function LandingHeader({
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 flex items-center gap-2 md:gap-5 px-3.5 md:px-10 py-2 md:py-3.5 ${
+      className={`md:hidden fixed top-0 left-0 right-0 z-40 transition-all duration-300 flex items-center gap-2 px-3.5 py-2 ${
         scrolled
           ? "bg-white/85 backdrop-blur-md shadow-xs"
-          : "bg-white/75 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none"
+          : "bg-white/75 backdrop-blur-sm"
       }`}
     >
       <Link
-        href="/new-arrival"
-        className="flex items-center h-10 md:h-11 shrink-0"
+        href="/"
+        className="flex items-center h-10 shrink-0"
         aria-label="VIVE New Arrival, về đầu trang"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/brand/vive-logo-chu.png"
           alt="VIVE"
-          className="w-[52px] md:w-[64px] h-auto object-contain block"
+          className="w-[52px] h-auto object-contain block"
         />
       </Link>
 
-      {/* Điều hướng thống nhất trên bản mẫu (desktop + thanh gọn điện thoại theo tasks/W027) */}
+      {/* Thanh gọn điện thoại (< 768px) */}
       <nav
-        aria-label="Điều hướng chính"
-        className="ml-auto flex items-center gap-0.5 md:gap-1.5 flex-wrap"
+        aria-label="Điều hướng đầu trang"
+        className="ml-auto flex items-center gap-0.5 flex-wrap"
       >
         <Link
-          href="/new-arrival"
+          href="/"
           aria-current="page"
-          className="h-10 px-2.5 md:px-3.5 rounded-full flex items-center text-[13px] md:text-[15px] font-bold text-den bg-transparent md:bg-white md:shadow-xs underline md:no-underline decoration-2 underline-offset-[6px] decoration-[#E8D2CC]"
+          className="h-10 px-2.5 rounded-full flex items-center text-[13px] font-bold text-den bg-transparent underline decoration-2 underline-offset-[6px] decoration-[#E8D2CC]"
         >
           New Arrival
         </Link>

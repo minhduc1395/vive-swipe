@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
+import { NutQuayLai } from "@/components/NutQuayLai";
 import { BangChiTiet } from "@/components/deck/BangChiTiet";
 import { laySanPhamHienThi } from "@/lib/data";
 import { useDuLieu } from "@/lib/du-lieu-context";
@@ -285,37 +286,24 @@ function DanhMucNoiDung() {
         <div className="flex-1 min-h-0 overflow-y-auto">
           <div className="max-w-[1280px] mx-auto w-full">
             {/* Header */}
-            <header className="px-5 md:px-8 pt-6 pb-2 flex items-center gap-1">
+            <header className="px-5 md:px-8 pt-4 md:pt-6 pb-2 flex flex-col items-start gap-1">
               {dangXemDanhSach && (
-                <button
-                  type="button"
+                <NutQuayLai
+                  fallback="/danh-muc"
                   onClick={xuLyVeTrangDau}
-                  aria-label="Về tất cả danh mục"
-                  className="w-11 h-11 -ml-3 flex items-center justify-center rounded-full text-den hover:bg-hong-nhat transition-colors cursor-pointer"
-                >
-                  <svg
-                    width="22"
-                    height="22"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                  >
-                    <path d="M15 18l-6-6 6-6" />
-                  </svg>
-                </button>
+                  ariaLabel="Quay lại · Về tất cả danh mục"
+                />
               )}
-              <h1 className="m-0 text-[26px] md:text-[32px] font-bold tracking-[-0.4px] text-den">
-                {tieuDeTrang}
-              </h1>
-              {dangXemDanhSach && (
-                <span className="ml-1.5 text-[14px] text-xam">
-                  {ketQuaLoc.length} món
-                </span>
-              )}
+              <div className="flex items-baseline gap-2 flex-wrap">
+                <h1 className="m-0 text-[26px] md:text-[32px] font-bold tracking-[-0.4px] text-den">
+                  {tieuDeTrang}
+                </h1>
+                {dangXemDanhSach && (
+                  <span className="text-[14px] text-xam">
+                    {ketQuaLoc.length} món
+                  </span>
+                )}
+              </div>
             </header>
 
             {/* Ô tìm kiếm */}
@@ -357,11 +345,7 @@ function DanhMucNoiDung() {
                   }
                 }}
                 onChange={(e) => {
-                  const val = e.target.value;
-                  setTimKiemInput(val);
-                  if (val === "") {
-                    capNhatBoLoc({ tim: "" });
-                  }
+                  setTimKiemInput(e.target.value);
                 }}
                 placeholder="Tìm tên, thương hiệu, thành phần"
                 className="flex-1 min-w-0 border-none outline-none bg-transparent font-sans text-[15px] text-den placeholder:text-xam"

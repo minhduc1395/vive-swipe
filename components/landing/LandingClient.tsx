@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import type { ChienDich } from "@/lib/chien-dich/types";
+import { AppShell } from "@/components/AppShell";
 import { LandingHeader } from "./LandingHeader";
 import { LandingStage3D, type CanhStage3D } from "./LandingStage3D";
 import { KhoiHero } from "./khoi/KhoiHero";
@@ -51,12 +52,13 @@ export function LandingClient({
   }, [chienDich.mau.nen, heroBlock, tieuDiemBlock, raMatBlock]);
 
   return (
-    <div
-      className="relative min-h-screen text-den overflow-x-hidden font-sans"
-      style={{
-        backgroundColor: chienDich.mau.nen || "#F7EEEB",
-      }}
-    >
+    <AppShell>
+      <div
+        className="relative flex-1 flex flex-col text-den overflow-x-clip font-sans"
+        style={{
+          backgroundColor: chienDich.mau.nen || "#F7EEEB",
+        }}
+      >
       {/* Quy tắc co giãn vùng 3D & cột chữ đối xứng theo design/landing-3d/index.html */}
       <style>{`
         .vq-k {
@@ -71,12 +73,12 @@ export function LandingClient({
           width: min(520px, 46vw);
           max-width: 100%;
         }
-        @media (max-width: 759px), (max-width: 1023px) and (orientation: portrait) {
+        @media (max-width: 759px) {
           .vq-k {
             min-height: 100svh;
             align-items: flex-start;
             justify-content: flex-start !important;
-            padding: 46svh 20px 64px;
+            padding: 41svh 20px 96px;
           }
           .vq-k .cot {
             width: 100%;
@@ -85,7 +87,14 @@ export function LandingClient({
         }
         @media (min-width: 760px) and (max-width: 1023px) and (orientation: portrait) {
           .vq-k {
+            min-height: 100svh;
+            align-items: flex-start;
+            justify-content: flex-start !important;
             padding: 56svh 48px 64px;
+          }
+          .vq-k .cot {
+            width: 100%;
+            max-width: 560px;
           }
         }
       `}</style>
@@ -125,6 +134,7 @@ export function LandingClient({
 
         <LandingFooter />
       </div>
-    </div>
+      </div>
+    </AppShell>
   );
 }

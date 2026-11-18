@@ -1,10 +1,10 @@
 import { expect, test } from "./fixtures";
 
 test.describe("Màn chào và 3 câu hỏi khởi tạo (W010)", () => {
-  test("trang chào / có nút Bắt đầu quẹt và dẫn tới /bat-dau khi chưa khảo sát", async ({
+  test("trang chào /chao có nút Bắt đầu quẹt và dẫn tới /bat-dau khi chưa khảo sát", async ({
     page,
   }) => {
-    await page.goto("/?chao=1");
+    await page.goto("/chao");
     const nutBatDau = page.getByRole("link", { name: "Bắt đầu quẹt" });
     await expect(nutBatDau).toBeVisible();
     await nutBatDau.click();
@@ -73,10 +73,10 @@ test.describe("Màn chào và 3 câu hỏi khởi tạo (W010)", () => {
 
   test("nút quay lại hoạt động đúng giữa các bước", async ({ page }) => {
     await page.goto("/bat-dau");
-    // Bước 1: quay lại dẫn về /
+    // Bước 1: quay lại dẫn về /chao
     const nutQuayLai = page.getByLabel("Quay lại");
     await nutQuayLai.click();
-    await expect(page).toHaveURL(/^http:\/\/[^/]+\/$/);
+    await expect(page).toHaveURL(/\/chao$/);
 
     // Vào lại và sang bước 2
     await page.goto("/bat-dau");
@@ -88,15 +88,25 @@ test.describe("Màn chào và 3 câu hỏi khởi tạo (W010)", () => {
     await expect(page.locator("text=CÂU 1/3")).toBeVisible();
   });
 
-  test("khách quay lại đã có hồ sơ vào thẳng /quet từ trang chủ", async ({
+  test("vào / luôn thấy landing kể cả khách đã khảo sát; vào /quet khi chưa khảo sát chuyển sang /chao", async ({
     page,
   }) => {
-    // Set localStorage trước khi load trang
-    await page.addInitScript(() => {
+    // 1. Chưa khảo sát vào /quet -> tự chuyển sang /chao
+    await page.goto("/quet");
+    await expect(page).toHaveURL(/\/chao/);
+    await expect(page.locator("h1")).toContainText("Thích thì");
+
+    // 2. Đã khảo sát vào / -> vẫn giữ nguyên landing /
+    await page.evaluate(() => {
       localStorage.setItem("vive_da_khao_sat", "true");
     });
-
     await page.goto("/");
+    await expect(page).toHaveURL(/^http:\/\/[^/]+\/$/);
+    await expect(page.getByRole("heading", { name: /LOPOE/i, level: 1 })).toBeVisible();
+
+    // 3. Đã khảo sát vào /quet -> mở thẳng deck
+    await page.goto("/quet");
     await expect(page).toHaveURL(/\/quet/);
+    await expect(page.getByRole("article")).toBeVisible();
   });
 });

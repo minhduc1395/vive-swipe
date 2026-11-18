@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { ThanhTrenDesktop } from "./ThanhTrenDesktop";
 import { ThanhDocTablet } from "./ThanhDocTablet";
 import { ThanhTab } from "./ThanhTab";
@@ -37,6 +38,11 @@ export function AppShell({
   noiDungClassName = "",
   khoaChieuCao = false,
 }: AppShellProps) {
+  const pathname = usePathname();
+  const laTrangNoiBo =
+    pathname.startsWith("/nhan-vien") || pathname.startsWith("/quan-tri");
+  const coHienDieuHuong = hienDieuHuong && !laTrangNoiBo;
+
   const [soThich, setSoThich] = useState(propSoLuongThich ?? 0);
   const [soGio, setSoGio] = useState(propSoLuongGio ?? 0);
 
@@ -77,13 +83,13 @@ export function AppShell({
       } ${className}`}
     >
       {/* 1. Thanh trên cho máy tính (>= 1024px) */}
-      {hienDieuHuong && hienThanhTrenDesktop && (
+      {coHienDieuHuong && hienThanhTrenDesktop && (
         <ThanhTrenDesktop soLuongThich={tongThich} soLuongGio={tongGio} />
       )}
 
       {/* 2. Thân trang: bố cục hàng ngang ở tablet (768–1023px) để chứa thanh rail bên trái */}
       <div className="w-full flex-1 min-h-0 flex flex-col md:flex-row">
-        {hienDieuHuong && hienThanhDocTablet && (
+        {coHienDieuHuong && hienThanhDocTablet && (
           <ThanhDocTablet soLuongThich={tongThich} soLuongGio={tongGio} />
         )}
 
@@ -98,7 +104,7 @@ export function AppShell({
       </div>
 
       {/* 3. Thanh tab dưới cho điện thoại (< 768px) */}
-      {hienDieuHuong && hienThanhTabMobile && (
+      {coHienDieuHuong && hienThanhTabMobile && (
         <ThanhTab soLuongThich={tongThich} soLuongGio={tongGio} />
       )}
     </div>

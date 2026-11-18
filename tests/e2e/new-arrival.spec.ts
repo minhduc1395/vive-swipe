@@ -7,16 +7,17 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto("/new-arrival");
 
-    const header = page.locator("header");
+    const header = page.getByRole("banner");
     await expect(header).toBeVisible();
     await expect(
       header.getByRole("link", { name: "New Arrival", exact: true })
     ).toBeVisible();
-    await expect(header.getByRole("link", { name: "Home" })).toBeVisible();
     await expect(
       header.getByRole("link", { name: "Quẹt", exact: true })
     ).toBeVisible();
     await expect(header.getByRole("link", { name: "Sản phẩm" })).toBeVisible();
+    await expect(header.getByRole("link", { name: "Deal", exact: true })).toBeVisible();
+    await expect(header.getByRole("link", { name: "Đã thích" })).toBeVisible();
     await expect(header.getByRole("link", { name: /Giỏ/ })).toBeVisible();
     await expect(header.getByRole("link", { name: "Đăng nhập" })).toBeVisible();
 
@@ -102,7 +103,14 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
             }).__viveBo;
             const sec = document.querySelectorAll("section[data-k]")[idx];
             const cot = sec?.querySelector(".cot")?.getBoundingClientRect();
-            const hd = document.querySelector("header")?.getBoundingClientRect().bottom ?? 0;
+            const hdEl = Array.from(
+              document.querySelectorAll<HTMLElement>("header, [role='banner']")
+            ).find(
+              (el) =>
+                getComputedStyle(el).display !== "none" &&
+                el.getBoundingClientRect().height > 0
+            );
+            const hd = hdEl ? hdEl.getBoundingClientRect().bottom : 0;
             const out: string[] = [];
             if (!b || !cot) return ["Thiếu __viveBo hoặc .cot"];
 

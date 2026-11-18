@@ -1,9 +1,10 @@
-import { test, expect } from "./fixtures";
+import { test, expect, datDaKhaoSat } from "./fixtures";
 import { KHOA_NHAN_VIEN_SESSION } from "@/lib/nhan-vien/auth";
 
 test.describe("W015 · Trang nhân viên /nhan-vien", () => {
-  test.beforeEach(async () => {
+  test.beforeEach(async ({ page }) => {
     test.setTimeout(60000);
+    await datDaKhaoSat(page);
   });
 
   test("1. Khách chưa đăng nhập: hiển thị form xác thực nhân viên, chặn truy cập danh sách", async ({
