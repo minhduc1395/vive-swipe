@@ -464,12 +464,12 @@ def chay_ffmpeg_dung_video(
     """Chạy ffmpeg dựng video H.264 30fps, zoom nhẹ sản phẩm thật + chữ thương hiệu."""
     ffmpeg = common.tim_ffmpeg()
     frames = int(round(thoi_luong * 30))
-    # Zoom chậm nền 1.0 -> 1.05, sản phẩm nổi nhẹ +/-10px và phóng nhẹ 0.96 -> 1.03
+    # Zoom nền 1.0 -> 1.08; sản phẩm nổi rõ hơn (+/-22px) và phóng 0.92 -> 1.06 theo góp ý QA
     filter_complex = (
-        f"[0:v]zoompan=z='min(1.0+0.05*(on/{frames}),1.05)':d={frames}:fps=30:"
+        f"[0:v]zoompan=z='min(1.0+0.08*(on/{frames}),1.08)':d={frames}:fps=30:"
         f"x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s={rong}x{cao},format=rgba[bg];"
-        f"[1:v]format=rgba,scale=w='trunc(iw*(0.96+0.06*(t/{thoi_luong}))/2)*2':h=-2:eval=frame[sp];"
-        f"[bg][sp]overlay=x='{cx}-w/2':y='{cy}-h/2+10*sin(2*PI*t/3.5)':shortest=1[mid];"
+        f"[1:v]format=rgba,scale=w='trunc(iw*(0.92+0.14*(t/{thoi_luong}))/2)*2':h=-2:eval=frame[sp];"
+        f"[bg][sp]overlay=x='{cx}-w/2':y='{cy}-h/2+22*sin(2*PI*t/3.5)':shortest=1[mid];"
         f"[2:v]format=rgba,fade=t=in:st=0.15:d=0.45:alpha=1[ov];"
         f"[mid][ov]overlay=0:0:shortest=1,format=yuv420p[out]"
     )

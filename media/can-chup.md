@@ -1,7 +1,7 @@
 # Danh sách mã sản phẩm cần chụp / bổ sung ảnh
 
-Cập nhật: 18/11/2026 (Antigravity Media · W036).
-Tổng sản phẩm hiển thị (`hien_thi = true`): **129** · Đã duyệt: **26** · Chờ QA duyệt: **6** · Còn thiếu ảnh: **97**.
+Cập nhật: 18/11/2026 (Antigravity Media · W036 sau QA đợt 1).
+Tổng sản phẩm hiển thị (`hien_thi = true`): **129** · Đã duyệt: **32** · Chờ QA duyệt: **0** · Còn thiếu ảnh: **97**.
 
 ## Hướng dẫn chụp tại booth (5 bước · docs/06 mục 6)
 1. Đặt sản phẩm trước tường hoặc tấm giấy trắng, ánh sáng cửa sổ hoặc đèn trắng, không flash.
@@ -14,18 +14,18 @@ Tổng sản phẩm hiển thị (`hien_thi = true`): **129** · Đã duyệt: *
 | Thương hiệu | Tổng | Đã duyệt | Chờ duyệt | Còn thiếu | Ghi chú nguồn |
 |---|---:|---:|---:|---:|---|
 | LOPOE | 3 | 3 | 0 | 0 | Đủ 3/3 (ảnh thật từ chiến dịch) |
-| Medicube | 12 | 7 | 0 | 5 | Đã duyệt 6, 1 chờ duyệt (Zero Pore Pad Mild >150KB); còn thiếu 2 máy Booster Pro X2 (cần phân biệt màu), 2 hũ kem (tránh ảnh ghép 2 hũ) và Zero Pore Pad xanh dương (tránh badge Amazon) |
+| Medicube | 12 | 7 | 0 | 5 | Đã duyệt 7 (Zero Pore Pad Mild đã làm lại nền #FFFFFF 25KB không rỗng thân, Deep Vita C Pad đã xóa huy hiệu VEGAN, PDRN & Triple Collagen Serum đã làm sạch viền mờ); còn thiếu 2 máy Booster Pro X2 (cần phân biệt màu), 2 hũ kem (tránh ảnh ghép 2 hũ) và Zero Pore Pad xanh dương (tránh badge Amazon) |
 | Celimax | 3 | 3 | 0 | 0 | Đủ 3/3 (celimax.com) |
 | SKINFOOD | 19 | 3 | 0 | 16 | Đã duyệt 3 (theskinfood.us); 16 mã còn thiếu không bán trên trang US / trang Hàn cần chụp hoặc lấy từ Drive/hãng |
 | Rep!el | 14 | 0 | 0 | 14 | Ảnh trên repiel.vn có chữ khuyến mại 'Mua 1 tặng 5' hoặc placeholder nên đã loại; cần ảnh packshot trơn hoặc chụp tại booth |
 | Uniura | 4 | 0 | 0 | 4 | Không có website chính hãng riêng; cần chụp tại booth hoặc lấy ảnh từ nhà phân phối |
-| salTherapy | 9 | 0 | 3 | 6 | 3 mã Body Scrub chờ QA trên trang saltherapy.us; 6 mã muối tắm & sữa tắm cần chụp hoặc lấy từ trang Hàn |
+| salTherapy | 9 | 3 | 0 | 6 | 3 mã Body Scrub đã duyệt (saltherapy.us); 6 mã muối tắm & sữa tắm cần chụp hoặc lấy từ trang Hàn |
 | Tiela | 6 | 6 | 0 | 0 | Đủ 6/6 (tielacosmetics.com) |
 | Dermal | 8 | 4 | 0 | 4 | 4/8 đã duyệt từ Drive 08; còn thiếu 4 mặt nạ (gồm Tea Tree theo W004) |
 | Aprilskin | 3 | 0 | 0 | 3 | aprilskin.us không có dòng Magic Snow Cushion; cần chụp tại booth hoặc trang Hàn |
 | Beaund | 6 | 0 | 0 | 6 | 6 thiết bị làm đẹp: trang beaund.com có chữ/banner tiếng Hàn, cần chọn hoặc chụp tại booth |
 | Dermagarden | 3 | 0 | 0 | 3 | 3 mã: cần chụp tại booth hoặc lấy từ dermagarden.co.kr |
-| Edit.B | 8 | 0 | 3 | 5 | 3 mã chờ QA (en.editb.co.kr); 5 mã còn lại cần chụp hoặc tách màu Cushion Pink/Purple |
+| Edit.B | 8 | 3 | 0 | 5 | 3 mã đã duyệt (en.editb.co.kr); 5 mã còn lại cần chụp hoặc tách màu Cushion Pink/Purple |
 | Franz | 2 | 0 | 0 | 2 | 2 mã: ảnh trên franzskincareusa.com có sticker 'BUY A PATCH, GET A FREE TONER' nên đã loại; cần ảnh packshot trơn hoặc chụp tại booth |
 | ISOI | 6 | 0 | 0 | 6 | 6 mã: trang isoi.co.kr chưa trích xuất tự động được; cần chụp hoặc lấy ảnh từ hãng |
 | JUNGSAEMMOOL | 11 | 0 | 0 | 11 | 11 mã: jsmbeauty.us cần tách từng biến thể màu/tông cushion và base; ưu tiên chụp hoặc lấy từ Drive |
