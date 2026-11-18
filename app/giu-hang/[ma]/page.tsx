@@ -1,6 +1,9 @@
+import Link from "next/link";
 import { AppShell } from "@/components/AppShell";
 import { layDonGiuHangTheoMa } from "@/lib/giu-hang/kho-giu-hang";
 import { ChiTietMaGiuHang } from "./ChiTietMaGiuHang";
+
+export const dynamic = "force-dynamic";
 
 export default async function TrangMaGiuHang({
   params,
@@ -10,57 +13,26 @@ export default async function TrangMaGiuHang({
   const { ma } = await params;
   const maChuanHoa = decodeURIComponent(ma).toUpperCase();
 
-  let don = await layDonGiuHangTheoMa(maChuanHoa);
+  const donGoc = await layDonGiuHangTheoMa(maChuanHoa);
 
-  // Fallback demo object nếu chưa có trong DB (ví dụ mở trực tiếp VIVE-4821)
-  if (!don) {
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const yyyy = tomorrow.getFullYear();
-    const mm = String(tomorrow.getMonth() + 1).padStart(2, "0");
-    const dd = String(tomorrow.getDate()).padStart(2, "0");
-
-    don = {
-      id: `fallback-${maChuanHoa}`,
-      ma: maChuanHoa,
-      ten: "Khách trải nghiệm",
-      sdt: "0901234567",
-      email: "khach@email.com",
-      ngayDen: `${yyyy}-${mm}-${dd}`,
-      hetHan: `${yyyy}-${mm}-${dd}T21:00:00+07:00`,
-      trangThai: "moi",
-      tongUocTinh: 1235000,
-      quaDuKien: "1 ampoule LOPOE",
-      taoLuc: new Date().toISOString(),
-      cacDong: [
-        {
-          id: "combo-pink",
-          ten: "COMBO PINK PDRN",
-          thuongHieu: "VIVE",
-          soLuong: 1,
-          giaSauUuDai: 999000,
-          loai: "combo",
-        },
-        {
-          id: "LOPOE-CF",
-          ten: "Sữa rửa mặt LOPOE",
-          thuongHieu: "LOPOE",
-          soLuong: 1,
-          giaSauUuDai: 186000,
-          loai: "san_pham",
-        },
-        {
-          id: "8809459397669",
-          ten: "Mặt nạ Aloe Dermal",
-          thuongHieu: "Dermal",
-          soLuong: 2,
-          giaSauUuDai: 50000,
-          loai: "san_pham",
-        },
-      ],
-    };
+  if (!donGoc) {
+    return (
+      <AppShell>
+        <main className="max-w-[540px] mx-auto px-6 py-16 flex flex-col items-center gap-4 text-center">
+          <h1 className="m-0 text-[24px] font-bold">Không tìm thấy mã {maChuanHoa}</h1>
+          <p className="m-0 text-[15px] text-[#5C5C5B]">Mã có thể đã hết hạn hoặc gõ sai. Bạn kiểm tra lại email xác nhận hoặc hỏi nhân viên tại booth.</p>
+          <Link href="/gio" className="h-12 px-6 rounded-full bg-den text-trang flex items-center font-semibold">Về giỏ hàng</Link>
+        </main>
+      </AppShell>
+    );
   }
+
+  // Ai biết mã cũng mở được trang này: ẩn bớt số điện thoại, che bớt email
+  const don = {
+    ...donGoc,
+    sdt: donGoc.sdt.replace(/^(\d{2})\d+(\d{3})$/, "$1•••••$2"),
+    email: donGoc.email ? donGoc.email.replace(/^(.)[^@]*(@.*)$/, "$1•••$2") : null,
+  };
 
   return (
     <AppShell>

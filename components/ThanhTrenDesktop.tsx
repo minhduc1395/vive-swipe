@@ -132,7 +132,7 @@ export function ThanhTrenDesktop({
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/brand/vive-logo-black.png"
+            src="/brand/vive-logo-chu.png"
             alt="VIVE"
             className="w-[76px] h-auto"
           />
@@ -141,7 +141,7 @@ export function ThanhTrenDesktop({
         {/* Menu chính */}
         <nav
           aria-label="Điều hướng máy tính"
-          className="flex items-center gap-1.5"
+          className="flex items-center gap-1 min-w-0"
         >
           {CAC_MUC_MENU.map((muc) => {
             const dangChon =
@@ -153,13 +153,13 @@ export function ThanhTrenDesktop({
                 key={muc.key}
                 href={muc.href}
                 aria-current={dangChon ? "page" : undefined}
-                className={`h-11 px-4 rounded-full flex items-center gap-2 text-[15px] transition-colors focus-visible:outline-2 focus-visible:outline-den ${
+                className={`h-11 px-3 rounded-full flex items-center gap-2 text-[15px] whitespace-nowrap shrink-0 transition-colors focus-visible:outline-2 focus-visible:outline-den ${
                   dangChon
                     ? "bg-[#F7EEEB] text-den font-semibold"
                     : "text-[#2B2B2A] hover:bg-[#F7EEEB]/60 font-medium"
                 }`}
               >
-                {muc.icon}
+                <span className="hidden xl:inline-flex">{muc.icon}</span>
                 <span>{muc.label}</span>
                 {soDem > 0 && (
                   <span
@@ -181,9 +181,9 @@ export function ThanhTrenDesktop({
             action="/danh-muc"
             method="GET"
             role="search"
-            className="relative flex items-center"
+            className="relative hidden xl:flex items-center"
           >
-            <label className="h-11 w-[260px] px-4 rounded-full bg-[#F7EEEB] flex items-center gap-2.5 focus-within:ring-2 focus-within:ring-den/20 transition-all cursor-text">
+            <label className="h-11 w-[220px] px-4 rounded-full bg-[#F7EEEB] flex items-center gap-2.5 focus-within:ring-2 focus-within:ring-den/20 transition-all cursor-text">
               <svg
                 width="18"
                 height="18"
@@ -213,7 +213,7 @@ export function ThanhTrenDesktop({
             aria-label={
               soLuongGio > 0 ? `Giỏ hàng (${soLuongGio} món)` : "Giỏ hàng"
             }
-            className="h-11 px-4.5 rounded-full bg-den text-trang flex items-center gap-2 text-[15px] font-semibold hover:opacity-90 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-den"
+            className="h-11 px-4.5 rounded-full bg-den text-trang flex items-center gap-2 text-[15px] font-semibold whitespace-nowrap shrink-0 hover:opacity-90 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-den"
           >
             <svg
               width="18"
@@ -242,7 +242,7 @@ export function ThanhTrenDesktop({
           {/* Nút Đăng nhập */}
           <Link
             href="/dang-nhap"
-            className="h-11 px-4 rounded-full border border-[#E8D2CC] text-den flex items-center text-[14px] font-semibold hover:bg-[#F7EEEB] transition-colors focus-visible:outline-2 focus-visible:outline-den"
+            className="h-11 px-4 rounded-full border border-[#E8D2CC] text-den flex items-center text-[14px] font-semibold whitespace-nowrap shrink-0 hover:bg-[#F7EEEB] transition-colors focus-visible:outline-2 focus-visible:outline-den"
           >
             Đăng nhập
           </Link>
