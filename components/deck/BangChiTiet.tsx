@@ -42,11 +42,11 @@ export function BangChiTiet({
       role="dialog"
       aria-modal="true"
       aria-label={`Chi tiết sản phẩm ${sanPham.ten_hien_thi}`}
-      className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 transition-opacity"
+      className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/50 transition-opacity p-0 md:p-6"
       onClick={onDong}
     >
       <div
-        className="w-full max-w-[480px] max-h-[85vh] bg-trang rounded-t-[28px] overflow-hidden flex flex-col relative animate-in slide-in-from-bottom duration-300 shadow-2xl"
+        className="w-full max-w-[480px] md:max-w-[560px] max-h-[85vh] bg-trang rounded-t-[28px] md:rounded-[28px] overflow-hidden flex flex-col relative animate-in slide-in-from-bottom duration-300 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Nắp kéo */}
