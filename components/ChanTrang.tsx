@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CAU_HINH_BOOTH } from "@/lib/cau-hinh";
+import { DOANH_NGHIEP } from "@/lib/data";
 
 interface ChanTrangProps {
   className?: string;
@@ -7,7 +8,7 @@ interface ChanTrangProps {
 
 /**
  * Chân trang thống nhất cho mọi trang khách (W019, docs/03 mục 5 & 8).
- * Giữ rõ chỗ trống [chờ W001] cho thông tin pháp lý doanh nghiệp từ chủ dự án.
+ * Dữ liệu đơn vị vận hành đọc từ data/doanh-nghiep.yaml; ẩn SĐT nếu null.
  */
 export function ChanTrang({ className = "" }: ChanTrangProps) {
   return (
@@ -24,8 +25,8 @@ export function ChanTrang({ className = "" }: ChanTrangProps) {
               className="w-16 h-auto object-contain"
             />
             <span className="text-[13px] text-xam leading-snug">
-              VIVE | K-Beauty Experience · Tầng LL2 Union Square, 171 Đồng Khởi,
-              Phường Sài Gòn · {CAU_HINH_BOOTH.gioMoCua}
+              {DOANH_NGHIEP.ten_cua_hang} · {DOANH_NGHIEP.dia_diem_booth} ·{" "}
+              {CAU_HINH_BOOTH.gioMoCua}
             </span>
           </div>
 
@@ -61,8 +62,12 @@ export function ChanTrang({ className = "" }: ChanTrangProps) {
         </div>
 
         <div className="pt-4 border-t border-vien/70 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[12px] text-xam">
-          <span>
-            Đơn vị vận hành: [chờ W001: Tên doanh nghiệp / HKD · MST · Địa chỉ ĐKKD · SĐT · Email]
+          <span className="leading-relaxed">
+            {DOANH_NGHIEP.ten_cong_ty} · MST: {DOANH_NGHIEP.ma_so_thue} ·{" "}
+            {DOANH_NGHIEP.dia_chi} · Email: {DOANH_NGHIEP.email}
+            {DOANH_NGHIEP.so_dien_thoai
+              ? ` · SĐT: ${DOANH_NGHIEP.so_dien_thoai}`
+              : ""}
           </span>
           <div className="flex items-center gap-3 shrink-0">
             <Link href="/chinh-sach" className="text-den font-medium hover:underline">

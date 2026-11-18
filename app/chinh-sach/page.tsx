@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import { AppShell } from "@/components/AppShell";
 import { NutQuayLai } from "@/components/NutQuayLai";
 import { CAU_HINH_BOOTH } from "@/lib/cau-hinh";
+import { DOANH_NGHIEP } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "Chính sách bảo mật & giữ hàng · VIVE",
-  description:
-    "Quy định bảo mật dữ liệu cá nhân, giữ hàng miễn phí tại booth LL2 Union Square và thông tin đơn vị vận hành VIVE.",
+  title: `Chính sách bảo mật & giữ hàng · ${DOANH_NGHIEP.ten_cua_hang}`,
+  description: `Quy định bảo mật dữ liệu cá nhân, giữ hàng miễn phí tại ${DOANH_NGHIEP.dia_diem_booth} và thông tin ${DOANH_NGHIEP.ten_cong_ty}.`,
 };
 
 export default function TrangChinhSach() {
@@ -20,7 +20,7 @@ export default function TrangChinhSach() {
           </h1>
           <p className="m-0 text-[15px] text-xam leading-relaxed">
             Áp dụng cho web trải nghiệm sản phẩm VIVE và quầy giữ hàng tại{" "}
-            {CAU_HINH_BOOTH.diaChiNgan}.
+            {DOANH_NGHIEP.dia_diem_booth}.
           </p>
         </header>
 
@@ -29,7 +29,10 @@ export default function TrangChinhSach() {
             aria-labelledby="muc-bao-mat"
             className="rounded-[24px] bg-hong-nhat p-5 md:p-6 flex flex-col gap-2.5"
           >
-            <h2 id="muc-bao-mat" className="m-0 text-[18px] md:text-[20px] font-bold text-den">
+            <h2
+              id="muc-bao-mat"
+              className="m-0 text-[18px] md:text-[20px] font-bold text-den"
+            >
               1. Bảo mật dữ liệu cá nhân
             </h2>
             <ul className="m-0 pl-5 flex flex-col gap-2 text-[14px] md:text-[15px] text-xam-dam leading-relaxed">
@@ -47,7 +50,14 @@ export default function TrangChinhSach() {
               <li>
                 <strong>Quyền xóa &amp; kiểm tra dữ liệu:</strong> Khách hàng có
                 quyền yêu cầu xem hoặc xóa lịch sử cá nhân thông qua nhân viên tại
-                booth hoặc email hỗ trợ <span>[chờ W001]</span>.
+                booth hoặc email{" "}
+                <a
+                  href={`mailto:${DOANH_NGHIEP.email}`}
+                  className="text-den underline"
+                >
+                  {DOANH_NGHIEP.email}
+                </a>
+                .
               </li>
             </ul>
           </section>
@@ -56,7 +66,10 @@ export default function TrangChinhSach() {
             aria-labelledby="muc-giu-hang"
             className="rounded-[24px] bg-bac-ha-nhat p-5 md:p-6 flex flex-col gap-2.5"
           >
-            <h2 id="muc-giu-hang" className="m-0 text-[18px] md:text-[20px] font-bold text-den">
+            <h2
+              id="muc-giu-hang"
+              className="m-0 text-[18px] md:text-[20px] font-bold text-den"
+            >
               2. Quy định giữ hàng tại booth
             </h2>
             <ul className="m-0 pl-5 flex flex-col gap-2 text-[14px] md:text-[15px] text-xam-dam leading-relaxed">
@@ -64,7 +77,7 @@ export default function TrangChinhSach() {
                 <strong>Thanh toán trực tiếp tại quầy:</strong> Việc giữ hàng trên
                 web là hoàn toàn miễn phí và không thu tiền trước. Khách thanh
                 toán và nhận sản phẩm tại quầy POS KiotViet ở{" "}
-                {CAU_HINH_BOOTH.diaChiNgan}.
+                {DOANH_NGHIEP.dia_diem_booth}.
               </li>
               <li>
                 <strong>Giá &amp; quà ước tính:</strong> Tổng tiền và quà tặng
@@ -84,15 +97,18 @@ export default function TrangChinhSach() {
             aria-labelledby="muc-doi-tra"
             className="rounded-[24px] bg-trang border border-vien p-5 md:p-6 flex flex-col gap-2.5"
           >
-            <h2 id="muc-doi-tra" className="m-0 text-[18px] md:text-[20px] font-bold text-den">
+            <h2
+              id="muc-doi-tra"
+              className="m-0 text-[18px] md:text-[20px] font-bold text-den"
+            >
               3. Đổi trả, nhãn phụ &amp; khuyến mại
             </h2>
             <ul className="m-0 pl-5 flex flex-col gap-2 text-[14px] md:text-[15px] text-xam-dam leading-relaxed">
               <li>
-                <strong>Đổi trả tại quầy:</strong> Sản phẩm được kiểm tra nguyên
-                trạng, tem niêm phong khi nhận và áp dụng chính sách đổi trả trực
-                tiếp theo quy định của booth VIVE.{" "}
-                <span>[chờ W001: chi tiết điều kiện/thời hạn đổi trả]</span>
+                <strong>Đổi trả tại quầy:</strong> Khách kiểm tra nguyên trạng sản
+                phẩm và tem niêm phong khi nhận hàng; mọi yêu cầu đổi trả được xử
+                lý trực tiếp tại quầy {DOANH_NGHIEP.ten_cua_hang} hoặc qua{" "}
+                {DOANH_NGHIEP.email}.
               </li>
               <li>
                 <strong>Nhãn phụ tiếng Việt:</strong> Sản phẩm mỹ phẩm nội địa
@@ -116,29 +132,40 @@ export default function TrangChinhSach() {
               id="muc-doanh-nghiep"
               className="m-0 text-[18px] md:text-[20px] font-bold text-den"
             >
-              4. Thông tin đơn vị vận hành &amp; pháp lý
+              4. Thông tin doanh nghiệp
             </h2>
-            <dl className="m-0 grid grid-cols-1 sm:grid-cols-[220px_1fr] gap-y-2 gap-x-4 text-[14px] md:text-[15px] text-xam-dam">
-              <dt className="font-semibold text-den">Địa điểm Pop-up</dt>
+            <dl className="m-0 grid grid-cols-1 sm:grid-cols-[200px_1fr] gap-y-2.5 gap-x-4 text-[14px] md:text-[15px] text-xam-dam">
+              <dt className="font-semibold text-den">Tên doanh nghiệp</dt>
+              <dd className="m-0">{DOANH_NGHIEP.ten_cong_ty}</dd>
+
+              <dt className="font-semibold text-den">Mã số thuế</dt>
+              <dd className="m-0">{DOANH_NGHIEP.ma_so_thue}</dd>
+
+              <dt className="font-semibold text-den">Địa chỉ doanh nghiệp</dt>
+              <dd className="m-0">{DOANH_NGHIEP.dia_chi}</dd>
+
+              <dt className="font-semibold text-den">Email liên hệ</dt>
               <dd className="m-0">
-                VIVE | K-Beauty Experience, tầng LL2 Union Square, 171 Đồng Khởi,
-                Phường Sài Gòn ({CAU_HINH_BOOTH.gioMoCua})
+                <a
+                  href={`mailto:${DOANH_NGHIEP.email}`}
+                  className="text-den underline"
+                >
+                  {DOANH_NGHIEP.email}
+                </a>
               </dd>
 
-              <dt className="font-semibold text-den">Tên doanh nghiệp / HKD</dt>
-              <dd className="m-0">[chờ W001]</dd>
+              {DOANH_NGHIEP.so_dien_thoai && (
+                <>
+                  <dt className="font-semibold text-den">Số điện thoại</dt>
+                  <dd className="m-0">{DOANH_NGHIEP.so_dien_thoai}</dd>
+                </>
+              )}
 
-              <dt className="font-semibold text-den">Mã số thuế / Số ĐKKD</dt>
-              <dd className="m-0">[chờ W001]</dd>
-
-              <dt className="font-semibold text-den">Địa chỉ ĐKKD</dt>
-              <dd className="m-0">[chờ W001]</dd>
-
-              <dt className="font-semibold text-den">Điện thoại &amp; Email</dt>
-              <dd className="m-0">[chờ W001]</dd>
-
-              <dt className="font-semibold text-den">Thông báo Bộ Công Thương</dt>
-              <dd className="m-0">[chờ W001: xác nhận nghĩa vụ theo Luật TMĐT 2025 / NĐ 248/2026]</dd>
+              <dt className="font-semibold text-den">Cửa hàng pop-up</dt>
+              <dd className="m-0">
+                {DOANH_NGHIEP.ten_cua_hang} · {DOANH_NGHIEP.dia_diem_booth} (
+                {CAU_HINH_BOOTH.gioMoCua})
+              </dd>
 
               <dt className="font-semibold text-den">Kênh chính thức</dt>
               <dd className="m-0">

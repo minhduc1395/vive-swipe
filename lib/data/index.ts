@@ -1,10 +1,12 @@
 import dealsJson from "./deals.json";
+import doanhNghiepJson from "./doanh-nghiep.json";
 import productsJson from "./products.json";
-import type { Deal, SanPham } from "./types";
+import type { Deal, DoanhNghiep, SanPham } from "./types";
 import { hienThi, layDealHienThi } from "@/lib/deals/hien-thi";
 
 export const SAN_PHAM: SanPham[] = productsJson as SanPham[];
 export const DEALS: Deal[] = dealsJson as Deal[];
+export const DOANH_NGHIEP: DoanhNghiep = doanhNghiepJson as DoanhNghiep;
 
 /**
  * Lọc sản phẩm đủ điều kiện hiển thị trên web:
@@ -42,5 +44,9 @@ export function timDealTheoId(
 }
 
 export * from "./types";
-export { parseDealsYaml, parseProductsCsv } from "./parse";
+export {
+  parseDealsYaml,
+  parseDoanhNghiepYaml,
+  parseProductsCsv,
+} from "./parse";
 export { hienThi, layDealHienThi };

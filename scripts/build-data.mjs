@@ -36,16 +36,21 @@ function loadParseModule() {
 export function buildStaticData({
   csvPath = path.join(ROOT, "data", "products.csv"),
   yamlPath = path.join(ROOT, "data", "deals.yaml"),
+  doanhNghiepPath = path.join(ROOT, "data", "doanh-nghiep.yaml"),
   chienDichDir = path.join(ROOT, "data", "chien-dich"),
   outDir = path.join(ROOT, "lib", "data"),
 } = {}) {
-  const { parseProductsCsv, parseDealsYaml } = loadParseModule();
+  const { parseProductsCsv, parseDealsYaml, parseDoanhNghiepYaml } =
+    loadParseModule();
 
   const csvText = fs.readFileSync(csvPath, "utf8");
   const products = parseProductsCsv(csvText);
 
   const yamlText = fs.readFileSync(yamlPath, "utf8");
   const deals = parseDealsYaml(yamlText);
+
+  const doanhNghiepText = fs.readFileSync(doanhNghiepPath, "utf8");
+  const doanhNghiep = parseDoanhNghiepYaml(doanhNghiepText);
 
   const yaml = require("js-yaml");
   const chienDichList = [];
@@ -79,8 +84,13 @@ export function buildStaticData({
     `${JSON.stringify(chienDichList, null, 2)}\n`,
     "utf8"
   );
+  fs.writeFileSync(
+    path.join(outDir, "doanh-nghiep.json"),
+    `${JSON.stringify(doanhNghiep, null, 2)}\n`,
+    "utf8"
+  );
 
-  return { products, deals, chienDichList };
+  return { products, deals, chienDichList, doanhNghiep };
 }
 
 const isDirectRun =

@@ -1,4 +1,5 @@
 import { test, expect, datDaKhaoSat } from "./fixtures";
+import { DOANH_NGHIEP } from "@/lib/data";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -15,7 +16,7 @@ const CU_CHUAN_9_CO = [
 ] as const;
 
 test.describe("W019 · Trang chính sách (/chinh-sach) và chân trang (ChanTrang)", () => {
-  test("1. /chinh-sach hiển thị đủ 4 mục pháp lý, giữ rõ chỗ trống [chờ W001] và nút Quay lại", async ({
+  test("1. /chinh-sach đọc đúng thông tin doanh nghiệp từ data/doanh-nghiep.yaml, ẩn SĐT khi null, không còn [chờ W001]", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
@@ -34,13 +35,22 @@ test.describe("W019 · Trang chính sách (/chinh-sach) và chân trang (ChanTra
       page.getByRole("heading", { name: /3\. Đổi trả, nhãn phụ & khuyến mại/ }),
     ).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: /4\. Thông tin đơn vị vận hành/ }),
+      page.getByRole("heading", { name: /4\. Thông tin doanh nghiệp/ }),
     ).toBeVisible();
-    await expect(page.getByText("[chờ W001]").first()).toBeVisible();
+
+    await expect(page.getByText(DOANH_NGHIEP.ten_cong_ty).first()).toBeVisible();
+    await expect(page.getByText(DOANH_NGHIEP.ma_so_thue).first()).toBeVisible();
+    await expect(page.getByText(DOANH_NGHIEP.dia_chi).first()).toBeVisible();
+    await expect(page.getByText(DOANH_NGHIEP.email).first()).toBeVisible();
+    await expect(page.getByText("[chờ W001]")).toHaveCount(0);
+    if (DOANH_NGHIEP.so_dien_thoai === null) {
+      await expect(page.locator("dl").getByText("Số điện thoại")).toHaveCount(0);
+    }
+
     await expect(page.getByRole("button", { name: /Quay lại/i })).toBeVisible();
   });
 
-  test("2. Chân trang xuất hiện trên các trang khách cuộn dọc (/deal, /gio, /chinh-sach) với đúng tài khoản MXH", async ({
+  test("2. Chân trang xuất hiện trên các trang khách cuộn dọc (/deal, /gio, /chinh-sach) với thông tin doanh nghiệp và MXH", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
@@ -56,6 +66,9 @@ test.describe("W019 · Trang chính sách (/chinh-sach) và chân trang (ChanTra
       ).toBeVisible();
       await expect(footer.getByText("Instagram: @vive.k_beauty")).toBeVisible();
       await expect(footer.getByText("TikTok: @viveuniverse")).toBeVisible();
+      await expect(
+        footer.getByText(new RegExp(DOANH_NGHIEP.ma_so_thue)),
+      ).toBeVisible();
       await expect(
         footer.getByRole("link", { name: "Chính sách & Pháp lý" }),
       ).toBeVisible();

@@ -2,8 +2,10 @@ import yaml from "js-yaml";
 import { z } from "zod";
 import {
   DealSchema,
+  DoanhNghiepSchema,
   SanPhamSchema,
   type Deal,
+  type DoanhNghiep,
   type SanPham,
 } from "./types";
 
@@ -277,4 +279,24 @@ export function parseDealsYaml(yamlText: string): Deal[] {
   }
 
   return danhSach;
+}
+
+/**
+ * Đọc và kiểm tra định dạng YAML thông tin doanh nghiệp theo schema Zod.
+ */
+export function parseDoanhNghiepYaml(yamlText: string): DoanhNghiep {
+  let taiLieu: unknown;
+  try {
+    taiLieu = yaml.load(yamlText, { schema: yaml.JSON_SCHEMA });
+  } catch (err) {
+    const chiTiet = err instanceof Error ? err.message : String(err);
+    throw new Error(`YAML doanh-nghiep sai cú pháp: ${chiTiet}`);
+  }
+
+  const ketQua = DoanhNghiepSchema.safeParse(taiLieu);
+  if (!ketQua.success) {
+    throw new Error(`YAML doanh-nghiep: ${dinhDangLoiZod(ketQua.error)}`);
+  }
+
+  return ketQua.data;
 }
