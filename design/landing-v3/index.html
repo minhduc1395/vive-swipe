@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VIVE – Landing tối giản (bản thử v3)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,500&display=swap">
+<style>
+  :root{
+    --hong:#E8D2CC;--hong-nhat:#F7EEEB;--bac-ha:#CFE3D5;--bac-ha-nhat:#EAF3ED;
+    --den:#2B2B2A;--xam:#737373;--nen:#F6F4F2;--vien:rgba(43,43,42,.14)
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#fff;color:var(--den);font-family:'Be Vietnam Pro',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  img{display:block;max-width:100%}
+
+  /* Thanh menu mảnh, mờ kính */
+  header{position:sticky;top:0;z-index:50;height:48px;background:rgba(255,255,255,.78);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px)}
+  .menu{max-width:1024px;height:100%;margin:0 auto;padding:0 22px;display:flex;align-items:center;justify-content:space-between}
+  .menu .logo img{height:22px;width:auto}
+  .menu nav{display:flex;gap:30px}
+  .menu nav a{font-size:13px;text-decoration:none;color:rgba(43,43,42,.82)}
+  .menu nav a:hover{color:var(--den)}
+  .bieu-tuong{display:flex;gap:22px;align-items:center}
+  .bieu-tuong svg{width:17px;height:17px;display:block}
+  .nut-menu{display:none}
+  @media (max-width:833px){.menu nav{display:none}.nut-menu{display:block}}
+
+  /* Dải thông báo */
+  .dai{background:var(--hong-nhat);text-align:center;font-size:14px;padding:14px 20px}
+  .dai a{text-decoration:none;font-weight:500}
+
+  /* Ô nội dung kiểu Apple */
+  main{display:flex;flex-direction:column;gap:12px;padding-bottom:12px}
+  .o{position:relative;overflow:hidden;text-align:center;display:flex;flex-direction:column;align-items:center;padding:52px 20px 0}
+  .o h2{margin:0;font-size:56px;line-height:1.07;font-weight:600;letter-spacing:-.015em}
+  .o h2 em{font-family:'Playfair Display',serif;font-style:italic;font-weight:500}
+  .o p{margin:6px 0 0;font-size:28px;line-height:1.14;font-weight:400;letter-spacing:.005em}
+  .nut{display:flex;gap:14px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+  .nut a{min-width:28px;padding:11px 21px;border-radius:980px;font-size:17px;line-height:1.18;text-decoration:none;transition:background .2s,color .2s}
+  .nut .chinh{background:#fff;color:var(--den);font-weight:500}
+  #chon-loc .nut .chinh,#qua-lopoe .nut .chinh{background:var(--hong)}
+  .nut .phu{box-shadow:inset 0 0 0 1px var(--vien);color:var(--den)}
+  .nut .phu:hover{background:rgba(255,255,255,.5)}
+  .o .hinh{margin-top:auto;width:calc(100% + 40px);margin-left:-20px;margin-right:-20px;display:flex;justify-content:center;overflow:hidden}
+
+  .o.lon{min-height:692px}
+  .luoi{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 12px}
+  .luoi .o{min-height:580px}
+  .luoi .o h2{font-size:40px}
+  .luoi .o p{font-size:21px}
+  .luoi .nut a{font-size:14px;padding:8px 15px}
+
+  .toi{background:var(--den);color:#fff}
+  .toi .nut .chinh{background:var(--hong);color:var(--den)}
+  .toi .nut .phu{box-shadow:inset 0 0 0 1px rgba(255,255,255,.35);color:#fff}
+
+  /* Từng ô */
+  #cua-hang{background:var(--hong-nhat)}
+  #cua-hang h1{margin:0}
+  #cua-hang h1 img{height:84px;width:auto;margin:0 auto}
+  #ghep{position:relative;width:100%;aspect-ratio:1600/891;overflow:hidden;margin-top:40px;background:#efe6e2}
+  #ghep .luoi-anh{position:absolute;top:0;bottom:0;left:50%;height:100%;aspect-ratio:1600/891;transform:translateX(-50%);display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(4,1fr)}
+  .manh{position:relative;overflow:hidden}
+  .manh i{position:absolute;inset:0;background-size:600% 400%;background-repeat:no-repeat;transition:clip-path .75s cubic-bezier(.65,0,.25,1)}
+  .manh::after{content:'';position:absolute;inset:0;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.45);pointer-events:none;z-index:5}
+
+  #lopoe{background:var(--bac-ha-nhat)}
+  #lopoe .bo-ba{position:relative;align-items:flex-end;gap:30px;padding:48px 0 76px;overflow:visible}
+  #lopoe .bo-ba img{position:relative;z-index:2;transform:none;transition:none;will-change:transform,opacity}
+  #lopoe .quang{position:absolute;z-index:1;left:50%;bottom:40px;width:620px;height:620px;margin-left:-310px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.95) 0,rgba(207,227,213,.55) 38%,rgba(191,214,242,0) 68%);transform:scale(.3);opacity:0;pointer-events:none}
+  #lopoe .giot{position:absolute;z-index:3;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,rgba(191,214,242,.75) 60%,rgba(143,175,216,.55));opacity:0;pointer-events:none}
+  #lopoe .bo-ba img{height:380px;width:auto;filter:drop-shadow(0 26px 34px rgba(60,90,130,.18))}
+  #lopoe .bo-ba img.giua{height:274px}
+  #bay{position:fixed;left:0;top:0;z-index:40;pointer-events:none;opacity:0;transform-origin:50% 100%;will-change:transform,opacity;filter:drop-shadow(0 18px 24px rgba(60,90,130,.22))}
+  #bay img{display:block;height:100%;width:auto}
+
+  #chon-loc{background:#fff}
+  #chon-loc .hinh img{width:min(1100px,100%);aspect-ratio:1461/860;object-fit:cover;object-position:50% 40%;margin-top:40px;border-radius:0}
+
+  #personal-color{background:var(--hong-nhat)}
+  #personal-color .hinh img{width:100%;height:300px;object-fit:cover;object-position:50% 30%;margin-top:30px}
+  #check-in{background:var(--bac-ha)}
+  #check-in .hinh img{width:100%;height:300px;object-fit:cover;margin-top:30px}
+
+  .so-lon{margin-top:auto;padding:40px 0 56px;font-family:'Playfair Display',serif;font-style:italic;font-weight:500;font-size:150px;line-height:1;letter-spacing:-.03em}
+  #deal-pdrn{background:var(--hong)}
+  #deal-mat-na{background:var(--bac-ha-nhat)}
+  #qua-lopoe{background:#fff;box-shadow:inset 0 0 0 1px rgba(43,43,42,.06)}
+  #qua-lopoe .hinh img{height:380px;width:auto;margin:40px 0 0}
+  .hinh.sp img{height:300px;width:auto;margin:40px 0 44px;filter:drop-shadow(0 24px 30px rgba(120,60,70,.18))}
+  #deal-pdrn .hinh{margin-top:auto}
+  p.co-logo{display:flex;align-items:center;justify-content:center;gap:.3em}
+  p.co-logo img{height:1.05em;width:auto;transform:translateY(.04em)}
+  h2.ghe{display:flex;align-items:center;justify-content:center;gap:.28em}
+  h2.ghe img{height:.95em;width:auto;transform:translateY(.06em);filter:brightness(0) invert(1)}
+  #ghe-vive,#qua-lopoe{min-height:0}
+  #ghe-vive .so-lon{padding-bottom:70px}
+  #ghe-vive .so-lon{font-family:'Be Vietnam Pro',sans-serif;font-style:normal;font-weight:700;color:transparent;-webkit-text-stroke:1.5px var(--hong);font-size:170px}
+
+  #chon-loc{min-height:0;padding-bottom:0}
+  .tuong-logo{width:calc(100% + 40px);margin:44px -20px 0;padding:34px 0;background:var(--hong-nhat);overflow:hidden;opacity:0;transform:translateY(24px);transition:opacity .9s ease .25s,transform 1s cubic-bezier(.2,.8,.2,1) .25s}
+  .tuong-logo.da{opacity:1;transform:none}
+  .chay{display:flex;width:max-content;animation:chay 55s linear infinite}
+  .nhom{display:flex;align-items:center;gap:76px;padding-right:76px}
+  .lg{height:40px;display:flex;align-items:center;flex:none;color:var(--den)}
+  .lg img{height:100%;width:auto;display:block}
+  .lg.chu{font-size:30px;font-weight:700;letter-spacing:.07em;white-space:nowrap}
+  @keyframes chay{to{transform:translateX(-50%)}}
+  @media (prefers-reduced-motion:reduce){.chay{animation:none}.tuong-logo{opacity:1;transform:none}}
+
+  /* Chân trang */
+  footer{background:var(--nen);font-size:12px;line-height:1.33;color:var(--xam)}
+  .chan{max-width:980px;margin:0 auto;padding:20px 22px 24px}
+  .cot-chan{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;padding:10px 0 24px;border-bottom:1px solid rgba(0,0,0,.08)}
+  .cot-chan b{display:block;color:var(--den);font-weight:600;margin-bottom:8px}
+  .logo-chan{height:14px;width:auto;display:block}
+  .cot-chan a{display:block;text-decoration:none;margin-bottom:8px}
+  .cot-chan a:hover{text-decoration:underline}
+  .ban-quyen{padding-top:16px}
+  .ban-quyen p{margin:0 0 4px}
+
+  /* Hiện dần khi cuộn */
+  .hien{opacity:0;transform:translateY(28px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+  .hien.da{opacity:1;transform:none}
+  .hinh img{transform:scale(1.04);transition:transform 1.6s cubic-bezier(.2,.7,.2,1)}
+  .da .hinh img,.hinh.da img{transform:scale(1)}
+  @media (prefers-reduced-motion:reduce){.hien,.hinh img{transition:none;opacity:1;transform:none}}
+
+  @media (max-width:833px){
+    .luoi{grid-template-columns:1fr;padding:0}
+    .o{padding-top:44px}
+    .o h2,.luoi .o h2{font-size:40px}
+    .o p,.luoi .o p{font-size:21px}
+    .o.lon,.luoi .o{min-height:0}
+    .so-lon{padding:36px 0 48px}
+    .hinh.sp img{height:240px}
+    #qua-lopoe .hinh img{height:280px}
+    #cua-hang h1 img{height:62px}
+    #ghep{aspect-ratio:4/3.6}
+    #chon-loc .hinh img{aspect-ratio:1/1}
+    #lopoe .bo-ba{gap:14px;padding:36px 0 60px}
+    #lopoe .quang{width:400px;height:400px;margin-left:-200px;bottom:30px}
+    #lopoe .bo-ba img{height:250px}
+    #lopoe .bo-ba img.giua{height:180px}
+    .so-lon{font-size:120px}
+    #ghe-vive .so-lon{font-size:140px}
+    .cot-chan{grid-template-columns:1fr 1fr}
+    .tuong-logo{margin-top:32px;padding:26px 0}
+    .nhom{gap:52px;padding-right:52px}
+    .lg{height:30px}
+    .lg.chu{font-size:22px}
+  }
+  @media (max-width:420px){
+    .o h2,.luoi .o h2{font-size:34px}
+    .o p,.luoi .o p{font-size:19px}
+    .nut a{font-size:15px;padding:10px 18px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="menu">
+    <a class="logo" href="/" aria-label="VIVE"><img src="img/vive-logo-chu.png" alt="VIVE"></a>
+    <nav aria-label="Điều hướng chính"><a href="/new-arrival">New Arrival</a><a href="/quet">Quẹt</a><a href="/danh-muc">Sản phẩm</a><a href="/deal">Deal</a><a href="/da-thich">Đã thích</a></nav>
+    <div class="bieu-tuong">
+      <a href="/danh-muc" aria-label="Tìm sản phẩm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg></a>
+      <a href="/gio" aria-label="Giỏ hàng"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg></a>
+      <a href="/dang-nhap" class="nut-menu" aria-label="Đăng nhập"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 9h16M4 15h16"/></svg></a>
+    </div>
+  </div>
+</header>
+
+<div id="bay" aria-hidden="true"><img src="img/srm.webp" alt=""></div>
+<div class="dai">Mua LOPOE, tặng sản phẩm fullsize. <a href="/deal?id=KM-13">Xem ›</a></div>
+
+<main>
+  <section class="o lon" id="cua-hang">
+    <div class="hien">
+      <h1><img src="img/vive-logo-chu.png" alt="VIVE"></h1>
+      <p>K-Beauty Experience</p>
+      <div class="nut"><a class="chinh" href="#ghe-vive">Ghé cửa hàng</a><a class="phu" href="/danh-muc">Xem sản phẩm</a></div>
+    </div>
+    <div class="hinh"><div id="ghep" role="img" aria-label="Mặt tiền VIVE với nhiều phương án trang trí"><div class="luoi-anh"></div></div></div>
+  </section>
+
+  <section class="o lon" id="lopoe">
+    <div class="hien">
+      <h2>LOPOE Better Balance</h2>
+      <p>Bọt dày. Cấp ẩm. Làm dịu.</p>
+      <div class="nut"><a class="chinh" href="/danh-muc?thuong-hieu=LOPOE">Mua</a><a class="phu" href="/new-arrival">Tìm hiểu thêm</a></div>
+    </div>
+    <div class="hinh bo-ba" aria-label="Bộ ba LOPOE Better Balance" role="img">
+      <span class="quang" aria-hidden="true"></span>
+      <span class="giot" aria-hidden="true"></span><span class="giot" aria-hidden="true"></span><span class="giot" aria-hidden="true"></span><span class="giot" aria-hidden="true"></span><span class="giot" aria-hidden="true"></span><span class="giot" aria-hidden="true"></span>
+      <img id="dich-bay" src="img/srm.webp" alt=""><img id="sp-giua" class="giua" src="img/ampoule.webp" alt=""><img id="sp-phai" src="img/kem.webp" alt="">
+    </div>
+  </section>
+
+  <section class="o lon" id="chon-loc">
+    <div class="hien">
+      <h2>Người Hàn chọn kỹ.</h2>
+      <p class="co-logo"><img src="img/vive-logo-chu.png" alt="VIVE"> mang về.</p>
+    </div>
+    <div class="tuong-logo" aria-label="Thương hiệu đang có tại VIVE">
+      <div class="chay"><div class="nhom"><a class="lg" href="/danh-muc?thuong-hieu=Medicube"><img src="img/brand/medicube.png" alt="Medicube"></a><a class="lg chu" href="/danh-muc?thuong-hieu=SKINFOOD">SKINFOOD</a><a class="lg chu" href="/danh-muc?thuong-hieu=Rep%21el">Rep!el</a><a class="lg" href="/danh-muc?thuong-hieu=Celimax"><img src="img/brand/celimax.png" alt="Celimax"></a><a class="lg" href="/danh-muc?thuong-hieu=LOPOE"><img src="img/brand/lopoe.png" alt="LOPOE"></a><a class="lg" href="/danh-muc?thuong-hieu=JUNGSAEMMOOL"><img src="img/brand/jungsaemmool.png" alt="JUNGSAEMMOOL"></a><a class="lg chu" href="/danh-muc?thuong-hieu=ISOI">ISOI</a><a class="lg chu" href="/danh-muc?thuong-hieu=Edit.B">Edit.B</a><a class="lg chu" href="/danh-muc?thuong-hieu=Lalarecipe">Lalarecipe</a><a class="lg chu" href="/danh-muc?thuong-hieu=Dermal">Dermal</a><a class="lg chu" href="/danh-muc?thuong-hieu=salTherapy">salTherapy</a><a class="lg chu" href="/danh-muc?thuong-hieu=Tiela">Tiela</a><a class="lg chu" href="/danh-muc?thuong-hieu=Beaund">Beaund</a><a class="lg chu" href="/danh-muc?thuong-hieu=Uniura">Uniura</a><a class="lg chu" href="/danh-muc?thuong-hieu=Aprilskin">Aprilskin</a><a class="lg chu" href="/danh-muc?thuong-hieu=Dermagarden">Dermagarden</a></div><div class="nhom" aria-hidden="true"><span class="lg"><img src="img/brand/medicube.png" alt=""></span><a class="lg chu" href="/danh-muc?thuong-hieu=SKINFOOD">SKINFOOD</a><a class="lg chu" href="/danh-muc?thuong-hieu=Rep%21el">Rep!el</a><span class="lg"><img src="img/brand/celimax.png" alt=""></span><span class="lg"><img src="img/brand/lopoe.png" alt=""></span><span class="lg"><img src="img/brand/jungsaemmool.png" alt=""></span><a class="lg chu" href="/danh-muc?thuong-hieu=ISOI">ISOI</a><a class="lg chu" href="/danh-muc?thuong-hieu=Edit.B">Edit.B</a><a class="lg chu" href="/danh-muc?thuong-hieu=Lalarecipe">Lalarecipe</a><a class="lg chu" href="/danh-muc?thuong-hieu=Dermal">Dermal</a><a class="lg chu" href="/danh-muc?thuong-hieu=salTherapy">salTherapy</a><a class="lg chu" href="/danh-muc?thuong-hieu=Tiela">Tiela</a><a class="lg chu" href="/danh-muc?thuong-hieu=Beaund">Beaund</a><a class="lg chu" href="/danh-muc?thuong-hieu=Uniura">Uniura</a><a class="lg chu" href="/danh-muc?thuong-hieu=Aprilskin">Aprilskin</a><a class="lg chu" href="/danh-muc?thuong-hieu=Dermagarden">Dermagarden</a></div></div>
+    </div>
+  </section>
+
+  <div class="luoi">
+    <section class="o" id="personal-color">
+      <div class="hien">
+        <h2>Personal color</h2>
+        <p>Tìm <em style="font-family:'Playfair Display',serif">tone</em> của riêng bạn.</p>
+        <div class="nut"><a class="chinh" href="/personal-color">Tìm hiểu thêm</a></div>
+      </div>
+      <div class="hinh"><img src="img/vive-personal-color.webp" alt="Góc personal color tại VIVE"></div>
+    </section>
+
+    <section class="o" id="check-in">
+      <div class="hien">
+        <h2>Thử. Chụp. Nhận quà.</h2>
+        <p class="co-logo">Ngay tại <img src="img/vive-logo-chu.png" alt="VIVE"></p>
+        <div class="nut"><a class="chinh" href="#ghe-vive">Xem quà</a></div>
+      </div>
+      <div class="hinh"><img src="img/vive-checkin.webp" alt="Khu check-in tại VIVE"></div>
+    </section>
+
+    <section class="o" id="deal-pdrn">
+      <div class="hien">
+        <h2>Combo PDRN Pink</h2>
+        <p>Medicube · 999K</p>
+        <div class="nut"><a class="chinh" href="/deal?id=COMBO-PINK">Xem deal</a></div>
+      </div>
+      <div class="hinh sp"><img src="img/medicube-pdrn.webp" alt="Tinh chất và kem PDRN Pink Medicube"></div>
+    </section>
+
+    <section class="o" id="deal-mat-na">
+      <div class="hien">
+        <h2>Mua 4 tặng 1</h2>
+        <p>Mặt nạ Uniura.</p>
+        <div class="nut"><a class="chinh" href="/deal?id=DC-05">Xem deal</a></div>
+      </div>
+      <div class="so-lon hien">4+1</div>
+    </section>
+
+
+  </div>
+  <section class="o lon" id="qua-lopoe">
+    <div class="hien">
+      <h2>Từ 700K, tặng LOPOE</h2>
+      <p>Medicube. Celimax. SKINFOOD.</p>
+      <div class="nut"><a class="chinh" href="/deal?id=KM-08">Xem deal</a></div>
+    </div>
+    <div class="hinh"><img src="img/srm.webp" alt="Sữa rửa mặt LOPOE"></div>
+  </section>
+  <section class="o lon toi" id="ghe-vive">
+    <div class="hien">
+      <h2 class="ghe">Ghé <img src="img/vive-logo-chu.png" alt="VIVE"></h2>
+      <p>Union Square. 10:00 – 21:00.</p>
+      <div class="nut"><a class="chinh" href="https://maps.google.com/?q=Union+Square+171+Dong+Khoi+Ho+Chi+Minh" target="_blank" rel="noopener">Chỉ đường</a><a class="phu" href="/gio">Giữ hàng</a></div>
+    </div>
+    <div class="so-lon hien">LL2</div>
+  </section>
+</main>
+
+<footer>
+  <div class="chan">
+    <div class="cot-chan">
+      <div><b>Mua sắm</b><a href="/new-arrival">New Arrival</a><a href="/danh-muc">Sản phẩm</a><a href="/deal">Deal</a><a href="/gio">Giỏ hàng</a></div>
+      <div><b><img class="logo-chan" src="img/vive-logo-chu.png" alt="VIVE"></b><a href="/personal-color">Personal color</a><a href="#ghe-vive">Ghé VIVE</a><a href="/deal">Quà tặng</a></div>
+      <div><b>Hỗ trợ</b><a href="/gio">Giữ hàng</a><a href="/chinh-sach">Đổi trả</a><a href="mailto:vkis.business@gmail.com">Liên hệ</a></div>
+      <div><b>Theo dõi</b><a href="https://www.facebook.com/weareVIVE" target="_blank" rel="noopener">Facebook</a><a href="https://www.instagram.com/vive.k_beauty" target="_blank" rel="noopener">Instagram</a><a href="https://www.tiktok.com/@viveuniverse" target="_blank" rel="noopener">TikTok</a></div>
+    </div>
+    <div class="ban-quyen">
+      <p>Công ty CP Giải pháp Quốc tế Việt Hàn</p>
+      <p>MST 0319121217</p>
+      <p>Lầu 1, 456 Xô Viết Nghệ Tĩnh, P. Thạnh Mỹ Tây, TP.HCM</p>
+      <p>vkis.business@gmail.com</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('da'); io.unobserve(e.target); }
+  }), { threshold: 0.15 });
+  document.querySelectorAll('.hien, .o').forEach(el => io.observe(el));
+
+  // Mặt tiền ghép mảnh: khung hình cố định, các phương án trang trí thay nhau vào từng mảng
+  (() => {
+    const ANH = [0,1,2,3,4,5].map(i => `img/mt/${i}.webp`);
+    const C = 6, R = 4, luoi = document.querySelector('#ghep .luoi-anh');
+    ANH.forEach(u => { const im = new Image(); im.src = u; });
+    const manh = [];
+    for (let r = 0; r < R; r++) for (let c = 0; c < C; c++) {
+      const d = document.createElement('div'); d.className = 'manh';
+      const pos = `${c / (C - 1) * 100}% ${r / (R - 1) * 100}%`;
+      const i = document.createElement('i'); i.style.backgroundImage = `url(${ANH[0]})`; i.style.backgroundPosition = pos;
+      d.appendChild(i); luoi.appendChild(d); manh.push({ d, r, c, pos, hien: 0 });
+    }
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const HUONG = ['inset(0 100% 0 0)', 'inset(0 0 0 100%)', 'inset(100% 0 0 0)', 'inset(0 0 100% 0)'];
+    function doi(m, k) {
+      if (m.hien === k) return; m.hien = k;
+      const i = document.createElement('i');
+      i.style.backgroundImage = `url(${ANH[k]})`; i.style.backgroundPosition = m.pos;
+      i.style.clipPath = HUONG[(Math.random() * 4) | 0];
+      m.d.appendChild(i); i.getBoundingClientRect();
+      i.style.clipPath = 'inset(0 0 0 0)';
+      i.addEventListener('transitionend', () => { let x = i.previousElementSibling; while (x) { const p = x.previousElementSibling; x.remove(); x = p; } }, { once: true });
+    }
+    const ngu = ms => new Promise(r => setTimeout(r, ms));
+    let chay = false, dangLap = false, chinh = 0;
+    async function lap() {
+      if (dangLap) return; dangLap = true;
+      while (chay) {
+        await ngu(1800);                                   // giữ một phương án trọn vẹn
+        for (let b = 0; b < 6 && chay; b++) {             // các mảng ngẫu nhiên đổi sang phương án khác
+          for (let n = 0; n < 4; n++) {
+            const m = manh[(Math.random() * manh.length) | 0];
+            let k; do { k = (Math.random() * ANH.length) | 0; } while (k === m.hien);
+            doi(m, k);
+          }
+          await ngu(420);
+        }
+        chinh = (chinh + 1) % ANH.length;                  // quét chéo để ghép lại thành phương án tiếp theo
+        manh.forEach(m => setTimeout(() => doi(m, chinh), (m.c + m.r) * 75));
+        await ngu((C + R) * 75 + 800);
+      }
+      dangLap = false;
+    }
+    new IntersectionObserver(es => { chay = es[0].isIntersecting && !document.hidden; if (chay) lap(); }).observe(document.getElementById('ghep'));
+    document.addEventListener('visibilitychange', () => { chay = !document.hidden; if (chay) lap(); });
+  })();
+
+  // Khối LOPOE: hoạt ảnh chạy theo con lăn (lăn xuống chạy tới, lăn lên chạy lùi).
+  // p = 0 khi đầu khối chạm mép dưới màn hình; p = 1 khi bộ ba nằm giữa màn hình.
+  (() => {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const bay = document.getElementById('bay'), trai = document.getElementById('dich-bay');
+    const giua = document.getElementById('sp-giua'), phai = document.getElementById('sp-phai');
+    const khoi = document.getElementById('lopoe'), boBa = khoi.querySelector('.bo-ba');
+    const quang = boBa.querySelector('.quang'), giot = [...boBa.querySelectorAll('.giot')];
+    const anh = document.querySelector('#ghep .luoi-anh');
+    const KE = { x: .37, y: .575, h: .05 };            // chỗ tuýp nằm trên kệ, theo tỉ lệ ảnh mặt tiền
+    const TL = 366 / 989;
+    const de = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    const ra = t => 1 - Math.pow(1 - t, 3);
+    const kep = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+    const doan = (p, a, b) => kep((p - a) / (b - a));
+    const GIOT = giot.map((_, i) => ({ x: (i % 3 - 1) * 0.28 + (i > 2 ? .12 : -.06), tre: i * .06, cao: .55 + (i % 2) * .25 }));
+
+    function ve() {
+      const H = innerHeight, k = khoi.getBoundingClientRect(), b = boBa.getBoundingClientRect();
+      const A = H - k.top, B = (b.top + b.height / 2) - H / 2;
+      const p = A <= 0 ? 0 : B <= 0 ? 1 : A / (A + B);
+
+      // Quầng sáng sau sản phẩm
+      const q = de(doan(p, .25, 1));
+      quang.style.opacity = q; quang.style.transform = `scale(${.3 + .7 * q})`;
+
+      // Ampoule giữa: trồi lên từ dưới, xoay về thẳng
+      const g = de(doan(p, .3, .9));
+      giua.style.opacity = doan(p, .3, .45);
+      giua.style.transform = `translateY(${(1 - g) * 160}px) rotate(${(1 - g) * 18}deg) scale(${.75 + .25 * g})`;
+
+      // Kem bên phải: lướt vào từ phải
+      const f = de(doan(p, .2, .85));
+      phai.style.opacity = doan(p, .2, .35);
+      phai.style.transform = `translateX(${(1 - f) * Math.min(innerWidth * .35, 320)}px) rotate(${(1 - f) * 22}deg)`;
+
+      // Giọt tinh chất bay lên quanh bộ ba rồi tan
+      giot.forEach((el, i) => {
+        const o = GIOT[i], t = doan(p, .35 + o.tre, .95);
+        el.style.left = `calc(50% + ${o.x * b.width}px)`;
+        el.style.bottom = `${60 + ra(t) * b.height * o.cao}px`;
+        el.style.opacity = t > 0 && t < 1 ? Math.sin(Math.PI * t) : 0;
+        el.style.transform = `scale(${.6 + t * .8})`;
+      });
+
+      // Sữa rửa mặt bên trái: nhô ra khỏi kệ trong ảnh mặt tiền rồi bay về chỗ
+      const a = anh.getBoundingClientRect(), d = trai.getBoundingClientRect();
+      if (p <= 0 || p >= 1) { bay.style.opacity = 0; trai.style.opacity = p >= 1 ? 1 : 0; return; }
+      trai.style.opacity = 0;
+      const sx = a.left + a.width * KE.x, sy = a.top + a.height * KE.y, sh = a.height * KE.h;
+      const nho = de(doan(p, 0, .15)), e = de(doan(p, .15, 1));
+      const h0 = sh * (1 + 1.6 * nho), y0 = sy - sh * .5 * nho;
+      const ex = d.left + d.width / 2, ey = d.bottom;
+      const vong = Math.sin(Math.PI * e) * Math.min(innerWidth * .2, 240) * (sx < ex ? -1 : 1);
+      const x = sx + (ex - sx) * e + vong, y = y0 + (ey - y0) * e, h = h0 + (d.height - h0) * e;
+      bay.style.height = h + 'px';
+      bay.style.transform = `translate(${x - h * TL / 2}px, ${y - h}px) rotate(${Math.sin(Math.PI * e) * -16}deg)`;
+      bay.style.opacity = kep(p / .03);
+    }
+    let cho = false;
+    const lich = () => { if (!cho) { cho = true; requestAnimationFrame(() => { cho = false; ve(); }); } };
+    addEventListener('scroll', lich, { passive: true }); addEventListener('resize', lich);
+    addEventListener('load', ve); ve();
+  })();
+
+  const ioLogo = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('da'); ioLogo.unobserve(e.target); } }), { threshold: .4 });
+  document.querySelectorAll('.tuong-logo').forEach(el => ioLogo.observe(el));
+</script>
+</body>
+</html>

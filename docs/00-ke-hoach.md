@@ -108,3 +108,4 @@ Chỉ tiêu cụ thể đặt sau 3 ngày chạy đầu, khi đã có số thậ
 - 15/11/2026: Thêm trang Danh mục (W026) và tab thứ 5; màn chào đổi tiêu đề "Thích thì quẹt phải", font Be Vietnam Pro.
 - 15/11/2026: v1.1. Chủ dự án chốt chạy local trước, thuê hosting và tên miền sau khi có ít nhất 1 chức năng dùng được. Thêm W024 (thuê hosting), W025 (đưa web lên); W023 phụ thuộc W025; email ở local chỉ xem trước, không gửi thật.
 - 15/11/2026: v1.0.
+- 19/11/2026: Chủ dự án duyệt landing v3 (Apple tối giản, `design/landing-v3/`). Chốt: logo VIVE → `/` (trang chủ mới), landing chiến dịch cũ giữ ở `/new-arrival` và nối từ nút "Tìm hiểu thêm" của khối LOPOE; menu v3 làm chuẩn (bỏ "Ghé LL2" và "Personal color"); các trang khách đổi theo ngôn ngữ v3. Giao W050, W051, W052; W038 không còn làm đích logo. Playfair Display nghiêng được dùng lại cho chữ nhấn ngắn.
