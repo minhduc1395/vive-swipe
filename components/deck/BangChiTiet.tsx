@@ -5,6 +5,7 @@ import type { SanPham } from "@/lib/data/types";
 import { useDuLieu } from "@/lib/du-lieu-context";
 import { NutQuayLai } from "@/components/NutQuayLai";
 import { dinhDangTien } from "@/lib/dinh-dang";
+import { duongDanAnh } from "@/lib/anh";
 import { layNhanLoaiDa, layNhanVanDe } from "@/lib/nhan";
 import { layCacDealCuaSanPham } from "@/lib/deals/ghi-chu";
 
@@ -35,7 +36,7 @@ export function BangChiTiet({
       ? "bg-[#EAF3ED]"
       : "bg-[#F7EEEB]";
 
-  const anhSrc = sanPham.anh || "/brand/vive-logo-black.png";
+  const anhSrc = duongDanAnh(sanPham.anh, "the") || "/brand/vive-logo-black.png";
   const dealsLienQuan = layCacDealCuaSanPham(sanPham, deals);
 
   return (

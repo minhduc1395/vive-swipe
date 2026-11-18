@@ -50,3 +50,4 @@ export {
   parseProductsCsv,
 } from "./parse";
 export { hienThi, layDealHienThi };
+export { duongDanAnh, type CoAnh } from "../anh";

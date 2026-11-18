@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback } from "react";
 import type { SanPham } from "@/lib/data/types";
 import { dinhDangTien } from "@/lib/dinh-dang";
+import { duongDanAnh } from "@/lib/anh";
 import { layNhanVanDe } from "@/lib/nhan";
 
 interface TheSanPhamProps {
@@ -174,7 +175,7 @@ export function TheSanPham({
     ...(sanPham.thanh_phan?.slice(0, 1) ?? []),
   ].slice(0, 3);
 
-  const anhSrc = sanPham.anh || "/brand/vive-logo-black.png";
+  const anhSrc = duongDanAnh(sanPham.anh, "the") || "/brand/vive-logo-black.png";
 
   return (
     <article
