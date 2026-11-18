@@ -22,7 +22,7 @@ khoi:
       - "LOPOE-CR"
     nut:
       - chu: "Xem bộ sản phẩm"
-        den: "/danh-muc?thuong_hieu=LOPOE"
+        den: "/danh-muc?thuong-hieu=LOPOE"
       - chu: "Giữ hàng tại booth"
         den: "/gio"
     hieu_ung: roi-vao-ke
@@ -108,7 +108,7 @@ khoi:
     deal_id: "LOPOE-25"
     cta_chinh:
       chu: "Xem sản phẩm"
-      den: "/danh-muc?thuong_hieu=LOPOE"
+      den: "/danh-muc?thuong-hieu=LOPOE&sp=LOPOE-AMP"
     anh:
       - "/chien-dich/lopoe-better-balance/ampoule-than.webp"
       - "/chien-dich/lopoe-better-balance/ampoule-nap.webp"

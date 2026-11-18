@@ -91,6 +91,8 @@ Làm đúng thứ tự, mỗi việc một nhánh mới tách từ `main` mới 
 | 4 | **W019** | Trang chính sách + chân trang. Thông tin doanh nghiệp chưa có (W001) thì để chỗ trống ghi rõ `[chờ W001]` | Chân trang hiện ở cả 3 mốc màn hình |
 | 1c | **W038** | Khung trang dùng chung trong layout (logo không nhấp nháy), logo về New Arrival, danh mục giữ menu + quay lại | tasks/W038.md |
 | 1c2 | **W040** | Token + nút dùng chung, bỏ nút đen/viền tối (docs/05 §2.5) | tasks/W040.md |
+| 1c3 | **W042** | Trang Sản phẩm hiện hàng ngay, lọc sau; ô Xếp mới | tasks/W042.md |
+| 1c4 | **W041** | Nút landing dẫn thẳng tới sản phẩm/deal (đích lấy từ yaml) | tasks/W041.md |
 | 1d | **W039** | Trang Deal dạng thẻ gọn theo `design/DealPC-the.html` | tasks/W039.md |
 | 4b | **W005** | Web đọc ảnh từ kho media Supabase (tasks/W005.md, docs/06) | Đổi ảnh trong kho là web đổi, không cần deploy |
 | 5 | **W029** | Trang `/personal-color` bản tạm theo `design/Pawlette.dc.html` | Có link từ New Arrival |
