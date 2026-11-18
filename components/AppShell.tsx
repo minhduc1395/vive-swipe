@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { ThanhTrenDesktop } from "./ThanhTrenDesktop";
 import { ThanhDocTablet } from "./ThanhDocTablet";
 import { ThanhTab } from "./ThanhTab";
+import { ChanTrang } from "./ChanTrang";
 import { layDanhSachDaThich, layGioHang } from "@/lib/kho-luu-tru";
 
 export interface AppShellProps {
@@ -13,6 +14,7 @@ export interface AppShellProps {
   hienThanhTrenDesktop?: boolean;
   hienThanhDocTablet?: boolean;
   hienThanhTabMobile?: boolean;
+  hienChanTrang?: boolean;
   soLuongThich?: number;
   soLuongGio?: number;
   className?: string;
@@ -32,6 +34,7 @@ export function AppShell({
   hienThanhTrenDesktop = true,
   hienThanhDocTablet = true,
   hienThanhTabMobile = true,
+  hienChanTrang = true,
   soLuongThich: propSoLuongThich,
   soLuongGio: propSoLuongGio,
   className = "",
@@ -100,6 +103,9 @@ export function AppShell({
           } ${noiDungClassName}`}
         >
           {children}
+          {coHienDieuHuong && !isFixedH && hienChanTrang && (
+            <ChanTrang className="mt-auto" />
+          )}
         </div>
       </div>
 

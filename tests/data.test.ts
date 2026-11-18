@@ -5,6 +5,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   DEALS,
+  DOANH_NGHIEP,
   SAN_PHAM,
   hienThi,
   layDealHienThi,
@@ -16,9 +17,13 @@ import {
 } from "@/lib/data";
 
 describe("lớp dữ liệu tĩnh (W007)", () => {
-  it("nạp đủ 149 sản phẩm và 20 deal có kiểu từ data/", () => {
+  it("nạp đủ 149 sản phẩm, 20 deal và thông tin doanh nghiệp từ data/", () => {
     expect(SAN_PHAM).toHaveLength(149);
     expect(DEALS).toHaveLength(20);
+    expect(DOANH_NGHIEP.ten_cong_ty).toBe("CÔNG TY CP GIẢI PHÁP QUỐC TẾ VIỆT HÀN");
+    expect(DOANH_NGHIEP.ma_so_thue).toBe("0319121217");
+    expect(DOANH_NGHIEP.email).toBe("vkis.business@gmail.com");
+    expect(DOANH_NGHIEP.so_dien_thoai).toBeNull();
 
     const lopoeCf = SAN_PHAM.find((sp) => sp.id === "LOPOE-CF");
     expect(lopoeCf).toBeDefined();
