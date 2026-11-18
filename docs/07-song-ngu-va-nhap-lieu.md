@@ -72,7 +72,7 @@ Vai trò mới `kho` (bảng `nhan_vien.vai_tro`):
 - **Tải xuống Excel hiện tại** (để sửa hàng loạt rồi tải lên lại).
 
 ### 4.3 AI agent qua Drive
-- **Thư mục Drive:** `Her Bazaar Pop up/09 Nhập liệu sản phẩm/`. Trong đó có `00 Inbox` (kho thả file vào), `01 Đã xử lý`, `02 Lỗi`.
+- **Thư mục Drive:** `Her Bazaar Pop up/09 Nhập liệu sản phẩm/` (https://drive.google.com/drive/folders/1kNdUSEPdM8iASPfb_UG3yUqL9Jb1p_Ld; Inbox: https://drive.google.com/drive/folders/1-SEBvf5iv1D1lVYi81eXogjsenpuOm5n). Trong đó có `00 Inbox` (kho thả file vào), `01 Đã xử lý`, `02 Lỗi`.
 - **Kho thả vào Inbox bất kỳ file nào:** Excel, ảnh chụp nhãn hoặc hộp, PDF catalogue, ghi chú `.txt`/Google Doc.
 - **Agent (Antigravity Media) chạy theo lượt:**
   1. Đọc file, nhận diện mã (mã vạch, tên).
