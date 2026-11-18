@@ -40,14 +40,14 @@ Bảng `public.media`:
 - `ghi_chu`.
 
 ## 3. Nguồn ảnh: được dùng và không được dùng
-Theo thứ tự ưu tiên:
+Các nguồn ngang nhau, chọn ảnh đẹp nhất cho mỗi mã:
 1. **Drive 08**: ảnh tách nền sẵn có (hiện có Dermal).
 2. **Ảnh chụp tại booth** (`00 Inbox`). Media viết hướng dẫn chụp cho nhân viên (mục 6).
 3. **Ảnh chính hãng** từ website của chính thương hiệu (bản Hàn hoặc global), gian hàng chính thức do thương hiệu vận hành, hoặc ảnh nhà phân phối gửi.
    - Chủ dự án cho phép **mọi thương hiệu** (18/11, `media/nguon-duoc-phep.yaml`). Đây là nguồn chính để lấp nhanh 129 mã.
    - Ghi URL trang sản phẩm vào `nguon_chi_tiet`.
    - Chọn ảnh packshot nền trơn, mặt trước, không chữ quảng cáo đè lên. Ảnh có chữ quảng cáo thì cắt bỏ phần chữ; không cắt được thì bỏ.
-   - Chủ dự án sẽ tự chụp hoặc quay thêm góc đặc biệt khi cần, rồi tải vào `00 Inbox`. Ảnh của chủ dự án được ưu tiên hơn ảnh web nếu cùng mã.
+   - Chủ dự án sẽ tự chụp hoặc quay thêm góc đặc biệt khi cần, rồi tải vào `00 Inbox`. Cùng một mã có nhiều nguồn thì **chọn ảnh đẹp nhất**: nét, sáng, đúng màu, sạch viền. Không ưu tiên nguồn nào. Ảnh còn lại giữ làm ảnh phụ hoặc dùng cho bối cảnh, video.
 
 **Không bao giờ:**
 - Lấy ảnh từ trang bán lẻ khác (Shopee, Lazada, Olive Young, Hasaki, Watsons…), ảnh có watermark, hoặc ảnh có chữ của bên khác.
