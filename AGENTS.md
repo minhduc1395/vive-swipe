@@ -18,11 +18,11 @@ Repo code của web quẹt sản phẩm VIVE (kiểu Tinder). Claude = Lead (k�
 - Tên trong handoff: `media`; Chủ trì trong task: `Antigravity Media`. Hộp thư: `python scripts/inbox.py media`.
 - Làm trong **worktree riêng** để không đụng thư mục của Antigravity code:
   `git worktree add ../vive-swipe-media main`, rồi mở thư mục `vive-swipe-media` trong chat Media. Chép `.env.local` sang.
-- Chỉ sửa `scripts/media/`, `media/`, task W035–W037 và handoff của mình. Không sửa `app/`, `components/`, `lib/`, `data/`, `docs/`.
+- Chỉ sửa `scripts/media/`, `scripts/du_lieu/`, `media/`, task W035–W037, W047 và handoff của mình. Không sửa `app/`, `components/`, `lib/`, `data/`, `docs/`.
 - Quy trình, nguồn ảnh được phép, quy chuẩn: `docs/06-anh-va-video.md`.
 
 ## Lộ trình
-Thứ tự làm và nguyên tắc co giãn mọi cỡ màn hình: `docs/05-lo-trinh-hoan-thien.md`. Mọi PR có giao diện phải đạt mục 2.2 (mobile-first, không khóa độ rộng, dvh, nút ≥ 44px, chỉ animate transform/opacity).
+Thứ tự làm và nguyên tắc co giãn mọi cỡ màn hình: `docs/05-lo-trinh-hoan-thien.md`. Song ngữ và nhập liệu: `docs/07-song-ngu-va-nhap-lieu.md`. Mọi PR có giao diện phải đạt mục 2.2 (mobile-first, không khóa độ rộng, dvh, nút ≥ 44px, chỉ animate transform/opacity).
 
 ## Vòng làm việc tự động (hộp thư)
 Claude và Antigravity nói chuyện qua `handoff/` (lịch sử chung). Chủ dự án không cần chuyển lời.

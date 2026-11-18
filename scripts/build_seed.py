@@ -50,12 +50,11 @@ def products_sql():
                 arr(r["van_de"]), arr(r["thanh_phan"]), arr(r["loai_da"]), q(r["con_hang"]), num(r["ton"]),
                 "true" if r["hien_thi"] == "true" else "false", q(anh), q(r["ghi_chu"]),
             ])
-            + ") on conflict (id) do update set barcode = excluded.barcode, thuong_hieu = excluded.thuong_hieu, "
-            "ten_goc = excluded.ten_goc, ten_hien_thi = excluded.ten_hien_thi, quy_cach = excluded.quy_cach, "
+            # Từ 18/11: Supabase là nguồn chính cho thông tin sản phẩm (kho sửa trên web, AI điền, ảnh từ kho media).
+            # Seed chỉ thêm mã mới và cập nhật giá, tồn, hiển thị; KHÔNG ghi đè tên, mô tả, phân loại, ảnh.
+            + ") on conflict (id) do update set "
             "gia_goc = excluded.gia_goc, gia_ban = excluded.gia_ban, giam_tren_tag = excluded.giam_tren_tag, "
-            "danh_muc = excluded.danh_muc, van_de = excluded.van_de, thanh_phan = excluded.thanh_phan, "
-            "loai_da = excluded.loai_da, con_hang = excluded.con_hang, ton = excluded.ton, hien_thi = excluded.hien_thi, "
-            "anh = excluded.anh, ghi_chu = excluded.ghi_chu;"
+            "con_hang = excluded.con_hang, ton = coalesce(excluded.ton, public.san_pham.ton), hien_thi = excluded.hien_thi;"
         )
     return out
 
