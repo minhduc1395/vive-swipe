@@ -1,0 +1,214 @@
+[
+  {
+    "ma": "lopoe-better-balance",
+    "ten": "LOPOE Better Balance",
+    "bat_dau": "2026-11-14",
+    "ket_thuc": "2026-11-29",
+    "uu_tien": 10,
+    "mau": {
+      "nen": "#F7EEEB",
+      "nhan": "#E8D2CC",
+      "chu": "#2B2B2A"
+    },
+    "khoi": [
+      {
+        "loai": "hero",
+        "kieu": "san-pham-3d",
+        "nhan_tren": "MỚI TẠI VIVE · NỘI ĐỊA HÀN",
+        "tieu_de": [
+          "LOPOE",
+          "~Better",
+          "Balance"
+        ],
+        "mo_ta": "Bộ ba sữa rửa mặt, ampoule, kem dưỡng. Mua kèm sản phẩm bất kỳ, LOPOE giảm 25%.",
+        "san_pham": [
+          "LOPOE-CF",
+          "LOPOE-AMP",
+          "LOPOE-CR"
+        ],
+        "nut": [
+          {
+            "chu": "Xem bộ sản phẩm",
+            "den": "/danh-muc?thuong_hieu=LOPOE"
+          },
+          {
+            "chu": "Giữ hàng tại booth",
+            "den": "/gio"
+          }
+        ],
+        "hieu_ung": "roi-vao-ke",
+        "vat_the": {
+          "chinh": {
+            "x": 0.42,
+            "y": -0.02,
+            "ry": -0.18,
+            "rz": 0.03,
+            "s": 1,
+            "mo": 0,
+            "z": 0
+          },
+          "srm": {
+            "x": 0.15,
+            "y": 0.04,
+            "ry": 0.3,
+            "rz": -0.2,
+            "s": 0.9,
+            "z": -2
+          },
+          "kem": {
+            "x": 0.72,
+            "y": 0.06,
+            "ry": -0.3,
+            "rz": 0.18,
+            "s": 0.9,
+            "z": -2.4
+          }
+        }
+      },
+      {
+        "loai": "bang-chu",
+        "chu": "BETTER BALANCE · NỘI ĐỊA HÀN · MỚI TẠI VIVE · LL2 UNION SQUARE · ",
+        "mau_nen": "#E8D2CC"
+      },
+      {
+        "loai": "ra-mat",
+        "tieu_de": "Đủ bộ, đỡ tốn.",
+        "mo_ta": "Giá combo cố định, không cộng thêm giảm 25%. Hết quà thì combo về giá không quà.",
+        "deal": [
+          "LOPOE-COMBO-2SRM",
+          "LOPOE-COMBO-KEM-AMP",
+          "LOPOE-COMBO-BO3"
+        ],
+        "san_pham": [
+          "LOPOE-CF",
+          "LOPOE-AMP",
+          "LOPOE-CR"
+        ],
+        "vat_the": {
+          "chinh": {
+            "x": 0.43,
+            "y": -0.06,
+            "ry": 0,
+            "rz": 0,
+            "s": 0.86,
+            "mo": 0,
+            "z": 0
+          },
+          "srm": {
+            "x": 0.14,
+            "y": -0.02,
+            "ry": 0.12,
+            "rz": -0.03,
+            "s": 0.8,
+            "z": -0.6
+          },
+          "kem": {
+            "x": 0.72,
+            "y": -0.02,
+            "ry": -0.12,
+            "rz": 0.03,
+            "s": 0.8,
+            "z": -0.6
+          }
+        }
+      },
+      {
+        "loai": "chuong-trinh",
+        "tieu_de": "Đang chạy tại booth",
+        "deal": [
+          "COMBO-PINK",
+          "DC-05",
+          "KM-08",
+          "KM-13"
+        ],
+        "o_to": "COMBO-PINK"
+      },
+      {
+        "loai": "doi-tac",
+        "doi_tac": "pawlette",
+        "tieu_de": "Tông nào hợp bạn?",
+        "mo_ta": "Đo personal color cùng Pawlette, rồi thử lớp nền đúng tông ngay tại booth.",
+        "gia_goi": 378000,
+        "link": "/personal-color"
+      },
+      {
+        "loai": "booth",
+        "tieu_de": "VIVE | K-Beauty Experience",
+        "dia_chi": "Tầng LL2 Union Square, 171 Đồng Khởi, Quận 1",
+        "gio": "10:00 – 21:00",
+        "ngay_cuoi": "đến 29/11"
+      }
+    ]
+  },
+  {
+    "ma": "mac-dinh",
+    "ten": "VIVE New Arrival",
+    "bat_dau": "2026-01-01",
+    "ket_thuc": "2026-12-31",
+    "uu_tien": 1,
+    "mau": {
+      "nen": "#F7EEEB",
+      "nhan": "#E8D2CC",
+      "chu": "#2B2B2A"
+    },
+    "khoi": [
+      {
+        "loai": "hero",
+        "kieu": "san-pham-3d",
+        "nhan_tren": "MỚI TẠI VIVE · NỘI ĐỊA HÀN",
+        "tieu_de": [
+          "K-BEAUTY",
+          "~New",
+          "Arrival"
+        ],
+        "mo_ta": "Trải nghiệm mỹ phẩm nội địa Hàn Quốc thịnh hành nhất ngay tại Tầng LL2 Union Square.",
+        "san_pham": [
+          "LOPOE-CF",
+          "LOPOE-AMP",
+          "LOPOE-CR"
+        ],
+        "nut": [
+          {
+            "chu": "Khám phá sản phẩm",
+            "den": "/danh-muc"
+          },
+          {
+            "chu": "Xem giỏ hàng",
+            "den": "/gio"
+          }
+        ],
+        "hieu_ung": "roi-vao-ke"
+      },
+      {
+        "loai": "bang-chu",
+        "chu": "K-BEAUTY EXPERIENCE · NỘI ĐỊA HÀN · MỚI TẠI VIVE · LL2 UNION SQUARE · ",
+        "mau_nen": "#CFE3D5"
+      },
+      {
+        "loai": "chuong-trinh",
+        "tieu_de": "Chương trình nổi bật",
+        "deal": [
+          "COMBO-PINK",
+          "DC-05",
+          "KM-08"
+        ],
+        "o_to": "COMBO-PINK"
+      },
+      {
+        "loai": "doi-tac",
+        "doi_tac": "pawlette",
+        "tieu_de": "Tông nào hợp bạn?",
+        "mo_ta": "Đo personal color cùng Pawlette, rồi thử lớp nền đúng tông ngay tại booth.",
+        "gia_goi": 378000,
+        "link": "/personal-color"
+      },
+      {
+        "loai": "booth",
+        "tieu_de": "VIVE | K-Beauty Experience",
+        "dia_chi": "Tầng LL2 Union Square, 171 Đồng Khởi, Quận 1",
+        "gio": "10:00 – 21:00",
+        "ngay_cuoi": "đến 29/11"
+      }
+    ]
+  }
+]

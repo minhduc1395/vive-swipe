@@ -1,0 +1,49 @@
+ma: mac-dinh
+ten: VIVE New Arrival
+bat_dau: "2026-01-01"
+ket_thuc: "2026-12-31"
+uu_tien: 1
+mau:
+  nen: "#F7EEEB"
+  nhan: "#E8D2CC"
+  chu: "#2B2B2A"
+khoi:
+  - loai: hero
+    kieu: san-pham-3d
+    nhan_tren: "MỚI TẠI VIVE · NỘI ĐỊA HÀN"
+    tieu_de:
+      - "K-BEAUTY"
+      - "~New"
+      - "Arrival"
+    mo_ta: "Trải nghiệm mỹ phẩm nội địa Hàn Quốc thịnh hành nhất ngay tại Tầng LL2 Union Square."
+    san_pham:
+      - "LOPOE-CF"
+      - "LOPOE-AMP"
+      - "LOPOE-CR"
+    nut:
+      - chu: "Khám phá sản phẩm"
+        den: "/danh-muc"
+      - chu: "Xem giỏ hàng"
+        den: "/gio"
+    hieu_ung: roi-vao-ke
+  - loai: bang-chu
+    chu: "K-BEAUTY EXPERIENCE · NỘI ĐỊA HÀN · MỚI TẠI VIVE · LL2 UNION SQUARE · "
+    mau_nen: "#CFE3D5"
+  - loai: chuong-trinh
+    tieu_de: "Chương trình nổi bật"
+    deal:
+      - "COMBO-PINK"
+      - "DC-05"
+      - "KM-08"
+    o_to: "COMBO-PINK"
+  - loai: doi-tac
+    doi_tac: "pawlette"
+    tieu_de: "Tông nào hợp bạn?"
+    mo_ta: "Đo personal color cùng Pawlette, rồi thử lớp nền đúng tông ngay tại booth."
+    gia_goi: 378000
+    link: "/personal-color"
+  - loai: booth
+    tieu_de: "VIVE | K-Beauty Experience"
+    dia_chi: "Tầng LL2 Union Square, 171 Đồng Khởi, Quận 1"
+    gio: "10:00 – 21:00"
+    ngay_cuoi: "đến 29/11"

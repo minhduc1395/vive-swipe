@@ -73,7 +73,15 @@ export default function TrangChao() {
         </div>
       </div>
 
-      <main className="flex-1 flex flex-col px-7 pt-[34px] pb-[26px]">
+      <main className="flex-1 flex flex-col px-7 pt-[24px] pb-[26px]">
+        <Link
+          href="/new-arrival"
+          className="self-center mb-3 inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-hong-nhat border border-hong text-[12px] font-bold text-den hover:bg-hong/50 transition-colors shadow-2xs"
+        >
+          <span className="w-2 h-2 rounded-full bg-[#8FBF9F] animate-pulse" />
+          Chiến dịch mới: LOPOE Better Balance →
+        </Link>
+
         <h1 className="m-0 text-center font-bold text-[40px] leading-[1.15] tracking-[-1.2px] text-den">
           Thích thì
           <br />
