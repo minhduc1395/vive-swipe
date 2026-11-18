@@ -8,7 +8,7 @@ Tổng sản phẩm hiển thị (`hien_thi = true`): **129** · Đã duyệt: *
 2. Chụp thẳng mặt nhãn chính, sản phẩm đứng, điện thoại ngang tầm, chiếm khoảng 70% khung.
 3. Mỗi ảnh 1 sản phẩm. Chụp thêm 1 ảnh mã vạch ngay sau ảnh đó.
 4. Không cầm bằng tay trong khung, lau sạch bụi và dấu tay.
-5. Tải lên `08 Mockup sản phẩm/00 Inbox` (https://drive.google.com/drive/folders/1EgROHqS-Nfg0lFpe7lK2B64u4N3c_df6) hoặc gửi Zalo cho người phụ trách.
+5. Tải lên `Her Bazaar Pop up/00 Inbox - ảnh và thông tin sản phẩm` (https://drive.google.com/drive/folders/1-SEBvf5iv1D1lVYi81eXogjsenpuOm5n) hoặc gửi Zalo cho người phụ trách.
 
 ## Tóm tắt theo thương hiệu (theo thứ tự ưu tiên)
 | Thương hiệu | Tổng | Đã duyệt | Chờ duyệt | Còn thiếu | Ghi chú nguồn |

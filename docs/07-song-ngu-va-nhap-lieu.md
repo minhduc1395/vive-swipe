@@ -72,8 +72,8 @@ Vai trò mới `kho` (bảng `nhan_vien.vai_tro`):
 - **Tải xuống Excel hiện tại** (để sửa hàng loạt rồi tải lên lại).
 
 ### 4.3 AI agent qua Drive
-- **Thư mục Drive:** `Her Bazaar Pop up/09 Nhập liệu sản phẩm/` (https://drive.google.com/drive/folders/1kNdUSEPdM8iASPfb_UG3yUqL9Jb1p_Ld; Inbox: https://drive.google.com/drive/folders/1-SEBvf5iv1D1lVYi81eXogjsenpuOm5n). Trong đó có `00 Inbox` (kho thả file vào), `01 Đã xử lý`, `02 Lỗi`.
-- **Kho thả vào Inbox bất kỳ file nào:** Excel, ảnh chụp nhãn hoặc hộp, PDF catalogue, ghi chú `.txt`/Google Doc.
+- **Thư mục Drive:** một Inbox chung cho cả ảnh lẫn thông tin: `Her Bazaar Pop up/00 Inbox - ảnh và thông tin sản phẩm` (https://drive.google.com/drive/folders/1-SEBvf5iv1D1lVYi81eXogjsenpuOm5n). File xử lý xong chuyển sang `09 Nhập liệu sản phẩm/01 Đã xử lý` hoặc `02 Lỗi` (https://drive.google.com/drive/folders/1kNdUSEPdM8iASPfb_UG3yUqL9Jb1p_Ld).
+- **Kho thả vào Inbox bất kỳ file nào:** Excel, ảnh sản phẩm, video, ảnh chụp nhãn hoặc hộp, PDF catalogue, ghi chú `.txt`/Google Doc. Agent tự phân loại: ảnh, video sản phẩm vào quy trình docs/06; thông tin vào quy trình này. Một ảnh vừa đọc được thông tin vừa đủ đẹp thì dùng cho cả hai.
 - **Agent (Antigravity Media) chạy theo lượt:**
   1. Đọc file, nhận diện mã (mã vạch, tên).
   2. Đề xuất thay đổi.

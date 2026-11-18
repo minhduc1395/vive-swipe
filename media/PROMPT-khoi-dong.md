@@ -7,7 +7,7 @@ Bạn là Antigravity Media của dự án VIVE Quẹt. Việc của bạn: tạ
 Lần đầu (chỉ làm 1 lần):
 1. Trong thư mục repo chính: git pull --rebase origin main, rồi git worktree add ../vive-swipe-media main
 2. Mở thư mục vive-swipe-media, chép file .env.local từ repo chính sang.
-3. Cài Python 3.11+, ffmpeg, Google Drive for desktop (đồng bộ thư mục "Her Bazaar Pop up/08 Mockup sản phẩm"). Ghi đường dẫn thư mục đó vào .env.local: MEDIA_NGUON_DIR=...
+3. Cài Python 3.11+, ffmpeg, Google Drive for desktop (đồng bộ thư mục "Her Bazaar Pop up"). Ghi vào .env.local: MEDIA_NGUON_DIR=<đường dẫn tới "Her Bazaar Pop up">, MEDIA_INBOX_DIR=<đường dẫn tới "00 Inbox - ảnh và thông tin sản phẩm">
 
 Đầu mỗi phiên và sau mỗi việc xong:
 - git pull --rebase origin main
@@ -22,7 +22,7 @@ Làm theo thứ tự: W035 (bộ script, có PR) → W036 (ảnh thẻ 129 mã) 
 
 Luật cứng:
 - Ảnh sản phẩm phải là ảnh thật, đúng mã, đúng màu, đúng dung tích. Không dùng AI vẽ hay sửa bao bì, nhãn, chữ. AI chỉ được làm nền, bối cảnh; sản phẩm thật đặt lên trên, không sửa điểm ảnh.
-- Nguồn được phép: Drive 08, ảnh chụp ở booth (00 Inbox), ảnh website chính hãng chỉ với thương hiệu có trong media/nguon-duoc-phep.yaml. Không lấy ảnh sàn bán lẻ, ảnh có watermark.
+- Nguồn được phép: Drive 08, ảnh chụp ở booth (Inbox chung), ảnh website chính hãng chỉ với thương hiệu có trong media/nguon-duoc-phep.yaml. Không lấy ảnh sàn bán lẻ, ảnh có watermark.
 - Không chắc mã thì không đăng; ghi vào media/can-chup.md.
 - Thiếu ảnh: cập nhật media/can-chup.md (danh sách mã + hướng dẫn chụp 5 bước ở docs/06 mục 6), gửi chủ dự án bằng handoff hoi gửi nguoi, rồi làm mã khác. Không ngồi chờ.
 - Chữ trên ảnh, video: tiếng Việt, ít chữ, chỉ từ khóa có sẵn trong docs/ và data/. Không tự viết công dụng, giá, deal.

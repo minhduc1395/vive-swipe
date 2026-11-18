@@ -13,7 +13,7 @@ Media lưu một chỗ, web đọc thẳng từ đó, không cần deploy lại.
 ## 2. Hạ tầng (Claude đã tạo 18/11)
 | Tầng | Ở đâu | Ai ghi | Ghi chú |
 |---|---|---|---|
-| Ảnh thô (đầu vào) | Google Drive `Her Bazaar Pop up/08 Mockup sản phẩm/` | Chủ dự án, nhân viên, Media | Thư mục `00 Inbox` cho ảnh chụp ở booth (https://drive.google.com/drive/folders/1EgROHqS-Nfg0lFpe7lK2B64u4N3c_df6). Trên máy Windows dùng Google Drive for desktop; đường dẫn đặt trong biến `MEDIA_NGUON_DIR` của `.env.local` |
+| Ảnh thô (đầu vào) | Google Drive `Her Bazaar Pop up/08 Mockup sản phẩm/` | Chủ dự án, nhân viên, Media | Ảnh mới (booth, chủ dự án) thả vào Inbox chung `Her Bazaar Pop up/00 Inbox - ảnh và thông tin sản phẩm` (https://drive.google.com/drive/folders/1-SEBvf5iv1D1lVYi81eXogjsenpuOm5n), dùng chung với nhập liệu docs/07. Trên máy Windows dùng Google Drive for desktop; đường dẫn đặt trong biến `MEDIA_NGUON_DIR` của `.env.local` |
 | Kho chính (đầu ra) | Supabase Storage, bucket `media` (công khai để đọc) | Chỉ script phía máy (service role) | URL: `https://dsrejhghgbvnwgxpdhee.supabase.co/storage/v1/object/public/media/<đường dẫn>` |
 | Sổ quản lý | Bảng `public.media` | Chỉ script (service role) | Mỗi file một dòng: loại, nguồn, trạng thái duyệt |
 | Ảnh chính của sản phẩm | Cột `san_pham.anh` | **Trigger tự cập nhật** | Một dòng `media` có `loai = 'the'` chuyển sang `duyet` thì `san_pham.anh = url`. Bị `loai` thì gỡ |
@@ -42,12 +42,12 @@ Bảng `public.media`:
 ## 3. Nguồn ảnh: được dùng và không được dùng
 Các nguồn ngang nhau, chọn ảnh đẹp nhất cho mỗi mã:
 1. **Drive 08**: ảnh tách nền sẵn có (hiện có Dermal).
-2. **Ảnh chụp tại booth** (`00 Inbox`). Media viết hướng dẫn chụp cho nhân viên (mục 6).
+2. **Ảnh chụp tại booth hoặc của chủ dự án** (Inbox chung). Media viết hướng dẫn chụp cho nhân viên (mục 6).
 3. **Ảnh chính hãng** từ website của chính thương hiệu (bản Hàn hoặc global), gian hàng chính thức do thương hiệu vận hành, hoặc ảnh nhà phân phối gửi.
    - Chủ dự án cho phép **mọi thương hiệu** (18/11, `media/nguon-duoc-phep.yaml`). Đây là nguồn chính để lấp nhanh 129 mã.
    - Ghi URL trang sản phẩm vào `nguon_chi_tiet`.
    - Chọn ảnh packshot nền trơn, mặt trước, không chữ quảng cáo đè lên. Ảnh có chữ quảng cáo thì cắt bỏ phần chữ; không cắt được thì bỏ.
-   - Chủ dự án sẽ tự chụp hoặc quay thêm góc đặc biệt khi cần, rồi tải vào `00 Inbox`. Cùng một mã có nhiều nguồn thì **chọn ảnh đẹp nhất**: nét, sáng, đúng màu, sạch viền. Không ưu tiên nguồn nào. Ảnh còn lại giữ làm ảnh phụ hoặc dùng cho bối cảnh, video.
+   - Chủ dự án sẽ tự chụp hoặc quay thêm góc đặc biệt khi cần, rồi tải vào Inbox chung. Cùng một mã có nhiều nguồn thì **chọn ảnh đẹp nhất**: nét, sáng, đúng màu, sạch viền. Không ưu tiên nguồn nào. Ảnh còn lại giữ làm ảnh phụ hoặc dùng cho bối cảnh, video.
 
 **Không bao giờ:**
 - Lấy ảnh từ trang bán lẻ khác (Shopee, Lazada, Olive Young, Hasaki, Watsons…), ảnh có watermark, hoặc ảnh có chữ của bên khác.
@@ -100,7 +100,7 @@ Kèm hướng dẫn chụp 5 bước cho nhân viên:
 2. Chụp thẳng mặt nhãn chính, sản phẩm đứng, điện thoại ngang tầm, chiếm khoảng 70% khung.
 3. Mỗi ảnh 1 sản phẩm. Chụp thêm 1 ảnh mã vạch ngay sau ảnh đó.
 4. Không cầm bằng tay trong khung, lau sạch bụi và dấu tay.
-5. Tải lên `08 Mockup sản phẩm/00 Inbox` (hoặc gửi Zalo cho người phụ trách).
+5. Tải lên `Her Bazaar Pop up/00 Inbox - ảnh và thông tin sản phẩm` (https://drive.google.com/drive/folders/1-SEBvf5iv1D1lVYi81eXogjsenpuOm5n) hoặc gửi Zalo cho người phụ trách.
 
 Gửi bản này cho chủ dự án qua handoff `hoi` gửi `nguoi`.
 
