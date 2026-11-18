@@ -17,7 +17,7 @@ export function ThanhTren({ soLuongGio = 0 }: ThanhTrenProps) {
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/brand/vive-logo-black.png"
+          src="/brand/vive-logo-chu.png"
           alt="VIVE"
           className="h-7 w-auto"
         />

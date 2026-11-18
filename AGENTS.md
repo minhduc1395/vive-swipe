@@ -14,6 +14,9 @@ Repo code của web quẹt sản phẩm VIVE (kiểu Tinder). Claude = Lead (k�
 - Tạo handoff bằng `python scripts/new_handoff.py ...` (không cần bash). Terminal mặc định PowerShell là được.
 - Đặt repo ngoài thư mục đồng bộ OneDrive (ví dụ `C:\code\vive-swipe`). Git đã có `.gitattributes` giữ xuống dòng kiểu LF, không đổi `core.autocrlf`.
 
+## Lộ trình
+Thứ tự làm và nguyên tắc co giãn mọi cỡ màn hình: `docs/05-lo-trinh-hoan-thien.md`. Mọi PR có giao diện phải đạt mục 2.2 (mobile-first, không khóa độ rộng, dvh, nút ≥ 44px, chỉ animate transform/opacity).
+
 ## Vòng làm việc tự động (hộp thư)
 Claude và Antigravity nói chuyện qua `handoff/` (lịch sử chung). Chủ dự án không cần chuyển lời.
 - **Antigravity, trước khi nhận mỗi việc mới và ngay sau khi báo xong mỗi việc:** `git pull --rebase origin main` rồi `python3 scripts/inbox.py antigravity`. Có mục "SỬA TRƯỚC" (QA Fail) thì sửa hết trước, xong đặt task về Review, handoff `bao-xong` ghi đã sửa gì. Có tin mới (`hoi`, `tra-loi`, `thay-doi-luat`, `canh-bao`) thì làm theo trước khi làm tiếp. Hộp thư trống mới nhận việc Todo tiếp theo.
