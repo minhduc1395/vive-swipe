@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { NutQuayLai } from "@/components/NutQuayLai";
 import { dinhDangTien, dinhDangTienGio } from "@/lib/dinh-dang";
 import { taoMaQrSvg } from "@/lib/qr";
 import type { DonGiuHangChiTiet } from "@/lib/giu-hang/types";
@@ -66,8 +67,9 @@ END:VCALENDAR`;
 
   return (
     <div className="flex flex-col gap-3 max-w-[480px] mx-auto bg-hong-nhat rounded-[28px] p-4 md:p-6 shadow-sm border border-[#F2E4E0]">
-      {/* Nút về trang quẹt */}
-      <header className="flex justify-end pb-1">
+      {/* Nút quay lại & nút về trang quẹt */}
+      <header className="flex items-center justify-between gap-2 pb-1">
+        <NutQuayLai fallback="/gio" />
         <Link
           href="/quet"
           className="h-[40px] px-3 flex items-center text-[14px] font-semibold text-den hover:opacity-80 transition-opacity"

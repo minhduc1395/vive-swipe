@@ -1,9 +1,13 @@
 import Link from "next/link";
 import { AppShell } from "@/components/AppShell";
+import { NutQuayLai } from "@/components/NutQuayLai";
 
 export default function TrangDangNhap() {
   return (
     <AppShell>
+      <div className="max-w-[540px] w-full mx-auto px-4 md:px-6 pt-4 md:pt-8">
+        <NutQuayLai fallback="/" />
+      </div>
       <div className="flex-1 flex flex-col items-center justify-center p-6 text-center max-w-[480px] mx-auto min-h-[60vh]">
         <div className="w-16 h-16 rounded-full bg-[#F7EEEB] flex items-center justify-center mb-4">
           <svg

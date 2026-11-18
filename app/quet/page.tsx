@@ -9,6 +9,7 @@ import {
   useRef,
 } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
 import { ThanhTren } from "@/components/ThanhTren";
 import { TheSanPham } from "@/components/deck/TheSanPham";
@@ -23,7 +24,7 @@ import {
   type HoSoKhach,
   type HanhDongHoSo,
 } from "@/lib/goi-y/ho-so";
-import { layTraLoiLocal } from "@/lib/khao-sat";
+import { layTraLoiLocal, daTungKhaoSat } from "@/lib/khao-sat";
 import { layNhanVanDe, layNhanLoaiDa, layLyDoGoiY } from "@/lib/nhan";
 import { dinhDangTien } from "@/lib/dinh-dang";
 import { layGhiChuDeal } from "@/lib/deals/ghi-chu";
@@ -64,11 +65,13 @@ const HEARTS = [
 ];
 
 export default function TrangQuet() {
+  const router = useRouter();
   const {
     sanPham: danhSachSanPham,
     deals: danhSachDeals,
     daSanSang,
   } = useDuLieu();
+  const [daKiemTraKhaoSat, setDaKiemTraKhaoSat] = useState(false);
   const [deck, setDeck] = useState<TheDeck[]>([]);
   const [indexHienTai, setIndexHienTai] = useState<number>(0);
   const [daThich, setDaThich] = useState<string[]>([]);
@@ -134,9 +137,19 @@ export default function TrangQuet() {
     };
   }, [hienTheDealDacBiet, hoSo, sanPhamMap, daThich, danhSachDeals]);
 
+  // Kiểm tra đã làm khảo sát chưa; chưa làm thì đưa về trang chào /chao
+  useEffect(() => {
+    if (!daTungKhaoSat()) {
+      router.replace("/chao");
+      return;
+    }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setDaKiemTraKhaoSat(true);
+  }, [router]);
+
   // Khởi tạo deck và dữ liệu lưu trữ
   useEffect(() => {
-    if (!daSanSang) return;
+    if (!daSanSang || !daKiemTraKhaoSat) return;
     if (deckKhoiTaoRef.current) return;
     deckKhoiTaoRef.current = true;
 
@@ -201,7 +214,7 @@ export default function TrangQuet() {
       daBoQua: listBoQua,
     });
     setDeck(dsThe);
-  }, [daSanSang, danhSachSanPham]);
+  }, [daSanSang, daKiemTraKhaoSat, danhSachSanPham]);
 
   // Preload ảnh của 3 thẻ kế tiếp
   useEffect(() => {
@@ -567,6 +580,16 @@ export default function TrangQuet() {
       daThich,
     });
   }, [gioHang, danhSachSanPham, danhSachDeals, daThich]);
+
+  if (!daKiemTraKhaoSat) {
+    return (
+      <AppShell khoaChieuCao={true}>
+        <div className="flex-1 flex items-center justify-center p-6">
+          <h1 className="sr-only">Deck quẹt VIVE</h1>
+        </div>
+      </AppShell>
+    );
+  }
 
   return (
     <AppShell

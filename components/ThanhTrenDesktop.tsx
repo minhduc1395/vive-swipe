@@ -10,7 +10,7 @@ interface ThanhTrenDesktopProps {
 
 const CAC_MUC_MENU = [
   {
-    href: "/new-arrival",
+    href: "/",
     label: "New Arrival",
     key: "new-arrival",
     icon: (
@@ -51,7 +51,7 @@ const CAC_MUC_MENU = [
   },
   {
     href: "/danh-muc",
-    label: "Danh mục",
+    label: "Sản phẩm",
     key: "danh-muc",
     icon: (
       <svg
@@ -145,7 +145,11 @@ export function ThanhTrenDesktop({
         >
           {CAC_MUC_MENU.map((muc) => {
             const dangChon =
-              pathname === muc.href || pathname.startsWith(`${muc.href}/`);
+              muc.key === "new-arrival"
+                ? pathname === "/" ||
+                  pathname === "/new-arrival" ||
+                  pathname.startsWith("/new-arrival/")
+                : pathname === muc.href || pathname.startsWith(`${muc.href}/`);
             const soDem = muc.key === "da-thich" ? soLuongThich : 0;
 
             return (

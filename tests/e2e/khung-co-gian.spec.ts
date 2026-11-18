@@ -1,4 +1,4 @@
-import { test, expect } from "./fixtures";
+import { test, expect, datDaKhaoSat } from "./fixtures";
 
 const CAC_MOC_MAN_HINH = [
   // 1. Điện thoại
@@ -17,6 +17,7 @@ const CAC_MOC_MAN_HINH = [
 
 const CAC_ROUTE_CHINH = [
   "/",
+  "/chao",
   "/bat-dau",
   "/quet",
   "/danh-muc",
@@ -26,8 +27,9 @@ const CAC_ROUTE_CHINH = [
 ];
 
 test.describe("W031 · Khung co giãn (AppShell) và điều hướng 3 mốc", () => {
-  test.beforeEach(async () => {
+  test.beforeEach(async ({ page }) => {
     test.setTimeout(60000);
+    await datDaKhaoSat(page);
   });
 
   test("1. Mốc Điện thoại (< 768px): hiện tab dưới, ẩn rail trái và thanh trên máy tính", async ({
@@ -80,7 +82,7 @@ test.describe("W031 · Khung co giãn (AppShell) và điều hướng 3 mốc", 
     await expect(topDesktop).toBeHidden();
   });
 
-  test("3. Mốc Máy tính (>= 1024px): hiện thanh trên đủ mục (New Arrival, Quẹt, Danh mục, Deal, Đã thích, ô tìm, Giỏ, Đăng nhập), ẩn tab dưới và rail", async ({
+  test("3. Mốc Máy tính (>= 1024px): hiện thanh trên đủ mục (New Arrival, Quẹt, Sản phẩm, Deal, Đã thích, ô tìm, Giỏ, Đăng nhập), ẩn tab dưới và rail", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
@@ -98,7 +100,7 @@ test.describe("W031 · Khung co giãn (AppShell) và điều hướng 3 mốc", 
     ).toBeVisible();
     await expect(topDesktop.getByRole("link", { name: "Quẹt" })).toBeVisible();
     await expect(
-      topDesktop.getByRole("link", { name: "Danh mục" })
+      topDesktop.getByRole("link", { name: "Sản phẩm" })
     ).toBeVisible();
     await expect(topDesktop.getByRole("link", { name: "Deal" })).toBeVisible();
     await expect(

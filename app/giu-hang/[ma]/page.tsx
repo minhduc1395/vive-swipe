@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AppShell } from "@/components/AppShell";
+import { NutQuayLai } from "@/components/NutQuayLai";
 import { layDonGiuHangTheoMa } from "@/lib/giu-hang/kho-giu-hang";
 import { ChiTietMaGiuHang } from "./ChiTietMaGiuHang";
 
@@ -18,7 +19,10 @@ export default async function TrangMaGiuHang({
   if (!donGoc) {
     return (
       <AppShell>
-        <main className="max-w-[540px] mx-auto px-6 py-16 flex flex-col items-center gap-4 text-center">
+        <div className="max-w-[540px] w-full mx-auto px-4 md:px-6 pt-4 md:pt-8">
+          <NutQuayLai fallback="/gio" />
+        </div>
+        <main className="max-w-[540px] mx-auto px-6 py-12 flex flex-col items-center gap-4 text-center">
           <h1 className="m-0 text-[24px] font-bold">Không tìm thấy mã {maChuanHoa}</h1>
           <p className="m-0 text-[15px] text-[#5C5C5B]">Mã có thể đã hết hạn hoặc gõ sai. Bạn kiểm tra lại email xác nhận hoặc hỏi nhân viên tại booth.</p>
           <Link href="/gio" className="h-12 px-6 rounded-full bg-den text-trang flex items-center font-semibold">Về giỏ hàng</Link>

@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { KhungDienThoai } from "@/components/KhungDienThoai";
+import { AppShell } from "@/components/AppShell";
+import { NutQuayLai } from "@/components/NutQuayLai";
 import {
   layTraLoiLocal,
   luuTraLoiLocal,
@@ -111,51 +112,17 @@ export default function TrangBatDau() {
   };
 
   return (
-    <KhungDienThoai>
-      <div className="w-full h-full flex flex-col bg-trang font-sans text-den overflow-hidden">
+    <AppShell khoaChieuCao={true}>
+      <div className="w-full max-w-[560px] mx-auto flex-1 min-h-0 flex flex-col bg-trang font-sans text-den overflow-hidden">
         {/* Header điều hướng */}
-        <header className="flex items-center gap-3 pt-5 px-4 pb-2 shrink-0">
+        <header className="flex items-center gap-2 pt-3 md:pt-5 px-4 pb-2 shrink-0">
           {buoc === 1 ? (
-            <Link
-              href="/"
-              aria-label="Quay lại"
-              className="w-11 h-11 flex items-center justify-center rounded-full text-den hover:bg-hong-nhat transition-colors"
-            >
-              <svg
-                width="22"
-                height="22"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M15 18l-6-6 6-6" />
-              </svg>
-            </Link>
+            <NutQuayLai fallback="/chao" />
           ) : (
-            <button
-              type="button"
+            <NutQuayLai
+              fallback="/bat-dau"
               onClick={() => setBuoc((b) => b - 1)}
-              aria-label="Quay lại"
-              className="w-11 h-11 flex items-center justify-center rounded-full text-den hover:bg-hong-nhat transition-colors cursor-pointer"
-            >
-              <svg
-                width="22"
-                height="22"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M15 18l-6-6 6-6" />
-              </svg>
-            </button>
+            />
           )}
 
           {/* Thanh tiến độ 3 vạch */}
@@ -391,6 +358,6 @@ export default function TrangBatDau() {
           </div>
         )}
       </div>
-    </KhungDienThoai>
+    </AppShell>
   );
 }

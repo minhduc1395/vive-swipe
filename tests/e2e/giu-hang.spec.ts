@@ -1,9 +1,10 @@
-import { test, expect } from "./fixtures";
+import { test, expect, datDaKhaoSat } from "./fixtures";
 import { KHOA_GIO_HANG } from "@/lib/kho-luu-tru";
 
 test.describe("W014 · Giữ hàng tại booth, màn mã giữ hàng, email xác nhận, tự hết hạn", () => {
-  test.beforeEach(async () => {
+  test.beforeEach(async ({ page }) => {
     test.setTimeout(60000);
+    await datDaKhaoSat(page);
   });
 
   test("1. Màn /giu-hang: xem trước giỏ hàng, validation họ tên & SĐT, toggle ngày đến", async ({
