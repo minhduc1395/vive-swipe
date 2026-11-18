@@ -59,6 +59,7 @@ Làm đúng thứ tự, mỗi việc một nhánh mới tách từ `main` mới 
 | # | Việc | Làm gì | Xong khi |
 |---|---|---|---|
 | 1 | **W028** làm lại | Bỏ nhánh cũ. Tách nhánh mới từ main, áp bố cục máy tính/máy tính bảng lên các trang đã có (Quẹt, Danh mục, Đã thích, Giỏ, Giữ hàng, Deal, Nhân viên) theo §2 và `design/*PC*.dc.html`, `design/QuetTablet.dc.html` | Không cuộn ngang ở 9 cỡ §2.4; ảnh chụp 390/820/1440 gửi trong PR (không lưu vào `docs/`) |
+| 1b | **W033** | Landing là trang đầu (`/`), một thanh menu chung trên máy tính, nút quay lại ở trang con (xem tasks/W033.md) | Theo tiêu chí trong task |
 | 2 | **W027** sửa | Theo handoff 18/11 10:51: bỏ câu công dụng tự viết, chữ lấy từ yaml; vị trí lọ đọc từ `vat_the` trong yaml; sửa chồng chữ trên điện thoại; lọ không đè chữ ở khối 1 | Đổi yaml là đổi nội dung, không sửa code |
 | 3 | **W017** làm lại | Quản trị phải đăng nhập Supabase (dùng lại `lib/nhan-vien/xac-thuc-server.ts`, chỉ `vai_tro = 'quan_tri'`), ghi qua server action + `layAdmin()`, không dùng localStorage | Tài khoản `nhan_vien` thường bị chặn; sửa giá/deal lưu được vào DB |
 | 4 | **W019** | Trang chính sách + chân trang. Thông tin doanh nghiệp chưa có (W001) thì để chỗ trống ghi rõ `[chờ W001]` | Chân trang hiện ở cả 3 mốc màn hình |
