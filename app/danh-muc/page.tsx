@@ -70,10 +70,15 @@ function DanhMucNoiDung() {
     /* eslint-enable react-hooks/set-state-in-effect */
   }, []);
 
-  // Sync ô tìm kiếm khi URL thay đổi
+  // Sync ô tìm kiếm khi URL thay đổi (không ghi đè khi người dùng đang gõ)
   useEffect(() => {
     /* eslint-disable react-hooks/set-state-in-effect */
-    setTimKiemInput(timUrl);
+    if (
+      typeof document === "undefined" ||
+      document.activeElement?.id !== "tim-sp"
+    ) {
+      setTimKiemInput(timUrl);
+    }
     setGioiHanHienThi(6);
     /* eslint-enable react-hooks/set-state-in-effect */
   }, [timUrl, loaiUrl, vanDeUrl, thuongHieuUrl, xepUrl]);

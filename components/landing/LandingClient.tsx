@@ -52,7 +52,7 @@ export function LandingClient({
   }, [chienDich.mau.nen, heroBlock, tieuDiemBlock, raMatBlock]);
 
   return (
-    <AppShell>
+    <AppShell hienChanTrang={false}>
       <div
         className="relative flex-1 flex flex-col text-den overflow-x-clip font-sans"
         style={{
