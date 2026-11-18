@@ -131,7 +131,7 @@ export function ThanhDocTablet({
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/brand/vive-logo-black.png"
+          src="/brand/vive-logo-chu.png"
           alt="VIVE"
           className="w-[60px] h-auto"
         />

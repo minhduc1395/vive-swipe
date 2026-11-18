@@ -10,7 +10,7 @@ export default function TrangChao() {
       <div className="relative h-[530px] shrink-0 bg-hong-nhat rounded-b-[44px] overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/brand/vive-logo-black.png"
+          src="/brand/vive-logo-chu.png"
           alt="VIVE"
           className="absolute left-1/2 top-11 w-[92px] h-auto -translate-x-1/2"
         />
