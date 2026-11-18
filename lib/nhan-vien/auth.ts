@@ -44,7 +44,10 @@ export function cheDoThu(): boolean {
 
 /** Token phiên Supabase gửi kèm mỗi Server Action để server kiểm quyền. */
 export async function layTokenNhanVien(): Promise<string | null> {
-  if (cheDoThu()) return "thu";
+  if (cheDoThu()) {
+    const phien = layPhienNhanVienLocal();
+    return phien ? `thu:${phien.vaiTro}` : null;
+  }
   const supabase = laySupabase();
   if (!supabase) return null;
   const { data } = await supabase.auth.getSession();
@@ -52,8 +55,10 @@ export async function layTokenNhanVien(): Promise<string | null> {
 }
 
 /**
- * Đăng nhập nhân viên bằng Supabase Auth (email + mật khẩu do quản trị tạo, có dòng trong bảng nhan_vien).
- * Chế độ thử (dev/e2e): booth@vive.vn, mật khẩu bất kỳ từ 4 ký tự.
+ * Đăng nhập nhân viên/quản trị bằng Supabase Auth (email + mật khẩu có dòng trong bảng nhan_vien).
+ * Chế độ thử (dev/e2e):
+ * - booth@vive.vn (mật khẩu >= 4 ký tự) -> vai trò nhan_vien
+ * - admin@vive.vn (mật khẩu >= 4 ký tự) -> vai trò quan_tri
  */
 export async function dangNhapNhanVien(
   email: string,
@@ -66,11 +71,21 @@ export async function dangNhapNhanVien(
   };
 
   if (cheDoThu()) {
-    if (emailChuanHoa === "booth@vive.vn" && matKhau.length >= 4) {
+    if (matKhau.length >= 4 && emailChuanHoa === "booth@vive.vn") {
       const phien: PhienNhanVien = {
         email: emailChuanHoa,
         ten: "Quầy VIVE",
         vaiTro: "nhan_vien",
+        dangNhapLuc: new Date().toISOString(),
+      };
+      luuPhienNhanVienLocal(phien);
+      return { ok: true, phien };
+    }
+    if (matKhau.length >= 4 && emailChuanHoa === "admin@vive.vn") {
+      const phien: PhienNhanVien = {
+        email: emailChuanHoa,
+        ten: "Quản trị VIVE",
+        vaiTro: "quan_tri",
         dangNhapLuc: new Date().toISOString(),
       };
       luuPhienNhanVienLocal(phien);
