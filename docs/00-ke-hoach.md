@@ -95,6 +95,7 @@ Chỉ tiêu cụ thể đặt sau 3 ngày chạy đầu, khi đã có số thậ
 | `tasks/`, `handoff/` | Việc và tin nhắn giữa Claude và Antigravity (cách dùng: AGENTS.md) |
 
 ## Nhật ký thay đổi
+- 18/11/2026 (4): QA 17:13 merge W028, W027, W033, W019, W005, W029, W035 (landing là trang đầu, giao diện máy tính/máy tính bảng, chân trang, ảnh từ kho media). Địa chỉ booth trong `data/chien-dich/*.yaml` sửa "Quận 1" thành "Phường Sài Gòn" theo docs/03. Ngân sách hiệu năng (LCP landing 4,4s) và bố cục máy tính bảng 768–1023px của landing chuyển sang W032.
 - 18/11/2026 (3): Lập docs/05-lo-trinh-hoan-thien.md (tóm tắt, nguyên tắc co giãn, ngân sách hiệu năng, ma trận kiểm thử, thứ tự làm tới 27/11). Thêm W031 (khung co giãn, làm sớm), W032 (kiểm thử đa màn hình, hiệu năng); W027, W028 lên ưu tiên Cao.
 - 18/11/2026 (2): Landing đổi hướng: trang chiến dịch giới thiệu sản phẩm mới và chương trình theo đợt, không nói về quẹt; cấu hình bằng `data/chien-dich/*.yaml` (docs/01 mục 2.0b). Thiết kế 4.1 (đợt LOPOE), 4.5 thư viện khối, 4.6 Pawlette (bản tạm). Viết lại W027, thêm W029.
 - 18/11/2026: Chủ dự án yêu cầu landing page và giao diện cho máy tính, máy tính bảng. Thêm thiết kế hàng 4 trên canvas (4.1–4.4), docs/01 mục 2.0, task W027 (landing `/`), W028 (giao diện máy tính và máy tính bảng). Ưu tiên Trung bình: làm sau luồng mua tại booth (W012–W014, W025).
