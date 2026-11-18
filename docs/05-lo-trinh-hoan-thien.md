@@ -47,8 +47,28 @@ Việc nào bị chặn vì chờ chủ dự án thì làm việc kế tiếp, k
 
 ## 4. Việc chủ dự án cần làm để không chặn lộ trình
 1. **Ảnh sản phẩm (W004):** chọn A hoặc B ở handoff 18/11 02:44; gửi ảnh nhãn có deal trước 25/11.
-2. **Cloud Build:** nối repo vào trigger để merge xong là web tự cập nhật (handoff 18/11 01:37).
+2. ~~**Cloud Build:**~~ xong 18/11, trigger `deploy-main` chạy khi merge vào main.
 3. **Supabase → Authentication → URL Configuration:** Site URL = link Cloud Run; thêm link đó và `http://localhost:3000` vào Redirect URLs.
 4. **Đăng nhập (W030):** chốt cách đăng nhập (email nhận mã, số điện thoại, Google hay Zalo) và mục đích.
 5. **W001:** hạn giữ hàng, thông tin doanh nghiệp cho chân trang, tên hiển thị web. **W022:** pháp lý.
 6. **Tên miền:** cần trước khi gửi email thật và in QR New Arrival.
+
+## 5. Lượt chạy tiếp của Antigravity (giao 18/11 chiều)
+Làm đúng thứ tự, mỗi việc một nhánh mới tách từ `main` mới nhất, một PR. Việc nào bị chặn thì ghi handoff `hoi` rồi làm việc kế tiếp.
+
+| # | Việc | Làm gì | Xong khi |
+|---|---|---|---|
+| 1 | **W028** làm lại | Bỏ nhánh cũ. Tách nhánh mới từ main, áp bố cục máy tính/máy tính bảng lên các trang đã có (Quẹt, Danh mục, Đã thích, Giỏ, Giữ hàng, Deal, Nhân viên) theo §2 và `design/*PC*.dc.html`, `design/QuetTablet.dc.html` | Không cuộn ngang ở 9 cỡ §2.4; ảnh chụp 390/820/1440 gửi trong PR (không lưu vào `docs/`) |
+| 2 | **W027** sửa | Theo handoff 18/11 10:51: bỏ câu công dụng tự viết, chữ lấy từ yaml; vị trí lọ đọc từ `vat_the` trong yaml; sửa chồng chữ trên điện thoại; lọ không đè chữ ở khối 1 | Đổi yaml là đổi nội dung, không sửa code |
+| 3 | **W017** làm lại | Quản trị phải đăng nhập Supabase (dùng lại `lib/nhan-vien/xac-thuc-server.ts`, chỉ `vai_tro = 'quan_ly'`), ghi qua server action + `layAdmin()`, không dùng localStorage | Tài khoản `nhan_vien` thường bị chặn; sửa giá/deal lưu được vào DB |
+| 4 | **W019** | Trang chính sách + chân trang. Thông tin doanh nghiệp chưa có (W001) thì để chỗ trống ghi rõ `[chờ W001]` | Chân trang hiện ở cả 3 mốc màn hình |
+| 5 | **W029** | Trang `/personal-color` bản tạm theo `design/Pawlette.dc.html` | Có link từ New Arrival |
+| 6 | **W032** | Sau khi W028 merge: ma trận §2.4 vào CI, đo hiệu năng §2.3 | CI xanh cả Chromium và WebKit |
+
+Quy tắc bắt buộc (lặp lại vì đã sai nhiều lần):
+- Ghi dữ liệu phía server dùng `layAdmin()`, không nuốt lỗi; việc của nhân viên/quản trị luôn gọi `xacThucNhanVien()` trước.
+- Không bịa công dụng, giá, deal; chỉ lấy từ `data/` hoặc yaml chiến dịch.
+- Trước khi mở PR: `npm run lint`, `npm run test`, `npx playwright test` đều qua; rebase lên main.
+- Tài khoản thử trang nhân viên: `test@vive.vn` (vai trò `nhan_vien`, mật khẩu hỏi chủ dự án, không ghi vào repo).
+
+Sau lượt này (chưa làm): W018 email deal (cần tên miền), W030 đăng nhập (Claude thiết kế trước), W021 QA giữa kỳ (Claude, 22/11), W023 nghiệm thu tại booth (26/11).
