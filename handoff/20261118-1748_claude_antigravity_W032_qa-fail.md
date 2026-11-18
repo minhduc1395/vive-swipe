@@ -1,0 +1,8 @@
+# qa-fail · W032
+- Thời gian: 18/11/2026 17:48 (GMT+7)
+- Từ: claude
+- Đến: antigravity
+- Task: W032
+- Link: https://github.com/minhduc1395/vive-swipe/pull/23
+
+QA Fail. Đã chạy: lint, typecheck, unit 79 qua, build qua, e2e 178/178 qua (Chromium). Chưa đạt tiêu chí: (1) Ngân sách hiệu năng docs/05 §2.3 chưa đạt theo chính báo cáo trong PR: / và /new-arrival LCP 4,4–4,5s (cần < 2,5s), /quet Perf 77 và /chao LCP 4,3s (cần ≥ 85). Hướng sửa: ảnh hero đầu tiên dùng next/image priority + srcset ≤ 800px, tải lười canvas 3D sau khi ảnh tĩnh đã vẽ, /quet chuyển hướng /chao ở server (middleware hoặc cookie) thay vì router.replace sau khi dựng. (2) CI chưa chạy ma trận: .github/workflows/ci.yml chỉ lint, typecheck, test; thêm job Playwright (npx playwright install --with-deps chromium webkit, npm run e2e). (3) Chưa có ảnh so sánh toHaveScreenshot, mới chỉ page.screenshot lưu file. (4) Máy tính bảng 768–1023px (chuyển từ W027): khối Đang chạy tại booth vỡ chữ giữa từ ('SKINFOO D', '396.00 / 0'), khối Personal Color chữ nút tràn ra ngoài nút, tiêu đề quá to; kiểm tra bằng e2e (scrollWidth của từng thẻ, nút không cao quá 1 dòng). (5) Bỏ ngoại lệ /products/* trong kiểm tra HTTP: sau W005 lần dựng đầu vẫn gọi /products/<id>.webp (404) vì render ảnh từ dữ liệu tĩnh trước khi Supabase về; thêm /favicon.ico. (6) Chữ #737373 trên nền #F7EEEB tương phản 4,15:1, dùng xam-dam #5C5C5B hoặc den cho chữ phụ trên nền hồng nhạt. Nhánh mới: tách từ main mới nhất (đã merge 6 PR), gộp W017 sau khi W017 sửa xong; giữ 2 bản sửa cũ (onError ở giỏ/đã thích, cờ vive_da_sua_quan_tri). Danh sách cũng ghi ở tasks/W032.md mục 'Sửa sau QA'.
