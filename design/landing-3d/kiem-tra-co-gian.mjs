@@ -3,9 +3,11 @@ const co = [[360,780],[390,844],[430,932],[768,1024],[820,1180],[1180,820],[1280
 const loi = [];
 const br = await chromium.launch({ args: ['--use-gl=swiftshader','--enable-webgl','--ignore-gpu-blocklist'] });
 for (const [w,h] of co) {
-  const pg = await br.newPage({ viewport: { width: w, height: h }, hasTouch: w < 1024, isMobile: w < 760 });
+  const pg = await br.newPage({ viewport: { width: w, height: h }, hasTouch: w < 1024, isMobile: w < 760, deviceScaleFactor: w < 760 ? 3 : 2 });
   pg.on('pageerror', e => loi.push(`${w}: ${e.message}`));
   await pg.goto('http://localhost:8765/?khung=1'); await pg.waitForFunction(() => window.__viveBo, null, { timeout: 20000 });
+  const cv = await pg.evaluate(() => { const c = document.getElementById('canh'); return [c.clientWidth - innerWidth, c.clientHeight - innerHeight]; });
+  if (cv[0] || cv[1]) loi.push(`${w}: canvas lệch cỡ ${cv}`);
   const ngang = await pg.evaluate(() => document.documentElement.scrollWidth - innerWidth);
   for (let k = 0; k < 3; k++) {
     await pg.evaluate(k => { const s = document.querySelectorAll('section[data-k]')[k]; scrollTo(0, s.offsetTop); }, k);
