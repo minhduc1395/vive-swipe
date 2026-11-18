@@ -17,7 +17,8 @@ import {
   type HanhDongHoSo,
 } from "@/lib/goi-y/ho-so";
 import { layTraLoiLocal } from "@/lib/khao-sat";
-import { layNhanVanDe, layLyDoGoiY } from "@/lib/nhan";
+import { layNhanVanDe, layNhanLoaiDa, layLyDoGoiY } from "@/lib/nhan";
+import { dinhDangTien } from "@/lib/dinh-dang";
 import { layGhiChuDeal } from "@/lib/deals/ghi-chu";
 import { ghiLuotQuet } from "@/lib/supabase/luot-quet";
 import { danhDauCanDongBoHoSo } from "@/lib/supabase/auth";
@@ -375,6 +376,18 @@ export default function TrangQuet() {
   // Phím tắt bàn phím (máy tính)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Bỏ qua nếu đang gõ trong ô nhập liệu
+      const target = e.target as HTMLElement | null;
+      if (
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.tagName === "SELECT" ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+
       // Nếu đang mở dialog chi tiết thì phím Escape để đóng
       if (sanPhamChiTiet) {
         if (e.key === "Escape") setSanPhamChiTiet(null);
@@ -393,12 +406,17 @@ export default function TrangQuet() {
       } else if (e.key === "z" || e.key === "Z" || e.key === "Backspace") {
         e.preventDefault();
         xuLyHoanTac();
+      } else if (e.key === " " || e.code === "Space") {
+        e.preventDefault();
+        if (theHienTai) {
+          setSanPhamChiTiet(theHienTai.san_pham);
+        }
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [sanPhamChiTiet, xuLyThich, xuLyBoQua, xuLyVaoGio, xuLyHoanTac]);
+  }, [sanPhamChiTiet, theHienTai, xuLyThich, xuLyBoQua, xuLyVaoGio, xuLyHoanTac]);
 
   // Tính toán scale và style của các nút điều khiển khi đang kéo
   const { dx, dy } = dragOffset;
@@ -422,6 +440,49 @@ export default function TrangQuet() {
     if (!theHienTai) return undefined;
     return layGhiChuDeal(theHienTai.san_pham, danhSachDeals);
   }, [theHienTai, danhSachDeals]);
+
+  // Dữ liệu cho cột máy tính & tablet (W028, QuetPC / QuetTablet)
+  const guTags = useMemo(() => {
+    const traLoi = typeof window !== "undefined" ? layTraLoiLocal() : null;
+    const tags: string[] = [];
+    if (traLoi?.loai_da) {
+      tags.push(layNhanLoaiDa(traLoi.loai_da));
+    }
+    if (traLoi?.van_de?.length) {
+      traLoi.van_de.slice(0, 3).forEach((vd) => tags.push(layNhanVanDe(vd)));
+    }
+    if (traLoi?.ngan_sach) {
+      const budgetMap: Record<string, string> = {
+        duoi_200: "Dưới 200K",
+        tu_200_500: "200K–500K",
+        tren_500: "Trên 500K",
+      };
+      if (budgetMap[traLoi.ngan_sach]) {
+        tags.push(budgetMap[traLoi.ngan_sach]);
+      }
+    }
+    return tags.length > 0 ? tags : ["Da dầu", "Mụn", "Lỗ chân lông", "Dưới 500K"];
+  }, []);
+
+  const topDeals = useMemo(() => {
+    return danhSachDeals
+      .filter((d) => d.hien_thi && (!d.may_rui || d.da_dang_ky))
+      .slice(0, 3);
+  }, [danhSachDeals]);
+
+  const tongTienGio = useMemo(() => {
+    if (typeof window === "undefined" || soLuongGio === 0) return 0;
+    try {
+      const gio = layGioHang();
+      return gio.reduce((acc, item) => {
+        const spId = item.sanPhamId || item.dealId;
+        const sp = danhSachSanPham.find((s) => s.id === spId);
+        return acc + (sp?.gia_ban || 0) * item.soLuong;
+      }, 0);
+    } catch {
+      return 0;
+    }
+  }, [danhSachSanPham, soLuongGio]);
 
   return (
     <AppShell
@@ -451,137 +512,325 @@ export default function TrangQuet() {
       `}</style>
       <div className="w-full h-full flex flex-col items-center bg-trang font-sans text-den overflow-hidden relative">
         <h1 className="sr-only">Deck quẹt VIVE</h1>
-        {/* Thanh trên: hiện ở mobile và tablet, ẩn ở desktop (vì desktop đã có ThanhTrenDesktop) */}
-        <div className="w-full max-w-[480px] lg:hidden">
+        {/* Thanh trên: hiện ở mobile, ẩn ở tablet và desktop */}
+        <div className="w-full max-w-[480px] md:hidden">
           <ThanhTren soLuongGio={soLuongGio} />
         </div>
 
-        {/* Thanh phụ: Xếp theo + Sửa */}
-        <div className="w-full max-w-[480px] px-5 pt-1 pb-2.5 flex items-center gap-1.5 text-[13px] shrink-0">
-          <span className="text-xam">Xếp theo</span>
-          {moiQuanTamLabels.length > 0 ? (
-            moiQuanTamLabels.map((tag) => (
-              <span
-                key={tag}
-                className="h-[26px] px-2.5 rounded-full bg-hong-nhat flex items-center font-medium text-den"
-              >
-                {tag}
-              </span>
-            ))
-          ) : (
-            <span className="h-[26px] px-2.5 rounded-full bg-hong-nhat flex items-center font-medium text-den">
-              Phù hợp nhất
-            </span>
-          )}
-          <Link
-            href="/bat-dau"
-            className="ml-auto font-medium text-den no-underline py-1 px-1.5 hover:underline"
+        {/* Khung nội dung: 3 cột trên Desktop (QuetPC), 2 cột trên Tablet (QuetTablet), 1 cột trên Mobile */}
+        <div className="w-full flex-1 min-h-0 flex items-center justify-center lg:grid lg:grid-cols-[minmax(220px,280px)_minmax(380px,1fr)_minmax(260px,340px)] max-w-[1280px] px-3 md:px-6 py-1 md:py-4 gap-5 lg:gap-8 items-start">
+          {/* Cột trái (Desktop >= 1024px): Gu của bạn & Phím tắt */}
+          <aside
+            aria-label="Gu của bạn"
+            className="hidden lg:flex flex-col gap-5 shrink-0 pt-2"
           >
-            Sửa
-          </Link>
-        </div>
+            <section className="rounded-[24px] bg-hong-nhat p-5 flex flex-col gap-3.5 border border-vien">
+              <div className="flex justify-between items-center">
+                <h2 className="m-0 text-[18px] font-bold">Gu của bạn</h2>
+                <Link
+                  href="/bat-dau"
+                  className="text-[14px] font-semibold text-den hover:underline"
+                >
+                  Sửa
+                </Link>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {guTags.map((tag, i) => (
+                  <span
+                    key={i}
+                    className="h-[34px] px-3.5 rounded-full bg-bac-ha text-den text-[13px] font-semibold flex items-center"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <p className="m-0 text-[13px] text-xam-dam leading-[1.5]">
+                Web học thêm sau mỗi lượt quẹt.
+              </p>
+            </section>
 
-        {/* Khu vực Deck quẹt thẻ */}
-        <section
-          aria-label="Thẻ sản phẩm"
-          className="relative flex-1 min-h-0 mx-4 w-full max-w-[440px]"
-        >
-          {hienTheDealDacBiet ? (
-            <TheDealDacBiet onBoQua={() => setHienTheDealDacBiet(false)} />
-          ) : !daSanSang ? (
-            <div className="absolute inset-0 rounded-[28px] bg-hong-nhat border border-vien p-8 flex flex-col items-center justify-center gap-3 text-center">
-              <div className="w-10 h-10 rounded-full border-2 border-primary border-t-transparent animate-spin mb-1" />
-              <span className="font-bold text-[16px] tracking-[-0.3px] text-chu">
-                Đang chuẩn bị sản phẩm...
-              </span>
+            <section className="rounded-[24px] border border-vien p-5 flex flex-col gap-3.5 bg-white">
+              <h2 className="m-0 text-[18px] font-bold">Phím tắt</h2>
+              <ul className="m-0 p-0 list-none flex flex-col gap-2.5 text-[14px]">
+                <li className="flex items-center justify-between">
+                  <span>Bỏ qua</span>
+                  <kbd className="min-w-[28px] h-7 px-2 rounded-lg border border-hong bg-hong-nhat/40 font-semibold text-[13px] flex items-center justify-center">
+                    ←
+                  </kbd>
+                </li>
+                <li className="flex items-center justify-between">
+                  <span>Thích</span>
+                  <kbd className="min-w-[28px] h-7 px-2 rounded-lg border border-hong bg-hong-nhat/40 font-semibold text-[13px] flex items-center justify-center">
+                    →
+                  </kbd>
+                </li>
+                <li className="flex items-center justify-between">
+                  <span>Vào giỏ</span>
+                  <kbd className="min-w-[28px] h-7 px-2 rounded-lg border border-hong bg-hong-nhat/40 font-semibold text-[13px] flex items-center justify-center">
+                    ↑
+                  </kbd>
+                </li>
+                <li className="flex items-center justify-between">
+                  <span>Hoàn tác</span>
+                  <kbd className="min-w-[28px] h-7 px-2 rounded-lg border border-hong bg-hong-nhat/40 font-semibold text-[13px] flex items-center justify-center">
+                    Z
+                  </kbd>
+                </li>
+                <li className="flex items-center justify-between">
+                  <span>Xem chi tiết</span>
+                  <kbd className="min-w-[28px] h-7 px-2 rounded-lg border border-hong bg-hong-nhat/40 font-semibold text-[13px] flex items-center justify-center">
+                    Space
+                  </kbd>
+                </li>
+              </ul>
+            </section>
+          </aside>
+
+          {/* Cột giữa: Deck quẹt & 4 nút điều khiển */}
+          <div className="flex-1 min-w-0 h-full flex flex-col items-center justify-between max-w-[440px] w-full mx-auto">
+            {/* Thanh phụ: Xếp theo + Sửa trên mobile / tablet */}
+            <div className="w-full px-4 pt-0.5 pb-2 flex items-center gap-1.5 text-[13px] shrink-0 lg:hidden">
+              <span className="text-xam">Xếp theo</span>
+              {moiQuanTamLabels.length > 0 ? (
+                moiQuanTamLabels.map((tag) => (
+                  <span
+                    key={tag}
+                    className="h-[26px] px-2.5 rounded-full bg-hong-nhat flex items-center font-medium text-den"
+                  >
+                    {tag}
+                  </span>
+                ))
+              ) : (
+                <span className="h-[26px] px-2.5 rounded-full bg-hong-nhat flex items-center font-medium text-den">
+                  Phù hợp nhất
+                </span>
+              )}
+              <Link
+                href="/bat-dau"
+                className="ml-auto font-medium text-den no-underline py-1 px-1.5 hover:underline"
+              >
+                Sửa
+              </Link>
             </div>
-          ) : theHienTai ? (
-            <>
-              {/* Thẻ phía dưới tạo chiều sâu */}
-              {theTiepTheo && (
+
+            {/* Khu vực Deck quẹt thẻ */}
+            <section
+              aria-label="Thẻ sản phẩm"
+              className="relative flex-1 min-h-0 mx-2 w-full max-w-[440px]"
+            >
+              {hienTheDealDacBiet ? (
+                <TheDealDacBiet onBoQua={() => setHienTheDealDacBiet(false)} />
+              ) : !daSanSang ? (
+                <div className="absolute inset-0 rounded-[28px] bg-hong-nhat border border-vien p-8 flex flex-col items-center justify-center gap-3 text-center">
+                  <div className="w-10 h-10 rounded-full border-2 border-primary border-t-transparent animate-spin mb-1" />
+                  <span className="font-bold text-[16px] tracking-[-0.3px] text-chu">
+                    Đang chuẩn bị sản phẩm...
+                  </span>
+                </div>
+              ) : theHienTai ? (
+                <>
+                  {/* Thẻ phía dưới tạo chiều sâu */}
+                  {theTiepTheo && (
+                    <div
+                      aria-hidden="true"
+                      className="absolute inset-x-3.5 top-3 -bottom-2 rounded-[28px] bg-hong-nhat border border-vien scale-[0.96] transition-transform pointer-events-none"
+                    />
+                  )}
+
+                  {/* Thẻ trên cùng tương tác */}
+                  <TheSanPham
+                    key={theHienTai.san_pham.id}
+                    sanPham={theHienTai.san_pham}
+                    lyDoGoiY={lyDoHienTai}
+                    ghiChuDeal={ghiChuDealHienTai}
+                    onThich={xuLyThich}
+                    onBoQua={xuLyBoQua}
+                    onVaoGio={xuLyVaoGio}
+                    onMoChiTiet={() => {
+                      ghiLuotQuet({
+                        san_pham_id: theHienTai.san_pham.id,
+                        hanh_dong: "xem_chi_tiet",
+                        nguon: theHienTai.nguon,
+                        vi_tri: indexHienTai + 1,
+                      });
+                      setSanPhamChiTiet(theHienTai.san_pham);
+                    }}
+                    isTopCard={true}
+                    animState={animState}
+                    onDragStateChange={(dragX, dragY) =>
+                      setDragOffset({ dx: dragX, dy: dragY })
+                    }
+                  />
+                </>
+              ) : daHetDeck ? (
+                /* Khi đã xem hết thẻ (docs/01 mục 2.3) */
+                <div className="absolute inset-0 rounded-[28px] bg-hong-nhat border border-vien p-8 flex flex-col items-center justify-center gap-3 text-center">
+                  <span className="font-bold text-[26px] tracking-[-0.5px]">
+                    Bạn đã xem hết sản phẩm hôm nay.
+                  </span>
+                  <p className="m-0 text-[15px] leading-relaxed text-[#5C5C5B]">
+                    Bạn đã thích {daThich.length} món. Xem lại danh sách hoặc các
+                    deal hợp với bạn hôm nay.
+                  </p>
+                  <Link
+                    href="/deal"
+                    className="mt-2 h-12 px-6 rounded-full bg-den text-trang flex items-center font-semibold text-[15px] no-underline hover:opacity-90 transition-opacity"
+                  >
+                    Xem deal cho bạn
+                  </Link>
+                  <Link
+                    href="/da-thich"
+                    className="font-medium text-den no-underline p-2 hover:underline text-[14px]"
+                  >
+                    Xem món đã thích ({daThich.length})
+                  </Link>
+                </div>
+              ) : null}
+
+              {/* Toast thông báo quẹt */}
+              {toast && (
                 <div
-                  aria-hidden="true"
-                  className="absolute inset-x-3.5 top-3 -bottom-2 rounded-[28px] bg-hong-nhat border border-vien scale-[0.96] transition-transform pointer-events-none"
-                />
+                  role="status"
+                  style={{ animation: "vq-toast 420ms ease-out both" }}
+                  className="absolute left-1/2 top-[120px] -translate-x-1/2 z-50 h-[68px] px-7 rounded-full bg-den text-trang shadow-[0_12px_32px_rgba(43,43,42,0.22)] flex items-center gap-3 whitespace-nowrap pointer-events-none"
+                >
+                  {toast === "Đã vào giỏ" ? (
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#FFFFFF"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                      <path d="M3 6h18" />
+                      <path d="M16 10a4 4 0 0 1-8 0" />
+                    </svg>
+                  ) : (
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="#FFFFFF"
+                      stroke="#FFFFFF"
+                      strokeWidth="1.4"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg>
+                  )}
+                  <span className="font-bold text-[24px] tracking-[-0.5px]">
+                    {toast}
+                  </span>
+                </div>
               )}
 
-              {/* Thẻ trên cùng tương tác */}
-              <TheSanPham
-                key={theHienTai.san_pham.id}
-                sanPham={theHienTai.san_pham}
-                lyDoGoiY={lyDoHienTai}
-                ghiChuDeal={ghiChuDealHienTai}
-                onThich={xuLyThich}
-                onBoQua={xuLyBoQua}
-                onVaoGio={xuLyVaoGio}
-                onMoChiTiet={() => {
-                  ghiLuotQuet({
-                    san_pham_id: theHienTai.san_pham.id,
-                    hanh_dong: "xem_chi_tiet",
-                    nguon: theHienTai.nguon,
-                    vi_tri: indexHienTai + 1,
-                  });
-                  setSanPhamChiTiet(theHienTai.san_pham);
-                }}
-                isTopCard={true}
-                animState={animState}
-                onDragStateChange={(dragX, dragY) =>
-                  setDragOffset({ dx: dragX, dy: dragY })
-                }
-              />
-            </>
-          ) : daHetDeck ? (
-            /* Khi đã xem hết thẻ (docs/01 mục 2.3) */
-            <div className="absolute inset-0 rounded-[28px] bg-hong-nhat border border-vien p-8 flex flex-col items-center justify-center gap-3 text-center">
-              <span className="font-bold text-[26px] tracking-[-0.5px]">
-                Bạn đã xem hết sản phẩm hôm nay.
-              </span>
-              <p className="m-0 text-[15px] leading-relaxed text-[#5C5C5B]">
-                Bạn đã thích {daThich.length} món. Xem lại danh sách hoặc các
-                deal hợp với bạn hôm nay.
-              </p>
-              <Link
-                href="/deal"
-                className="mt-2 h-12 px-6 rounded-full bg-den text-trang flex items-center font-semibold text-[15px] no-underline hover:opacity-90 transition-opacity"
-              >
-                Xem deal cho bạn
-              </Link>
-              <Link
-                href="/da-thich"
-                className="font-medium text-den no-underline p-2 hover:underline text-[14px]"
-              >
-                Xem món đã thích ({daThich.length})
-              </Link>
-            </div>
-          ) : null}
+              {/* Heart burst khi thích */}
+              {burst && (
+                <div
+                  aria-hidden="true"
+                  className="absolute left-1/2 bottom-[140px] w-0 h-0 pointer-events-none z-50"
+                >
+                  {HEARTS.map((h, i) => (
+                    <svg
+                      key={i}
+                      width={h.size}
+                      height={h.size}
+                      viewBox="0 0 24 24"
+                      fill={h.fill}
+                      stroke="#2B2B2A"
+                      strokeWidth="1.2"
+                      strokeLinejoin="round"
+                      style={
+                        {
+                          position: "absolute",
+                          left: -9,
+                          top: -9,
+                          "--x": `${h.x}px`,
+                          animation: `vq-heart 820ms ease-out ${h.delay}ms both`,
+                        } as React.CSSProperties
+                      }
+                    >
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg>
+                  ))}
+                </div>
+              )}
+            </section>
 
-          {/* Toast thông báo quẹt */}
-          {toast && (
-            <div
-              role="status"
-              style={{ animation: "vq-toast 420ms ease-out both" }}
-              className="absolute left-1/2 top-[120px] -translate-x-1/2 z-50 h-[68px] px-7 rounded-full bg-den text-trang shadow-[0_12px_32px_rgba(43,43,42,0.22)] flex items-center gap-3 whitespace-nowrap pointer-events-none"
-            >
-              {toast === "Đã vào giỏ" ? (
+            {/* Thanh 4 nút điều khiển */}
+            <div className="h-[84px] shrink-0 flex items-center justify-center gap-4.5 my-1">
+              {/* Nút hoàn tác */}
+              <button
+                type="button"
+                onClick={xuLyHoanTac}
+                disabled={lichSu.length === 0 || !!animState}
+                aria-label="Hoàn tác"
+                className="w-[52px] h-[52px] rounded-full border-[1.5px] border-[#E8D2CC] bg-trang flex items-center justify-center text-den cursor-pointer hover:bg-hong-nhat disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+              >
                 <svg
-                  width="24"
-                  height="24"
+                  width="22"
+                  height="22"
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke="#FFFFFF"
+                  stroke="currentColor"
                   strokeWidth="1.8"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   aria-hidden="true"
                 >
-                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-                  <path d="M3 6h18" />
-                  <path d="M16 10a4 4 0 0 1-8 0" />
+                  <path d="M1 4v6h6" />
+                  <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
                 </svg>
-              ) : (
+              </button>
+
+              {/* Nút Bỏ qua (✕) */}
+              <button
+                type="button"
+                onClick={xuLyBoQua}
+                disabled={!theHienTai || !!animState}
+                aria-label="Bỏ qua"
+                style={{
+                  transform: `scale(${skipBtnScale})`,
+                  backgroundColor: skipBtnBg,
+                }}
+                className="w-[68px] h-[68px] rounded-full border-[1.5px] border-den flex items-center justify-center text-den cursor-pointer transition-transform duration-100 disabled:opacity-40"
+              >
                 <svg
-                  width="24"
-                  height="24"
+                  width="28"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+              </button>
+
+              {/* Nút Thích (♥) */}
+              <button
+                type="button"
+                onClick={xuLyThich}
+                disabled={!theHienTai || !!animState}
+                aria-label="Thích"
+                style={{
+                  transform: `scale(${likeBtnScale})`,
+                  boxShadow: likeRing > 0 ? `0 0 0 ${likeRing}px #CFE3D5` : "none",
+                }}
+                className="w-[68px] h-[68px] rounded-full bg-den text-trang flex items-center justify-center cursor-pointer transition-transform duration-100 disabled:opacity-40"
+              >
+                <svg
+                  width="28"
+                  height="28"
                   viewBox="0 0 24 24"
                   fill="#FFFFFF"
                   stroke="#FFFFFF"
@@ -591,152 +840,105 @@ export default function TrangQuet() {
                 >
                   <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                 </svg>
-              )}
-              <span className="font-bold text-[24px] tracking-[-0.5px]">
-                {toast}
-              </span>
-            </div>
-          )}
+              </button>
 
-          {/* Heart burst khi thích */}
-          {burst && (
-            <div
-              aria-hidden="true"
-              className="absolute left-1/2 bottom-[140px] w-0 h-0 pointer-events-none z-50"
-            >
-              {HEARTS.map((h, i) => (
+              {/* Nút Thêm vào giỏ (👜) */}
+              <button
+                type="button"
+                onClick={xuLyVaoGio}
+                disabled={!theHienTai || !!animState}
+                aria-label="Thêm vào giỏ"
+                style={{
+                  transform: `scale(${cartBtnScale})`,
+                }}
+                className="w-[52px] h-[52px] rounded-full border-[1.5px] border-[#E8D2CC] bg-[#CFE3D5] text-den flex items-center justify-center cursor-pointer hover:opacity-90 transition-transform duration-100 disabled:opacity-40"
+              >
                 <svg
-                  key={i}
-                  width={h.size}
-                  height={h.size}
+                  width="22"
+                  height="22"
                   viewBox="0 0 24 24"
-                  fill={h.fill}
-                  stroke="#2B2B2A"
-                  strokeWidth="1.2"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
                   strokeLinejoin="round"
-                  style={
-                    {
-                      position: "absolute",
-                      left: -9,
-                      top: -9,
-                      "--x": `${h.x}px`,
-                      animation: `vq-heart 820ms ease-out ${h.delay}ms both`,
-                    } as React.CSSProperties
-                  }
+                  aria-hidden="true"
                 >
-                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                  <path d="M3 6h18" />
+                  <path d="M16 10a4 4 0 0 1-8 0" />
                 </svg>
-              ))}
+              </button>
             </div>
-          )}
-        </section>
 
-        {/* Thanh 4 nút điều khiển */}
-        <div className="h-[88px] shrink-0 flex items-center justify-center gap-4.5 my-1">
-          {/* Nút hoàn tác */}
-          <button
-            type="button"
-            onClick={xuLyHoanTac}
-            disabled={lichSu.length === 0 || !!animState}
-            aria-label="Hoàn tác"
-            className="w-[52px] h-[52px] rounded-full border-[1.5px] border-[#E8D2CC] bg-trang flex items-center justify-center text-den cursor-pointer hover:bg-hong-nhat disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-          >
-            <svg
-              width="22"
-              height="22"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M1 4v6h6" />
-              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
-            </svg>
-          </button>
+            <p className="hidden md:block m-0 text-center text-[13px] text-xam-dam pb-1">
+              Kéo thẻ bằng chuột hoặc dùng phím mũi tên.
+            </p>
+          </div>
 
-          {/* Nút Bỏ qua (✕) */}
-          <button
-            type="button"
-            onClick={xuLyBoQua}
-            disabled={!theHienTai || !!animState}
-            aria-label="Bỏ qua"
-            style={{
-              transform: `scale(${skipBtnScale})`,
-              backgroundColor: skipBtnBg,
-            }}
-            className="w-[68px] h-[68px] rounded-full border-[1.5px] border-den flex items-center justify-center text-den cursor-pointer transition-transform duration-100 disabled:opacity-40"
+          {/* Cột phải (Tablet >= 768px, Desktop >= 1024px): Deal cho bạn & Tóm tắt giỏ */}
+          <aside
+            aria-label="Deal và giỏ"
+            className="hidden md:flex flex-col gap-5 shrink-0 w-[280px] lg:w-[320px] pt-2 overflow-y-auto max-h-[calc(100vh-140px)]"
           >
-            <svg
-              width="28"
-              height="28"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M18 6L6 18M6 6l12 12" />
-            </svg>
-          </button>
+            {/* Box Deal cho bạn */}
+            <section className="rounded-[24px] bg-bac-ha-nhat p-5 flex flex-col gap-3.5 border border-bac-ha/30">
+              <div className="flex justify-between items-center">
+                <h2 className="m-0 text-[18px] font-bold">Deal cho bạn</h2>
+                <Link
+                  href="/deal"
+                  className="text-[14px] font-semibold text-den hover:underline"
+                >
+                  Tất cả
+                </Link>
+              </div>
+              <ul className="m-0 p-0 list-none flex flex-col gap-3">
+                {topDeals.map((d) => (
+                  <li key={d.id} className="flex items-center gap-3">
+                    <span className="w-12 h-12 shrink-0 rounded-xl bg-white border border-bac-ha/30 flex items-center justify-center text-[10px] font-bold text-xam-dam text-center px-1">
+                      {d.ten.split(" ")[0]}
+                    </span>
+                    <div className="flex flex-col gap-0.5 min-w-0">
+                      <span className="text-[13px] font-bold text-den leading-[1.3] truncate">
+                        {d.ten}
+                      </span>
+                      <span className="text-[12px] text-xam-dam truncate">
+                        {d.hook ||
+                          (d.gia_combo
+                            ? dinhDangTien(d.gia_combo)
+                            : "Ưu đãi đặc biệt")}
+                      </span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </section>
 
-          {/* Nút Thích (♥) */}
-          <button
-            type="button"
-            onClick={xuLyThich}
-            disabled={!theHienTai || !!animState}
-            aria-label="Thích"
-            style={{
-              transform: `scale(${likeBtnScale})`,
-              boxShadow: likeRing > 0 ? `0 0 0 ${likeRing}px #CFE3D5` : "none",
-            }}
-            className="w-[68px] h-[68px] rounded-full bg-den text-trang flex items-center justify-center cursor-pointer transition-transform duration-100 disabled:opacity-40"
-          >
-            <svg
-              width="28"
-              height="28"
-              viewBox="0 0 24 24"
-              fill="#FFFFFF"
-              stroke="#FFFFFF"
-              strokeWidth="1.4"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-            </svg>
-          </button>
-
-          {/* Nút Thêm vào giỏ (👜) */}
-          <button
-            type="button"
-            onClick={xuLyVaoGio}
-            disabled={!theHienTai || !!animState}
-            aria-label="Thêm vào giỏ"
-            style={{
-              transform: `scale(${cartBtnScale})`,
-            }}
-            className="w-[52px] h-[52px] rounded-full border-[1.5px] border-[#E8D2CC] bg-[#CFE3D5] text-den flex items-center justify-center cursor-pointer hover:opacity-90 transition-transform duration-100 disabled:opacity-40"
-          >
-            <svg
-              width="22"
-              height="22"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-              <path d="M3 6h18" />
-              <path d="M16 10a4 4 0 0 1-8 0" />
-            </svg>
-          </button>
+            {/* Box Giỏ hàng mini */}
+            <section className="rounded-[24px] border border-vien p-5 flex flex-col gap-3.5 bg-white shadow-2xs">
+              <div className="flex justify-between items-center">
+                <h2 className="m-0 text-[18px] font-bold">
+                  Giỏ · {soLuongGio} món
+                </h2>
+                <Link
+                  href="/gio"
+                  className="text-[14px] font-semibold text-den hover:underline"
+                >
+                  Mở giỏ
+                </Link>
+              </div>
+              <div className="border-t border-vien pt-3 flex justify-between font-bold text-[15px]">
+                <span>Tạm tính</span>
+                <span>{dinhDangTien(tongTienGio)}</span>
+              </div>
+              <Link
+                href="/giu-hang"
+                className="h-11 rounded-full bg-den text-white flex items-center justify-center font-semibold text-[14px] hover:bg-black transition-colors"
+              >
+                Giữ hàng tại booth
+              </Link>
+            </section>
+          </aside>
         </div>
 
         {/* Dialog chi tiết sản phẩm */}

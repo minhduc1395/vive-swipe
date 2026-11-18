@@ -46,6 +46,7 @@ export function TheSanPham({
   const [anhLoi, setAnhLoi] = useState<boolean>(false);
 
   const startPos = useRef<{ x: number; y: number; time: number } | null>(null);
+  const keoRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const cardRef = useRef<HTMLDivElement | null>(null);
   const daRung = useRef<boolean>(false);
 
@@ -55,6 +56,7 @@ export function TheSanPham({
     if ((e.target as HTMLElement).closest("button, a")) return;
 
     startPos.current = { x: e.clientX, y: e.clientY, time: Date.now() };
+    keoRef.current = { x: 0, y: 0 };
     daRung.current = false;
     setKeo({ x: 0, y: 0, dangKeo: true });
     try {
@@ -68,6 +70,7 @@ export function TheSanPham({
     if (!startPos.current || !isTopCard || animState) return;
     const dx = e.clientX - startPos.current.x;
     const dy = e.clientY - startPos.current.y;
+    keoRef.current = { x: dx, y: dy };
     setKeo({ x: dx, y: dy, dangKeo: true });
     onDragStateChange?.(dx, dy);
 
@@ -86,9 +89,10 @@ export function TheSanPham({
 
   const ketThucKeo = useCallback(() => {
     if (!startPos.current) return;
-    const { x, y } = keo;
+    const { x, y } = keoRef.current;
     const dt = Date.now() - startPos.current.time;
     startPos.current = null;
+    keoRef.current = { x: 0, y: 0 };
     daRung.current = false;
     onDragStateChange?.(0, 0);
 
@@ -107,7 +111,7 @@ export function TheSanPham({
     } else {
       setKeo({ x: 0, y: 0, dangKeo: false });
     }
-  }, [keo, onThich, onBoQua, onVaoGio, onDragStateChange]);
+  }, [onThich, onBoQua, onVaoGio, onDragStateChange]);
 
   const handlePointerUp = () => {
     ketThucKeo();

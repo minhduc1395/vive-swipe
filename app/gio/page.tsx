@@ -163,8 +163,11 @@ export default function TrangGio() {
             </div>
           </div>
         ) : (
-          <div className="flex-1 overflow-y-auto px-4 pt-2 pb-8 flex flex-col gap-4">
-            {/* 1. Phần Quà theo hóa đơn & Mốc tiếp theo & Đổi combo */}
+          <div className="flex-1 overflow-y-auto px-4 md:px-8 pt-2 pb-12">
+            <div className="lg:grid lg:grid-cols-[1fr_360px] lg:gap-8 lg:items-start flex flex-col gap-6 max-w-[1280px] mx-auto">
+              {/* Cột trái: Quà theo hóa đơn, Mốc tiếp theo, Đổi combo, và Danh sách mặt hàng */}
+              <div className="flex flex-col gap-5 min-w-0">
+                {/* 1. Phần Quà theo hóa đơn & Mốc tiếp theo & Đổi combo */}
             {(ketQua.qua_du_kien || ketQua.moc_tiep_theo) && (
               <section
                 aria-label="Quà theo hóa đơn"
@@ -468,11 +471,16 @@ export default function TrangGio() {
                 );
               })}
             </section>
+          </div>
+
+          {/* Cột phải: Tổng tiền và Nút Giữ hàng tại booth (sticky trên màn hình lớn) */}
+          <div className="lg:sticky lg:top-6 flex flex-col gap-4 bg-[#FDFBF7] p-5 md:p-6 rounded-[24px] border border-[#F2E4E0] shadow-sm">
+            <h2 className="text-[18px] font-bold text-den m-0">Tóm tắt đơn hàng</h2>
 
             {/* 3. Tổng tiền */}
             <section
               aria-label="Tổng tiền"
-              className="flex flex-col gap-2 pt-2 text-[14px] border-t border-[#F2E4E0]"
+              className="flex flex-col gap-2.5 text-[14px]"
             >
               <div className="flex justify-between text-xam">
                 <span>Tạm tính theo giá lẻ</span>
@@ -532,6 +540,8 @@ export default function TrangGio() {
               </span>
             </div>
           </div>
+        </div>
+      </div>
         )}
       </div>
     </AppShell>
