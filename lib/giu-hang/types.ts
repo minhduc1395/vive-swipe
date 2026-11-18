@@ -2,12 +2,7 @@ import type { ItemGioHang } from "@/lib/kho-luu-tru";
 
 export type NgayDen = "hom_nay" | "ngay_mai";
 
-export type TrangThaiGiuHang =
-  | "moi"
-  | "da_soan"
-  | "da_lay"
-  | "huy"
-  | "het_han";
+export type TrangThaiGiuHang = "moi" | "da_soan" | "da_lay" | "huy" | "het_han";
 
 export interface ThongTinDatGiuHangInput {
   ten: string;
