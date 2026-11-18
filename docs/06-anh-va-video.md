@@ -40,12 +40,14 @@ Bảng `public.media`:
 - `ghi_chu`.
 
 ## 3. Nguồn ảnh: được dùng và không được dùng
-Theo thứ tự ưu tiên:
+Các nguồn ngang nhau, chọn ảnh đẹp nhất cho mỗi mã:
 1. **Drive 08**: ảnh tách nền sẵn có (hiện có Dermal).
 2. **Ảnh chụp tại booth** (`00 Inbox`). Media viết hướng dẫn chụp cho nhân viên (mục 6).
-3. **Ảnh chính hãng** từ website chính thức của thương hiệu, hoặc ảnh nhà phân phối gửi.
-   - Chỉ dùng cho thương hiệu có trong `media/nguon-duoc-phep.yaml`; chủ dự án xác nhận từng thương hiệu.
-   - Ghi URL gốc vào `nguon_chi_tiet`.
+3. **Ảnh chính hãng** từ website của chính thương hiệu (bản Hàn hoặc global), gian hàng chính thức do thương hiệu vận hành, hoặc ảnh nhà phân phối gửi.
+   - Chủ dự án cho phép **mọi thương hiệu** (18/11, `media/nguon-duoc-phep.yaml`). Đây là nguồn chính để lấp nhanh 129 mã.
+   - Ghi URL trang sản phẩm vào `nguon_chi_tiet`.
+   - Chọn ảnh packshot nền trơn, mặt trước, không chữ quảng cáo đè lên. Ảnh có chữ quảng cáo thì cắt bỏ phần chữ; không cắt được thì bỏ.
+   - Chủ dự án sẽ tự chụp hoặc quay thêm góc đặc biệt khi cần, rồi tải vào `00 Inbox`. Cùng một mã có nhiều nguồn thì **chọn ảnh đẹp nhất**: nét, sáng, đúng màu, sạch viền. Không ưu tiên nguồn nào. Ảnh còn lại giữ làm ảnh phụ hoặc dùng cho bối cảnh, video.
 
 **Không bao giờ:**
 - Lấy ảnh từ trang bán lẻ khác (Shopee, Lazada, Olive Young, Hasaki, Watsons…), ảnh có watermark, hoặc ảnh có chữ của bên khác.
@@ -76,7 +78,14 @@ Theo thứ tự ưu tiên:
   - đã đối chiếu mã vạch hoặc tên file khớp `id`;
   - tỉ lệ điểm ảnh trong suốt ở viền > 95%;
   - không phát hiện chữ lạ (OCR không thấy tên sàn hay watermark).
-- **Chờ duyệt (`cho_duyet`):** mọi ảnh từ nguồn `thuong_hieu`, `ai_boi_canh`, mọi video, mọi trường hợp không chắc mã.
+- **Tự duyệt thêm cho nguồn `thuong_hieu`:** khi qua mọi kiểm tra trên **và** khớp mã chắc chắn:
+  - trang sản phẩm ghi đúng tên, dung tích/quy cách và màu/số tông (nếu có) như `data/products.csv`;
+  - trang chỉ có 1 biến thể, hoặc ảnh gắn đúng biến thể đã chọn.
+  Ghi cách khớp vào `ghi_chu` (ví dụ "tên + 50ml khớp trang").
+- **Chờ duyệt (`cho_duyet`):**
+  - ảnh `thuong_hieu` không khớp chắc chắn: nhiều biến thể, khác dung tích, bao bì đời cũ/mới;
+  - mọi ảnh `ai_boi_canh` và mọi video;
+  - mọi trường hợp còn nghi ngờ.
   - Media tạo trang duyệt `media/tmp/duyet.html` (lưới ảnh, mã, tên, nguồn), đẩy lên artifact hoặc gửi đường dẫn trong handoff.
   - Claude QA rồi chuyển `duyet` hoặc `loai` (lý do ghi ở `ghi_chu`).
 - Chủ dự án xem được mọi lúc bằng bảng `media` hoặc trang duyệt.
