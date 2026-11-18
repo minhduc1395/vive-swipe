@@ -9,6 +9,8 @@ import {
   danhDauBoQuaKhaoSat,
   type TraLoiCauHoi,
 } from "@/lib/khao-sat";
+import { dongBoTraLoi } from "@/lib/supabase/auth";
+import { ghiSuKien } from "@/lib/supabase/su-kien";
 
 interface LuaChon {
   id: string;
@@ -70,11 +72,13 @@ export default function TrangBatDau() {
       ngan_sach: nganSach,
     };
     luuTraLoiLocal(ketQua);
+    void dongBoTraLoi(ketQua);
   };
 
   const xuLyBoQua = () => {
     danhDauBoQuaKhaoSat();
     luuKetQuaHienTai();
+    ghiSuKien("bo_qua_cau_hoi", { buoc });
   };
 
   const xuLyChonLoaiDa = (id: string) => {
@@ -371,7 +375,14 @@ export default function TrangBatDau() {
             <footer className="mt-auto p-6 pb-8 shrink-0">
               <Link
                 href="/quet"
-                onClick={luuKetQuaHienTai}
+                onClick={() => {
+                  luuKetQuaHienTai();
+                  ghiSuKien("xong_cau_hoi", {
+                    loai_da: loaiDa,
+                    van_de: vanDe,
+                    ngan_sach: nganSach,
+                  });
+                }}
                 className="w-full h-[56px] box-border rounded-full bg-den text-trang flex items-center justify-center font-semibold text-[17px] no-underline hover:bg-black transition-colors"
               >
                 Bắt đầu quẹt

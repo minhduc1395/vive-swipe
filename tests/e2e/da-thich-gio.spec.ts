@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test.describe("W012 · Đã thích và Giỏ hàng (giao diện)", () => {
   test.beforeEach(async ({ page }) => {

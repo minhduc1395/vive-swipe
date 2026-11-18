@@ -1,5 +1,8 @@
 import { notFound } from "next/navigation";
-import { KhungDienThoai } from "@/components/KhungDienThoai";
+import Link from "next/link";
+import { AppShell } from "@/components/AppShell";
+import { layDanhSachEmailDev } from "@/lib/email/store";
+import { DanhSachEmailDev } from "./DanhSachEmailDev";
 
 export const dynamic = "force-dynamic";
 
@@ -8,18 +11,32 @@ export default function TrangXemTruocEmailDev() {
     notFound();
   }
 
+  const emails = layDanhSachEmailDev();
+
   return (
-    <KhungDienThoai>
-      <main className="px-5 py-7 flex flex-col gap-3">
-        <h1 className="m-0 text-[24px] font-bold">
-          Xem trước email (chế độ local)
-        </h1>
-        <div className="rounded-[22px] bg-hong-nhat p-5">
-          <p className="m-0 text-[15px] text-xam-dam">
-            Trang chỉ bật ở môi trường development để xem email mẫu khi chạy local (docs/02 mục 9).
-          </p>
-        </div>
-      </main>
-    </KhungDienThoai>
+    <AppShell>
+      <div className="max-w-[1000px] mx-auto px-4 py-8">
+        <header className="flex items-center justify-between mb-6 pb-4 border-b border-[#F7EEEB]">
+          <div>
+            <h1 className="m-0 text-[24px] font-bold text-den">
+              Hộp thư xem trước local (`/dev/email`)
+            </h1>
+            <p className="mt-1 mb-0 text-[14px] text-xam">
+              Chỉ bật ở môi trường development. Bắt các email giữ hàng và deal được gửi khi chạy local (docs/02 mục 9).
+            </p>
+          </div>
+          <Link
+            href="/giu-hang"
+            className="text-[14px] font-semibold text-den hover:underline"
+          >
+            ← Về trang giữ hàng
+          </Link>
+        </header>
+
+        <main>
+          <DanhSachEmailDev emails={emails} />
+        </main>
+      </div>
+    </AppShell>
   );
 }

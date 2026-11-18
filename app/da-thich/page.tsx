@@ -2,14 +2,14 @@
 
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
-import { KhungDienThoai } from "@/components/KhungDienThoai";
-import { ThanhTab } from "@/components/ThanhTab";
+import { AppShell } from "@/components/AppShell";
 import { BangChiTiet } from "@/components/deck/BangChiTiet";
-import { timSanPhamTheoId, DEALS } from "@/lib/data";
+import { useDuLieu } from "@/lib/du-lieu-context";
 import type { SanPham } from "@/lib/data/types";
 import { dinhDangTien } from "@/lib/dinh-dang";
 import { NHAN_DANH_MUC } from "@/lib/nhan";
 import { layGhiChuDeal } from "@/lib/deals/ghi-chu";
+import { ghiLuotQuet } from "@/lib/supabase/luot-quet";
 import {
   layDanhSachDaThich,
   themDaThich,
@@ -22,6 +22,7 @@ import {
 const DANH_MUC_LABEL = NHAN_DANH_MUC;
 
 export default function TrangDaThich() {
+  const { timSanPham, deals } = useDuLieu();
   const [danhSachThich, setDanhSachThich] = useState<string[]>([]);
   const [gioHang, setGioHang] = useState<ItemGioHang[]>([]);
   const [danhMucChon, setDanhMucChon] = useState<string>("all");
@@ -50,9 +51,9 @@ export default function TrangDaThich() {
 
   const sanPhamThich = useMemo(() => {
     return danhSachThich
-      .map((id) => timSanPhamTheoId(id))
+      .map((id) => timSanPham(id))
       .filter((sp): sp is SanPham => Boolean(sp));
-  }, [danhSachThich]);
+  }, [danhSachThich, timSanPham]);
 
   // Bộ lọc danh mục theo các món đang có trong Đã thích
   const danhSachLoc = useMemo(() => {
@@ -88,19 +89,29 @@ export default function TrangDaThich() {
   const handleBoThich = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     xoaDaThich(id);
+    ghiLuotQuet({ san_pham_id: id, hanh_dong: "bo_thich" });
     setDanhSachThich((prev) => prev.filter((item) => item !== id));
   };
 
   const handleThemVaoGio = (sp: SanPham, e: React.MouseEvent) => {
     e.stopPropagation();
     themVaoGio(sp.id, 1);
+    ghiLuotQuet({
+      san_pham_id: sp.id,
+      hanh_dong: "gio",
+      nguon: "kham_pha",
+    });
     setGioHang(layGioHang());
     setThongBao(`Đã thêm "${sp.ten_hien_thi}" vào giỏ`);
     setTimeout(() => setThongBao(null), 2500);
   };
 
   return (
-    <KhungDienThoai>
+    <AppShell
+      soLuongThich={sanPhamThich.length}
+      soLuongGio={tongSoLuongGio}
+      noiDungClassName="max-w-[1280px] w-full mx-auto"
+    >
       <div className="flex-1 flex flex-col min-h-0 bg-trang text-den font-sans overflow-hidden">
         {/* Header */}
         <header className="px-5 pt-7 pb-2 flex items-baseline gap-2 shrink-0">
@@ -210,7 +221,7 @@ export default function TrangDaThich() {
                 sp.danh_muc === "mat-na" || sp.danh_muc === "kem-duong"
                   ? "bg-[#EAF3ED]"
                   : "bg-[#F7EEEB]";
-              const dealNote = layGhiChuDeal(sp, DEALS);
+              const dealNote = layGhiChuDeal(sp, deals);
 
               return (
                 <article
@@ -309,8 +320,6 @@ export default function TrangDaThich() {
       </div>
 
       {/* Thanh tab dưới cố định */}
-      <ThanhTab soLuongThich={sanPhamThich.length} soLuongGio={tongSoLuongGio} />
-
       {/* Modal chi tiết sản phẩm */}
       <BangChiTiet
         sanPham={sanPhamChiTiet}
@@ -333,6 +342,6 @@ export default function TrangDaThich() {
           }
         }}
       />
-    </KhungDienThoai>
+    </AppShell>
   );
 }

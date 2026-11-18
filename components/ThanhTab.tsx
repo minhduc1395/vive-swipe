@@ -130,7 +130,7 @@ export function ThanhTab({
   return (
     <nav
       aria-label="Điều hướng chính"
-      className="mt-auto sticky bottom-0 z-20 shrink-0 min-h-[76px] px-1 pt-2 pb-[max(14px,env(safe-area-inset-bottom,0px))] border-t border-vien bg-trang grid grid-cols-5"
+      className="mt-auto sticky bottom-0 z-20 shrink-0 min-h-[76px] px-1 pt-2 pb-[max(14px,env(safe-area-inset-bottom,0px))] border-t border-vien bg-trang grid grid-cols-5 md:hidden"
     >
       {MUC_TAB.map((tab) => {
         const dangChon =

@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test.describe("Màn chào và 3 câu hỏi khởi tạo (W010)", () => {
   test("trang chào / có nút Bắt đầu quẹt và dẫn tới /bat-dau khi chưa khảo sát", async ({

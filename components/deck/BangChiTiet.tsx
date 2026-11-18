@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { SanPham } from "@/lib/data/types";
-import { DEALS } from "@/lib/data";
+import { useDuLieu } from "@/lib/du-lieu-context";
 import { dinhDangTien } from "@/lib/dinh-dang";
 import { layNhanLoaiDa, layNhanVanDe } from "@/lib/nhan";
 import { layCacDealCuaSanPham } from "@/lib/deals/ghi-chu";
@@ -24,6 +24,7 @@ export function BangChiTiet({
   onThemGio,
   daThich = false,
 }: BangChiTietProps) {
+  const { deals } = useDuLieu();
   const [anhLoi, setAnhLoi] = useState<boolean>(false);
 
   if (!dangMo || !sanPham) return null;
@@ -34,7 +35,7 @@ export function BangChiTiet({
       : "bg-[#F7EEEB]";
 
   const anhSrc = sanPham.anh || "/brand/vive-logo-black.png";
-  const dealsLienQuan = layCacDealCuaSanPham(sanPham, DEALS);
+  const dealsLienQuan = layCacDealCuaSanPham(sanPham, deals);
 
   return (
     <div

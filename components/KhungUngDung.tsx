@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
-import { KhungDienThoai } from "./KhungDienThoai";
+import { AppShell } from "./AppShell";
 import { ThanhTren } from "./ThanhTren";
-import { ThanhTab } from "./ThanhTab";
 
 interface KhungUngDungProps {
   children: ReactNode;
@@ -9,10 +8,11 @@ interface KhungUngDungProps {
   hienTab?: boolean;
   soLuongThich?: number;
   soLuongGio?: number;
+  className?: string;
 }
 
 /**
- * Khung giao diện chuẩn cho các trang khách dùng thanh tab 5 mục.
+ * Khung giao diện chuẩn cho các trang khách dùng thanh điều hướng 3 mốc (AppShell).
  */
 export function KhungUngDung({
   children,
@@ -20,14 +20,21 @@ export function KhungUngDung({
   hienTab = true,
   soLuongThich = 0,
   soLuongGio = 0,
+  className = "",
 }: KhungUngDungProps) {
   return (
-    <KhungDienThoai>
-      {hienThanhTren && <ThanhTren soLuongGio={soLuongGio} />}
-      <main className="flex-1 min-h-0 flex flex-col">{children}</main>
-      {hienTab && (
-        <ThanhTab soLuongThich={soLuongThich} soLuongGio={soLuongGio} />
+    <AppShell
+      hienDieuHuong={hienTab}
+      soLuongThich={soLuongThich}
+      soLuongGio={soLuongGio}
+      className={className}
+    >
+      {hienThanhTren && (
+        <div className="lg:hidden">
+          <ThanhTren soLuongGio={soLuongGio} />
+        </div>
       )}
-    </KhungDienThoai>
+      <main className="flex-1 min-h-0 flex flex-col">{children}</main>
+    </AppShell>
   );
 }

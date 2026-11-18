@@ -4,7 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { KhungUngDung } from "@/components/KhungUngDung";
-import { DEALS, SAN_PHAM, type SanPham } from "@/lib/data";
+import { type SanPham } from "@/lib/data";
+import { useDuLieu } from "@/lib/du-lieu-context";
 import { dinhDangTien } from "@/lib/dinh-dang";
 import {
   layDanhSachDealChoBan,
@@ -23,6 +24,7 @@ import {
 const KHOA_EMAIL_DEAL = "vive_email_deal";
 
 export default function TrangDeal() {
+  const { sanPham, deals } = useDuLieu();
   const [daThich, setDaThich] = useState<string[]>([]);
   const [gioHang, setGioHang] = useState<ItemGioHang[]>([]);
   const [hoSo, setHoSo] = useState<Record<string, number>>({});
@@ -32,8 +34,8 @@ export default function TrangDeal() {
   const [daSanSang, setDaSanSang] = useState(false);
 
   const sanPhamMap = useMemo(
-    () => new Map<string, SanPham>(SAN_PHAM.map((sp) => [sp.id, sp])),
-    []
+    () => new Map<string, SanPham>(sanPham.map((sp) => [sp.id, sp])),
+    [sanPham]
   );
 
   const taiDuLieu = () => {
@@ -66,13 +68,13 @@ export default function TrangDeal() {
   const dealsChoBan = useMemo(() => {
     if (!daSanSang) return [];
     return layDanhSachDealChoBan(
-      DEALS,
+      deals,
       hoSo,
       sanPhamMap,
       daThich,
       gioHang
     );
-  }, [daSanSang, hoSo, sanPhamMap, daThich, gioHang]);
+  }, [daSanSang, hoSo, sanPhamMap, daThich, gioHang, deals]);
 
   const nhanGiaiThich = useMemo(() => {
     if (!daSanSang) return ["Ưu đãi hot", "Cấp ẩm", "Combo tiết kiệm"];
