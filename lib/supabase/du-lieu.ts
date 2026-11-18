@@ -7,6 +7,18 @@ import {
   type Deal,
 } from "@/lib/data/types";
 
+/** Gộp dòng bảng `deal` (cột + jsonb du_lieu) thành Deal; dùng chung client và server. */
+export function hopNhatDongDeal(row: Record<string, unknown>): Record<string, unknown> {
+  const dealGoc = (row.du_lieu || {}) as Record<string, unknown>;
+  return {
+    ...dealGoc,
+    id: row.id,
+    het_qua: typeof row.het_qua === "boolean" ? row.het_qua : (dealGoc.het_qua ?? false),
+    bat_dau: row.bat_dau || dealGoc.bat_dau,
+    ket_thuc: row.ket_thuc || dealGoc.ket_thuc,
+  };
+}
+
 let cacheSanPham: SanPham[] | null = null;
 let cacheDeals: Deal[] | null = null;
 
@@ -93,19 +105,7 @@ export async function taiDealsTuSupabase(): Promise<Deal[]> {
 
     const danhSachHopLe: Deal[] = [];
     for (const row of data) {
-      const dealGoc = (row.du_lieu || {}) as Record<string, unknown>;
-      const dealHopNhat = {
-        ...dealGoc,
-        id: row.id,
-        het_qua:
-          typeof row.het_qua === "boolean"
-            ? row.het_qua
-            : (dealGoc.het_qua ?? false),
-        bat_dau: row.bat_dau || dealGoc.bat_dau,
-        ket_thuc: row.ket_thuc || dealGoc.ket_thuc,
-      };
-
-      const parsed = DealSchema.safeParse(dealHopNhat);
+      const parsed = DealSchema.safeParse(hopNhatDongDeal(row));
       if (parsed.success) {
         danhSachHopLe.push(parsed.data);
       } else {
