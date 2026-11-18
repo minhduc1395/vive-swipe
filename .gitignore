@@ -14,3 +14,4 @@ playwright-report/
 test-results/
 __pycache__/
 supabase/.temp/
+media/tmp/
