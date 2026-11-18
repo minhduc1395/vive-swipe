@@ -6,7 +6,9 @@ interface KhungDienThoaiProps {
 }
 
 /**
- * Khung điện thoại chuẩn VIVE Quẹt: căn giữa trên máy tính, rộng tối đa 480px.
+ * Khung chứa co giãn theo docs/05 mục 2.1:
+ * - Bỏ khóa cứng 480px trên tablet và máy tính
+ * - Nội dung tối đa 1280px căn giữa
  */
 export function KhungDienThoai({ children, className = "" }: KhungDienThoaiProps) {
   const isFixedH =
@@ -21,7 +23,7 @@ export function KhungDienThoai({ children, className = "" }: KhungDienThoaiProps
       }`}
     >
       <div
-        className={`w-full max-w-[480px] bg-trang text-den flex flex-col relative ${
+        className={`w-full max-w-full md:max-w-[1280px] bg-trang text-den flex flex-col relative ${
           isFixedH ? "h-full overflow-hidden" : "min-h-dvh"
         } ${className}`}
       >
