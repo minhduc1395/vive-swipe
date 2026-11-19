@@ -126,7 +126,7 @@ test.describe("W038 · Khung trang cố định & điều hướng dùng chung",
 
       // Lấy danh sách text của các nút điều hướng (bỏ qua logo text rỗng)
       const menuTexts = await topBar
-        .locator("nav a, .ml-auto a")
+        .locator('nav a, [data-testid="menu-phai"] a')
         .evaluateAll((els) =>
           els
             .map((el) => {
@@ -242,5 +242,45 @@ test.describe("W038 · Khung trang cố định & điều hướng dùng chung",
     const toast = page.locator('[role="status"]');
     await expect(toast).toBeVisible();
     await expect(toast).toContainText("Tính năng sắp ra mắt");
+  });
+
+  test("6. Khoảng cách logo desktop tới New Arrival >= 24px (1024, 1440) và vùng bấm logo tablet >= 44px", async ({
+    page,
+  }) => {
+    await datDaKhaoSat(page);
+
+    for (const vp of [
+      { width: 1024, height: 768 },
+      { width: 1440, height: 900 },
+    ]) {
+      await page.setViewportSize(vp);
+      for (const route of ["/", "/new-arrival"]) {
+        await page.goto(route);
+        const topBar = page.locator('div[role="banner"]');
+        const logoBox = await topBar.locator('[data-testid="logo"]').boundingBox();
+        const firstNavBox = await topBar.locator("nav a").first().boundingBox();
+        expect(logoBox).not.toBeNull();
+        expect(firstNavBox).not.toBeNull();
+        if (logoBox && firstNavBox) {
+          const gap = firstNavBox.x - (logoBox.x + logoBox.width);
+          expect(
+            gap,
+            `Khoảng cách logo -> New Arrival tại ${route} (${vp.width}px) phải >= 24px, đo được ${gap}px`
+          ).toBeGreaterThanOrEqual(24);
+        }
+      }
+    }
+
+    await page.setViewportSize({ width: 820, height: 1180 });
+    await page.goto("/");
+    const tabletLogoLink = page
+      .locator('nav[aria-label="Điều hướng máy tính bảng"] a[href="/"]')
+      .first();
+    const box = await tabletLogoLink.boundingBox();
+    expect(box).not.toBeNull();
+    if (box) {
+      expect(box.width).toBeGreaterThanOrEqual(44);
+      expect(box.height).toBeGreaterThanOrEqual(44);
+    }
   });
 });

@@ -152,7 +152,7 @@ export function ThanhDocTablet({
       <Link
         href="/"
         aria-label="Trang chủ VIVE"
-        className="flex items-center justify-center mb-3 focus-visible:outline-2 focus-visible:outline-den rounded"
+        className="flex items-center justify-center min-w-[44px] min-h-[44px] mb-3 focus-visible:outline-2 focus-visible:outline-den rounded"
       >
         <LogoVive rong={52} />
       </Link>
