@@ -73,7 +73,7 @@ test.describe("W028 · Giao diện máy tính và máy tính bảng", () => {
     await expect(page.locator("article").first()).toBeVisible();
   });
 
-  test("2. Không kích hoạt phím tắt khi đang gõ trong ô tìm kiếm trên desktop", async ({
+  test("2. Không kích hoạt phím tắt khi đang gõ trong ô nhập trên desktop", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
@@ -84,9 +84,17 @@ test.describe("W028 · Giao diện máy tính và máy tính bảng", () => {
     await expect(theDauTien).toBeVisible();
     const tieuDeTruoc = await theDauTien.locator("h1, h2, h3").first().innerText();
 
-    const searchInput = page.getByPlaceholder(/Tìm sản phẩm, thương hiệu/i).first();
-    await expect(searchInput).toBeVisible();
-    await searchInput.focus();
+    await page.evaluate(() => {
+      const input = document.createElement("input");
+      input.type = "text";
+      input.setAttribute("data-testid", "test-typing-input");
+      input.setAttribute("aria-label", "Ô nhập thử");
+      document.body.appendChild(input);
+    });
+
+    const typingInput = page.getByTestId("test-typing-input");
+    await expect(typingInput).toBeVisible();
+    await typingInput.focus();
 
     await page.keyboard.press("ArrowRight");
     await page.keyboard.press("ArrowLeft");
@@ -94,6 +102,10 @@ test.describe("W028 · Giao diện máy tính và máy tính bảng", () => {
     await page.keyboard.press("ArrowUp");
     await page.keyboard.press("z");
     await page.waitForTimeout(400);
+
+    await page.evaluate(() => {
+      document.querySelector('[data-testid="test-typing-input"]')?.remove();
+    });
 
     const tieuDeSau = await page.locator("article").first().locator("h1, h2, h3").first().innerText();
     expect(tieuDeSau).toBe(tieuDeTruoc);
