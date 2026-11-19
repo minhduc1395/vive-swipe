@@ -1,9 +1,12 @@
 "use client";
 import { lopNut } from "@/components/ui/Nut";
 
-import { useState, useEffect, useMemo, Suspense } from "react";
+import { useState, useEffect, useMemo, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { NutQuayLai } from "@/components/NutQuayLai";
+import { KhungChiTiet } from "@/components/ui/KhungChiTiet";
+import { lopChip } from "@/components/ui/Nhan";
+import { ChonXep } from "./ChonXep";
 import { BangChiTiet } from "@/components/deck/BangChiTiet";
 import { laySanPhamHienThi, duongDanAnh } from "@/lib/data";
 import { useDuLieu } from "@/lib/du-lieu-context";
@@ -32,6 +35,8 @@ const DANH_SACH_LOAI = [
   { id: "thiet-bi", label: "Thiết bị làm đẹp" },
 ] as const;
 
+const BUOC_TAI = 24;
+
 const DANH_SACH_VAN_DE = [
   { id: "mun", label: "Mụn" },
   { id: "lo-chan-long", label: "Lỗ chân lông" },
@@ -52,9 +57,21 @@ function DanhMucNoiDung() {
   const thuongHieuUrl = searchParams.get("thuong-hieu") || "";
   const timUrl = searchParams.get("tim") || "";
   const xepUrl = searchParams.get("xep") || "goi-y";
+  const coDealUrl = searchParams.get("co-deal") === "1";
+  const [moLoc, setMoLoc] = useState(false);
+  const hangChipLoai = useRef<HTMLDivElement>(null);
+  // Chip loại đang chọn luôn nằm trong tầm nhìn của hàng cuộn ngang
+  useEffect(() => {
+    const el = hangChipLoai.current?.querySelector<HTMLElement>('[aria-pressed="true"]');
+    const hang = hangChipLoai.current;
+    if (el && hang) {
+      const lech = el.getBoundingClientRect().left - hang.getBoundingClientRect().left + hang.scrollLeft;
+      hang.scrollTo({ left: Math.max(0, lech - 20), behavior: "smooth" });
+    }
+  }, [loaiUrl]);
 
   const [timKiemInput, setTimKiemInput] = useState<string>(timUrl);
-  const [gioiHanHienThi, setGioiHanHienThi] = useState<number>(6);
+  const [gioiHanHienThi, setGioiHanHienThi] = useState<number>(BUOC_TAI);
   const [daThich, setDaThich] = useState<string[]>([]);
   const [sanPhamChiTiet, setSanPhamChiTiet] = useState<SanPham | null>(null);
 
@@ -74,9 +91,9 @@ function DanhMucNoiDung() {
     ) {
       setTimKiemInput(timUrl);
     }
-    setGioiHanHienThi(6);
+    setGioiHanHienThi(BUOC_TAI);
     /* eslint-enable react-hooks/set-state-in-effect */
-  }, [timUrl, loaiUrl, vanDeUrl, thuongHieuUrl, xepUrl]);
+  }, [timUrl, loaiUrl, vanDeUrl, thuongHieuUrl, xepUrl, coDealUrl]);
 
   // Tất cả sản phẩm hiển thị hợp lệ
   const { sanPham, deals } = useDuLieu();
@@ -110,6 +127,7 @@ function DanhMucNoiDung() {
       thuongHieu?: string;
       tim?: string;
       xep?: string;
+      coDeal?: boolean;
     },
     options?: { replace?: boolean }
   ) => {
@@ -136,6 +154,11 @@ function DanhMucNoiDung() {
       else nextParams.delete("xep");
     }
 
+    if (params.coDeal !== undefined) {
+      if (params.coDeal) nextParams.set("co-deal", "1");
+      else nextParams.delete("co-deal");
+    }
+
     const queryStr = nextParams.toString();
     const target = `/danh-muc${queryStr ? `?${queryStr}` : ""}`;
     if (options?.replace) {
@@ -154,10 +177,20 @@ function DanhMucNoiDung() {
     setTimKiemInput("");
   };
 
-  // Xác định có đang ở chế độ xem kết quả hay không
+  // Có đang lọc không (để hiện nút Quay lại, Xóa lọc)
   const dangXemDanhSach = Boolean(
-    loaiUrl || vanDeUrl || thuongHieuUrl || timUrl.trim()
+    loaiUrl || vanDeUrl || thuongHieuUrl || timUrl.trim() || coDealUrl
   );
+  const soLocPhu = (vanDeUrl ? 1 : 0) + (thuongHieuUrl ? 1 : 0) + (coDealUrl ? 1 : 0);
+  const loaiCoHang = DANH_SACH_LOAI.filter((l) => (soLuongTheoLoai[l.id] || 0) > 0);
+
+  // Gõ là lọc ngay (chờ 300ms, thay URL không thêm lịch sử)
+  useEffect(() => {
+    if (timKiemInput.trim() === timUrl.trim()) return;
+    const t = setTimeout(() => capNhatBoLoc({ tim: timKiemInput.trim() }, { replace: true }), 300);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timKiemInput]);
 
   // Lọc sản phẩm
   const ketQuaLoc = useMemo(() => {
@@ -173,6 +206,9 @@ function DanhMucNoiDung() {
       // Lọc theo thương hiệu
       if (thuongHieuUrl && sp.thuong_hieu.toLowerCase() !== thuongHieuUrl.toLowerCase())
         return false;
+
+      // Chỉ sản phẩm đang có deal
+      if (coDealUrl && !layGhiChuDeal(sp, deals)) return false;
 
       // Lọc theo từ khóa tìm kiếm không dấu
       if (qChuan) {
@@ -231,17 +267,17 @@ function DanhMucNoiDung() {
       if (coAnhB !== coAnhA) return coAnhB - coAnhA;
       return (b.pho_bien ?? 0.5) - (a.pho_bien ?? 0.5);
     });
-  }, [tatCaSanPhamHienThi, loaiUrl, vanDeUrl, thuongHieuUrl, timUrl, xepUrl]);
+  }, [tatCaSanPhamHienThi, loaiUrl, vanDeUrl, thuongHieuUrl, timUrl, xepUrl, coDealUrl, deals]);
 
   // Tiêu đề trang
   const tieuDeTrang = useMemo(() => {
     if (loaiUrl) {
       const timLoai = DANH_SACH_LOAI.find((l) => l.id === loaiUrl);
-      return timLoai ? timLoai.label : "Danh mục";
+      return timLoai ? timLoai.label : "Sản phẩm";
     }
     if (vanDeUrl) {
       const timVd = DANH_SACH_VAN_DE.find((v) => v.id === vanDeUrl);
-      return timVd ? `Da: ${timVd.label}` : "Danh mục";
+      return timVd ? `Da: ${timVd.label}` : "Sản phẩm";
     }
     if (thuongHieuUrl) {
       return thuongHieuUrl;
@@ -249,8 +285,9 @@ function DanhMucNoiDung() {
     if (timUrl) {
       return `Tìm "${timUrl}"`;
     }
-    return "Danh mục";
-  }, [loaiUrl, vanDeUrl, thuongHieuUrl, timUrl]);
+    if (coDealUrl) return "Đang có deal";
+    return "Sản phẩm";
+  }, [loaiUrl, vanDeUrl, thuongHieuUrl, timUrl, coDealUrl]);
 
   // Xử lý toggle thích
   const toggleThich = (id: string, e: React.MouseEvent) => {
@@ -273,100 +310,94 @@ function DanhMucNoiDung() {
   const sanPhamHienThiList = ketQuaLoc.slice(0, gioiHanHienThi);
   const conThem = ketQuaLoc.length - gioiHanHienThi;
 
+  // Khối bộ lọc phụ: dùng chung cho cột trái máy tính và bottom sheet điện thoại
+  const boLocPhu = (
+    <>
+      <section className="flex flex-col gap-2">
+        <h2 className="m-0 text-[12px] font-semibold text-xam tracking-[0.6px] uppercase">Vấn đề da</h2>
+        <div className="flex flex-wrap gap-1.5">
+          {DANH_SACH_VAN_DE.map((v) => {
+            const on = vanDeUrl === v.id;
+            return (
+              <button key={v.id} type="button" aria-pressed={on} onClick={() => capNhatBoLoc({ vanDe: on ? "" : v.id })} className={lopChip(on)}>
+                {v.label}
+              </button>
+            );
+          })}
+        </div>
+      </section>
+      <section className="flex flex-col gap-2">
+        <h2 className="m-0 text-[12px] font-semibold text-xam tracking-[0.6px] uppercase">Thương hiệu</h2>
+        <div className="flex flex-wrap gap-1.5">
+          {danhSachThuongHieu.map((b) => {
+            const on = thuongHieuUrl.toLowerCase() === b.ten.toLowerCase();
+            return (
+              <button key={b.ten} type="button" aria-pressed={on} onClick={() => capNhatBoLoc({ thuongHieu: on ? "" : b.ten })} className={lopChip(on)}>
+                {b.ten} <span className="text-[12px] text-xam font-normal">{b.count}</span>
+              </button>
+            );
+          })}
+        </div>
+      </section>
+      <section className="flex flex-col gap-2">
+        <h2 className="m-0 text-[12px] font-semibold text-xam tracking-[0.6px] uppercase">Ưu đãi</h2>
+        <div className="flex flex-wrap gap-1.5">
+          <button type="button" aria-pressed={coDealUrl} onClick={() => capNhatBoLoc({ coDeal: !coDealUrl })} className={lopChip(coDealUrl)}>
+            Đang có deal
+          </button>
+        </div>
+      </section>
+    </>
+  );
+
+  const xoaLoc = () => {
+    setTimKiemInput("");
+    capNhatBoLoc({ loai: "", vanDe: "", thuongHieu: "", tim: "", coDeal: false });
+  };
+
   return (
     <div className="w-full flex-1 min-h-0 flex flex-col bg-trang font-sans text-den overflow-hidden relative">
-        {/* Vùng cuộn nội dung */}
-        <div className="flex-1 min-h-0 overflow-y-auto">
-          <div className="max-w-[1280px] mx-auto w-full">
-            {/* Header */}
-            <header className="px-5 md:px-8 pt-4 md:pt-6 pb-2 flex flex-col items-start gap-1">
-              {dangXemDanhSach && (
-                <NutQuayLai
-                  fallback="/danh-muc"
-                  onClick={xuLyVeTrangDau}
-                  ariaLabel="Quay lại · Về tất cả danh mục"
-                />
-              )}
-              <div className="flex items-baseline gap-2 flex-wrap">
-                <h1 className="m-0 text-[26px] md:text-[32px] font-bold tracking-[-0.4px] text-den">
-                  {tieuDeTrang}
-                </h1>
-                {dangXemDanhSach && (
-                  <span className="text-[14px] text-xam">
-                    {ketQuaLoc.length} món
-                  </span>
-                )}
-              </div>
-            </header>
+      <div className="flex-1 min-h-0 overflow-y-auto">
+        <div className="max-w-[1280px] mx-auto w-full">
+          {/* Đầu trang: tiêu đề + tìm kiếm */}
+          <header className="px-5 md:px-8 pt-4 md:pt-6 pb-2 flex flex-col items-start gap-1">
+            {dangXemDanhSach && (
+              <NutQuayLai fallback="/danh-muc" onClick={xuLyVeTrangDau} ariaLabel="Quay lại · Về tất cả sản phẩm" />
+            )}
+            <h1 className="m-0 text-[28px] md:text-[34px] font-bold tracking-[-0.6px] text-den">{tieuDeTrang}</h1>
+          </header>
 
-            {/* Ô tìm kiếm */}
-            <div className="px-5 md:px-8 pt-1 pb-3 max-w-[600px]">
+          <div className="px-5 md:px-8 pt-1 pb-3 max-w-[640px]">
             <form
+              role="search"
               onSubmit={(e) => {
                 e.preventDefault();
-                const fd = new FormData(e.currentTarget);
-                const query = (fd.get("tim") as string) ?? timKiemInput;
-                capNhatBoLoc({ tim: query.trim() });
+                capNhatBoLoc({ tim: timKiemInput.trim() });
               }}
-              className="h-12 rounded-[14px] bg-hong-nhat flex items-center gap-2.5 px-3.5 focus-within:ring-2 focus-within:ring-den"
+              className="h-12 rounded-full bg-nen-phu flex items-center gap-2.5 px-4 focus-within:ring-2 focus-within:ring-hong"
             >
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#5C5C5B"
-                strokeWidth="2"
-                strokeLinecap="round"
-                aria-hidden="true"
-              >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true" className="text-xam">
                 <circle cx="11" cy="11" r="8" />
                 <path d="M21 21l-4.35-4.35" />
               </svg>
-              <label htmlFor="tim-sp" className="sr-only">
-                Tìm sản phẩm
-              </label>
+              <label htmlFor="tim-sp" className="sr-only">Tìm sản phẩm</label>
               <input
                 id="tim-sp"
                 name="tim"
                 type="search"
                 value={timKiemInput}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    capNhatBoLoc({ tim: e.currentTarget.value.trim() });
-                  }
-                }}
-                onChange={(e) => {
-                  setTimKiemInput(e.target.value);
-                }}
+                onChange={(e) => setTimKiemInput(e.target.value)}
                 placeholder="Tìm tên, thương hiệu, thành phần"
                 className="flex-1 min-w-0 border-none outline-none bg-transparent font-sans text-[15px] text-den placeholder:text-xam"
               />
-              <button type="submit" className="hidden" aria-hidden="true">
-                Tìm
-              </button>
               {timKiemInput && (
                 <button
                   type="button"
-                  onClick={() => {
-                    setTimKiemInput("");
-                    capNhatBoLoc({ tim: "" });
-                  }}
+                  onClick={() => { setTimKiemInput(""); capNhatBoLoc({ tim: "" }); }}
                   aria-label="Xóa tìm kiếm"
-                  className="w-6 h-6 rounded-full flex items-center justify-center text-xam hover:text-den cursor-pointer"
+                  className="w-7 h-7 rounded-full flex items-center justify-center text-xam hover:text-den cursor-pointer"
                 >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                  >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
                     <line x1="18" y1="6" x2="6" y2="18" />
                     <line x1="6" y1="6" x2="18" y2="18" />
                   </svg>
@@ -375,294 +406,73 @@ function DanhMucNoiDung() {
             </form>
           </div>
 
-          {/* MÀN HÌNH CHÍNH (LANDING) */}
-          {!dangXemDanhSach && (
-            <>
-              {/* Lưới 12 loại sản phẩm */}
-              <section className="px-5 md:px-8 pt-3 pb-2 flex flex-col gap-2.5">
-                <h2 className="m-0 text-[15px] font-semibold text-den">
-                  Loại sản phẩm
-                </h2>
-                <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-3">
-                  {DANH_SACH_LOAI.map((c, i) => {
-                    const count = soLuongTheoLoai[c.id] || 0;
-                    const bgClass =
-                      i % 2 === 0 ? "bg-hong-nhat" : "bg-bac-ha-nhat";
-                    return (
-                      <button
-                        key={c.id}
-                        type="button"
-                        onClick={() =>
-                          capNhatBoLoc({
-                            loai: c.id,
-                            vanDe: "",
-                            thuongHieu: "",
-                          })
-                        }
-                        className={`h-[76px] md:h-[92px] rounded-[18px] p-3 md:p-4 flex flex-col justify-between items-start text-left cursor-pointer border-none ${bgClass} hover:opacity-90 transition-opacity`}
-                      >
-                        <span className="text-[14px] font-semibold leading-[1.25] text-den">
-                          {c.label}
-                        </span>
-                        <span className="text-[12px] text-xam-dam">
-                          {count} món
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </section>
-
-              {/* Hàng chip theo vấn đề da */}
-              <section className="px-5 md:px-8 pt-4 pb-2 flex flex-col gap-2.5">
-                <h2 className="m-0 text-[15px] font-semibold text-den">
-                  Theo vấn đề da
-                </h2>
-                <div className="flex flex-wrap gap-2">
-                  {DANH_SACH_VAN_DE.map((v) => (
+          <div className="lg:grid lg:grid-cols-[240px_1fr] lg:gap-8 lg:px-8 lg:items-start">
+            {/* Cột lọc trái (máy tính) */}
+            <aside aria-label="Bộ lọc" className="hidden lg:flex flex-col gap-6 sticky top-4 pb-8">
+              <section className="flex flex-col gap-1">
+                <h2 className="m-0 mb-1 px-3 text-[12px] font-semibold text-xam tracking-[0.6px] uppercase">Loại sản phẩm</h2>
+                {[{ id: "", label: "Tất cả", dem: tatCaSanPhamHienThi.length }, ...loaiCoHang.map((l) => ({ id: l.id, label: l.label, dem: soLuongTheoLoai[l.id] || 0 }))].map((c) => {
+                  const on = loaiUrl === c.id;
+                  return (
                     <button
-                      key={v.id}
+                      key={c.id || "tat-ca"}
                       type="button"
-                      onClick={() =>
-                        capNhatBoLoc({
-                          vanDe: v.id,
-                          loai: "",
-                          thuongHieu: "",
-                        })
-                      }
-                      className={lopNut("phu")}
+                      aria-pressed={on}
+                      onClick={() => capNhatBoLoc({ loai: c.id })}
+                      className={`h-10 px-3 rounded-xl flex items-center justify-between text-[14px] cursor-pointer border-none ${on ? "bg-hong-nhat font-semibold" : "bg-transparent hover:bg-hong-nhat/60"}`}
                     >
-                      {v.label}
+                      <span>{c.label}</span>
+                      <span className="text-[12px] text-xam">{c.dem}</span>
                     </button>
-                  ))}
-                </div>
+                  );
+                })}
               </section>
+              {boLocPhu}
+            </aside>
 
-              {/* Thương hiệu */}
-              <section className="pl-5 md:px-8 pt-4 pb-6 flex flex-col gap-2.5">
-                <h2 className="m-0 text-[15px] font-semibold text-den">
-                  Thương hiệu
-                </h2>
-                <div className="flex md:flex-wrap gap-2 overflow-x-auto md:overflow-visible pr-5 md:pr-0 pb-1">
-                  {danhSachThuongHieu.map((b) => (
-                    <button
-                      key={b.ten}
-                      type="button"
-                      onClick={() =>
-                        capNhatBoLoc({
-                          thuongHieu: b.ten,
-                          loai: "",
-                          vanDe: "",
-                        })
-                      }
-                      className={lopNut("phu") + " shrink-0"}
-                    >
-                      {b.ten} · {b.count}
+            <div className="min-w-0 flex flex-col">
+              {/* Chip loại sản phẩm cuộn ngang (điện thoại, máy tính bảng) */}
+              <div ref={hangChipLoai} className="pl-5 md:pl-8 pt-1 flex gap-2 overflow-x-auto pr-5 lg:hidden [scrollbar-width:none]" role="group" aria-label="Chọn loại sản phẩm">
+                <button type="button" aria-pressed={!loaiUrl} onClick={() => capNhatBoLoc({ loai: "" })} className={lopChip(!loaiUrl)}>Tất cả</button>
+                {loaiCoHang.map((c) => {
+                  const on = loaiUrl === c.id;
+                  return (
+                    <button key={c.id} type="button" aria-pressed={on} onClick={() => capNhatBoLoc({ loai: c.id })} className={lopChip(on)}>
+                      {c.label}
                     </button>
-                  ))}
-                </div>
-              </section>
-            </>
-          )}
+                  );
+                })}
+              </div>
 
-          {/* MÀN HÌNH DANH SÁCH KẾT QUẢ */}
-          {dangXemDanhSach && (
-            <div className="lg:grid lg:grid-cols-[240px_1fr] lg:gap-8 lg:px-8 lg:items-start">
-              {/* Cột lọc trái dính trên máy tính (DanhMucPC) */}
-              <aside
-                aria-label="Bộ lọc"
-                className="hidden lg:flex flex-col gap-6 sticky top-4 pb-8"
-              >
-                <section className="flex flex-col gap-1.5">
-                  <h2 className="m-0 mb-1 px-3 text-[12px] font-semibold text-xam tracking-[0.6px] uppercase">
-                    DANH MỤC
-                  </h2>
-                  <button
-                    type="button"
-                    onClick={() => capNhatBoLoc({ loai: "" })}
-                    className={`h-11 px-3 rounded-xl flex items-center justify-between text-[14px] cursor-pointer border-none ${
-                      !loaiUrl
-                        ? "bg-hong-nhat font-semibold text-den"
-                        : "bg-transparent text-den hover:bg-hong-nhat/50"
-                    }`}
-                  >
-                    <span>Tất cả</span>
-                    <span className="text-[12px] text-xam">
-                      {tatCaSanPhamHienThi.length}
-                    </span>
-                  </button>
-                  {DANH_SACH_LOAI.map((c) => {
-                    const on = loaiUrl === c.id;
-                    return (
-                      <button
-                        key={c.id}
-                        type="button"
-                        onClick={() => capNhatBoLoc({ loai: c.id })}
-                        className={`h-11 px-3 rounded-xl flex items-center justify-between text-[14px] cursor-pointer border-none ${
-                          on
-                            ? "bg-hong-nhat font-semibold text-den"
-                            : "bg-transparent text-den hover:bg-hong-nhat/50"
-                        }`}
-                      >
-                        <span>{c.label}</span>
-                        <span className="text-[12px] text-xam">
-                          {soLuongTheoLoai[c.id] || 0}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </section>
-
-                <section className="flex flex-col gap-2">
-                  <h2 className="m-0 text-[12px] font-semibold text-xam tracking-[0.6px] uppercase">
-                    VẤN ĐỀ DA
-                  </h2>
-                  <div className="flex flex-wrap gap-1.5">
-                    {DANH_SACH_VAN_DE.map((v) => {
-                      const on = vanDeUrl === v.id;
-                      return (
-                        <button
-                          key={v.id}
-                          type="button"
-                          onClick={() =>
-                            capNhatBoLoc({ vanDe: on ? "" : v.id })
-                          }
-                          aria-pressed={on}
-                          className={`h-11 px-3.5 rounded-full font-sans text-[13px] font-medium cursor-pointer transition-colors ${
-                            on
-                              ? "bg-bac-ha text-den border border-bac-ha font-semibold"
-                              : "bg-nen-phu text-den border border-transparent hover:bg-hong-nhat"
-                          }`}
-                        >
-                          {v.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </section>
-
-                <section className="flex flex-col gap-2">
-                  <h2 className="m-0 text-[12px] font-semibold text-xam tracking-[0.6px] uppercase">
-                    THƯƠNG HIỆU
-                  </h2>
-                  <div className="flex flex-wrap gap-1.5">
-                    {danhSachThuongHieu.map((b) => {
-                      const on =
-                        thuongHieuUrl.toLowerCase() === b.ten.toLowerCase();
-                      return (
-                        <button
-                          key={b.ten}
-                          type="button"
-                          onClick={() =>
-                            capNhatBoLoc({ thuongHieu: on ? "" : b.ten })
-                          }
-                          className={`h-11 px-3 rounded-full font-sans text-[13px] font-medium cursor-pointer transition-colors ${
-                            on
-                              ? "bg-hong text-den border border-transparent font-semibold"
-                              : "bg-nen-phu text-den border border-transparent hover:bg-hong-nhat"
-                          }`}
-                        >
-                          {b.ten}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </section>
-              </aside>
-
-              {/* Cột phải: Chip lọc mobile/tablet + Dropdown Xếp + Lưới sản phẩm */}
-              <div className="min-w-0 flex flex-col">
-                {/* Chip cuộn ngang loại sản phẩm (ẩn trên desktop) */}
-                <div
-                  className="pl-5 pt-2 flex gap-2 overflow-x-auto pr-5 lg:hidden"
-                  role="group"
-                  aria-label="Chọn loại sản phẩm"
+              {/* Hàng công cụ: Lọc · số kết quả · Xóa lọc · Xếp */}
+              <div className="px-5 md:px-8 lg:px-0 pt-3 pb-2 flex flex-wrap items-center gap-x-2.5 gap-y-2">
+                <button
+                  type="button"
+                  onClick={() => setMoLoc(true)}
+                  aria-haspopup="dialog"
+                  className={lopNut("phu", "vua") + " lg:hidden"}
                 >
-                  <button
-                    type="button"
-                    onClick={() => capNhatBoLoc({ loai: "" })}
-                    aria-pressed={!loaiUrl}
-                    className={`h-[44px] px-3.5 rounded-full font-sans text-[13px] font-medium whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
-                      !loaiUrl
-                        ? "bg-hong text-den border border-transparent font-semibold"
-                        : "bg-trang text-den border border-hong"
-                    }`}
-                  >
-                    Tất cả
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                    <path d="M4 6h16M7 12h10M10 18h4" />
+                  </svg>
+                  Lọc{soLocPhu > 0 ? ` · ${soLocPhu}` : ""}
+                </button>
+                <span className="text-[14px] text-xam whitespace-nowrap" aria-live="polite">
+                  {ketQuaLoc.length} sản phẩm
+                </span>
+                {dangXemDanhSach && (
+                  <button type="button" onClick={xoaLoc} className={lopNut("chu", "vua")}>
+                    Xóa lọc
                   </button>
-                  {DANH_SACH_LOAI.map((c) => {
-                    const on = loaiUrl === c.id;
-                    return (
-                      <button
-                        key={c.id}
-                        type="button"
-                        onClick={() => capNhatBoLoc({ loai: c.id })}
-                        aria-pressed={on}
-                        className={`h-[44px] px-3.5 rounded-full font-sans text-[13px] font-medium whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
-                          on
-                            ? "bg-hong text-den border border-transparent font-semibold"
-                            : "bg-trang text-den border border-hong"
-                        }`}
-                      >
-                        {c.label}
-                      </button>
-                    );
-                  })}
+                )}
+                <div className="ml-auto">
+                  <ChonXep giaTri={xepUrl} onChon={(id) => capNhatBoLoc({ xep: id }, { replace: true })} />
                 </div>
+              </div>
 
-                {/* Hàng chip vấn đề da + dropdown Xếp */}
-                <div className="px-5 lg:px-0 pt-3 pb-2 flex items-center justify-between gap-2.5">
-                  <div
-                    className="flex gap-1.5 overflow-x-auto min-w-0 lg:hidden"
-                    role="group"
-                    aria-label="Lọc theo vấn đề da"
-                  >
-                    {DANH_SACH_VAN_DE.map((v) => {
-                      const on = vanDeUrl === v.id;
-                      return (
-                        <button
-                          key={v.id}
-                          type="button"
-                          onClick={() =>
-                            capNhatBoLoc({ vanDe: on ? "" : v.id })
-                          }
-                          aria-pressed={on}
-                          className={`h-[36px] px-3 rounded-full font-sans text-[12px] font-medium whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
-                            on
-                              ? "bg-hong text-den border border-transparent font-semibold"
-                              : "bg-trang text-den border border-hong"
-                          }`}
-                        >
-                          {v.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  <span className="hidden lg:block text-[14px] text-xam">
-                    Hiển thị {sanPhamHienThiList.length} / {ketQuaLoc.length} sản phẩm
-                  </span>
-
-                  <label className="shrink-0 flex items-center gap-1.5 text-[13px] text-xam ml-auto">
-                    <span>Xếp</span>
-                    <select
-                      value={xepUrl}
-                      onChange={(e) =>
-                        capNhatBoLoc({ xep: e.target.value }, { replace: true })
-                      }
-                      className="h-[44px] rounded-[12px] border border-hong bg-trang font-sans text-[13px] text-den px-2.5 outline-none cursor-pointer"
-                    >
-                      <option value="goi-y">Gợi ý</option>
-                      <option value="giam">Đang giảm giá</option>
-                      <option value="gia-tang">Giá thấp trước</option>
-                      <option value="gia-giam">Giá cao trước</option>
-                    </select>
-                  </label>
-                </div>
-
-                {/* Lưới sản phẩm co giãn auto-fill */}
-                {ketQuaLoc.length > 0 ? (
-                  <div className="px-4 lg:px-0 pt-2 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-3.5 md:gap-5">
+              {/* Lưới sản phẩm */}
+              {ketQuaLoc.length > 0 ? (
+                <div className="px-4 md:px-8 lg:px-0 pt-2 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-3.5 md:gap-5">
                   {sanPhamHienThiList.map((sp, i) => {
                     const liked = daThich.includes(sp.id);
                     const bgClass =
@@ -780,59 +590,65 @@ function DanhMucNoiDung() {
                   })}
                 </div>
               ) : (
-                /* Không có kết quả */
-                <p className="my-8 mx-5 text-center text-[14px] leading-relaxed text-xam">
-                  Chưa có sản phẩm hợp bộ lọc này. Thử bỏ bớt bộ lọc hoặc tìm từ
-                  khác.
-                </p>
-              )}
-
-              {/* Nút Xem thêm */}
-              {conThem > 0 && (
-                <div className="px-5 pt-4 pb-2">
-                  <button
-                    type="button"
-                    onClick={() => setGioiHanHienThi((prev) => prev + 6)}
-                    className={lopNut("phu","lon",true)}
-                  >
-                    Xem thêm {Math.min(6, conThem)} sản phẩm
-                  </button>
+                <div className="my-10 mx-5 flex flex-col items-center gap-3 text-center">
+                  <p className="m-0 text-[14px] leading-relaxed text-xam">Chưa có sản phẩm hợp bộ lọc này.</p>
+                  <button type="button" onClick={xoaLoc} className={lopNut("phu")}>Xóa lọc</button>
                 </div>
               )}
 
-              <div className="h-6" />
+              {conThem > 0 && (
+                <div className="px-5 md:px-8 lg:px-0 pt-6 pb-2 flex justify-center">
+                  <button type="button" onClick={() => setGioiHanHienThi((prev) => prev + BUOC_TAI)} className={lopNut("phu", "lon")}>
+                    Xem thêm {Math.min(BUOC_TAI, conThem)} sản phẩm
+                  </button>
+                </div>
+              )}
+              <div className="h-8" />
             </div>
-            </div>
-          )}
           </div>
         </div>
-
-        {/* Modal chi tiết sản phẩm */}
-        <BangChiTiet
-          sanPham={sanPhamChiTiet}
-          dangMo={sanPhamChiTiet !== null}
-          onDong={() => setSanPhamChiTiet(null)}
-          onThich={() => {
-            if (sanPhamChiTiet) {
-              if (daThich.includes(sanPhamChiTiet.id)) {
-                xoaDaThich(sanPhamChiTiet.id);
-                setDaThich((prev) => prev.filter((id) => id !== sanPhamChiTiet.id));
-              } else {
-                themDaThich(sanPhamChiTiet.id);
-                setDaThich((prev) => [sanPhamChiTiet.id, ...prev]);
-              }
-            }
-          }}
-          onThemGio={() => {
-            if (sanPhamChiTiet) {
-              xuLyThemVaoGio(sanPhamChiTiet);
-            }
-          }}
-          daThich={
-            sanPhamChiTiet !== null && daThich.includes(sanPhamChiTiet.id)
-          }
-        />
       </div>
+
+      {/* Bộ lọc điện thoại / máy tính bảng */}
+      <KhungChiTiet mo={moLoc} onDong={() => setMoLoc(false)} nhan="Bộ lọc sản phẩm">
+        <div className="p-5 flex flex-col gap-6">
+          <div className="flex items-center justify-between">
+            <h2 className="m-0 text-[22px] font-bold">Lọc</h2>
+            <button type="button" onClick={() => setMoLoc(false)} aria-label="Đóng bộ lọc" className="w-11 h-11 rounded-full bg-nen-phu flex items-center justify-center cursor-pointer border-none">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" /></svg>
+            </button>
+          </div>
+          {boLocPhu}
+          <div className="flex gap-2 pt-2 sticky bottom-0 bg-trang pb-[env(safe-area-inset-bottom)]">
+            {soLocPhu > 0 && (
+              <button type="button" onClick={() => capNhatBoLoc({ vanDe: "", thuongHieu: "", coDeal: false })} className={lopNut("phu", "lon")}>Bỏ chọn</button>
+            )}
+            <button type="button" onClick={() => setMoLoc(false)} className={lopNut("chinh", "lon", true)}>
+              Xem {ketQuaLoc.length} sản phẩm
+            </button>
+          </div>
+        </div>
+      </KhungChiTiet>
+
+      <BangChiTiet
+        sanPham={sanPhamChiTiet}
+        dangMo={sanPhamChiTiet !== null}
+        onDong={() => setSanPhamChiTiet(null)}
+        onThich={() => {
+          if (sanPhamChiTiet) {
+            if (daThich.includes(sanPhamChiTiet.id)) {
+              xoaDaThich(sanPhamChiTiet.id);
+              setDaThich((prev) => prev.filter((id) => id !== sanPhamChiTiet.id));
+            } else {
+              themDaThich(sanPhamChiTiet.id);
+              setDaThich((prev) => [sanPhamChiTiet.id, ...prev]);
+            }
+          }
+        }}
+        onThemGio={() => { if (sanPhamChiTiet) xuLyThemVaoGio(sanPhamChiTiet); }}
+        daThich={sanPhamChiTiet !== null && daThich.includes(sanPhamChiTiet.id)}
+      />
+    </div>
   );
 }
 
