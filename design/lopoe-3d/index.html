@@ -47,7 +47,7 @@
   .o-chu ul{list-style:none;display:grid;gap:10px;margin-top:22px}
   .o-chu li{font-size:16px;line-height:1.5;color:#4a4a48;padding-left:18px;position:relative}
   .o-chu li::before{content:"";position:absolute;left:0;top:.62em;width:6px;height:6px;border-radius:50%;background:var(--den);opacity:.35}
-  .o-chu h3.tu-khoa{font-size:clamp(76px,8vw,132px);font-weight:700;letter-spacing:-.05em;line-height:.9;margin:14px 0 10px}
+  .o-chu h3.tu-khoa{font-size:clamp(76px,8vw,132px);font-weight:700;letter-spacing:-.05em;line-height:.9;margin:8px 0 10px}
   .o-chu h3.tu-khoa.vua{font-size:clamp(46px,5.4vw,84px);letter-spacing:-.035em;line-height:.98}
   .o-chu .tu.nhan-mau{color:#6f93c9}
   #lopoe .vi-trai .tu.nhan-mau,#lopoe .vi-phai .tu.nhan-mau{}
@@ -131,21 +131,18 @@
       <!-- SỮA RỬA MẶT -->
       <div class="o-chu vi-phai" data-a=".075" data-b=".155" data-tu="phai">
         <p class="ten-nho">Sữa rửa mặt</p>
-        <p class="so"><b>01</b> Công dụng</p>
         <h3 class="tu-khoa" data-nhan="1">pH 5.5</h3>
         <p class="cau">Sạch sâu. <em>Không căng rít.</em></p>
         <p class="chips"><span>Cuốn bụi mịn</span><span>Bọt đệm siêu mịn</span><span>Êm cho da nhạy cảm</span></p>
       </div>
       <div class="o-chu vi-tren-trai" data-a=".185" data-b=".27" data-tu="tren">
         <p class="ten-nho">Sữa rửa mặt</p>
-        <p class="so"><b>02</b> Thành phần</p>
         <h3 class="tu-khoa vua" data-nhan="0">4 thành phần xanh</h3>
         <p class="cau">Cấp ẩm &amp; <em>phục hồi.</em></p>
         <p class="chips chi-dt"><span>Thùa xanh · ngậm nước</span><span>Sen xanh · dịu đỏ</span><span>Vitamin B5 · phục hồi</span><span>Rau má · làm dịu</span></p>
       </div>
       <div class="o-chu vi-trai" data-a=".30" data-b=".37" data-tu="trai">
         <p class="ten-nho">Sữa rửa mặt</p>
-        <p class="so"><b>03</b> Giải thưởng</p>
         <p class="lon-nghieng">Winner</p>
         <p class="cau">Hwahae Beauty Awards 2025</p>
         <p class="chips"><span>Không sulfate</span><span>Thành phần sạch</span></p>
@@ -154,19 +151,16 @@
       <!-- AMPOULE -->
       <div class="o-chu vi-trai" data-a=".42" data-b=".50" data-tu="duoi">
         <p class="ten-nho">Ampoule</p>
-        <p class="so"><b>01</b> Công dụng</p>
         <h3 class="tu-khoa vua" data-nhan="2">Cấp ẩm cân bằng</h3>
         <p class="cau lon"><em>Dịu da tức thì.</em></p>
       </div>
       <div class="o-chu vi-cot" data-a=".53" data-b=".62" data-tu="phai">
         <p class="ten-nho">Ampoule</p>
-        <p class="so"><b>02</b> Thành phần</p>
         <h3 class="tu-khoa vua" data-nhan="1">Hoạt chất xanh</h3>
         <p class="cau">Phục hồi &amp; <em>khóa ẩm.</em></p>
         <p class="chips chi-dt"><span>Lá thùa · ngậm nước sâu</span><span>Sen xanh · dịu đỏ</span><span>Hyaluronic Acid · ẩm đa tầng</span><span>Panthenol + Niacinamide · khóa ẩm</span></p>
       </div>
       <div class="o-chu vi-duoi-giua" data-a=".65" data-b=".72" data-tu="duoi">
-        <p class="so"><b>03</b> Giải thưởng · Ampoule</p>
         <h3 class="tu-khoa vua" data-nhan="2">Tinh chất làm dịu</h3>
         <p class="cau">Hwahae Trending Glow Awards 2025</p>
         <p class="chips"><span>Không hương liệu</span><span>Hợp da nhạy cảm</span></p>
@@ -175,7 +169,6 @@
       <!-- KEM DƯỠNG -->
       <div class="o-chu vi-trai-duoi" data-a=".78" data-b=".87" data-tu="trai">
         <p class="ten-nho">Kem dưỡng</p>
-        <p class="so"><b>01</b> Công dụng</p>
         <h3 class="tu-khoa vua" data-nhan="1">Sẵn sàng trang điểm</h3>
         <p class="cau lon"><em>Ready for makeup.</em></p>
       </div>
@@ -454,7 +447,7 @@ addEventListener('resize',doiCo); doiCo();
 const moDau=document.getElementById('mo-dau');
 const OCHU=[...document.querySelectorAll('.o-chu')].map(el=>{
   const h=el.querySelector('h3'); if(h){ const n=h.dataset.nhan===undefined?99:+h.dataset.nhan; h.innerHTML=h.textContent.split(' ').map((t,i)=>`<span class="tu${i>=n?' nhan-mau':''}">${t}</span>`).join(' '); }
-  return {el,a:+el.dataset.a,b:+el.dataset.b,tu:el.dataset.tu,tus:[...el.querySelectorAll('.tu')],con:[...el.querySelectorAll('.ten-nho,.so,.lon-nghieng,.cau,.chips span')]};
+  return {el,a:+el.dataset.a,b:+el.dataset.b,tu:el.dataset.tu,tus:[...el.querySelectorAll('.tu')],con:[...el.querySelectorAll('.ten-nho,.lon-nghieng,.cau,.chips span')]};
 });
 const LECH={phai:[40,0],trai:[-40,0],tren:[0,-30],duoi:[0,40]};
 const tt=document.getElementById('tien-trinh'); const vach=tt.querySelectorAll('span'), dong=tt.querySelectorAll('div');
