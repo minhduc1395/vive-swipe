@@ -29,7 +29,7 @@
         "nut": [
           {
             "chu": "Xem bộ sản phẩm",
-            "den": "/danh-muc?thuong_hieu=LOPOE"
+            "den": "/danh-muc?thuong-hieu=LOPOE"
           },
           {
             "chu": "Giữ hàng tại booth",
@@ -137,7 +137,7 @@
         "deal_id": "LOPOE-25",
         "cta_chinh": {
           "chu": "Xem sản phẩm",
-          "den": "/danh-muc?thuong_hieu=LOPOE"
+          "den": "/danh-muc?thuong-hieu=LOPOE&sp=LOPOE-AMP"
         },
         "anh": [
           "/chien-dich/lopoe-better-balance/ampoule-than.webp",
@@ -336,7 +336,9 @@
       },
       {
         "loai": "chuong-trinh",
-        "tieu_de": "Đang chạy tại booth",
+        "tieu_de": "Đang có tại",
+        "tieu_de_en": "Now at",
+        "logo_sau_tieu_de": true,
         "deal": [
           "COMBO-PINK",
           "DC-05",
@@ -348,8 +350,8 @@
       {
         "loai": "doi-tac",
         "doi_tac": "pawlette",
-        "tieu_de": "Tông nào hợp bạn?",
-        "mo_ta": "Đo personal color cùng Pawlette, rồi thử lớp nền đúng tông ngay tại booth.",
+        "tieu_de": "Tone bạn màu nào?",
+        "mo_ta": "Đo personal color cùng Pawlette, rồi thử lớp nền đúng tone ngay tại booth.",
         "gia_goi": 378000,
         "link": "/personal-color"
       },
@@ -504,7 +506,9 @@
       },
       {
         "loai": "chuong-trinh",
-        "tieu_de": "Chương trình nổi bật",
+        "tieu_de": "Đang có tại",
+        "tieu_de_en": "Now at",
+        "logo_sau_tieu_de": true,
         "deal": [
           "COMBO-PINK",
           "DC-05",
@@ -515,8 +519,8 @@
       {
         "loai": "doi-tac",
         "doi_tac": "pawlette",
-        "tieu_de": "Tông nào hợp bạn?",
-        "mo_ta": "Đo personal color cùng Pawlette, rồi thử lớp nền đúng tông ngay tại booth.",
+        "tieu_de": "Tone bạn màu nào?",
+        "mo_ta": "Đo personal color cùng Pawlette, rồi thử lớp nền đúng tone ngay tại booth.",
         "gia_goi": 378000,
         "link": "/personal-color"
       },

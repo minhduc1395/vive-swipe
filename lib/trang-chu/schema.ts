@@ -1,0 +1,126 @@
+import yaml from "js-yaml";
+import { z } from "zod";
+
+export const NutTrangChuSchema = z
+  .object({
+    chu: z.string().min(1, "Nút trang chủ phải có chữ hiển thị"),
+    den: z.string().nullable().optional(),
+    sap_co: z.boolean().optional(),
+    nguon_den: z.enum(["doanh_nghiep.ban_do"]).optional(),
+    mo_tab_moi: z.boolean().optional(),
+    kieu: z.enum(["chinh", "phu"]).default("chinh"),
+  })
+  .refine(
+    (n) =>
+      n.sap_co === true ||
+      n.den === null ||
+      n.nguon_den !== undefined ||
+      (typeof n.den === "string" && n.den.length > 0),
+    {
+      message: "Nút chưa có đích cần đặt den: null hoặc sap_co: true",
+    }
+  );
+
+export type NutTrangChu = z.infer<typeof NutTrangChuSchema>;
+
+export const DaiThongBaoSchema = z.object({
+  deal_id: z.string().min(1),
+  mac_dinh_chu: z.string().min(1),
+  nut: NutTrangChuSchema,
+});
+
+export const CuaHangKhoiSchema = z.object({
+  phu_de: z.string().min(1),
+  mo_ta_anh: z.string().min(1),
+  cot: z.number().int().positive().default(6),
+  hang: z.number().int().positive().default(4),
+  anh_mat_tien: z.array(z.string().min(1)).min(1),
+  nut: z.array(NutTrangChuSchema).min(1),
+});
+
+export const LopoeKhoiSchema = z.object({
+  tieu_de: z.string().min(1),
+  phu_de: z.string().min(1),
+  mo_ta_bo: z.string().min(1),
+  anh_trai: z.string().min(1),
+  anh_giua: z.string().min(1),
+  anh_phai: z.string().min(1),
+  nut: z.array(NutTrangChuSchema).min(1),
+});
+
+export const ThuongHieuLogoSchema = z.object({
+  ten: z.string().min(1),
+  den: z.string().min(1),
+  logo_slug: z.string().min(1).optional(),
+  logo: z.string().min(1).nullable().optional(),
+});
+
+export type ThuongHieuLogo = z.infer<typeof ThuongHieuLogoSchema>;
+
+export const ThuongHieuKhoiSchema = z.object({
+  tieu_de: z.string().min(1),
+  dong_logo_hau: z.string().min(1),
+  nhan_aria: z.string().min(1),
+  danh_sach: z.array(ThuongHieuLogoSchema).min(1),
+});
+
+export const OTrongLuoiSchema = z.object({
+  id: z.string().min(1),
+  mau_nen: z.enum(["hong-nhat", "bac-ha", "hong", "bac-ha-nhat"]),
+  tieu_de: z.string().min(1),
+  phu_de_truoc: z.string().optional(),
+  phu_de_nghieng: z.string().optional(),
+  phu_de_sau: z.string().optional(),
+  co_logo: z.boolean().optional(),
+  deal_id: z.string().optional(),
+  nhan_thuong_hieu: z.string().optional(),
+  anh: z.string().min(1).optional(),
+  anh_sp: z.boolean().optional(),
+  mo_ta_anh: z.string().optional(),
+  so_lon: z.string().optional(),
+  nut: z.array(NutTrangChuSchema).min(1),
+});
+
+export type OTrongLuoi = z.infer<typeof OTrongLuoiSchema>;
+
+export const QuaLopoeKhoiSchema = z.object({
+  deal_id: z.string().min(1),
+  tien_to_tieu_de: z.string().min(1),
+  hau_to_tieu_de: z.string().min(1),
+  anh: z.string().min(1),
+  mo_ta_anh: z.string().min(1),
+  nut: z.array(NutTrangChuSchema).min(1),
+});
+
+export const GheViveKhoiSchema = z.object({
+  tien_to_tieu_de: z.string().min(1),
+  dia_diem_ngan: z.string().min(1),
+  chu_lon: z.string().min(1),
+  nut: z.array(NutTrangChuSchema).min(1),
+});
+
+export const TrangChuConfigSchema = z.object({
+  dai_thong_bao: DaiThongBaoSchema,
+  cua_hang: CuaHangKhoiSchema,
+  lopoe: LopoeKhoiSchema,
+  thuong_hieu: ThuongHieuKhoiSchema,
+  luoi_doi: z.array(OTrongLuoiSchema).min(1),
+  qua_lopoe: QuaLopoeKhoiSchema,
+  ghe_vive: GheViveKhoiSchema,
+});
+
+export type TrangChuConfig = z.infer<typeof TrangChuConfigSchema>;
+
+/**
+ * Phân tích và kiểm tra cấu hình trang chủ `/` từ YAML.
+ */
+export function parseTrangChuYaml(yamlText: string): TrangChuConfig {
+  let taiLieu: unknown;
+  try {
+    taiLieu = yaml.load(yamlText, { schema: yaml.JSON_SCHEMA });
+  } catch (err) {
+    const chiTiet = err instanceof Error ? err.message : String(err);
+    throw new Error(`YAML trang-chu sai cú pháp: ${chiTiet}`);
+  }
+  return TrangChuConfigSchema.parse(taiLieu);
+}

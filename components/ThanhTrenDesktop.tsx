@@ -74,7 +74,7 @@ export function ThanhTrenDesktop({
         </nav>
 
         {/* Phải: Biểu tượng tìm sản phẩm, Giỏ hàng, Đăng nhập */}
-        <div className="ml-auto flex items-center gap-[22px]">
+        <div data-testid="menu-phai" className="flex items-center gap-[22px]">
           {/* Biểu tượng tìm kiếm */}
           <Link
             href="/danh-muc"

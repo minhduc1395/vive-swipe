@@ -141,6 +141,14 @@ export const DealSchema = z.object({
 
 export type Deal = z.infer<typeof DealSchema>;
 
+export const MangXaHoiSchema = z.object({
+  ten: z.string().min(1),
+  tai_khoan: z.string().min(1),
+  url: z.string().url(),
+});
+
+export type MangXaHoi = z.infer<typeof MangXaHoiSchema>;
+
 export const DoanhNghiepSchema = z.object({
   ten_cong_ty: z.string().min(1, "Thiếu ten_cong_ty"),
   dia_chi: z.string().min(1, "Thiếu dia_chi"),
@@ -149,6 +157,10 @@ export const DoanhNghiepSchema = z.object({
   so_dien_thoai: z.string().nullable().optional().default(null),
   ten_cua_hang: z.string().min(1, "Thiếu ten_cua_hang"),
   dia_diem_booth: z.string().min(1, "Thiếu dia_diem_booth"),
+  dia_chi_booth: z.string().optional(),
+  dia_chi_booth_en: z.string().optional(),
+  ban_do: z.string().url().optional(),
+  mang_xa_hoi: z.array(MangXaHoiSchema).optional().default([]),
 });
 
 export type DoanhNghiep = z.infer<typeof DoanhNghiepSchema>;

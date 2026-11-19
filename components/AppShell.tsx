@@ -68,7 +68,7 @@ export function AppShell({
   const tongThich = propSoLuongThich ?? soThich;
   const tongGio = propSoLuongGio ?? soGio;
 
-  const isLanding = pathname === "/" || pathname === "/new-arrival";
+  const isLanding = pathname === "/new-arrival";
 
   const isFixedH =
     khoaChieuCao ||

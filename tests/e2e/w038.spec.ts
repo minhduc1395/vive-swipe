@@ -126,7 +126,7 @@ test.describe("W038 · Khung trang cố định & điều hướng dùng chung",
 
       // Lấy danh sách text của các nút điều hướng (bỏ qua logo text rỗng)
       const menuTexts = await topBar
-        .locator("nav a, .ml-auto a")
+        .locator('nav a, [data-testid="menu-phai"] a')
         .evaluateAll((els) =>
           els
             .map((el) => {

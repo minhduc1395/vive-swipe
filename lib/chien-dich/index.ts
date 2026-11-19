@@ -44,6 +44,9 @@ export function docDanhSachChienDichTuDisk(
   const danhSach: ChienDich[] = [];
 
   for (const file of files) {
+    if (file === "trang-chu.yaml" || file === "trang-chu.yml") {
+      continue;
+    }
     if (file.endsWith(".yaml") || file.endsWith(".yml")) {
       const fullPath = path.join(dirPath, file);
       try {

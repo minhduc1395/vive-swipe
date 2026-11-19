@@ -33,15 +33,32 @@ function loadParseModule() {
   return mod.exports;
 }
 
+function timLogoThuongHieu(publicDir, slug) {
+  if (!slug) return null;
+  for (const ext of ["png", "webp", "svg"]) {
+    const filePath = path.join(publicDir, "brand", "thuong-hieu", `${slug}.${ext}`);
+    if (fs.existsSync(filePath)) {
+      return `/brand/thuong-hieu/${slug}.${ext}`;
+    }
+  }
+  return null;
+}
+
 export function buildStaticData({
   csvPath = path.join(ROOT, "data", "products.csv"),
   yamlPath = path.join(ROOT, "data", "deals.yaml"),
   doanhNghiepPath = path.join(ROOT, "data", "doanh-nghiep.yaml"),
   chienDichDir = path.join(ROOT, "data", "chien-dich"),
+  trangChuPath = path.join(ROOT, "data", "chien-dich", "trang-chu.yaml"),
+  publicDir = path.join(ROOT, "public"),
   outDir = path.join(ROOT, "lib", "data"),
 } = {}) {
-  const { parseProductsCsv, parseDealsYaml, parseDoanhNghiepYaml } =
-    loadParseModule();
+  const {
+    parseProductsCsv,
+    parseDealsYaml,
+    parseDoanhNghiepYaml,
+    parseTrangChuYaml,
+  } = loadParseModule();
 
   const csvText = fs.readFileSync(csvPath, "utf8");
   const products = parseProductsCsv(csvText);
@@ -57,6 +74,7 @@ export function buildStaticData({
   if (fs.existsSync(chienDichDir)) {
     const files = fs.readdirSync(chienDichDir);
     for (const file of files) {
+      if (file === "trang-chu.yaml" || file === "trang-chu.yml") continue;
       if (file.endsWith(".yaml") || file.endsWith(".yml")) {
         const content = fs.readFileSync(path.join(chienDichDir, file), "utf8");
         const cd = yaml.load(content);
@@ -67,6 +85,17 @@ export function buildStaticData({
     }
   }
   chienDichList.sort((a, b) => (b.uu_tien || 0) - (a.uu_tien || 0));
+
+  let trangChu = null;
+  if (fs.existsSync(trangChuPath)) {
+    const trangChuText = fs.readFileSync(trangChuPath, "utf8");
+    trangChu = parseTrangChuYaml(trangChuText);
+    trangChu.thuong_hieu.danh_sach = trangChu.thuong_hieu.danh_sach.map((th) => {
+      if (th.logo) return th;
+      const detected = timLogoThuongHieu(publicDir, th.logo_slug);
+      return detected ? { ...th, logo: detected } : th;
+    });
+  }
 
   fs.mkdirSync(outDir, { recursive: true });
   fs.writeFileSync(
@@ -89,8 +118,15 @@ export function buildStaticData({
     `${JSON.stringify(doanhNghiep, null, 2)}\n`,
     "utf8"
   );
+  if (trangChu) {
+    fs.writeFileSync(
+      path.join(outDir, "trang-chu.json"),
+      `${JSON.stringify(trangChu, null, 2)}\n`,
+      "utf8"
+    );
+  }
 
-  return { products, deals, chienDichList, doanhNghiep };
+  return { products, deals, chienDichList, doanhNghiep, trangChu };
 }
 
 const isDirectRun =
