@@ -1,0 +1,296 @@
+/* Chân trang thống nhất 4 cụm (W049 bản 2, theo design/ChanTrang.html) */
+
+.ct-chan {
+  --ct-hong: #e8d2cc;
+  --ct-hong-n: #f7eeeb;
+  --ct-den: #2b2b2a;
+  --ct-xam: #737373;
+  --ct-xam-dam: #5c5c5b;
+  --ct-vien: #eee5e2;
+  --ct-nen-phu: #f4f2f1;
+
+  background: var(--ct-nen-phu);
+  color: var(--ct-xam-dam);
+  font-size: 13px;
+  line-height: 1.5;
+  width: 100%;
+}
+
+.ct-chan .ct-khung {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 32px 20px;
+}
+
+/* Máy tính (>= 1024px): 4 cụm cùng 1 hàng */
+.ct-chan .ct-cum-chinh {
+  display: grid;
+  grid-template-columns: 1.15fr 1.2fr 0.8fr 1.25fr;
+  gap: 40px;
+}
+
+.ct-chan .ct-cum {
+  min-width: 0;
+}
+
+.ct-chan .ct-cum h3 {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ct-xam);
+}
+
+.ct-chan .ct-cum p {
+  margin: 0;
+}
+
+.ct-chan .ct-logo {
+  height: 26px;
+  width: auto;
+  max-inline-size: none;
+  display: block;
+}
+
+.ct-chan .ct-cau {
+  margin: 12px 0 16px;
+  max-width: 30ch;
+}
+
+/* Mạng xã hội: logo đơn sắc --den trong nút tròn trắng, rê chuột nền hồng */
+.ct-chan .ct-mxh {
+  display: flex;
+  gap: 8px;
+}
+
+.ct-chan .ct-mxh a {
+  width: 40px;
+  height: 40px;
+  min-block-size: 0;
+  border-radius: 999px;
+  background: #ffffff;
+  display: grid;
+  place-items: center;
+  transition: background 0.15s;
+}
+
+.ct-chan .ct-mxh a:hover {
+  background: var(--ct-hong);
+}
+
+.ct-chan .ct-mxh i {
+  width: 18px;
+  height: 18px;
+  display: block;
+  background: var(--ct-den);
+  -webkit-mask: var(--ct-icon) center / contain no-repeat;
+  mask: var(--ct-icon) center / contain no-repeat;
+}
+
+.ct-chan .ct-booth b {
+  display: block;
+  color: var(--ct-den);
+  font-weight: 600;
+}
+
+.ct-chan .ct-booth .ct-gio {
+  margin-top: 6px;
+}
+
+.ct-chan .ct-lien-ket {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 8px;
+  color: var(--ct-den);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  min-height: 32px;
+}
+
+.ct-chan .ct-ds {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ct-chan .ct-ds a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  color: var(--ct-xam-dam);
+  text-decoration: none;
+}
+
+.ct-chan .ct-ds a:hover {
+  color: var(--ct-den);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Đơn vị vận hành: mỗi ý một dòng, chữ 12px */
+.ct-chan .ct-cong-ty p {
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--ct-xam);
+}
+
+.ct-chan .ct-cong-ty .ct-ten {
+  color: var(--ct-xam-dam);
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.ct-chan .ct-cong-ty a {
+  color: inherit;
+  overflow-wrap: break-word;
+}
+
+/* Dòng bản quyền © căn giữa */
+.ct-chan .ct-ban-quyen {
+  margin: 32px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--ct-vien);
+  text-align: center;
+  font-size: 12px;
+  color: var(--ct-xam);
+}
+
+/* Máy tính bảng 768–1023px: giữ bố cục 4 cột như máy tính, thu tỉ lệ */
+@media (max-width: 1023px) {
+  .ct-chan .ct-khung {
+    padding: 32px 24px 18px;
+  }
+
+  .ct-chan .ct-cum-chinh {
+    grid-template-columns: 1fr 1.15fr 0.8fr 1.25fr;
+    gap: 24px;
+  }
+
+  .ct-chan .ct-cau {
+    max-width: none;
+    font-size: 12px;
+  }
+
+  .ct-chan .ct-mxh {
+    gap: 6px;
+  }
+
+  .ct-chan .ct-mxh a {
+    width: 36px;
+    height: 36px;
+  }
+
+  .ct-chan .ct-mxh i {
+    width: 16px;
+    height: 16px;
+  }
+
+  .ct-chan .ct-ban-quyen {
+    margin-top: 24px;
+  }
+}
+
+/* Điện thoại < 768px: tối giản, chạm >= 44px, chữ công ty 11px */
+@media (max-width: 767px) {
+  .ct-chan .ct-khung {
+    padding: 16px 16px calc(12px + 72px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .ct-chan .ct-cum-chinh {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .ct-chan .ct-thuong-hieu {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .ct-chan .ct-cau,
+  .ct-chan .ct-booth h3,
+  .ct-chan .ct-ho-tro h3,
+  .ct-chan .ct-cong-ty h3 {
+    display: none;
+  }
+
+  .ct-chan .ct-mxh a {
+    width: 44px;
+    height: 44px;
+  }
+
+  .ct-chan .ct-mxh i {
+    width: 18px;
+    height: 18px;
+  }
+
+  .ct-chan .ct-booth {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 10px 12px 10px 14px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1px 10px;
+    align-items: center;
+  }
+
+  .ct-chan .ct-booth .ct-gio {
+    margin-top: 2px;
+  }
+
+  .ct-chan .ct-booth .ct-lien-ket {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    margin: 0;
+    height: 44px;
+    padding: 0 14px;
+    border-radius: 999px;
+    background: var(--ct-hong-n);
+    text-decoration: none;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .ct-chan .ct-ds {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0 6px;
+  }
+
+  .ct-chan .ct-ds li {
+    display: flex;
+    align-items: center;
+  }
+
+  .ct-chan .ct-ds li + li::before {
+    content: "·";
+    color: var(--ct-xam);
+    margin-right: 6px;
+  }
+
+  .ct-chan .ct-ds a {
+    min-height: 44px;
+  }
+
+  .ct-chan .ct-cong-ty {
+    padding-top: 10px;
+    border-top: 1px solid var(--ct-vien);
+  }
+
+  .ct-chan .ct-cong-ty p {
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+  .ct-chan .ct-ban-quyen {
+    margin-top: 8px;
+    padding-top: 0;
+    border-top: 0;
+    font-size: 11px;
+  }
+}

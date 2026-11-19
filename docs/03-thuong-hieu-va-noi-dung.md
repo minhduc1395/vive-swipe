@@ -15,9 +15,9 @@ Phiên bản 1.1 · 15/11/2026 (bỏ font có chân trên web). Nguồn gốc: h
 Không thêm màu ngoài bảng này (kể cả đỏ cho giảm giá). Nhãn giảm giá: nền `den`, chữ trắng.
 
 ## 2. Chữ
-- **Be Vietnam Pro** (400, 500, 600, 700): mọi chữ trên web, kể cả tiêu đề và chữ nhấn.
-- **Không dùng font có chân (serif)** trên web, kể cả Playfair Display (chủ dự án chốt 15/11/2026). Tiêu đề dùng Be Vietnam Pro 700, khoảng cách chữ −0,5 đến −1,2px.
-- Chữ cần nhấn: vệt hồng `#E8D2CC` sau chữ (`box-shadow: inset 0 -10px 0 #E8D2CC`), không dùng chữ nghiêng.
+- **Be Vietnam Pro** (400, 500, 600, 700): mọi chữ trên web, kể cả tiêu đề.
+- **Font có chân:** chỉ **Playfair Display Italic 500**, chỉ cho một hai chữ nhấn ngắn đúng như `design/landing-v3/` (ví dụ "tone", "4+1"). Không dùng cho tiêu đề, câu hay đoạn văn (chủ dự án duyệt landing v3 ngày 19/11/2026, thay quy định 15/11). Tiêu đề dùng Be Vietnam Pro 700, khoảng cách chữ −0,5 đến −1,2px.
+- Chữ cần nhấn: vệt hồng `#E8D2CC` sau chữ (`box-shadow: inset 0 -10px 0 #E8D2CC`); chữ nghiêng chỉ theo ngoại lệ Playfair ở trên.
 - Cỡ tối thiểu 14px cho chữ đọc, 12px cho chú thích. Giá bán 24–28px, đậm.
 - Ngoại lệ (chủ dự án 18/11): thông tin công ty và dòng © ở chân trang trên điện thoại dùng 11px.
 

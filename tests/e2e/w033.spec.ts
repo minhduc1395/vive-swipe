@@ -198,7 +198,7 @@ test.describe("W033 · Landing là trang đầu, menu thống nhất, nút quay 
       localStorage.setItem(k, JSON.stringify([{ loai: "san_pham", sanPhamId: "LOPOE-CF", soLuong: 1 }]));
     }, KHOA_GIO_HANG);
     await page.goto("/gio");
-    await page.getByRole("link", { name: "Giữ hàng tại booth" }).click();
+    await page.locator('a[href="/giu-hang"]').click();
     await expect(page).toHaveURL(/\/giu-hang$/);
     const backGiuHang = page.getByRole("button", { name: /Quay lại/i });
     await expect(backGiuHang).toBeVisible();
