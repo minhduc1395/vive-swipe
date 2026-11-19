@@ -11,8 +11,8 @@
   --color-vien: #F7EEEB;
   --color-trang: #FFFFFF;
 
-  --font-sans: var(--font-be-vietnam-pro), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-playfair), Georgia, serif;
+  --font-sans: var(--font-be-vietnam-pro, "Be Vietnam Pro Fallback"), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-playfair, "Playfair Display Fallback"), Georgia, serif;
 }
 
 @layer base {
@@ -34,7 +34,7 @@
     margin: 0;
     background-color: #FFFFFF;
     color: #2B2B2A;
-    font-family: var(--font-be-vietnam-pro), ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-sans);
     overflow-wrap: break-word;
     -webkit-font-smoothing: antialiased;
   }

@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { CAU_HINH_BOOTH } from "@/lib/cau-hinh";
-import { DOANH_NGHIEP } from "@/lib/data";
+import doanhNghiepJson from "@/lib/data/doanh-nghiep.json";
+import type { DoanhNghiep } from "@/lib/data/types";
+
+const DOANH_NGHIEP = doanhNghiepJson as DoanhNghiep;
 
 interface ChanTrangProps {
   className?: string;
@@ -13,6 +16,7 @@ interface ChanTrangProps {
 export function ChanTrang({ className = "" }: ChanTrangProps) {
   return (
     <footer
+      style={{ contentVisibility: "auto", containIntrinsicSize: "auto 260px" }}
       className={`relative z-10 bg-trang border-t border-vien py-8 md:py-10 px-5 sm:px-8 md:px-12 text-[13px] md:text-[14px] text-xam ${className}`}
     >
       <div className="max-w-[1280px] mx-auto flex flex-col gap-5">
@@ -20,8 +24,12 @@ export function ChanTrang({ className = "" }: ChanTrangProps) {
           <div className="flex flex-col sm:flex-row sm:items-center gap-3">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/brand/vive-logo-chu.png"
+              src="/brand/vive-logo-chu.webp"
               alt="VIVE"
+              width={64}
+              height={31}
+              loading="lazy"
+              decoding="async"
               className="w-16 h-auto object-contain"
             />
             <span className="text-[13px] text-xam leading-snug">
@@ -70,7 +78,7 @@ export function ChanTrang({ className = "" }: ChanTrangProps) {
               : ""}
           </span>
           <div className="flex items-center gap-3 shrink-0">
-            <Link href="/chinh-sach" className="text-den font-medium hover:underline">
+            <Link href="/chinh-sach" prefetch={false} className="text-den font-medium hover:underline">
               Chính sách &amp; Pháp lý
             </Link>
             <span>·</span>

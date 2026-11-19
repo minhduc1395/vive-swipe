@@ -151,6 +151,7 @@ export function ThanhDocTablet({
       {/* Logo VIVE -> về / */}
       <Link
         href="/"
+        prefetch={false}
         aria-label="Trang chủ VIVE"
         className="flex items-center justify-center min-w-[44px] min-h-[44px] mb-3 focus-visible:outline-2 focus-visible:outline-den rounded"
       >
@@ -197,6 +198,7 @@ export function ThanhDocTablet({
             <Link
               key={tab.key}
               href={tab.href}
+              prefetch={false}
               aria-current={dangChon ? "page" : undefined}
               className={lopStyle}
             >

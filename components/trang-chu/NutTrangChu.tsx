@@ -59,7 +59,7 @@ export function NutTrangChu({
   }
 
   return (
-    <Link href={dichThucTe} className={lopCoBan}>
+    <Link href={dichThucTe} prefetch={false} className={lopCoBan}>
       {nut.chu}
     </Link>
   );

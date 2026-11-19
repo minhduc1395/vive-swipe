@@ -78,6 +78,15 @@ test.describe("W050 · Trang chủ mới / theo landing v3", () => {
   test("2. Bấm từng nút trên dải khuyến mãi và khối 1–6 tới đúng URL (sap_co hiện toast)", async ({
     page,
   }) => {
+    // Dải khuyến mãi trên điện thoại (390x844): link Xem › vùng bấm cao >= 44px
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/");
+    const daiLinkBox = await page.locator(".tc-v3 .dai a").boundingBox();
+    expect(daiLinkBox).not.toBeNull();
+    if (daiLinkBox) {
+      expect(daiLinkBox.height).toBeGreaterThanOrEqual(44);
+    }
+
     await page.setViewportSize({ width: 1440, height: 900 });
     await datDaKhaoSat(page);
 

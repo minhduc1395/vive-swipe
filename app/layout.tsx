@@ -2,13 +2,13 @@ import type { Metadata, Viewport } from "next";
 import { Be_Vietnam_Pro, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { KhoiTaoSupabase } from "@/components/KhoiTaoSupabase";
-import { DuLieuProvider } from "@/lib/du-lieu-context";
 
 const beVietnamPro = Be_Vietnam_Pro({
   subsets: ["vietnamese", "latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-be-vietnam-pro",
   display: "swap",
+  preload: false,
 });
 
 const playfairDisplay = Playfair_Display({
@@ -17,6 +17,7 @@ const playfairDisplay = Playfair_Display({
   style: ["italic"],
   variable: "--font-playfair",
   display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -38,10 +39,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi" className={`${beVietnamPro.variable} ${playfairDisplay.variable}`}>
+    <html lang="vi">
       <body className="font-sans antialiased bg-trang text-den">
-        <KhoiTaoSupabase />
-        <DuLieuProvider>{children}</DuLieuProvider>
+        <KhoiTaoSupabase
+          fontClasses={[beVietnamPro.variable, playfairDisplay.variable]}
+        />
+        {children}
       </body>
     </html>
   );

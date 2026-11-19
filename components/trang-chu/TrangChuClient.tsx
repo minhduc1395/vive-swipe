@@ -1,13 +1,17 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import type { Deal, DoanhNghiep } from "@/lib/data/types";
-import { dinhDangGioV3, dinhDangNgan, type TrangChuConfig } from "@/lib/trang-chu";
+import { dinhDangGioV3, dinhDangNgan } from "@/lib/trang-chu/dinh-dang";
+import type { TrangChuConfig } from "@/lib/trang-chu/schema";
 import { hienToast } from "@/components/ui/Toast";
 import { NutTrangChu } from "./NutTrangChu";
 import "./trang-chu.css";
+
+const ANH_TRONG_SUOT =
+  "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
 interface TrangChuClientProps {
   cauHinh: TrangChuConfig;
@@ -49,6 +53,41 @@ export function TrangChuClient({
   const spPhaiRef = useRef<HTMLImageElement>(null);
   const giotRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const tuongLogoRef = useRef<HTMLDivElement>(null);
+  const [daTaiAnhDuoi, setDaTaiAnhDuoi] = useState(false);
+
+  // Chỉ tải ảnh các khối dưới (2..6) khi bắt đầu cuộn, tương tác hoặc rảnh sau sơn LCP đầu tiên
+  useEffect(() => {
+    if (daTaiAnhDuoi) return;
+    const bat = () => setDaTaiAnhDuoi(true);
+    const onScroll = () => {
+      if (window.scrollY > 2) bat();
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("wheel", bat, { passive: true, once: true });
+    window.addEventListener("touchmove", bat, { passive: true, once: true });
+    window.addEventListener("keydown", bat, { passive: true, once: true });
+    const timer = window.setTimeout(bat, 2500);
+
+    let io: IntersectionObserver | null = null;
+    if (typeof IntersectionObserver !== "undefined" && tuongLogoRef.current) {
+      io = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((e) => e.isIntersecting)) bat();
+        },
+        { rootMargin: "120px" }
+      );
+      io.observe(tuongLogoRef.current);
+    }
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("wheel", bat);
+      window.removeEventListener("touchmove", bat);
+      window.removeEventListener("keydown", bat);
+      window.clearTimeout(timer);
+      io?.disconnect();
+    };
+  }, [daTaiAnhDuoi]);
 
   const dealsMap = useMemo(() => {
     return new Map<string, Deal>(deals.map((d) => [d.id, d]));
@@ -148,11 +187,24 @@ export function TrangChuClient({
       return;
     }
 
-    // Tải trước các phương án ảnh mặt tiền
-    for (const url of danhSachAnh) {
-      const im = new Image();
-      im.src = url;
-    }
+    const timeouts = new Set<number>();
+
+    const henGio = (fn: () => void, ms: number) => {
+      const id = window.setTimeout(() => {
+        timeouts.delete(id);
+        if (!daHuy) fn();
+      }, ms);
+      timeouts.add(id);
+      return id;
+    };
+
+    // Trì hoãn tải trước ảnh mặt tiền phụ để không tranh băng thông với ảnh LCP đầu tiên
+    henGio(() => {
+      for (const url of danhSachAnh.slice(1)) {
+        const im = new Image();
+        im.src = url;
+      }
+    }, 1500);
 
     const manhEls = Array.from(luoiEl.querySelectorAll<HTMLDivElement>(".manh"));
     const trangThaiManh = manhEls.map((el, idx) => ({
@@ -169,16 +221,6 @@ export function TrangChuClient({
     let chay = false;
     let dangLap = false;
     let chinh = 0;
-    const timeouts = new Set<number>();
-
-    const henGio = (fn: () => void, ms: number) => {
-      const id = window.setTimeout(() => {
-        timeouts.delete(id);
-        if (!daHuy) fn();
-      }, ms);
-      timeouts.add(id);
-      return id;
-    };
 
     const ngu = (ms: number) =>
       new Promise<void>((resolve) => {
@@ -298,6 +340,7 @@ export function TrangChuClient({
       giua.style.transform = "none";
       phai.style.opacity = "1";
       phai.style.transform = "none";
+      bay.style.display = "none";
       bay.style.opacity = "0";
       return;
     }
@@ -342,11 +385,13 @@ export function TrangChuClient({
 
       const a = anhMatTien.getBoundingClientRect();
       const d = trai.getBoundingClientRect();
-      if (p <= 0 || p >= 1) {
+      if (window.scrollY <= 2 || p <= 0 || p >= 1) {
+        bay.style.display = "none";
         bay.style.opacity = "0";
         trai.style.opacity = p >= 1 ? "1" : "0";
         return;
       }
+      bay.style.display = "block";
       trai.style.opacity = "0";
 
       const sx = a.left + a.width * KE_TREN_MAT_TIEN.x;
@@ -397,10 +442,15 @@ export function TrangChuClient({
   }, []);
 
   return (
-    <div ref={rootRef} className="tc-v3">
+    <div ref={rootRef} className={daTaiAnhDuoi ? "tc-v3 co-serif" : "tc-v3"}>
       {/* Tuýp sữa rửa mặt bay từ kệ trên mặt tiền xuống khối LOPOE */}
       <div ref={bayRef} id="bay" aria-hidden="true">
-        <img src={cauHinh.lopoe.anh_trai} alt="" />
+        <img
+          src={daTaiAnhDuoi ? cauHinh.lopoe.anh_trai : ANH_TRONG_SUOT}
+          alt=""
+          fetchPriority="low"
+          decoding="async"
+        />
       </div>
 
       {/* Dải khuyến mãi trên cùng */}
@@ -411,12 +461,12 @@ export function TrangChuClient({
             type="button"
             data-sap-co="true"
             onClick={() => hienToast("Tính năng sắp ra mắt")}
-            className="cursor-pointer border-0 bg-transparent p-0 font-[inherit]"
+            className="cursor-pointer border-0 bg-transparent font-[inherit]"
           >
             {cauHinh.dai_thong_bao.nut.chu}
           </button>
         ) : (
-          <Link href={cauHinh.dai_thong_bao.nut.den}>
+          <Link href={cauHinh.dai_thong_bao.nut.den} prefetch={false}>
             {cauHinh.dai_thong_bao.nut.chu}
           </Link>
         )}
@@ -427,7 +477,14 @@ export function TrangChuClient({
         <section className="o lon" id="cua-hang">
           <div className="hien da">
             <h1>
-              <img src="/brand/vive-logo-chu.png" alt="VIVE" />
+              <img
+                src="/brand/vive-logo-chu.webp"
+                alt="VIVE"
+                width={175}
+                height={84}
+                fetchPriority="low"
+                decoding="async"
+              />
             </h1>
             <p>{cauHinh.cua_hang.phu_de}</p>
             <div className="nut">
@@ -447,16 +504,26 @@ export function TrangChuClient({
               role="img"
               aria-label={cauHinh.cua_hang.mo_ta_anh}
             >
+              <picture>
+                <source
+                  media="(max-width: 767px)"
+                  srcSet="/trang-chu/mt/0-mobile.webp"
+                  type="image/webp"
+                />
+                <img
+                  src={cauHinh.cua_hang.anh_mat_tien[0]}
+                  alt={cauHinh.cua_hang.mo_ta_anh}
+                  width={1600}
+                  height={891}
+                  fetchPriority="high"
+                  loading="eager"
+                  decoding="sync"
+                  className="anh-mat-tien-goc"
+                />
+              </picture>
               <div ref={luoiAnhRef} className="luoi-anh">
                 {danhSachManh.map((m) => (
-                  <div key={`${m.r}-${m.c}`} className="manh">
-                    <i
-                      style={{
-                        backgroundImage: `url(${cauHinh.cua_hang.anh_mat_tien[0]})`,
-                        backgroundPosition: m.pos,
-                      }}
-                    />
-                  </div>
+                  <div key={`${m.r}-${m.c}`} className="manh" />
                 ))}
               </div>
             </div>
@@ -498,21 +565,27 @@ export function TrangChuClient({
             <img
               ref={dichBayRef}
               id="dich-bay"
-              src={cauHinh.lopoe.anh_trai}
+              src={daTaiAnhDuoi ? cauHinh.lopoe.anh_trai : ANH_TRONG_SUOT}
               alt=""
+              loading="lazy"
+              decoding="async"
             />
             <img
               ref={spGiuaRef}
               id="sp-giua"
               className="giua"
-              src={cauHinh.lopoe.anh_giua}
+              src={daTaiAnhDuoi ? cauHinh.lopoe.anh_giua : ANH_TRONG_SUOT}
               alt=""
+              loading="lazy"
+              decoding="async"
             />
             <img
               ref={spPhaiRef}
               id="sp-phai"
-              src={cauHinh.lopoe.anh_phai}
+              src={daTaiAnhDuoi ? cauHinh.lopoe.anh_phai : ANH_TRONG_SUOT}
               alt=""
+              loading="lazy"
+              decoding="async"
             />
           </div>
         </section>
@@ -522,7 +595,14 @@ export function TrangChuClient({
           <div className="hien">
             <h2>{cauHinh.thuong_hieu.tieu_de}</h2>
             <p className="co-logo">
-              <img src="/brand/vive-logo-chu.png" alt="VIVE" />{" "}
+              <img
+                src="/brand/vive-logo-chu.webp"
+                alt="VIVE"
+                width={350}
+                height={168}
+                loading="lazy"
+                decoding="async"
+              />{" "}
               <span>{cauHinh.thuong_hieu.dong_logo_hau}</span>
             </p>
           </div>
@@ -537,11 +617,17 @@ export function TrangChuClient({
                   <Link
                     key={th.ten}
                     href={th.den}
+                    prefetch={false}
                     aria-label={th.ten}
                     className={th.logo ? "lg" : "lg chu"}
                   >
                     {th.logo ? (
-                      <img src={th.logo} alt={th.ten} />
+                      <img
+                        src={daTaiAnhDuoi ? th.logo : ANH_TRONG_SUOT}
+                        alt={th.ten}
+                        loading="lazy"
+                        decoding="async"
+                      />
                     ) : (
                       th.ten
                     )}
@@ -553,10 +639,20 @@ export function TrangChuClient({
                   <Link
                     key={`dup-${th.ten}`}
                     href={th.den}
+                    prefetch={false}
                     tabIndex={-1}
                     className={th.logo ? "lg" : "lg chu"}
                   >
-                    {th.logo ? <img src={th.logo} alt="" /> : th.ten}
+                    {th.logo ? (
+                      <img
+                        src={daTaiAnhDuoi ? th.logo : ANH_TRONG_SUOT}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ) : (
+                      th.ten
+                    )}
                   </Link>
                 ))}
               </div>
@@ -579,7 +675,14 @@ export function TrangChuClient({
                   {o.co_logo ? (
                     <p className="co-logo">
                       <span>{o.phu_de_truoc}</span>
-                      <img src="/brand/vive-logo-chu.png" alt="VIVE" />
+                      <img
+                        src="/brand/vive-logo-chu.webp"
+                        alt="VIVE"
+                        width={350}
+                        height={168}
+                        loading="lazy"
+                        decoding="async"
+                      />
                     </p>
                   ) : o.phu_de_nghieng ? (
                     <p>
@@ -611,7 +714,12 @@ export function TrangChuClient({
                   </div>
                 ) : o.anh ? (
                   <div className={o.anh_sp ? "hinh sp" : "hinh"}>
-                    <img src={o.anh} alt={o.mo_ta_anh || o.tieu_de} />
+                    <img
+                      src={daTaiAnhDuoi ? o.anh : ANH_TRONG_SUOT}
+                      alt={o.mo_ta_anh || o.tieu_de}
+                      loading="lazy"
+                      decoding="async"
+                    />
                   </div>
                 ) : null}
               </section>
@@ -636,8 +744,10 @@ export function TrangChuClient({
           </div>
           <div className="hinh">
             <img
-              src={cauHinh.qua_lopoe.anh}
+              src={daTaiAnhDuoi ? cauHinh.qua_lopoe.anh : ANH_TRONG_SUOT}
               alt={cauHinh.qua_lopoe.mo_ta_anh}
+              loading="lazy"
+              decoding="async"
             />
           </div>
         </section>
@@ -647,7 +757,14 @@ export function TrangChuClient({
           <div className="hien">
             <h2 className="ghe">
               <span>{cauHinh.ghe_vive.tien_to_tieu_de}</span>
-              <img src="/brand/vive-logo-chu.png" alt="VIVE" />
+              <img
+                src="/brand/vive-logo-chu.webp"
+                alt="VIVE"
+                width={350}
+                height={168}
+                loading="lazy"
+                decoding="async"
+              />
             </h2>
             <p>
               {cauHinh.ghe_vive.dia_diem_ngan}. {gioHienThi}.

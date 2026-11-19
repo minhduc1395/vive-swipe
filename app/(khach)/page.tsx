@@ -24,12 +24,37 @@ export const metadata: Metadata = {
 };
 
 export default function TrangChu() {
+  const dealIdsCanDung = new Set(
+    [
+      TRANG_CHU_CONFIG.dai_thong_bao.deal_id,
+      TRANG_CHU_CONFIG.qua_lopoe.deal_id,
+      ...TRANG_CHU_CONFIG.luoi_doi.map((o) => o.deal_id).filter(Boolean),
+    ].filter((id): id is string => Boolean(id))
+  );
+  const dealsTrangChu = DEALS.filter((d) => dealIdsCanDung.has(d.id));
+
   return (
-    <TrangChuClient
-      cauHinh={TRANG_CHU_CONFIG}
-      deals={DEALS}
-      doanhNghiep={DOANH_NGHIEP}
-      gioMoCua={CAU_HINH_BOOTH.gioMoCua}
-    />
+    <>
+      <link
+        rel="preload"
+        as="image"
+        href="/trang-chu/mt/0-mobile.webp"
+        media="(max-width: 767px)"
+        fetchPriority="high"
+      />
+      <link
+        rel="preload"
+        as="image"
+        href={TRANG_CHU_CONFIG.cua_hang.anh_mat_tien[0]}
+        media="(min-width: 768px)"
+        fetchPriority="high"
+      />
+      <TrangChuClient
+        cauHinh={TRANG_CHU_CONFIG}
+        deals={dealsTrangChu}
+        doanhNghiep={DOANH_NGHIEP}
+        gioMoCua={CAU_HINH_BOOTH.gioMoCua}
+      />
+    </>
   );
 }

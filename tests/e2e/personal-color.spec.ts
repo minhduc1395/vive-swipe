@@ -15,7 +15,7 @@ const CU_CHUAN_9_CO = [
 ];
 
 test.describe("W029 · Trang Personal Color cùng Pawlette (/personal-color)", () => {
-  test("1. Hiển thị đủ 4 mùa, 3 bước, giá 378.000đ, placeholder và liên kết #booth", async ({
+  test("1. Hiển thị đủ 4 mùa, 3 bước, giá 378.000đ, placeholder và liên kết #ghe-vive", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 390, height: 844 });
@@ -39,10 +39,10 @@ test.describe("W029 · Trang Personal Color cùng Pawlette (/personal-color)", (
     }
 
     const ctaBooth = page.getByRole("link", { name: /Đặt lịch tại booth/i });
-    await expect(ctaBooth).toHaveAttribute("href", "/#booth");
+    await expect(ctaBooth).toHaveAttribute("href", "/#ghe-vive");
     await ctaBooth.click();
-    await expect(page).toHaveURL(/\/#booth$/);
-    await expect(page.locator("#booth")).toBeVisible();
+    await expect(page).toHaveURL(/\/#ghe-vive$/);
+    await expect(page.locator("#ghe-vive")).toBeVisible();
   });
 
   test("2. Vòng màu xoay bình thường và tắt khi prefers-reduced-motion: reduce", async ({
