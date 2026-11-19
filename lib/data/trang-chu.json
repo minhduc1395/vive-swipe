@@ -119,6 +119,7 @@
     {
       "id": "personal-color",
       "mau_nen": "hong-nhat",
+      "co": "vua",
       "tieu_de": "Personal color",
       "phu_de_truoc": "Tìm ",
       "phu_de_nghieng": "tone",
@@ -136,6 +137,7 @@
     {
       "id": "check-in",
       "mau_nen": "bac-ha",
+      "co": "vua",
       "tieu_de": "Thử. Chụp. Nhận quà.",
       "phu_de_truoc": "Ngay tại ",
       "co_logo": true,
@@ -152,7 +154,8 @@
     },
     {
       "id": "combo-lopoe-bo3",
-      "mau_nen": "toi",
+      "mau_nen": "bac-ha-nhat",
+      "co": "vua",
       "tieu_de": "Bộ 3 LOPOE",
       "deal_id": "LOPOE-COMBO-BO3",
       "nhan_thuong_hieu": "Better Balance",
@@ -178,7 +181,8 @@
     },
     {
       "id": "combo-lopoe-kem-amp",
-      "mau_nen": "xanh-nhat",
+      "mau_nen": "hong-nhat",
+      "co": "vua",
       "tieu_de": "Kem + Ampoule",
       "deal_id": "LOPOE-COMBO-KEM-AMP",
       "nhan_thuong_hieu": "LOPOE",
@@ -204,6 +208,7 @@
     {
       "id": "deal-pdrn",
       "mau_nen": "hong",
+      "co": "rong",
       "tieu_de": "Combo PDRN Pink",
       "deal_id": "COMBO-PINK",
       "nhan_thuong_hieu": "Medicube",
@@ -219,28 +224,67 @@
       ]
     },
     {
+      "id": "repiel",
+      "mau_nen": "bac-ha-nhat",
+      "co": "nho",
+      "tieu_de": "Rep!el",
+      "phu_de_truoc": "Serum và toner pad.",
+      "san_pham": [
+        "8809198846238?v=2",
+        "8809198846252"
+      ],
+      "mo_ta_anh": "Serum CICA-Niacin và toner pad Vita-Toning của Rep!el",
+      "nut": [
+        {
+          "chu": "Xem sản phẩm",
+          "den": "/danh-muc?thuong-hieu=Rep%21el",
+          "kieu": "chinh"
+        }
+      ]
+    },
+    {
+      "id": "tiela",
+      "mau_nen": "hong-nhat",
+      "co": "nho",
+      "tieu_de": "Tiela",
+      "phu_de_truoc": "Dưỡng thể có hương.",
+      "san_pham": [
+        "8800282110150",
+        "8800282110174"
+      ],
+      "mo_ta_anh": "Kem dưỡng thể và tẩy da chết toàn thân Tiela",
+      "nut": [
+        {
+          "chu": "Xem sản phẩm",
+          "den": "/danh-muc?thuong-hieu=Tiela",
+          "kieu": "chinh"
+        }
+      ]
+    },
+    {
       "id": "combo-vampire-glow",
-      "mau_nen": "toi",
+      "mau_nen": "bac-ha",
+      "co": "nho",
       "tieu_de": "Vampire Glow",
       "deal_id": "COMBO-VAMPIRE-GLOW",
       "nhan_thuong_hieu": "Medicube",
-      "so_lon": "Glow",
+      "san_pham": [
+        "8809982769866",
+        "8800256115174"
+      ],
+      "mo_ta_anh": "Kem Deep Vita C và serum Glutathione Glow của Medicube",
       "nut": [
         {
           "chu": "Xem deal",
           "den": "/deal?id=COMBO-VAMPIRE-GLOW",
           "kieu": "chinh"
-        },
-        {
-          "chu": "Mua",
-          "den": "/danh-muc?thuong-hieu=Medicube",
-          "kieu": "phu"
         }
       ]
     },
     {
       "id": "combo-lopoe-2srm",
-      "mau_nen": "hong-nhat",
+      "mau_nen": "hong",
+      "co": "nho",
       "tieu_de": "2 sữa rửa mặt",
       "deal_id": "LOPOE-COMBO-2SRM",
       "nhan_thuong_hieu": "LOPOE",
@@ -255,17 +299,13 @@
           "chu": "Xem deal",
           "den": "/deal?id=LOPOE-COMBO-2SRM",
           "kieu": "chinh"
-        },
-        {
-          "chu": "Mua",
-          "den": "/danh-muc?thuong-hieu=LOPOE",
-          "kieu": "phu"
         }
       ]
     },
     {
       "id": "deal-mat-na",
       "mau_nen": "bac-ha-nhat",
+      "co": "nho",
       "tieu_de": "Mua 4 tặng 1",
       "deal_id": "DC-05",
       "nhan_thuong_hieu": "Mặt nạ Uniura",
@@ -274,6 +314,26 @@
         {
           "chu": "Xem deal",
           "den": "/deal?id=DC-05",
+          "kieu": "chinh"
+        }
+      ]
+    },
+    {
+      "id": "saltherapy",
+      "mau_nen": "hong-nhat",
+      "co": "rong",
+      "tieu_de": "salTherapy",
+      "phu_de_truoc": "Tẩy tế bào chết muối biển.",
+      "san_pham": [
+        "8801990000337",
+        "8801990000351",
+        "8801990000320"
+      ],
+      "mo_ta_anh": "Ba hũ tẩy tế bào chết muối và dầu salTherapy",
+      "nut": [
+        {
+          "chu": "Xem sản phẩm",
+          "den": "/danh-muc?thuong-hieu=salTherapy",
           "kieu": "chinh"
         }
       ]
@@ -304,7 +364,7 @@
     "the": [
       {
         "deal_id": "LOPOE-COMBO-BO3",
-        "mau_nen": "toi",
+        "mau_nen": "bac-ha-nhat",
         "nhan": "LOPOE",
         "ten": "Bộ 3 Better Balance",
         "anh_bo": [
@@ -315,7 +375,7 @@
       },
       {
         "deal_id": "LOPOE-COMBO-KEM-AMP",
-        "mau_nen": "xanh-nhat",
+        "mau_nen": "hong-nhat",
         "nhan": "LOPOE",
         "ten": "Kem dưỡng + Ampoule",
         "anh_bo": [
@@ -344,17 +404,23 @@
       },
       {
         "deal_id": "COMBO-VAMPIRE-GLOW",
-        "mau_nen": "toi",
+        "mau_nen": "bac-ha",
         "nhan": "Medicube",
         "ten": "Vampire Glow",
-        "so_lon": "Glow"
+        "san_pham": [
+          "8809982769866",
+          "8800256115174"
+        ]
       },
       {
         "deal_id": "COMBO-ZOMBIE",
-        "mau_nen": "bac-ha",
+        "mau_nen": "hong",
         "nhan": "SKINFOOD",
         "ten": "Zombie hồi sinh",
-        "so_lon": "Honey"
+        "san_pham": [
+          "8809511276704",
+          "8809511276728"
+        ]
       },
       {
         "deal_id": "DC-05",

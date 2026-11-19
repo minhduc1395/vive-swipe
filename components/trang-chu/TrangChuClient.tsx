@@ -9,6 +9,7 @@ import type { TheCombo, TrangChuConfig } from "@/lib/trang-chu/schema";
 import type { CauHinhLopoe3D } from "@/lib/thu-nghiem/lopoe-3d";
 import { CuonLopoe3D, type VeNut3D } from "@/components/cuon-3d/CuonLopoe3D";
 import { hienToast } from "@/components/ui/Toast";
+import { anhKhoMediaTheoMa } from "@/lib/anh";
 import { NutTrangChu } from "./NutTrangChu";
 import "./trang-chu.css";
 
@@ -469,7 +470,8 @@ export function TrangChuClient({
           {cauHinh.luoi_doi.map((o) => {
             const dealCuaO = o.deal_id ? dealsMap.get(o.deal_id) : undefined;
             const { gia: giaNgan, qua: dongQua } = giaVaQua(dealCuaO);
-            const lop = `o nen-${o.mau_nen}${o.mau_nen === "toi" ? " toi" : ""}`;
+            const lop = `o nen-${o.mau_nen} co-${o.co}`;
+            const anhSanPham = (o.san_pham ?? []).map((ma) => anhKhoMediaTheoMa(ma)).filter((u): u is string => Boolean(u));
 
             return (
               <section key={o.id} className={lop} id={o.id}>
@@ -498,6 +500,8 @@ export function TrangChuClient({
                       {o.nhan_thuong_hieu}
                       {giaNgan ? ` · ${giaNgan}` : ""}
                     </p>
+                  ) : o.phu_de_truoc ? (
+                    <p>{o.phu_de_truoc}</p>
                   ) : null}
                   {o.hien_qua && dongQua && <p className="dong-nho">{dongQua}</p>}
 
@@ -512,7 +516,25 @@ export function TrangChuClient({
                   </div>
                 </div>
 
-                {o.anh_bo ? (
+                {anhSanPham.length > 0 ? (
+                  <div
+                    className={`hinh bo kho bo-${anhSanPham.length}`}
+                    role="img"
+                    aria-label={o.mo_ta_anh || o.tieu_de}
+                  >
+                    {anhSanPham.map((a, i) => (
+                      <img
+                        key={`${a}-${i}`}
+                        src={daTaiAnhDuoi ? a : ANH_TRONG_SUOT}
+                        alt=""
+                        width={1000}
+                        height={1000}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ))}
+                  </div>
+                ) : o.anh_bo ? (
                   <div
                     className={`hinh bo bo-${o.anh_bo.length}`}
                     role="img"
@@ -687,14 +709,21 @@ function HangCombo({
               key={t.deal_id}
               href={`/deal?id=${encodeURIComponent(t.deal_id)}`}
               prefetch={false}
-              className={`the-combo nen-${t.mau_nen}${t.mau_nen === "toi" ? " toi" : ""}`}
+              className={`the-combo nen-${t.mau_nen}`}
             >
               <span className="nhan">{t.nhan}</span>
               <span className="ten">{t.ten}</span>
               {gia && <span className="gia">{gia}</span>}
               {qua && <span className="qua">{qua}</span>}
               <span className="hinh-the" aria-hidden="true">
-                {t.anh_bo ? (
+                {t.san_pham ? (
+                  t.san_pham
+                    .map((ma) => anhKhoMediaTheoMa(ma))
+                    .filter((u): u is string => Boolean(u))
+                    .map((a, i) => (
+                      <img key={`${a}-${i}`} src={daTaiAnh ? a : ANH_TRONG_SUOT} alt="" width={1000} height={1000} loading="lazy" decoding="async" className="kho" />
+                    ))
+                ) : t.anh_bo ? (
                   t.anh_bo.map((a, i) => (
                     <img
                       key={`${a}-${i}`}

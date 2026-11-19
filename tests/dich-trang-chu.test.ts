@@ -120,7 +120,17 @@ describe("W050 + W041 · Cấu hình trang chủ YAML & kiểm đích", () => {
     expect(parsed.cua_hang.cot).toBe(6);
     expect(parsed.cua_hang.hang).toBe(4);
     expect(parsed.cua_hang.anh_mat_tien).toHaveLength(6);
-    expect(parsed.luoi_doi.length).toBeGreaterThanOrEqual(8);
+    expect(parsed.luoi_doi.length).toBeGreaterThanOrEqual(10);
+    // W056: mỗi hàng lưới 6 cột phải cộng đủ 6 (vua 3, rong 4, nho 2)
+    const phan = { vua: 3, rong: 4, nho: 2 } as const;
+    let tong = 0;
+    for (const o of parsed.luoi_doi) {
+      tong += phan[o.co];
+      expect(tong % 6 === 0 || tong % 6 === 2 || tong % 6 === 3 || tong % 6 === 4).toBe(true);
+    }
+    expect(tong % 6, "hàng cuối lưới chưa đủ 6 phần").toBe(0);
+    // Không ô nào nền tối (CĐT 20/11)
+    for (const o of parsed.luoi_doi) expect(["hong", "hong-nhat", "bac-ha", "bac-ha-nhat", "trang"]).toContain(o.mau_nen);
     expect(parsed.truot_combo.the.length).toBeGreaterThanOrEqual(5);
   });
 
@@ -224,6 +234,19 @@ describe("W050 + W041 · Cấu hình trang chủ YAML & kiểm đích", () => {
       expect(d?.hien_thi, `deal ${id} đang ẩn`).toBe(true);
       expect(d?.may_rui, `deal ${id} may rủi`).toBe(false);
       expect(d?.gia_combo, `deal ${id} thiếu gia_combo`).toBeGreaterThan(0);
+    }
+  });
+
+  it("W056 · mã sản phẩm trong ô lưới và thẻ trượt có thật và đang hiện", () => {
+    const ma = [
+      ...TRANG_CHU_CONFIG.luoi_doi.flatMap((o) => o.san_pham ?? []),
+      ...TRANG_CHU_CONFIG.truot_combo.the.flatMap((t) => t.san_pham ?? []),
+    ].map((m) => m.split("?")[0]);
+    expect(ma.length).toBeGreaterThan(0);
+    for (const id of ma) {
+      const sp = timSanPhamTheoId(id);
+      expect(sp, `sản phẩm ${id}`).toBeDefined();
+      expect(sp?.hien_thi, `sản phẩm ${id} đang ẩn`).toBe(true);
     }
   });
 

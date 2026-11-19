@@ -9,7 +9,6 @@
   --xam: #737373;
   --nen: #f6f4f2;
   --vien: rgba(43, 43, 42, 0.14);
-  --xanh-nhat: #edf2f9;
 
   background: #ffffff;
   color: var(--den);
@@ -153,7 +152,7 @@
 
 .tc-v3 .luoi {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(6, 1fr);
   gap: 12px;
   padding: 0 12px;
   content-visibility: auto;
@@ -162,6 +161,29 @@
 
 .tc-v3 .luoi .o {
   min-height: 580px;
+  grid-column: span 3;
+}
+
+/* W056: ô rộng 2/3, ô nhỏ 1/3 để nhịp lưới đổi sau 2 hàng đầu */
+.tc-v3 .luoi .o.co-rong {
+  grid-column: span 4;
+}
+
+.tc-v3 .luoi .o.co-nho {
+  grid-column: span 2;
+  min-height: 520px;
+}
+
+.tc-v3 .luoi .o.co-nho h2 {
+  font-size: 34px;
+}
+
+.tc-v3 .luoi .o.co-nho p {
+  font-size: 19px;
+}
+
+.tc-v3 .luoi .o.co-nho .so-lon {
+  font-size: 120px;
 }
 
 .tc-v3 .luoi .o h2 {
@@ -478,8 +500,7 @@
 .tc-v3 .nen-hong { background: var(--hong); }
 .tc-v3 .nen-bac-ha { background: var(--bac-ha); }
 .tc-v3 .nen-bac-ha-nhat { background: var(--bac-ha-nhat); }
-.tc-v3 .nen-xanh-nhat { background: var(--xanh-nhat); }
-.tc-v3 .nen-toi { background: var(--den); }
+.tc-v3 .nen-trang { background: #ffffff; box-shadow: inset 0 0 0 1px rgba(43, 43, 42, 0.06); }
 
 /* Dòng nhỏ dưới phụ đề (quà combo), như dòng chú thích của apple.com */
 .tc-v3 .o p.dong-nho {
@@ -490,10 +511,6 @@
   max-width: 34ch;
   margin-left: auto;
   margin-right: auto;
-}
-
-.tc-v3 .toi p.dong-nho {
-  color: rgba(255, 255, 255, 0.72);
 }
 
 /* Ô combo: các sản phẩm đứng cạnh nhau */
@@ -514,12 +531,27 @@
   height: 200px;
 }
 
-.tc-v3 .toi .hinh.bo img {
-  filter: drop-shadow(0 24px 40px rgba(0, 0, 0, 0.55));
+.tc-v3 .hinh.bo.kho {
+  gap: 0;
+  padding: 24px 0 36px;
 }
 
-.tc-v3 .toi .so-lon {
-  color: var(--hong);
+.tc-v3 .hinh.bo.kho img {
+  height: 300px;
+  width: 300px;
+  object-fit: contain;
+  margin: 0 -28px;
+}
+
+.tc-v3 .co-nho .hinh.bo.kho img {
+  height: 250px;
+  width: 250px;
+  margin: 0 -34px;
+}
+
+.tc-v3 .co-rong .hinh.bo.kho img {
+  height: 320px;
+  width: 320px;
 }
 
 /* Hàng combo trượt ngang (hàng cuối phần combo) */
@@ -678,6 +710,13 @@
   height: 176px;
 }
 
+.tc-v3 .the-combo .hinh-the img.kho {
+  height: 176px;
+  width: 176px;
+  object-fit: contain;
+  margin: 0 -22px;
+}
+
 .tc-v3 .the-combo .so-the {
   font-style: italic;
   font-weight: 500;
@@ -694,23 +733,6 @@
   margin-top: 16px;
   font-size: 15px;
   font-weight: 500;
-}
-
-.tc-v3 .the-combo.toi {
-  color: #ffffff;
-}
-
-.tc-v3 .the-combo.toi .nhan,
-.tc-v3 .the-combo.toi .qua {
-  color: rgba(255, 255, 255, 0.72);
-}
-
-.tc-v3 .the-combo.toi .so-the {
-  color: var(--hong);
-}
-
-.tc-v3 .the-combo.toi .hinh-the img {
-  filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.55));
 }
 
 /* Hiện dần khi cuộn */
@@ -761,7 +783,28 @@
   .tc-v3 .luoi {
     grid-template-columns: 1fr;
     padding: 0;
-    contain-intrinsic-size: auto 4800px;
+    contain-intrinsic-size: auto 6400px;
+  }
+
+  .tc-v3 .luoi .o,
+  .tc-v3 .luoi .o.co-rong,
+  .tc-v3 .luoi .o.co-nho {
+    grid-column: auto;
+    min-height: 0;
+  }
+
+  .tc-v3 .hinh.bo.kho img,
+  .tc-v3 .co-nho .hinh.bo.kho img,
+  .tc-v3 .co-rong .hinh.bo.kho img {
+    height: 230px;
+    width: 230px;
+    margin: 0 -26px;
+  }
+
+  .tc-v3 .hinh.bo.kho.bo-3 img {
+    height: 168px;
+    width: 168px;
+    margin: 0 -18px;
   }
 
   .tc-v3 .o {

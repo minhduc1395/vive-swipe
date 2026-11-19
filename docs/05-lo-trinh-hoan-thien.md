@@ -82,7 +82,7 @@ Việc nào bị chặn vì chờ chủ dự án thì làm việc kế tiếp, k
 ## 4b. Claude làm thay Antigravity (19/11, Antigravity hết quota)
 Đã xong, đã merge vào main, mỗi task có mục "Đã làm (Claude, 19/11). Antigravity KHÔNG làm lại":
 W040 (#30), W042 (#31), W041 + W048 (#32), W039 (#33), W052 (#34), W054 (#35), W032 làm lại từ main (#36, PR #23 cũ đã đóng).
-20/11: **W055** (khối 2 trang chủ = cuộn 3D LOPOE, huy hiệu Hwahae ở Ampoule, lưới combo kiểu apple.com + hàng combo trượt ngang). File chữ 3D dùng chung: `data/thu-nghiem/lopoe-3d.yaml`; khóa `lopoe` cũ trong `trang-chu.yaml` đã bỏ.
+20/11: **W056** (lưới combo + thương hiệu đổi nhịp, màu cửa hàng, ảnh kho media theo mã `san_pham` trong `trang-chu.yaml`). **W055** (khối 2 trang chủ = cuộn 3D LOPOE, huy hiệu Hwahae ở Ampoule, lưới combo kiểu apple.com + hàng combo trượt ngang). File chữ 3D dùng chung: `data/thu-nghiem/lopoe-3d.yaml`; khóa `lopoe` cũ trong `trang-chu.yaml` đã bỏ.
 
 **Antigravity khi có quota lại, làm theo thứ tự:**
 1. `git pull` main, đọc handoff `20261119-*_claude_antigravity_*` mới nhất. Không mở lại nhánh cũ (`w032-v2` và các nhánh trước 19/11 chiều).
