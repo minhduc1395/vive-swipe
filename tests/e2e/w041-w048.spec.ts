@@ -4,6 +4,7 @@ test.describe("W041 · nút landing dẫn thẳng tới sản phẩm, deal", () 
   test("Xem bộ sản phẩm ra đúng 3 sản phẩm LOPOE", async ({ page }) => {
     await datDaKhaoSat(page);
     await page.goto("/new-arrival");
+    await page.waitForLoadState("networkidle");
     await page.getByRole("link", { name: "Xem bộ sản phẩm" }).first().click();
     await expect(page).toHaveURL(/thuong-hieu=LOPOE/);
     await expect(page.locator("article")).toHaveCount(3);
@@ -12,13 +13,15 @@ test.describe("W041 · nút landing dẫn thẳng tới sản phẩm, deal", () 
   test("/danh-muc?sp=LOPOE-AMP mở sẵn bảng chi tiết; đóng thì bỏ sp; Back cũng đóng", async ({ page }) => {
     await datDaKhaoSat(page);
     await page.goto("/danh-muc?thuong-hieu=LOPOE&sp=LOPOE-AMP");
+    await page.waitForLoadState("networkidle");
     const bang = page.getByRole("dialog", { name: /Chi tiết sản phẩm .*Ampoule/i });
     await expect(bang).toBeVisible();
-    await page.mouse.click(5, 120); // bấm nền mờ để đóng
+    await page.mouse.click(5, 20); // bấm nền mờ phía trên bảng để đóng
     await expect(bang).toHaveCount(0);
     await expect(page).not.toHaveURL(/sp=/);
 
     // mở từ lưới rồi Back
+    await page.waitForLoadState("networkidle");
     await page.locator("article").first().click();
     await expect(page).toHaveURL(/sp=/);
     await expect(page.getByRole("dialog")).toBeVisible();
@@ -30,6 +33,7 @@ test.describe("W041 · nút landing dẫn thẳng tới sản phẩm, deal", () 
   test("Khối ampoule: Xem sản phẩm mở bảng chi tiết LOPOE-AMP", async ({ page }) => {
     await datDaKhaoSat(page);
     await page.goto("/new-arrival");
+    await page.waitForLoadState("networkidle");
     await page.getByRole("link", { name: "Xem sản phẩm" }).first().click();
     await expect(page).toHaveURL(/sp=LOPOE-AMP/);
     await expect(page.getByRole("dialog")).toBeVisible();

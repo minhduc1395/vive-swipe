@@ -50,7 +50,8 @@ test.describe("Trang Danh mục - tìm kiếm và lọc sản phẩm (W026)", ()
 
   test("W042: gõ tìm kiếm là lọc ngay, không cần Enter", async ({ page }) => {
     await page.goto("/danh-muc");
-    await page.getByPlaceholder("Tìm tên, thương hiệu, thành phần").fill("cica");
+    await page.waitForLoadState("networkidle"); // chờ hydrate xong (WebKit chậm hơn) rồi mới gõ
+    await page.getByPlaceholder("Tìm tên, thương hiệu, thành phần").pressSequentially("cica");
     await expect(page).toHaveURL(/tim=cica/);
     await expect(page.locator("article", { hasText: /Cica/i }).first()).toBeVisible();
   });
