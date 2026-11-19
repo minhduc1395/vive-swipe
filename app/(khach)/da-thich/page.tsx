@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
-import { AppShell } from "@/components/AppShell";
 import { BangChiTiet } from "@/components/deck/BangChiTiet";
 import { useDuLieu } from "@/lib/du-lieu-context";
 import type { SanPham } from "@/lib/data/types";
@@ -15,9 +14,7 @@ import {
   layDanhSachDaThich,
   themDaThich,
   xoaDaThich,
-  layGioHang,
   themVaoGio,
-  type ItemGioHang,
 } from "@/lib/kho-luu-tru";
 
 const DANH_MUC_LABEL = NHAN_DANH_MUC;
@@ -25,7 +22,6 @@ const DANH_MUC_LABEL = NHAN_DANH_MUC;
 export default function TrangDaThich() {
   const { timSanPham, deals } = useDuLieu();
   const [danhSachThich, setDanhSachThich] = useState<string[]>([]);
-  const [gioHang, setGioHang] = useState<ItemGioHang[]>([]);
   const [danhMucChon, setDanhMucChon] = useState<string>("all");
   const [sanPhamChiTiet, setSanPhamChiTiet] = useState<SanPham | null>(null);
   const [thongBao, setThongBao] = useState<string | null>(null);
@@ -33,7 +29,6 @@ export default function TrangDaThich() {
 
   const taiDuLieu = () => {
     setDanhSachThich(layDanhSachDaThich());
-    setGioHang(layGioHang());
   };
 
   useEffect(() => {
@@ -83,10 +78,6 @@ export default function TrangDaThich() {
     return sanPhamThich.filter((sp) => sp.danh_muc === danhMucChon);
   }, [sanPhamThich, danhMucChon]);
 
-  const tongSoLuongGio = useMemo(() => {
-    return gioHang.reduce((sum, item) => sum + item.soLuong, 0);
-  }, [gioHang]);
-
   const handleBoThich = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     xoaDaThich(id);
@@ -102,18 +93,12 @@ export default function TrangDaThich() {
       hanh_dong: "gio",
       nguon: "kham_pha",
     });
-    setGioHang(layGioHang());
     setThongBao(`Đã thêm "${sp.ten_hien_thi}" vào giỏ`);
     setTimeout(() => setThongBao(null), 2500);
   };
 
   return (
-    <AppShell
-      soLuongThich={sanPhamThich.length}
-      soLuongGio={tongSoLuongGio}
-      noiDungClassName="max-w-[1280px] w-full mx-auto"
-    >
-      <div className="flex-1 flex flex-col min-h-0 bg-trang text-den font-sans overflow-hidden">
+    <div className="max-w-[1280px] w-full mx-auto flex-1 flex flex-col min-h-0 bg-trang text-den font-sans overflow-hidden">
         {/* Header */}
         <header className="px-5 pt-7 pb-2 flex items-baseline gap-2 shrink-0">
           <h1 className="m-0 text-[28px] font-semibold tracking-tight">Đã thích</h1>
@@ -319,9 +304,7 @@ export default function TrangDaThich() {
             })}
           </div>
         )}
-      </div>
 
-      {/* Thanh tab dưới cố định */}
       {/* Modal chi tiết sản phẩm */}
       <BangChiTiet
         sanPham={sanPhamChiTiet}
@@ -337,13 +320,12 @@ export default function TrangDaThich() {
         onThemGio={() => {
           if (sanPhamChiTiet) {
             themVaoGio(sanPhamChiTiet.id, 1);
-            setGioHang(layGioHang());
             setSanPhamChiTiet(null);
             setThongBao(`Đã thêm "${sanPhamChiTiet.ten_hien_thi}" vào giỏ`);
             setTimeout(() => setThongBao(null), 2500);
           }
         }}
       />
-    </AppShell>
+    </div>
   );
 }

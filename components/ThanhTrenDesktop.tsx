@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { LogoVive } from "@/components/LogoVive";
+import { kiemTraMucDangChon } from "@/lib/dieu-huong";
 
 interface ThanhTrenDesktopProps {
   soLuongThich?: number;
@@ -130,12 +132,7 @@ export function ThanhTrenDesktop({
           aria-label="Trang chủ VIVE"
           className="flex items-center shrink-0 focus-visible:outline-2 focus-visible:outline-den rounded"
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/brand/vive-logo-chu.png"
-            alt="VIVE"
-            className="w-[76px] h-auto"
-          />
+          <LogoVive rong={76} />
         </Link>
 
         {/* Menu chính */}
@@ -144,12 +141,7 @@ export function ThanhTrenDesktop({
           className="flex items-center gap-1 min-w-0"
         >
           {CAC_MUC_MENU.map((muc) => {
-            const dangChon =
-              muc.key === "new-arrival"
-                ? pathname === "/" ||
-                  pathname === "/new-arrival" ||
-                  pathname.startsWith("/new-arrival/")
-                : pathname === muc.href || pathname.startsWith(`${muc.href}/`);
+            const dangChon = kiemTraMucDangChon(muc.key, pathname);
             const soDem = muc.key === "da-thich" ? soLuongThich : 0;
 
             return (

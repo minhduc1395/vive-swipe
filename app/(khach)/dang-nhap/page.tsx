@@ -1,10 +1,9 @@
 import Link from "next/link";
-import { AppShell } from "@/components/AppShell";
 import { NutQuayLai } from "@/components/NutQuayLai";
 
 export default function TrangDangNhap() {
   return (
-    <AppShell>
+    <div className="w-full flex-1 min-h-0 flex flex-col">
       <div className="max-w-[540px] w-full mx-auto px-4 md:px-6 pt-4 md:pt-8">
         <NutQuayLai fallback="/" />
       </div>
@@ -39,6 +38,6 @@ export default function TrangDangNhap() {
           Tiếp tục quẹt sản phẩm
         </Link>
       </div>
-    </AppShell>
+    </div>
   );
 }

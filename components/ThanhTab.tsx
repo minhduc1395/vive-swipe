@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { kiemTraMucDangChon } from "@/lib/dieu-huong";
 
 interface ThanhTabProps {
   soLuongThich?: number;
@@ -10,7 +11,7 @@ interface ThanhTabProps {
 
 const MUC_TAB = [
   { href: "/quet", label: "Quẹt", key: "quet" },
-  { href: "/danh-muc", label: "Danh mục", key: "danh-muc" },
+  { href: "/danh-muc", label: "Sản phẩm", key: "danh-muc" },
   { href: "/da-thich", label: "Đã thích", key: "da-thich" },
   { href: "/deal", label: "Deal", key: "deal" },
   { href: "/gio", label: "Giỏ", key: "gio" },
@@ -133,8 +134,7 @@ export function ThanhTab({
       className="mt-auto sticky bottom-0 z-40 shrink-0 min-h-[76px] px-1 pt-2 pb-[max(14px,env(safe-area-inset-bottom,0px))] border-t border-vien bg-trang grid grid-cols-5 md:hidden"
     >
       {MUC_TAB.map((tab) => {
-        const dangChon =
-          pathname === tab.href || pathname.startsWith(`${tab.href}/`);
+        const dangChon = kiemTraMucDangChon(tab.key, pathname);
         const soDem =
           tab.key === "da-thich"
             ? soLuongThich

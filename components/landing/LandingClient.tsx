@@ -2,8 +2,6 @@
 
 import { useMemo } from "react";
 import type { ChienDich } from "@/lib/chien-dich/types";
-import { AppShell } from "@/components/AppShell";
-import { LandingHeader } from "./LandingHeader";
 import { LandingStage3D, type CanhStage3D } from "./LandingStage3D";
 import { KhoiHero } from "./khoi/KhoiHero";
 import { KhoiTieuDiem } from "./khoi/KhoiTieuDiem";
@@ -18,12 +16,10 @@ import { LandingFooter } from "./LandingFooter";
 
 interface LandingClientProps {
   chienDich: ChienDich;
-  hienHeaderRieng?: boolean;
 }
 
 export function LandingClient({
   chienDich,
-  hienHeaderRieng = true,
 }: LandingClientProps) {
   const heroBlock = chienDich.khoi.find((k) => k.loai === "hero");
   const tieuDiemBlock = chienDich.khoi.find((k) => k.loai === "tieu-diem");
@@ -52,13 +48,12 @@ export function LandingClient({
   }, [chienDich.mau.nen, heroBlock, tieuDiemBlock, raMatBlock]);
 
   return (
-    <AppShell hienChanTrang={false}>
-      <div
-        className="relative flex-1 flex flex-col text-den overflow-x-clip font-sans"
-        style={{
-          backgroundColor: chienDich.mau.nen || "#F7EEEB",
-        }}
-      >
+    <div
+      className="relative flex-1 flex flex-col text-den overflow-x-clip font-sans"
+      style={{
+        backgroundColor: chienDich.mau.nen || "#F7EEEB",
+      }}
+    >
       {/* Quy tắc co giãn vùng 3D & cột chữ đối xứng theo design/landing-3d/index.html */}
       <style>{`
         .vq-k {
@@ -99,8 +94,6 @@ export function LandingClient({
         }
       `}</style>
 
-      {hienHeaderRieng && <LandingHeader />}
-
       <LandingStage3D cacCanh={cacCanh} />
 
       <main id="trang-landing" className="relative z-10">
@@ -134,7 +127,6 @@ export function LandingClient({
 
         <LandingFooter />
       </div>
-      </div>
-    </AppShell>
+    </div>
   );
 }

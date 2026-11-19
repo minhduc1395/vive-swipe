@@ -33,10 +33,10 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
     await expect(page.getByText("Combo kem dưỡng và ampoule LOPOE")).toBeVisible();
     await expect(page.getByText("Bộ 3 LOPOE")).toBeVisible();
 
-    await expect(page.getByRole("heading", { name: "Đang chạy tại booth" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Đang có tại|Đang chạy tại booth/ })).toBeVisible();
     await expect(page.getByText("COMBO PINK Medicube PDRN")).toBeVisible();
 
-    await expect(page.getByRole("heading", { name: "Tông nào hợp bạn?" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Tone bạn màu nào?" })).toBeVisible();
     await expect(page.getByRole("link", { name: "Tìm hiểu Personal Color" })).toBeVisible();
 
     await expect(page.getByText("LL2").first()).toBeVisible();
@@ -167,11 +167,7 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
     await page.goto("/new-arrival");
 
     const logoBox = await page.locator("header img[alt='VIVE']").boundingBox();
-    expect(logoBox?.width).toBeLessThanOrEqual(56);
-
-    await expect(
-      page.locator("header").getByRole("link", { name: "New Arrival", exact: true })
-    ).toBeVisible();
+    expect(logoBox?.width).toBeLessThanOrEqual(58);
 
     const btnXem = page.getByRole("link", { name: "Xem bộ sản phẩm" });
     await expect(btnXem).toBeVisible();
@@ -183,7 +179,7 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
       .getByRole("link", { name: "Đăng nhập" });
     await expect(btnDangNhap).toBeVisible();
     const boxDN = await btnDangNhap.boundingBox();
-    expect(boxDN?.height).toBeGreaterThanOrEqual(30);
+    expect(boxDN?.height).toBeGreaterThanOrEqual(44);
   });
 
   test("tôn trọng prefers-reduced-motion, dùng dữ liệu thật không bịa mô tả, ẩn 2 ống bên ở cảnh 1", async ({

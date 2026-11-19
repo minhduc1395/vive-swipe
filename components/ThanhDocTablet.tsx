@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { LogoVive } from "@/components/LogoVive";
+import { kiemTraMucDangChon } from "@/lib/dieu-huong";
 
 interface ThanhDocTabletProps {
   soLuongThich?: number;
@@ -130,6 +132,28 @@ const CAC_MUC_TABLET = [
       </svg>
     ),
   },
+  {
+    href: "/dang-nhap",
+    label: "Đăng nhập",
+    key: "dang-nhap",
+    icon: (
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+        <polyline points="10 17 15 12 10 7" />
+        <line x1="15" y1="12" x2="3" y2="12" />
+      </svg>
+    ),
+  },
 ];
 
 export function ThanhDocTablet({
@@ -149,23 +173,13 @@ export function ThanhDocTablet({
         aria-label="Trang chủ VIVE"
         className="flex items-center justify-center mb-4 focus-visible:outline-2 focus-visible:outline-den rounded"
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/brand/vive-logo-chu.png"
-          alt="VIVE"
-          className="w-[60px] h-auto"
-        />
+        <LogoVive rong={60} />
       </Link>
 
       {/* Các mục điều hướng */}
       <div className="flex flex-col items-center gap-2 w-full px-2.5">
         {CAC_MUC_TABLET.map((tab) => {
-          const dangChon =
-            tab.key === "new-arrival"
-              ? pathname === "/" ||
-                pathname === "/new-arrival" ||
-                pathname.startsWith("/new-arrival/")
-              : pathname === tab.href || pathname.startsWith(`${tab.href}/`);
+          const dangChon = kiemTraMucDangChon(tab.key, pathname);
           const soDem =
             tab.key === "da-thich"
               ? soLuongThich

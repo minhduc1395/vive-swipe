@@ -118,6 +118,7 @@ test.describe("W033 · Landing là trang đầu, menu thống nhất, nút quay 
       "Deal",
       "Đã thích",
       "Giỏ",
+      "Đăng nhập",
     ]);
 
     // /nhan-vien không dùng menu khách

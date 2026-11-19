@@ -151,8 +151,21 @@ export async function caiDatMockSupabase(
 }
 
 export async function datDaKhaoSat(page: Page) {
+  try {
+    await page.context().addCookies([
+      {
+        name: "vive_da_khao_sat",
+        value: "true",
+        domain: "localhost",
+        path: "/",
+      },
+    ]);
+  } catch {
+    // ignore
+  }
   await page.addInitScript(() => {
     window.localStorage.setItem("vive_da_khao_sat", "true");
+    document.cookie = "vive_da_khao_sat=true; path=/; max-age=2592000";
   });
 }
 

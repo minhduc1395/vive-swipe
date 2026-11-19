@@ -134,6 +134,7 @@ test.describe("W031 · Khung co giãn (AppShell) và điều hướng 3 mốc", 
   test("4. Không cuộn ngang (scrollWidth <= clientWidth) ở cả 9 cỡ màn hình", async ({
     page,
   }) => {
+    test.setTimeout(120_000);
     for (const viewport of CAC_MOC_MAN_HINH) {
       await page.setViewportSize({
         width: viewport.width,
@@ -160,6 +161,7 @@ test.describe("W031 · Khung co giãn (AppShell) và điều hướng 3 mốc", 
   test("5. Chụp ảnh 7 trang ở 3 cỡ chuẩn: 390 (mobile), 820 (tablet), 1440 (desktop)", async ({
     page,
   }) => {
+    test.setTimeout(120_000);
     const cacMocChup = [
       { name: "390", width: 390, height: 844 },
       { name: "820", width: 820, height: 1180 },

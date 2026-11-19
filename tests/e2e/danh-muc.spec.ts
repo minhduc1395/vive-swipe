@@ -151,7 +151,7 @@ test.describe("Trang Danh mục - tìm kiếm và lọc sản phẩm (W026)", ()
     await expect(page.getByRole("article")).toBeVisible();
 
     // 2. Chuyển sang /danh-muc
-    const linkDanhMuc = page.getByRole("link", { name: "Danh mục" });
+    const linkDanhMuc = page.getByRole("link", { name: /Sản phẩm|Danh mục/ }).first();
     await linkDanhMuc.click();
     await expect(page).toHaveURL(/\/danh-muc$/);
     await expect(page.locator("h1")).toHaveText("Danh mục");

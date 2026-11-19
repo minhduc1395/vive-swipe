@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { LogoVive } from "./LogoVive";
 import { ThanhTrenDesktop } from "./ThanhTrenDesktop";
 import { ThanhDocTablet } from "./ThanhDocTablet";
 import { ThanhTab } from "./ThanhTab";
@@ -10,10 +12,6 @@ import { layDanhSachDaThich, layGioHang } from "@/lib/kho-luu-tru";
 
 export interface AppShellProps {
   children: React.ReactNode;
-  hienDieuHuong?: boolean;
-  hienThanhTrenDesktop?: boolean;
-  hienThanhDocTablet?: boolean;
-  hienThanhTabMobile?: boolean;
   hienChanTrang?: boolean;
   soLuongThich?: number;
   soLuongGio?: number;
@@ -23,17 +21,13 @@ export interface AppShellProps {
 }
 
 /**
- * Khung ứng dụng đa nền tảng (AppShell) co giãn linh hoạt theo 3 mốc (docs/05 mục 2.1):
- * - Điện thoại (< 768px): Thanh tab dưới 5 mục
+ * Khung ứng dụng đa nền tảng (AppShell) co giãn linh hoạt theo 3 mốc (docs/05 mục 2.1, W038 §5):
+ * - Điện thoại (< 768px): Thanh trên mảnh 52px (Logo · Đăng nhập) + thanh tab dưới 5 mục (Quẹt · Sản phẩm · Đã thích · Deal · Giỏ)
  * - Máy tính bảng (768–1023px): Thanh điều hướng rail dọc bên trái
  * - Máy tính (>= 1024px): Thanh điều hướng trên cùng, nội dung tối đa 1280px
  */
 export function AppShell({
   children,
-  hienDieuHuong = true,
-  hienThanhTrenDesktop = true,
-  hienThanhDocTablet = true,
-  hienThanhTabMobile = true,
   hienChanTrang = true,
   soLuongThich: propSoLuongThich,
   soLuongGio: propSoLuongGio,
@@ -44,7 +38,7 @@ export function AppShell({
   const pathname = usePathname();
   const laTrangNoiBo =
     pathname.startsWith("/nhan-vien") || pathname.startsWith("/quan-tri");
-  const coHienDieuHuong = hienDieuHuong && !laTrangNoiBo;
+  const coHienDieuHuong = !laTrangNoiBo;
 
   const [soThich, setSoThich] = useState(propSoLuongThich ?? 0);
   const [soGio, setSoGio] = useState(propSoLuongGio ?? 0);
@@ -73,8 +67,14 @@ export function AppShell({
   const tongThich = propSoLuongThich ?? soThich;
   const tongGio = propSoLuongGio ?? soGio;
 
+  const isLanding = pathname === "/" || pathname === "/new-arrival";
+
   const isFixedH =
     khoaChieuCao ||
+    pathname === "/quet" ||
+    pathname.startsWith("/quet/") ||
+    pathname === "/bat-dau" ||
+    pathname.startsWith("/bat-dau/") ||
     className.includes("h-dvh") ||
     className.includes("h-screen") ||
     className.includes("h-full");
@@ -85,14 +85,35 @@ export function AppShell({
         isFixedH ? "h-dvh overflow-hidden" : "min-h-dvh"
       } ${className}`}
     >
+      {/* 0. Thanh trên mảnh cho điện thoại (< 768px): cao 52px, Logo (về New Arrival) · Đăng nhập (nút phụ) */}
+      {coHienDieuHuong && (
+        <header className="flex md:hidden h-[52px] shrink-0 px-4 items-center justify-between border-b border-[#F7EEEB] bg-trang sticky top-0 z-40">
+          <Link
+            href="/"
+            aria-label="Trang chủ VIVE"
+            className="inline-flex items-center min-h-[44px]"
+          >
+            <LogoVive rong={56} />
+          </Link>
+          <Link
+            href="/dang-nhap"
+            className="min-h-[44px] inline-flex items-center justify-center"
+          >
+            <span className="h-8 px-3 rounded-full bg-[#F7EEEB] text-den text-[13px] font-semibold inline-flex items-center hover:bg-[#E8D2CC] transition-colors">
+              Đăng nhập
+            </span>
+          </Link>
+        </header>
+      )}
+
       {/* 1. Thanh trên cho máy tính (>= 1024px) */}
-      {coHienDieuHuong && hienThanhTrenDesktop && (
+      {coHienDieuHuong && (
         <ThanhTrenDesktop soLuongThich={tongThich} soLuongGio={tongGio} />
       )}
 
       {/* 2. Thân trang: bố cục hàng ngang ở tablet (768–1023px) để chứa thanh rail bên trái */}
       <div className="w-full flex-1 min-h-0 flex flex-col md:flex-row">
-        {coHienDieuHuong && hienThanhDocTablet && (
+        {coHienDieuHuong && (
           <ThanhDocTablet soLuongThich={tongThich} soLuongGio={tongGio} />
         )}
 
@@ -103,14 +124,14 @@ export function AppShell({
           } ${noiDungClassName}`}
         >
           {children}
-          {coHienDieuHuong && !isFixedH && hienChanTrang && (
+          {coHienDieuHuong && !isFixedH && !isLanding && hienChanTrang && (
             <ChanTrang className="mt-auto" />
           )}
         </div>
       </div>
 
       {/* 3. Thanh tab dưới cho điện thoại (< 768px) */}
-      {coHienDieuHuong && hienThanhTabMobile && (
+      {coHienDieuHuong && (
         <ThanhTab soLuongThich={tongThich} soLuongGio={tongGio} />
       )}
     </div>

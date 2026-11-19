@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { AppShell } from "@/components/AppShell";
 import { NutQuayLai } from "@/components/NutQuayLai";
 import { layDonGiuHangTheoMa } from "@/lib/giu-hang/kho-giu-hang";
 import { ChiTietMaGiuHang } from "./ChiTietMaGiuHang";
@@ -18,7 +17,7 @@ export default async function TrangMaGiuHang({
 
   if (!donGoc) {
     return (
-      <AppShell>
+      <div className="w-full flex-1 min-h-0 flex flex-col">
         <div className="max-w-[540px] w-full mx-auto px-4 md:px-6 pt-4 md:pt-8">
           <NutQuayLai fallback="/gio" />
         </div>
@@ -27,7 +26,7 @@ export default async function TrangMaGiuHang({
           <p className="m-0 text-[15px] text-[#5C5C5B]">Mã có thể đã hết hạn hoặc gõ sai. Bạn kiểm tra lại email xác nhận hoặc hỏi nhân viên tại booth.</p>
           <Link href="/gio" className="h-12 px-6 rounded-full bg-den text-trang flex items-center font-semibold">Về giỏ hàng</Link>
         </main>
-      </AppShell>
+      </div>
     );
   }
 
@@ -39,12 +38,10 @@ export default async function TrangMaGiuHang({
   };
 
   return (
-    <AppShell>
-      <div className="max-w-[540px] mx-auto px-4 md:px-6 py-4 md:py-8">
-        <main>
-          <ChiTietMaGiuHang don={don} />
-        </main>
-      </div>
-    </AppShell>
+    <div className="max-w-[540px] mx-auto px-4 md:px-6 py-4 md:py-8 w-full">
+      <main>
+        <ChiTietMaGiuHang don={don} />
+      </main>
+    </div>
   );
 }

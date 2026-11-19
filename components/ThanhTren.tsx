@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LogoVive } from "@/components/LogoVive";
 
 interface ThanhTrenProps {
   soLuongGio?: number;
@@ -12,15 +13,10 @@ export function ThanhTren({ soLuongGio = 0 }: ThanhTrenProps) {
     <header className="h-[60px] shrink-0 px-5 pr-3 pt-3 flex items-center justify-between">
       <Link
         href="/"
-        aria-label="Về trang chào VIVE"
+        aria-label="Trang chủ VIVE"
         className="inline-flex items-center min-h-[44px]"
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/brand/vive-logo-chu.png"
-          alt="VIVE"
-          className="h-7 w-auto"
-        />
+        <LogoVive rong={58} />
       </Link>
 
       <Link
