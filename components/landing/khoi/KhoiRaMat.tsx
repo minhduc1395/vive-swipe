@@ -1,4 +1,5 @@
 "use client";
+import { lopNut } from "@/components/ui/Nut";
 
 import Link from "next/link";
 import type { KhoiRaMat as KhoiRaMatType } from "@/lib/chien-dich/types";
@@ -76,7 +77,7 @@ export function KhoiRaMat({ khoi }: KhoiRaMatProps) {
                     href="/gio"
                     onClick={() => themComboVaoGio(d.id, 1)}
                     aria-label={`Thêm vào giỏ ${d.ten}`}
-                    className="min-h-[44px] h-11 px-3.5 rounded-full bg-den text-white font-semibold text-[13px] inline-flex items-center justify-center hover:bg-black transition-colors whitespace-nowrap"
+                    className={lopNut("chinh","nho")}
                   >
                     Thêm vào giỏ
                   </Link>

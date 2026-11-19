@@ -59,7 +59,7 @@ export function LandingHeader({
         <Link
           href="/"
           aria-current="page"
-          className="h-10 px-2.5 rounded-full flex items-center text-[13px] font-bold text-den bg-transparent underline decoration-2 underline-offset-[6px] decoration-[#E8D2CC]"
+          className="h-10 px-2.5 rounded-full flex items-center text-[13px] font-bold text-den bg-transparent underline decoration-2 underline-offset-[6px] decoration-hong"
         >
           New Arrival
         </Link>
@@ -83,7 +83,7 @@ export function LandingHeader({
         </Link>
         <Link
           href="/gio"
-          className="hidden md:flex h-11 px-4 rounded-full items-center gap-1.5 text-[14px] font-semibold text-den border border-den/20 hover:bg-white transition-colors"
+          className="hidden md:flex h-11 px-4 rounded-full items-center gap-1.5 text-[14px] font-semibold text-den bg-hong-nhat hover:bg-hong/60 transition-colors"
         >
           <svg
             width="16"
@@ -103,7 +103,7 @@ export function LandingHeader({
         </Link>
         <Link
           href="/dang-nhap"
-          className="relative h-8 md:h-11 px-3 md:px-5 ml-1 rounded-full bg-transparent md:bg-den text-den md:text-white border border-den/25 md:border-transparent flex items-center text-[13px] md:text-[14px] font-semibold hover:opacity-90 transition-colors after:content-[''] after:absolute after:-inset-y-[6px] after:-inset-x-[2px] md:after:hidden"
+          className="relative h-8 md:h-11 px-3 md:px-5 ml-1 rounded-full bg-hong-nhat text-den border border-transparent flex items-center text-[13px] md:text-[14px] font-semibold hover:opacity-90 transition-colors after:content-[''] after:absolute after:-inset-y-[6px] after:-inset-x-[2px] md:after:hidden"
         >
           Đăng nhập
         </Link>

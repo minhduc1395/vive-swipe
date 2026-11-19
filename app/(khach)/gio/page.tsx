@@ -1,4 +1,5 @@
 "use client";
+import { lopNut } from "@/components/ui/Nut";
 
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
@@ -145,13 +146,13 @@ export default function TrangGio() {
             <div className="flex gap-3">
               <Link
                 href="/quet"
-                className="h-11 px-5 rounded-full bg-den text-trang text-[14px] font-semibold inline-flex items-center justify-center shadow-sm"
+                className={lopNut("chinh")}
               >
                 Bắt đầu quẹt
               </Link>
               <Link
                 href="/danh-muc"
-                className="h-11 px-5 rounded-full bg-trang text-den border border-[#E8D2CC] text-[14px] font-semibold inline-flex items-center justify-center"
+                className="h-11 px-5 rounded-full bg-trang text-den border border-hong text-[14px] font-semibold inline-flex items-center justify-center"
               >
                 Xem danh mục
               </Link>
@@ -166,12 +167,12 @@ export default function TrangGio() {
             {(ketQua.qua_du_kien || ketQua.moc_tiep_theo) && (
               <section
                 aria-label="Quà theo hóa đơn"
-                className="rounded-[22px] bg-[#F7EEEB] p-4 flex flex-col gap-3"
+                className="rounded-[22px] bg-hong-nhat p-4 flex flex-col gap-3"
               >
                 {/* Quà dự kiến */}
                 {ketQua.qua_du_kien && (
                   <div className="flex items-center gap-3">
-                    <div className="w-11 h-11 rounded-full bg-den text-trang flex items-center justify-center shrink-0">
+                    <div className="w-11 h-11 rounded-full bg-hong text-den flex items-center justify-center shrink-0">
                       <svg
                         width="20"
                         height="20"
@@ -194,7 +195,7 @@ export default function TrangGio() {
                       <strong className="text-[15px] font-semibold text-den">
                         Quà dự kiến: {ketQua.qua_du_kien}
                       </strong>
-                      <span className="text-[13px] text-[#5C5C5B]">
+                      <span className="text-[13px] text-xam-dam">
                         Mỗi hóa đơn nhận 1 quà có giá trị cao nhất
                       </span>
                     </div>
@@ -205,7 +206,7 @@ export default function TrangGio() {
                 {ketQua.moc_tiep_theo && (
                   <>
                     {ketQua.qua_du_kien && (
-                      <div className="h-[1px] bg-[#E8D2CC]" />
+                      <div className="h-[1px] bg-hong" />
                     )}
                     <p className="m-0 text-[14px] leading-[1.45] text-den">
                       Thêm{" "}
@@ -251,7 +252,7 @@ export default function TrangGio() {
                           }}
                         />
                       </div>
-                      <div className="flex justify-between text-[12px] text-[#5C5C5B]">
+                      <div className="flex justify-between text-[12px] text-xam-dam">
                         <span>
                           Đang có {dinhDangTien(ketQua.moc_tiep_theo.muc_hien_tai)}đ
                         </span>
@@ -277,7 +278,7 @@ export default function TrangGio() {
                               <div
                                 role="img"
                                 aria-label="Ảnh sản phẩm"
-                                className="w-12 h-12 rounded-xl bg-hong-nhat text-[10px] font-semibold tracking-wider uppercase text-[#5C5C5B] flex items-center justify-center shrink-0 overflow-hidden"
+                                className="w-12 h-12 rounded-xl bg-hong-nhat text-[10px] font-semibold tracking-wider uppercase text-xam-dam flex items-center justify-center shrink-0 overflow-hidden"
                               >
                                 {anhGoiY ? (
                                   /* eslint-disable-next-line @next/next/no-img-element */
@@ -301,7 +302,7 @@ export default function TrangGio() {
                               <button
                                 type="button"
                                 onClick={() => handleThemGoiY(spGoiY.id)}
-                                className="h-9 px-3 rounded-full bg-[#CFE3D5] hover:opacity-90 text-den font-semibold text-[13px] shrink-0 transition-transform active:scale-95 cursor-pointer"
+                                className="h-9 px-3 rounded-full bg-bac-ha hover:opacity-90 text-den font-semibold text-[13px] shrink-0 transition-transform active:scale-95 cursor-pointer"
                               >
                                 + Thêm
                               </button>
@@ -319,7 +320,7 @@ export default function TrangGio() {
             {ketQua.goi_y_doi_combo.length > 0 && (
               <section
                 aria-label="Gợi ý đổi combo"
-                className="rounded-[18px] bg-[#EAF3ED] border border-[#CFE3D5] p-3.5 flex flex-col gap-2"
+                className="rounded-[18px] bg-bac-ha-nhat border border-bac-ha p-3.5 flex flex-col gap-2"
               >
                 {ketQua.goi_y_doi_combo.map((combo) => (
                   <div
@@ -342,7 +343,7 @@ export default function TrangGio() {
                       onClick={() =>
                         handleDoiCombo(combo.deal_id, combo.thanh_phan)
                       }
-                      className="h-9 px-3.5 rounded-full bg-den hover:bg-black text-trang font-semibold text-[13px] shrink-0 cursor-pointer transition-transform active:scale-95"
+                      className={lopNut("chinh","nho")}
                     >
                       Đổi combo
                     </button>
@@ -362,8 +363,8 @@ export default function TrangGio() {
 
                 const bgAnh =
                   sp?.danh_muc === "mat-na" || sp?.danh_muc === "kem-duong"
-                    ? "bg-[#EAF3ED]"
-                    : "bg-[#F7EEEB]";
+                    ? "bg-bac-ha-nhat"
+                    : "bg-hong-nhat";
 
                 const anhSrc = duongDanAnh(sp?.anh, "nho");
 
@@ -379,7 +380,7 @@ export default function TrangGio() {
                       className={`relative w-[76px] h-[76px] rounded-[16px] ${bgAnh} flex items-center justify-center shrink-0 overflow-hidden`}
                     >
                       {dong.loai === "combo" && (
-                        <span className="absolute left-1.5 top-1.5 px-1.5 py-0.5 rounded-md bg-den text-trang text-[10px] font-bold">
+                        <span className="absolute left-1.5 top-1.5 px-1.5 py-0.5 rounded-md bg-hong text-den text-[10px] font-bold">
                           COMBO
                         </span>
                       )}
@@ -391,7 +392,7 @@ export default function TrangGio() {
                           className="w-14 h-14 object-contain"
                         />
                       ) : (
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#5C5C5B] px-1 text-center">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-xam-dam px-1 text-center">
                           {dong.thuong_hieu}
                         </span>
                       )}
@@ -408,7 +409,7 @@ export default function TrangGio() {
 
                       {/* Tag deal nếu có */}
                       {dong.deal_ap_dung.includes("LOPOE-25") && (
-                        <span className="self-start px-2 py-0.5 rounded-full bg-[#CFE3D5] text-den text-[11px] font-semibold">
+                        <span className="self-start px-2 py-0.5 rounded-full bg-bac-ha text-den text-[11px] font-semibold">
                           Giảm 25% vì mua kèm
                         </span>
                       )}
@@ -440,7 +441,7 @@ export default function TrangGio() {
                         })()}
 
                         {/* Nút cộng trừ */}
-                        <div className="flex items-center border border-[#E8D2CC] rounded-full overflow-hidden bg-trang">
+                        <div className="flex items-center border border-hong rounded-full overflow-hidden bg-trang">
                           <button
                             type="button"
                             aria-label="Giảm số lượng"
@@ -529,7 +530,7 @@ export default function TrangGio() {
                     tong_tam_tinh: ketQua.tong_tam_tinh,
                   })
                 }
-                className="w-full h-14 rounded-full bg-den hover:bg-black text-trang flex items-center justify-center font-semibold text-[17px] shadow-sm transition-transform active:scale-[0.99] no-underline"
+                className={lopNut("dam","lon",true) + " h-14 text-[17px] shadow-sm"}
               >
                 Giữ hàng tại booth
               </Link>

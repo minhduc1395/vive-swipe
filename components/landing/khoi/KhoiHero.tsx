@@ -76,8 +76,8 @@ export function KhoiHero({ khoi }: KhoiHeroProps) {
                   href={dichDen}
                   className={`min-h-[44px] h-[46px] sm:h-[52px] lg:h-[56px] px-4 sm:px-5 lg:px-7 rounded-full inline-flex items-center gap-2 font-semibold text-[14px] sm:text-[15px] lg:text-[16px] transition-transform active:scale-95 whitespace-nowrap ${
                     isChinh
-                      ? "bg-den text-white hover:bg-black shadow-sm"
-                      : "bg-white text-den hover:bg-white/80 border border-den/10 shadow-xs"
+                      ? "bg-hong text-den hover:brightness-[0.97] shadow-sm"
+                      : "bg-white text-den hover:bg-white/80 shadow-xs"
                   }`}
                 >
                   {n.chu}

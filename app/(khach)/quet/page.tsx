@@ -1,4 +1,5 @@
 "use client";
+import { lopNut } from "@/components/ui/Nut";
 
 import {
   useState,
@@ -769,13 +770,13 @@ export default function TrangQuet() {
               <span className="font-bold text-[26px] tracking-[-0.5px]">
                 Bạn đã xem hết sản phẩm hôm nay.
               </span>
-              <p className="m-0 text-[15px] leading-relaxed text-[#5C5C5B]">
+              <p className="m-0 text-[15px] leading-relaxed text-xam-dam">
                 Bạn đã thích {daThich.length} món. Xem lại danh sách hoặc các
                 deal hợp với bạn hôm nay.
               </p>
               <Link
                 href="/deal"
-                className="mt-2 h-12 px-6 rounded-full bg-den text-trang flex items-center font-semibold text-[15px] no-underline hover:opacity-90 transition-opacity"
+                className={lopNut("chinh","lon")}
               >
                 Xem deal cho bạn
               </Link>
@@ -873,7 +874,7 @@ export default function TrangQuet() {
                 onClick={xuLyHoanTac}
                 disabled={lichSu.length === 0 || !!animState}
                 aria-label="Hoàn tác"
-                className="w-[52px] h-[52px] rounded-full border-[1.5px] border-[#E8D2CC] bg-trang flex items-center justify-center text-den cursor-pointer hover:bg-hong-nhat disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                className="w-[52px] h-[52px] rounded-full border-[1.5px] border-hong bg-trang flex items-center justify-center text-den cursor-pointer hover:bg-hong-nhat disabled:opacity-40 disabled:cursor-not-allowed transition-all"
               >
                 <svg
                   width="22"
@@ -901,7 +902,7 @@ export default function TrangQuet() {
                   transform: `scale(${skipBtnScale})`,
                   backgroundColor: skipBtnBg,
                 }}
-                className="w-[68px] h-[68px] rounded-full border-[1.5px] border-den flex items-center justify-center text-den cursor-pointer transition-transform duration-100 disabled:opacity-40"
+                className="w-[68px] h-[68px] rounded-full bg-nen-phu flex items-center justify-center text-den cursor-pointer transition-transform duration-100 disabled:opacity-40"
               >
                 <svg
                   width="28"
@@ -928,7 +929,7 @@ export default function TrangQuet() {
                   transform: `scale(${likeBtnScale})`,
                   boxShadow: likeRing > 0 ? `0 0 0 ${likeRing}px #CFE3D5` : "none",
                 }}
-                className="w-[68px] h-[68px] rounded-full bg-den text-trang flex items-center justify-center cursor-pointer transition-transform duration-100 disabled:opacity-40"
+                className="w-[68px] h-[68px] rounded-full bg-hong text-den flex items-center justify-center cursor-pointer transition-transform duration-100 disabled:opacity-40"
               >
                 <svg
                   width="28"
@@ -953,7 +954,7 @@ export default function TrangQuet() {
                 style={{
                   transform: `scale(${cartBtnScale})`,
                 }}
-                className="w-[52px] h-[52px] rounded-full border-[1.5px] border-[#E8D2CC] bg-[#CFE3D5] text-den flex items-center justify-center cursor-pointer hover:opacity-90 transition-transform duration-100 disabled:opacity-40"
+                className="w-[52px] h-[52px] rounded-full border-[1.5px] border-hong bg-bac-ha text-den flex items-center justify-center cursor-pointer hover:opacity-90 transition-transform duration-100 disabled:opacity-40"
               >
                 <svg
                   width="22"
@@ -1059,7 +1060,7 @@ export default function TrangQuet() {
               </div>
               <Link
                 href="/giu-hang"
-                className="h-11 rounded-full bg-den text-trang flex items-center justify-center font-semibold text-[14px] no-underline hover:bg-black transition-colors"
+                className={lopNut("chinh","vua",true)}
               >
                 Giữ hàng tại booth
               </Link>

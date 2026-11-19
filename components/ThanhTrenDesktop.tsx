@@ -57,15 +57,15 @@ export function ThanhTrenDesktop({
                 aria-current={dangChon ? "page" : undefined}
                 className={`text-[13px] whitespace-nowrap transition-colors focus-visible:outline-2 focus-visible:outline-den flex items-center gap-1.5 ${
                   dangChon
-                    ? "text-[#2B2B2A] font-bold"
-                    : "text-[#2B2B2A]/82 hover:text-[#2B2B2A] font-medium"
+                    ? "text-den font-bold"
+                    : "text-den/82 hover:text-den font-medium"
                 }`}
               >
                 <span>{muc.nhan.vi}</span>
                 {soDem > 0 && (
                   <span
                     aria-label={`${soDem} món`}
-                    className="min-w-[16px] h-4 px-1 rounded-full bg-[#E8D2CC] text-den text-[10px] font-bold inline-flex items-center justify-center leading-none"
+                    className="min-w-[16px] h-4 px-1 rounded-full bg-hong text-den text-[10px] font-bold inline-flex items-center justify-center leading-none"
                   >
                     {soDem > 99 ? "99+" : soDem}
                   </span>
@@ -82,7 +82,7 @@ export function ThanhTrenDesktop({
             href="/danh-muc"
             prefetch={false}
             aria-label="Tìm kiếm"
-            className="text-[#2B2B2A]/82 hover:text-[#2B2B2A] transition-colors focus-visible:outline-2 focus-visible:outline-den p-1"
+            className="text-den/82 hover:text-den transition-colors focus-visible:outline-2 focus-visible:outline-den p-1"
           >
             <svg
               className="w-[17px] h-[17px] block"
@@ -105,7 +105,7 @@ export function ThanhTrenDesktop({
             aria-label={
               soLuongGio > 0 ? `Giỏ hàng (${soLuongGio} món)` : "Giỏ hàng"
             }
-            className="flex items-center gap-1.5 text-[13px] font-medium text-[#2B2B2A]/82 hover:text-[#2B2B2A] transition-colors focus-visible:outline-2 focus-visible:outline-den"
+            className="flex items-center gap-1.5 text-[13px] font-medium text-den/82 hover:text-den transition-colors focus-visible:outline-2 focus-visible:outline-den"
           >
             <svg
               className="w-[17px] h-[17px] block"
@@ -123,7 +123,7 @@ export function ThanhTrenDesktop({
             {soLuongGio > 0 && (
               <span
                 aria-label={`${soLuongGio} món`}
-                className="min-w-[16px] h-4 px-1 rounded-full bg-[#E8D2CC] text-den text-[10px] font-bold inline-flex items-center justify-center leading-none"
+                className="min-w-[16px] h-4 px-1 rounded-full bg-hong text-den text-[10px] font-bold inline-flex items-center justify-center leading-none"
               >
                 {soLuongGio > 99 ? "99+" : soLuongGio}
               </span>
@@ -139,7 +139,7 @@ export function ThanhTrenDesktop({
             }}
             data-sap-co="true"
             aria-label="Đăng nhập"
-            className="text-[13px] font-medium text-[#2B2B2A]/82 hover:text-[#2B2B2A] transition-colors focus-visible:outline-2 focus-visible:outline-den cursor-pointer"
+            className="text-[13px] font-medium text-den/82 hover:text-den transition-colors focus-visible:outline-2 focus-visible:outline-den cursor-pointer"
           >
             <span>Đăng nhập</span>
           </a>

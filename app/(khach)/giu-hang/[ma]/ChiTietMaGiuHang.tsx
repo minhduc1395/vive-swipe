@@ -1,4 +1,5 @@
 "use client";
+import { lopNut } from "@/components/ui/Nut";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -98,7 +99,7 @@ END:VCALENDAR`;
         <h1 className="m-0 text-[26px] md:text-[28px] font-bold tracking-tight text-den">
           Đã giữ hàng
         </h1>
-        <p className="m-0 text-[15px] text-[#5C5C5B]">
+        <p className="m-0 text-[15px] text-xam-dam">
           Đưa mã này cho nhân viên VIVE tại quầy.
         </p>
       </div>
@@ -117,7 +118,7 @@ END:VCALENDAR`;
 
         {/* QR Code SVG */}
         <div
-          className="w-[176px] h-[176px] flex items-center justify-center p-2 rounded-[14px] bg-trang border border-[#F7EEEB]"
+          className="w-[176px] h-[176px] flex items-center justify-center p-2 rounded-[14px] bg-trang border border-hong-nhat"
           dangerouslySetInnerHTML={{ __html: qrSvg }}
         />
 
@@ -175,7 +176,7 @@ END:VCALENDAR`;
         </div>
 
         {don.quaDuKien && (
-          <div className="flex justify-between items-center text-[13px] text-[#5C5C5B]">
+          <div className="flex justify-between items-center text-[13px] text-xam-dam">
             <span>Quà dự kiến</span>
             <span className="font-semibold text-den">{don.quaDuKien}</span>
           </div>
@@ -183,7 +184,7 @@ END:VCALENDAR`;
       </section>
 
       {/* Địa chỉ và thông báo email */}
-      <section className="flex flex-col gap-2 text-[13px] text-[#5C5C5B] px-2 py-1">
+      <section className="flex flex-col gap-2 text-[13px] text-xam-dam px-2 py-1">
         <div className="flex gap-2 items-start">
           <svg
             width="16"
@@ -243,14 +244,14 @@ END:VCALENDAR`;
         <button
           type="button"
           onClick={handleLuuAnh}
-          className="h-[50px] rounded-full border-[1.5px] border-den bg-trang font-semibold text-[15px] text-den flex items-center justify-center hover:bg-hong-nhat/50 transition-colors cursor-pointer"
+          className={lopNut("phu","lon",true)}
         >
           Lưu ảnh màn hình
         </button>
         <button
           type="button"
           onClick={handleThemVaoLich}
-          className="h-[50px] rounded-full border-[1.5px] border-den bg-trang font-semibold text-[15px] text-den flex items-center justify-center hover:bg-hong-nhat/50 transition-colors cursor-pointer"
+          className={lopNut("phu","lon",true)}
         >
           Thêm vào lịch
         </button>

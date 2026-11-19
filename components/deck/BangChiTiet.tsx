@@ -1,4 +1,5 @@
 "use client";
+import { lopNut } from "@/components/ui/Nut";
 
 import { useState } from "react";
 import type { SanPham } from "@/lib/data/types";
@@ -33,8 +34,8 @@ export function BangChiTiet({
 
   const nenAnh =
     sanPham.danh_muc === "mat-na" || sanPham.danh_muc === "kem-duong"
-      ? "bg-[#EAF3ED]"
-      : "bg-[#F7EEEB]";
+      ? "bg-bac-ha-nhat"
+      : "bg-hong-nhat";
 
   const anhSrc = duongDanAnh(sanPham.anh, "the") || "/brand/vive-logo-black.png";
   const dealsLienQuan = layCacDealCuaSanPham(sanPham, deals);
@@ -56,7 +57,7 @@ export function BangChiTiet({
           className="flex justify-center pt-2.5 pb-1 shrink-0"
           aria-hidden="true"
         >
-          <div className="w-10 h-1 rounded-full bg-[#E8D2CC]" />
+          <div className="w-10 h-1 rounded-full bg-hong" />
         </div>
 
         {/* Nút quay lại (góc trên trái) */}
@@ -154,7 +155,7 @@ export function BangChiTiet({
                 {sanPham.van_de?.map((vd) => (
                   <span
                     key={vd}
-                    className="h-[30px] px-3 rounded-full bg-[#EAF3ED] text-[13px] font-medium flex items-center text-den"
+                    className="h-[30px] px-3 rounded-full bg-bac-ha-nhat text-[13px] font-medium flex items-center text-den"
                   >
                     {layNhanVanDe(vd)}
                   </span>
@@ -181,7 +182,7 @@ export function BangChiTiet({
                       </span>
                     </div>
                     {(deal.hook || deal.dieu_kien) && (
-                      <p className="m-0 text-[13px] text-[#5C5C5B]">
+                      <p className="m-0 text-[13px] text-xam-dam">
                         {deal.hook || deal.dieu_kien}
                       </p>
                     )}
@@ -227,8 +228,8 @@ export function BangChiTiet({
             aria-label="Thích sản phẩm này"
             className={`h-[52px] px-5 rounded-full flex items-center justify-center gap-2 font-semibold text-[15px] border cursor-pointer transition-colors ${
               daThich
-                ? "bg-[#E8D2CC] border-den text-den"
-                : "bg-trang border-[#E8D2CC] text-den hover:border-den"
+                ? "bg-hong border-transparent text-den font-semibold"
+                : "bg-nen-phu border-transparent text-den hover:bg-hong-nhat"
             }`}
           >
             <svg
@@ -252,7 +253,7 @@ export function BangChiTiet({
               onThemGio();
               onDong();
             }}
-            className="flex-1 h-[52px] rounded-full bg-den text-trang flex items-center justify-center gap-2 font-semibold text-[16px] cursor-pointer hover:opacity-90 transition-opacity"
+            className={lopNut("chinh-bac-ha","lon") + " flex-1"}
           >
             <svg
               width="20"

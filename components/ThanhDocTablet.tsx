@@ -171,8 +171,8 @@ export function ThanhDocTablet({
 
           const lopStyle = `relative w-[80px] h-[58px] rounded-2xl flex flex-col items-center justify-center gap-1 text-[11px] transition-colors focus-visible:outline-2 focus-visible:outline-den ${
             dangChon
-              ? "bg-[#F7EEEB] text-[#2B2B2A] font-semibold"
-              : "bg-transparent text-[#737373] hover:text-[#2B2B2A] hover:bg-[#F7EEEB]/50 font-medium"
+              ? "bg-hong-nhat text-den font-semibold"
+              : "bg-transparent text-xam hover:text-den hover:bg-hong-nhat/50 font-medium"
           }`;
 
           if (tab.sap_co) {
@@ -207,7 +207,7 @@ export function ThanhDocTablet({
               {soDem > 0 && (
                 <span
                   aria-label={`${soDem} món`}
-                  className="absolute top-1 right-2 min-w-[16px] h-4 px-1 rounded-full bg-[#E8D2CC] text-den text-[10px] font-bold flex items-center justify-center leading-none"
+                  className="absolute top-1 right-2 min-w-[16px] h-4 px-1 rounded-full bg-hong text-den text-[10px] font-bold flex items-center justify-center leading-none"
                 >
                   {soDem > 99 ? "99+" : soDem}
                 </span>

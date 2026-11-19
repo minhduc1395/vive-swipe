@@ -1,3 +1,4 @@
+import { lopNut } from "@/components/ui/Nut";
 import Link from "next/link";
 import type { KhoiTieuDiem as KhoiTieuDiemType } from "@/lib/chien-dich/types";
 import { timDealTheoId, timSanPhamTheoId } from "@/lib/data";
@@ -97,7 +98,7 @@ export function KhoiTieuDiem({ khoi }: KhoiTieuDiemProps) {
           <div className="pt-1">
             <Link
               href={cta_chinh.den}
-              className="min-h-[44px] h-[52px] lg:h-[54px] px-6 rounded-full bg-den text-white inline-flex items-center gap-2 text-[15px] font-semibold hover:bg-black transition-colors"
+              className={lopNut("chinh","lon")}
             >
               {cta_chinh.chu}
             </Link>

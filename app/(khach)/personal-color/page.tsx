@@ -1,3 +1,4 @@
+import { lopNut } from "@/components/ui/Nut";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { NutQuayLai } from "@/components/NutQuayLai";
@@ -100,7 +101,7 @@ export default function TrangPersonalColor() {
             <div className="flex flex-wrap items-center gap-4 pt-1">
               <Link
                 href="/#ghe-vive"
-                className="min-h-[54px] md:h-[58px] px-7 rounded-full bg-den text-trang hover:bg-black transition-colors inline-flex items-center gap-2.5 text-[15px] md:text-[16px] font-semibold no-underline"
+                className={lopNut("chinh","lon")}
               >
                 <span>Đặt lịch tại booth</span>
                 <svg

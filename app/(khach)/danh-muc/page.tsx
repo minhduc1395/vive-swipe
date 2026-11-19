@@ -1,4 +1,5 @@
 "use client";
+import { lopNut } from "@/components/ui/Nut";
 
 import { useState, useEffect, useMemo, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -386,7 +387,7 @@ function DanhMucNoiDung() {
                   {DANH_SACH_LOAI.map((c, i) => {
                     const count = soLuongTheoLoai[c.id] || 0;
                     const bgClass =
-                      i % 2 === 0 ? "bg-[#F7EEEB]" : "bg-[#EAF3ED]";
+                      i % 2 === 0 ? "bg-hong-nhat" : "bg-bac-ha-nhat";
                     return (
                       <button
                         key={c.id}
@@ -403,7 +404,7 @@ function DanhMucNoiDung() {
                         <span className="text-[14px] font-semibold leading-[1.25] text-den">
                           {c.label}
                         </span>
-                        <span className="text-[12px] text-[#5C5C5B]">
+                        <span className="text-[12px] text-xam-dam">
                           {count} món
                         </span>
                       </button>
@@ -429,7 +430,7 @@ function DanhMucNoiDung() {
                           thuongHieu: "",
                         })
                       }
-                      className="h-[44px] px-4 rounded-full border border-[#E8D2CC] bg-trang font-sans text-[14px] text-den hover:border-den cursor-pointer transition-colors"
+                      className={lopNut("phu")}
                     >
                       {v.label}
                     </button>
@@ -454,7 +455,7 @@ function DanhMucNoiDung() {
                           vanDe: "",
                         })
                       }
-                      className="h-[44px] px-4 rounded-full border border-[#E8D2CC] bg-trang font-sans text-[14px] font-medium whitespace-nowrap text-den hover:border-den cursor-pointer shrink-0 transition-colors"
+                      className={lopNut("phu") + " shrink-0"}
                     >
                       {b.ten} · {b.count}
                     </button>
@@ -530,7 +531,7 @@ function DanhMucNoiDung() {
                           className={`h-11 px-3.5 rounded-full font-sans text-[13px] font-medium cursor-pointer transition-colors ${
                             on
                               ? "bg-bac-ha text-den border border-bac-ha font-semibold"
-                              : "bg-trang text-den border border-[#E8D2CC] hover:border-den"
+                              : "bg-nen-phu text-den border border-transparent hover:bg-hong-nhat"
                           }`}
                         >
                           {v.label}
@@ -557,8 +558,8 @@ function DanhMucNoiDung() {
                           }
                           className={`h-11 px-3 rounded-full font-sans text-[13px] font-medium cursor-pointer transition-colors ${
                             on
-                              ? "bg-den text-trang border border-den"
-                              : "bg-trang text-den border border-[#E8D2CC] hover:border-den"
+                              ? "bg-hong text-den border border-transparent font-semibold"
+                              : "bg-nen-phu text-den border border-transparent hover:bg-hong-nhat"
                           }`}
                         >
                           {b.ten}
@@ -583,8 +584,8 @@ function DanhMucNoiDung() {
                     aria-pressed={!loaiUrl}
                     className={`h-[44px] px-3.5 rounded-full font-sans text-[13px] font-medium whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
                       !loaiUrl
-                        ? "bg-den text-trang border border-den"
-                        : "bg-trang text-den border border-[#E8D2CC]"
+                        ? "bg-hong text-den border border-transparent font-semibold"
+                        : "bg-trang text-den border border-hong"
                     }`}
                   >
                     Tất cả
@@ -599,8 +600,8 @@ function DanhMucNoiDung() {
                         aria-pressed={on}
                         className={`h-[44px] px-3.5 rounded-full font-sans text-[13px] font-medium whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
                           on
-                            ? "bg-den text-trang border border-den"
-                            : "bg-trang text-den border border-[#E8D2CC]"
+                            ? "bg-hong text-den border border-transparent font-semibold"
+                            : "bg-trang text-den border border-hong"
                         }`}
                       >
                         {c.label}
@@ -628,8 +629,8 @@ function DanhMucNoiDung() {
                           aria-pressed={on}
                           className={`h-[36px] px-3 rounded-full font-sans text-[12px] font-medium whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
                             on
-                              ? "bg-den text-trang border border-den"
-                              : "bg-trang text-den border border-[#E8D2CC]"
+                              ? "bg-hong text-den border border-transparent font-semibold"
+                              : "bg-trang text-den border border-hong"
                           }`}
                         >
                           {v.label}
@@ -649,7 +650,7 @@ function DanhMucNoiDung() {
                       onChange={(e) =>
                         capNhatBoLoc({ xep: e.target.value }, { replace: true })
                       }
-                      className="h-[44px] rounded-[12px] border border-[#E8D2CC] bg-trang font-sans text-[13px] text-den px-2.5 outline-none cursor-pointer"
+                      className="h-[44px] rounded-[12px] border border-hong bg-trang font-sans text-[13px] text-den px-2.5 outline-none cursor-pointer"
                     >
                       <option value="goi-y">Gợi ý</option>
                       <option value="giam">Đang giảm giá</option>
@@ -666,8 +667,8 @@ function DanhMucNoiDung() {
                     const liked = daThich.includes(sp.id);
                     const bgClass =
                       i % 4 === 0 || i % 4 === 3
-                        ? "bg-[#F7EEEB]"
-                        : "bg-[#EAF3ED]";
+                        ? "bg-hong-nhat"
+                        : "bg-bac-ha-nhat";
                     const ghiChuDeal = layGhiChuDeal(sp, deals);
                     const anhSrc = duongDanAnh(sp.anh, "the");
 
@@ -696,7 +697,7 @@ function DanhMucNoiDung() {
 
                           {/* Tag giảm giá */}
                           {sp.giam_tren_tag && (
-                            <span className="absolute left-2 top-2 h-6 px-2 rounded-lg bg-den text-trang text-[11px] font-semibold flex items-center">
+                            <span className="absolute left-2 top-2 h-6 px-2 rounded-lg bg-hong text-den text-[11px] font-semibold flex items-center">
                               {sp.giam_tren_tag}
                             </span>
                           )}
@@ -758,7 +759,7 @@ function DanhMucNoiDung() {
                             type="button"
                             onClick={(e) => xuLyThemVaoGio(sp, e)}
                             aria-label={`Thêm ${sp.ten_hien_thi} vào giỏ`}
-                            className="w-[38px] h-[38px] shrink-0 rounded-full bg-[#CFE3D5] flex items-center justify-center text-den hover:opacity-90 cursor-pointer transition-opacity"
+                            className="w-[38px] h-[38px] shrink-0 rounded-full bg-bac-ha flex items-center justify-center text-den hover:opacity-90 cursor-pointer transition-opacity"
                           >
                             <svg
                               width="18"
@@ -792,7 +793,7 @@ function DanhMucNoiDung() {
                   <button
                     type="button"
                     onClick={() => setGioiHanHienThi((prev) => prev + 6)}
-                    className="w-full h-12 rounded-full border-[1.5px] border-den bg-trang font-sans text-[15px] font-semibold text-den cursor-pointer hover:bg-hong-nhat transition-colors"
+                    className={lopNut("phu","lon",true)}
                   >
                     Xem thêm {Math.min(6, conThem)} sản phẩm
                   </button>

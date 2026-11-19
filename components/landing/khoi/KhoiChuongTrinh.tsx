@@ -51,9 +51,9 @@ export function KhoiChuongTrinh({ khoi }: KhoiChuongTrinhProps) {
             // Card background styles
             const bgClass =
               d.id === "COMBO-PINK"
-                ? "bg-[#E8D2CC]"
+                ? "bg-hong"
                 : d.id === "DC-05"
-                ? "bg-[#CFE3D5]"
+                ? "bg-bac-ha"
                 : "bg-white";
 
             return (

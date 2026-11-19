@@ -1,4 +1,5 @@
 "use client";
+import { lopNut } from "@/components/ui/Nut";
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -130,7 +131,7 @@ export function KhoiDoiTac({ khoi }: KhoiDoiTacProps) {
 
           <Link
             href={link}
-            className="self-start h-14 px-8 rounded-full bg-den text-white font-semibold text-[16px] inline-flex items-center gap-2.5 hover:bg-black transition-transform active:scale-95"
+            className={lopNut("chinh","lon") + " self-start"}
           >
             Tìm hiểu Personal Color
             <svg
