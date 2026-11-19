@@ -102,7 +102,7 @@ export default function TrangDaThich() {
     <div className="max-w-[1280px] w-full mx-auto flex-1 flex flex-col min-h-0 bg-trang text-den font-sans overflow-hidden">
         {/* Header */}
         <header className="px-5 pt-7 pb-2 flex items-baseline gap-2 shrink-0">
-          <h1 className="m-0 text-[28px] font-semibold tracking-tight">Đã thích</h1>
+          <h1 className="tieu-de-trang">Đã thích</h1>
           <span suppressHydrationWarning className="text-[15px] text-xam">
             {sanPhamThich.length} món
           </span>
@@ -215,7 +215,7 @@ export default function TrangDaThich() {
                 <article
                   key={sp.id}
                   onClick={() => setSanPhamChiTiet(sp)}
-                  className="flex flex-col gap-1.5 cursor-pointer group"
+                  className="hien-dan flex flex-col gap-1.5 cursor-pointer group"
                 >
                   {/* Khối ảnh */}
                   <div

@@ -25,7 +25,7 @@ export default function TrangDangNhap() {
             <circle cx="12" cy="7" r="4" />
           </svg>
         </div>
-        <h1 className="text-[26px] md:text-[32px] font-bold tracking-tight mb-2">
+        <h1 className="tieu-de-trang mb-3">
           Đăng nhập VIVE
         </h1>
         <p className="text-[15px] text-xam-dam leading-relaxed mb-6">

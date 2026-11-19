@@ -166,7 +166,7 @@ export default function TrangPersonalColor() {
               {BON_NHOM_MAU.map((nhom) => (
                 <article
                   key={nhom.ten}
-                  className="rounded-[26px] bg-trang p-[18px] flex flex-col gap-3 shadow-[0_10px_26px_rgba(43,43,42,0.06)]"
+                  className="hien-dan rounded-[26px] bg-trang p-[18px] flex flex-col gap-3 shadow-[0_10px_26px_rgba(43,43,42,0.06)]"
                 >
                   <div className="flex gap-1.5 h-[110px]" aria-hidden="true">
                     {nhom.mau.map((hex) => (
@@ -192,7 +192,7 @@ export default function TrangPersonalColor() {
         {/* Trải nghiệm tại booth */}
         <section
           aria-labelledby="trai-nghiem-booth-heading"
-          className="max-w-[1360px] mx-auto px-5 md:px-8 py-12 md:py-20 flex flex-col gap-7"
+          className="hien-dan max-w-[1360px] mx-auto px-5 md:px-8 py-12 md:py-20 flex flex-col gap-7"
         >
           <h2
             id="trai-nghiem-booth-heading"

@@ -13,7 +13,7 @@ export default function TrangChinhSach() {
     <div className="max-w-[820px] w-full mx-auto px-5 md:px-8 py-5 md:py-10 flex flex-col gap-6">
         <header className="flex flex-col items-start gap-1">
           <NutQuayLai fallback="/" />
-          <h1 className="m-0 text-[26px] md:text-[34px] font-bold tracking-tight text-den">
+          <h1 className="tieu-de-trang">
             Chính sách bảo mật &amp; giữ hàng
           </h1>
           <p className="m-0 text-[15px] text-xam leading-relaxed">
@@ -25,7 +25,7 @@ export default function TrangChinhSach() {
         <main className="flex flex-col gap-4">
           <section
             aria-labelledby="muc-bao-mat"
-            className="rounded-[24px] bg-hong-nhat p-5 md:p-6 flex flex-col gap-2.5"
+            className="hien-dan rounded-[24px] bg-hong-nhat p-5 md:p-6 flex flex-col gap-2.5"
           >
             <h2
               id="muc-bao-mat"
@@ -62,7 +62,7 @@ export default function TrangChinhSach() {
 
           <section
             aria-labelledby="muc-giu-hang"
-            className="rounded-[24px] bg-bac-ha-nhat p-5 md:p-6 flex flex-col gap-2.5"
+            className="hien-dan rounded-[24px] bg-bac-ha-nhat p-5 md:p-6 flex flex-col gap-2.5"
           >
             <h2
               id="muc-giu-hang"
@@ -93,7 +93,7 @@ export default function TrangChinhSach() {
 
           <section
             aria-labelledby="muc-doi-tra"
-            className="rounded-[24px] bg-trang border border-vien p-5 md:p-6 flex flex-col gap-2.5"
+            className="hien-dan rounded-[24px] bg-trang border border-vien p-5 md:p-6 flex flex-col gap-2.5"
           >
             <h2
               id="muc-doi-tra"
@@ -124,7 +124,7 @@ export default function TrangChinhSach() {
 
           <section
             aria-labelledby="muc-doanh-nghiep"
-            className="rounded-[24px] bg-trang border border-vien p-5 md:p-6 flex flex-col gap-2.5"
+            className="hien-dan rounded-[24px] bg-trang border border-vien p-5 md:p-6 flex flex-col gap-2.5"
           >
             <h2
               id="muc-doanh-nghiep"

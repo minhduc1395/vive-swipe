@@ -162,7 +162,7 @@ function NoiDungDeal() {
 
         {/* Tiêu đề & Tags giải thích theo hồ sơ */}
         <header className="px-5 md:px-8 pt-7 pb-2 flex flex-col gap-2.5">
-          <h1 className="m-0 text-[28px] md:text-[32px] font-semibold tracking-[-0.3px]">
+          <h1 className="tieu-de-trang">
             Deal{" "}
             <span className="bg-hong/70 px-1 py-0.5 rounded-md">
               cho bạn

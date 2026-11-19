@@ -11,6 +11,15 @@
   --color-vien: #EEE5E2;
   --color-nen-phu: #F4F2F1;
   --color-trang: #FFFFFF;
+  /* phụ: nhãn, trạng thái (W052) */
+  --color-vang-nhat: #FFF4D6;
+  --color-moc: #C9A79D;
+  --color-cam: #D9895F;
+  --color-xanh-dam: #2F6B45;
+  --color-loi: #9B1C1C;
+  --color-loi-nen: #FDE8E8;
+  --color-loi-vien: #F8B4B4;
+  --color-bat-buoc: #E02424;
 
   --font-sans: var(--font-be-vietnam-pro, "Be Vietnam Pro Fallback"), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-playfair, "Playfair Display Fallback"), Georgia, serif;
@@ -115,4 +124,32 @@
     transition-delay: 0s !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* W052: tiêu đề trang theo landing v3 (đậm, lớn, khít chữ) */
+@utility tieu-de-trang {
+  margin: 0;
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--color-den);
+  @media (width >= 48rem) {
+    font-size: 40px;
+  }
+}
+
+/* W052: hiện dần khi cuộn tới (CSS thuần, trình duyệt không hỗ trợ thì hiện ngay) */
+@utility hien-dan {
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      animation: vive-hien-dan linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+  }
+}
+@keyframes vive-hien-dan {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
 }

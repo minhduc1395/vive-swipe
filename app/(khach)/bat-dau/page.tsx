@@ -132,17 +132,17 @@ export default function TrangBatDau() {
           >
             <div
               className={`h-1 rounded-[4px] transition-colors ${
-                buoc >= 1 ? "bg-den" : "bg-hong-nhat"
+                buoc >= 1 ? "bg-moc" : "bg-hong-nhat"
               }`}
             />
             <div
               className={`h-1 rounded-[4px] transition-colors ${
-                buoc >= 2 ? "bg-den" : "bg-hong-nhat"
+                buoc >= 2 ? "bg-moc" : "bg-hong-nhat"
               }`}
             />
             <div
               className={`h-1 rounded-[4px] transition-colors ${
-                buoc >= 3 ? "bg-den" : "bg-hong-nhat"
+                buoc >= 3 ? "bg-moc" : "bg-hong-nhat"
               }`}
             />
           </div>
@@ -163,7 +163,7 @@ export default function TrangBatDau() {
               <span className="text-[13px] font-semibold tracking-[1.2px] text-xam">
                 CÂU 1/3
               </span>
-              <h1 className="m-0 text-[28px] leading-[1.2] font-semibold">
+              <h1 className="m-0 text-[30px] md:text-[36px] leading-[1.1] font-bold tracking-[-0.03em]">
                 Da bạn thuộc <span className="vet-hong">loại nào?</span>
               </h1>
               <p className="m-0 text-[15px] leading-relaxed text-xam">
@@ -225,7 +225,7 @@ export default function TrangBatDau() {
               <span className="text-[13px] font-semibold tracking-[1.2px] text-xam">
                 CÂU 2/3
               </span>
-              <h1 className="m-0 text-[28px] leading-[1.2] font-semibold">
+              <h1 className="m-0 text-[30px] md:text-[36px] leading-[1.1] font-bold tracking-[-0.03em]">
                 Bạn quan tâm <span className="vet-hong">điều gì?</span>
               </h1>
               <p className="m-0 text-[15px] leading-relaxed text-xam">
@@ -294,7 +294,7 @@ export default function TrangBatDau() {
               <span className="text-[13px] font-semibold tracking-[1.2px] text-xam">
                 CÂU 3/3
               </span>
-              <h1 className="m-0 text-[28px] leading-[1.2] font-semibold">
+              <h1 className="m-0 text-[30px] md:text-[36px] leading-[1.1] font-bold tracking-[-0.03em]">
                 Mỗi món bạn thường <span className="vet-hong">chi khoảng?</span>
               </h1>
               <p className="m-0 text-[15px] leading-relaxed text-xam">
