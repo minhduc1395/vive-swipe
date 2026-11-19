@@ -1,16 +1,16 @@
 "use client";
-import { lopNut } from "@/components/ui/Nut";
 
-import { useEffect, useMemo, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { duongDanAnh, type SanPham } from "@/lib/data";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import type { SanPham, Deal } from "@/lib/data";
+import { KhungChiTiet } from "@/components/ui/KhungChiTiet";
+import { lopChip } from "@/components/ui/Nhan";
+import { TheDeal, TEN_NHOM, nhomCuaDeal, type NhomDeal } from "@/components/deal/TheDeal";
+import { NganKeoDeal } from "@/components/deal/NganKeoDeal";
 import { useDuLieu } from "@/lib/du-lieu-context";
-import { dinhDangTien } from "@/lib/dinh-dang";
 import {
   layDanhSachDealChoBan,
   trichXuatNhanGiaiThich,
-  type DealChoBan,
 } from "@/lib/deals/diem-deal";
 import {
   layDanhSachDaThich,
@@ -23,8 +23,13 @@ import {
 
 const KHOA_EMAIL_DEAL = "vive_email_deal";
 
-export default function TrangDeal() {
+function NoiDungDeal() {
   const { sanPham, deals } = useDuLieu();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const idUrl = searchParams.get("id") || "";
+  const nhomUrl = (searchParams.get("nhom") || "") as NhomDeal | "";
+  const moTuTrang = useRef(false);
   const [daThich, setDaThich] = useState<string[]>([]);
   const [gioHang, setGioHang] = useState<ItemGioHang[]>([]);
   const [hoSo, setHoSo] = useState<Record<string, number>>({});
@@ -88,7 +93,7 @@ export default function TrangDeal() {
     }, 2200);
   };
 
-  const handleThemCombo = (deal: DealChoBan) => {
+  const handleThemCombo = (deal: Deal) => {
     themComboVaoGio(deal.id, 1);
     hienToast(`Đã thêm ${deal.ten} vào giỏ!`);
   };
@@ -102,6 +107,28 @@ export default function TrangDeal() {
     }
     hienToast(`Đã thêm bộ "${tenBo}" vào giỏ!`);
   };
+
+  // Bộ lọc + ?id= (W041): mở ngăn kéo chi tiết, cuộn tới thẻ; đóng hoặc Back thì bỏ id
+  const doiUrl = (moi: { id?: string; nhom?: string }, thay = false) => {
+    const q = new URLSearchParams(searchParams.toString());
+    for (const [k, v] of Object.entries(moi)) { if (v) q.set(k, v); else q.delete(k); }
+    const dich = `/deal${q.toString() ? `?${q}` : ""}`;
+    if (thay) router.replace(dich, { scroll: false }); else router.push(dich, { scroll: false });
+  };
+  const moDeal = (d: Deal) => { moTuTrang.current = true; doiUrl({ id: d.id }); };
+  const dongDeal = () => {
+    if (moTuTrang.current) { moTuTrang.current = false; router.back(); }
+    else doiUrl({ id: "" }, true);
+  };
+  const dealDangMo = idUrl ? deals.find((d) => d.id === idUrl && d.hien_thi && !(d.may_rui && !d.da_dang_ky)) ?? null : null;
+  const dealsHienThi = nhomUrl ? dealsChoBan.filter((d) => nhomCuaDeal(d) === nhomUrl) : dealsChoBan;
+
+  // Vào thẳng /deal?id=… : cuộn tới thẻ đó
+  useEffect(() => {
+    if (!idUrl || !daSanSang) return;
+    const t = setTimeout(() => document.getElementById(`deal-${idUrl}`)?.scrollIntoView({ block: "center", behavior: "smooth" }), 150);
+    return () => clearTimeout(t);
+  }, [idUrl, daSanSang]);
 
   const handleDangKyEmail = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -154,20 +181,36 @@ export default function TrangDeal() {
           </div>
         </header>
 
-        {/* Danh sách Deal */}
-        <div className="px-4 md:px-8 pt-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 md:gap-5 items-start">
-          {dealsChoBan.length === 0 ? (
-            <div className="md:col-span-2 lg:col-span-3 rounded-[20px] bg-hong-nhat p-6 text-center text-xam">
+        {/* Bộ lọc theo nhóm */}
+        <div className="px-5 md:px-8 pt-2 pb-1 flex gap-2 overflow-x-auto [scrollbar-width:none]" role="group" aria-label="Lọc deal">
+          {(["", "qua", "combo", "giam"] as const).map((n) => {
+            const on = nhomUrl === n;
+            const dem = n ? dealsChoBan.filter((d) => nhomCuaDeal(d) === n).length : dealsChoBan.length;
+            if (n && dem === 0) return null;
+            return (
+              <button key={n || "tat-ca"} type="button" aria-pressed={on} onClick={() => doiUrl({ nhom: n }, true)} className={lopChip(on)}>
+                {n ? TEN_NHOM[n] : "Tất cả"} · {dem}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Lưới thẻ deal: 1 cột điện thoại, 2 cột từ 768, 3 cột từ 1280 */}
+        <div className="px-4 md:px-8 pt-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 items-stretch">
+          {dealsHienThi.length === 0 ? (
+            <div className="md:col-span-2 xl:col-span-3 rounded-[20px] bg-hong-nhat p-6 text-center text-xam">
               Hiện chưa có deal nào đang chạy hôm nay. Vui lòng quay lại sau!
             </div>
           ) : (
-            dealsChoBan.map((deal) => (
-              <TheDealMuc
+            dealsHienThi.map((deal) => (
+              <TheDeal
                 key={deal.id}
                 deal={deal}
                 sanPhamMap={sanPhamMap}
+                noiBat={deal.id === idUrl}
+                onMo={moDeal}
                 onThemCombo={handleThemCombo}
-                onThemBoGoiY={handleThemBoGoiY}
+                onThemBo={handleThemBoGoiY}
               />
             ))
           )}
@@ -175,7 +218,7 @@ export default function TrangDeal() {
           {/* Ô đăng ký email */}
           <section
             aria-label="Đăng ký nhận deal"
-            className="md:col-span-2 lg:col-span-3 rounded-[22px] bg-hong-nhat p-5 flex flex-col gap-2.5 mt-2"
+            className="md:col-span-2 xl:col-span-3 rounded-[22px] bg-hong-nhat p-5 flex flex-col gap-2.5 mt-2"
           >
             <div className="flex items-center gap-2">
               <svg
@@ -242,350 +285,21 @@ export default function TrangDeal() {
             </p>
           </section>
         </div>
+
+        <KhungChiTiet mo={dealDangMo !== null} onDong={dongDeal} nhan={dealDangMo ? `Chi tiết deal ${dealDangMo.ten}` : "Chi tiết deal"}>
+          {dealDangMo && (
+            <NganKeoDeal deal={dealDangMo} sanPhamMap={sanPhamMap} onDong={dongDeal} onThemCombo={handleThemCombo} onThemBo={handleThemBoGoiY} />
+          )}
+        </KhungChiTiet>
       </div>
   );
 }
 
-interface TheDealMucProps {
-  deal: DealChoBan;
-  sanPhamMap: Map<string, SanPham>;
-  onThemCombo: (deal: DealChoBan) => void;
-  onThemBoGoiY: (tenBo: string, danhSachId: string[]) => void;
-}
-
-function TheDealMuc({
-  deal,
-  sanPhamMap,
-  onThemCombo,
-  onThemBoGoiY,
-}: TheDealMucProps) {
-  // 1. Quà theo mốc hóa đơn / thương hiệu (KM-08, BAC-HOA-DON)
-  if (deal.moc && deal.moc.length > 0) {
-    const boGoiYDau = deal.goi_y && deal.goi_y.length > 0 ? deal.goi_y[0] : null;
-
-    return (
-      <article
-        aria-label={deal.ten}
-        className="rounded-[24px] bg-hong-nhat p-5 flex flex-col gap-3.5"
-      >
-        <div className="flex items-center justify-between">
-          <span className="h-7 px-3 rounded-full bg-hong text-den text-[12px] font-semibold flex items-center gap-1.5">
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#FFFFFF"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M20 12v10H4V12" />
-              <path d="M2 7h20v5H2z" />
-              <path d="M12 22V7" />
-              <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
-              <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
-            </svg>
-            Quà theo hóa đơn
-          </span>
-          <span className="text-[12px] text-xam-dam">Số lượng có hạn</span>
-        </div>
-
-        <h2 className="m-0 text-[19px] leading-[1.3] font-semibold text-den">
-          {deal.hook ?? deal.ten}
-        </h2>
-
-        {/* Các mốc quà */}
-        <div
-          className={`grid gap-1.5 ${
-            deal.moc.length >= 3 ? "grid-cols-3" : "grid-cols-2"
-          }`}
-        >
-          {deal.moc.map((m, idx) => {
-            const mocTien = m.tu ?? m.tren ?? 0;
-            const tenMoc =
-              mocTien >= 1_000_000
-                ? `Từ ${(mocTien / 1_000_000).toString().replace(".", ",")} triệu`
-                : `Từ ${dinhDangTien(mocTien)}`;
-            return (
-              <div
-                key={idx}
-                className="rounded-[14px] bg-trang p-2.5 flex flex-col gap-0.5"
-              >
-                <span className="text-[11px] text-xam-dam">{tenMoc}</span>
-                <strong className="text-[12px] font-semibold text-den line-clamp-1">
-                  {m.qua.replace(/^\d+\s*/, "")}
-                </strong>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Bộ gợi ý vừa mốc */}
-        {deal.goi_y && deal.goi_y.length > 0 && (
-          <div className="flex flex-col gap-2 mt-1">
-            <span className="text-[13px] font-semibold text-den">
-              Bộ gợi ý vừa mốc
-            </span>
-            {deal.goi_y.slice(0, 2).map((bo) => {
-              const spDau = sanPhamMap.get(bo.san_pham[0]);
-              const anhDau = duongDanAnh(spDau?.anh, "nho");
-              return (
-                <div
-                  key={bo.id}
-                  className="rounded-[14px] bg-trang p-2.5 flex items-center justify-between gap-2.5"
-                >
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    {anhDau ? (
-                      <div className="w-11 h-11 rounded-[10px] bg-hong-nhat relative overflow-hidden shrink-0">
-                        <Image
-                          src={anhDau}
-                          alt={bo.ten}
-                          fill
-                          sizes="44px"
-                          className="object-contain p-1"
-                        />
-                      </div>
-                    ) : (
-                      <div className="w-11 h-11 rounded-[10px] bg-hong-nhat text-[10px] font-semibold flex items-center justify-center shrink-0">
-                        SET
-                      </div>
-                    )}
-                    <div className="flex flex-col min-w-0">
-                      <strong className="text-[13px] font-semibold text-den truncate">
-                        {bo.ten} · {dinhDangTien(bo.gia)}
-                      </strong>
-                      <span className="text-[12px] text-xam-dam">
-                        Đạt mốc tặng quà
-                      </span>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => onThemBoGoiY(bo.ten, bo.san_pham)}
-                    className={lopNut("phu","nho")}
-                  >
-                    Thêm bộ
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-        )}
-
-        {/* Nút hành động chính */}
-        {boGoiYDau && (
-          <button
-            type="button"
-            onClick={() => onThemBoGoiY(boGoiYDau.ten, boGoiYDau.san_pham)}
-            className={lopNut("chinh-bac-ha","lon",true)}
-          >
-            Thêm {boGoiYDau.ten} vào giỏ
-          </button>
-        )}
-      </article>
-    );
-  }
-
-  // 2. Combo (loai === 'combo')
-  if (deal.loai === "combo") {
-    const thanhPhan = deal.thanh_phan ?? [];
-    let tongLe = 0;
-    const sanPhamTrongCombo: SanPham[] = [];
-
-    for (const tp of thanhPhan) {
-      const sp = sanPhamMap.get(tp.id);
-      if (sp) {
-        tongLe += sp.gia_ban * tp.so_luong;
-        sanPhamTrongCombo.push(sp);
-      }
-    }
-
-    const giaCombo = deal.gia_combo ?? tongLe;
-    const tietKiem = Math.max(0, tongLe - giaCombo);
-
-    return (
-      <article
-        aria-label={deal.ten}
-        className="rounded-[24px] border border-hong p-[18px] bg-trang flex flex-col gap-3"
-      >
-        <div className="flex items-center gap-3">
-          {/* Ảnh các món chồng nhau */}
-          <div className="flex shrink-0">
-            {sanPhamTrongCombo.map((sp, idx) => {
-              const anhSp = duongDanAnh(sp.anh, "nho");
-              return (
-                <div
-                  key={sp.id}
-                  className={`w-[56px] h-[56px] rounded-[14px] bg-hong-nhat border-2 border-trang relative overflow-hidden shrink-0 ${
-                    idx > 0 ? "-ml-4" : ""
-                  }`}
-                >
-                  {anhSp ? (
-                    <Image
-                      src={anhSp}
-                      alt={sp.ten_hien_thi}
-                      fill
-                      sizes="56px"
-                      className="object-contain p-1"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-[9px] font-semibold text-xam">
-                      {sp.thuong_hieu.slice(0, 4)}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="flex flex-col min-w-0">
-            <span className="text-[11px] font-semibold text-xam uppercase tracking-wider">
-              Combo ưu đãi
-            </span>
-            <h2 className="m-0 text-[16px] font-semibold text-den line-clamp-1">
-              {deal.ten}
-            </h2>
-            <span className="text-[12px] text-xam line-clamp-1">
-              {sanPhamTrongCombo.map((s) => s.ten_hien_thi).join(" + ")}
-            </span>
-          </div>
-        </div>
-
-        {/* Giá & Tiết kiệm */}
-        <div className="flex items-baseline justify-between pt-1 border-t border-[#F2E4E0]">
-          <div className="flex items-baseline gap-2">
-            <span className="text-[20px] font-bold text-den">
-              {dinhDangTien(giaCombo)}
-            </span>
-            {tongLe > giaCombo && (
-              <span className="text-[13px] text-xam line-through">
-                {dinhDangTien(tongLe)}
-              </span>
-            )}
-          </div>
-          {tietKiem > 0 ? (
-            <span className="px-2.5 py-0.5 rounded-full bg-bac-ha text-den text-[12px] font-semibold">
-              Tiết kiệm {dinhDangTien(tietKiem)}
-            </span>
-          ) : deal.qua ? (
-            <span className="px-2.5 py-0.5 rounded-full bg-bac-ha text-den text-[12px] font-semibold line-clamp-1">
-              Tặng quà
-            </span>
-          ) : null}
-        </div>
-
-        <button
-          type="button"
-          onClick={() => onThemCombo(deal)}
-          className={lopNut("chinh-bac-ha","vua",true)}
-        >
-          Thêm combo vào giỏ
-        </button>
-      </article>
-    );
-  }
-
-  // 3. Giảm khi mua kèm (LOPOE-25)
-  if (deal.loai === "giam_khi_mua_kem") {
-    const dsId = deal.ap_dung_cho ?? [];
-    const dsSanPham = dsId
-      .map((id) => sanPhamMap.get(id))
-      .filter((sp): sp is SanPham => Boolean(sp));
-
-    return (
-      <article
-        aria-label={deal.ten}
-        className="rounded-[24px] border border-hong p-[18px] bg-trang flex flex-col gap-3"
-      >
-        <div className="flex items-center justify-between">
-          <span className="h-6 px-2.5 rounded-full bg-bac-ha text-den text-[12px] font-semibold flex items-center">
-            Giảm 25% khi mua kèm
-          </span>
-          <span className="text-[12px] text-xam">Ưu đãi kèm</span>
-        </div>
-
-        <h2 className="m-0 text-[17px] font-semibold text-den">
-          {deal.hook ?? deal.ten}
-        </h2>
-        {deal.dieu_kien && (
-          <p className="m-0 text-[13px] text-xam-dam">{deal.dieu_kien}</p>
-        )}
-
-        {/* Danh sách món ưu đãi */}
-        <div className="flex flex-col gap-2 pt-1 border-t border-[#F2E4E0]">
-          {dsSanPham.map((sp) => {
-            const giaUuDai = deal.gia_uu_dai?.[sp.id] ?? Math.round(sp.gia_ban * 0.75);
-            return (
-              <div
-                key={sp.id}
-                className="flex items-center justify-between py-1 text-[13px]"
-              >
-                <span className="text-den truncate max-w-[200px]">
-                  {sp.ten_hien_thi}
-                </span>
-                <div className="flex items-center gap-1.5 shrink-0">
-                  <span className="text-xam line-through text-[12px]">
-                    {dinhDangTien(sp.gia_ban)}
-                  </span>
-                  <strong className="text-den font-semibold">
-                    {dinhDangTien(giaUuDai)}
-                  </strong>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        <Link
-          href="/danh-muc"
-          className={lopNut("phu","vua",true)}
-        >
-          Chọn món để mua kèm
-        </Link>
-      </article>
-    );
-  }
-
-  // 4. Các loại deal khác (mua_x_tang_y, qua_khi_mua)
+export default function TrangDeal() {
   return (
-    <article
-      aria-label={deal.ten}
-      className="rounded-[24px] border border-hong p-[18px] bg-trang flex flex-col gap-3"
-    >
-      <div className="flex items-center justify-between">
-        <span className="h-6 px-2.5 rounded-full bg-hong-nhat text-den text-[12px] font-semibold flex items-center">
-          Ưu đãi đặc biệt
-        </span>
-        {deal.gioi_han && (
-          <span className="text-[12px] text-xam">Số lượng có hạn</span>
-        )}
-      </div>
-
-      <h2 className="m-0 text-[17px] font-semibold text-den">
-        {deal.hook ?? deal.ten}
-      </h2>
-
-      {deal.dieu_kien && (
-        <p className="m-0 text-[13px] text-xam-dam">{deal.dieu_kien}</p>
-      )}
-
-      {deal.qua && (
-        <div className="rounded-xl bg-hong-nhat p-2.5 text-[13px] text-den flex items-center gap-2">
-          <span className="font-semibold text-den bg-bac-ha px-1.5 py-0.5 rounded text-[11px]">
-            QUÀ TẶNG
-          </span>
-          <span className="line-clamp-1">{deal.qua}</span>
-        </div>
-      )}
-
-      <Link
-        href="/danh-muc"
-        className={lopNut("chinh","vua",true)}
-      >
-        Xem sản phẩm áp dụng
-      </Link>
-    </article>
+    <Suspense fallback={null}>
+      <NoiDungDeal />
+    </Suspense>
   );
 }
+

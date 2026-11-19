@@ -50,7 +50,7 @@ test.describe("W016 · Deal cho bạn (/deal) và thẻ deal trong deck", () => 
     await page.goto("/deal");
 
     // 1. Thêm combo (COMBO PINK hoặc bất kỳ combo nào hiển thị)
-    const nutThemCombo = page.getByRole("button", { name: "Thêm combo vào giỏ" }).first();
+    const nutThemCombo = page.locator("article", { hasText: "Combo" }).getByRole("button", { name: "Thêm vào giỏ" }).first();
     await expect(nutThemCombo).toBeVisible();
     await nutThemCombo.click();
 

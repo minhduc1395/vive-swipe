@@ -103,7 +103,7 @@ export function TheDealDacBiet({
 
         <div className="flex flex-col gap-2 mt-auto pt-4">
           <Link
-            href="/deal"
+            href={`/deal?id=${encodeURIComponent(dealTop.id)}`}
             className="h-[50px] rounded-full bg-trang text-den no-underline flex items-center justify-center font-semibold text-[16px] hover:opacity-95 transition-opacity"
           >
             Xem bộ gợi ý
