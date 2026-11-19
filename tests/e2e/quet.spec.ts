@@ -85,6 +85,26 @@ test.describe("Deck quẹt sản phẩm (W011)", () => {
     await expect(dialog).not.toBeVisible();
   });
 
+  test("W057: chạm vào thẻ mở chi tiết, có phần Giới thiệu, nền sau bị khóa cuộn", async ({ page }) => {
+    await page.goto("/quet");
+    const the = page.getByRole("article").first();
+    await expect(the).toBeVisible();
+    const box = (await the.boundingBox())!;
+    // Chạm nhẹ giữa thẻ (không kéo)
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.mouse.up();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByRole("heading", { name: "Giới thiệu" })).toBeVisible();
+    await expect(dialog.locator("[data-mo-ta] p")).not.toHaveText("");
+    // Trang nền bị khóa cuộn khi khung chi tiết mở, mở lại khi đóng
+    expect(await page.evaluate(() => getComputedStyle(document.documentElement).overflow)).toBe("hidden");
+    await dialog.getByLabel("Đóng chi tiết").click();
+    await expect(dialog).not.toBeVisible();
+    expect(await page.evaluate(() => getComputedStyle(document.documentElement).overflow)).not.toBe("hidden");
+  });
+
   test("điều khiển quẹt bằng phím mũi tên", async ({ page }) => {
     await page.goto("/quet");
     await expect(page.getByRole("article")).toBeVisible();

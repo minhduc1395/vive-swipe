@@ -227,16 +227,17 @@ luoi_doi:
         den: "/deal?id=DC-05"
         kieu: "chinh"
 
-  - id: "saltherapy"
+  # 20/11: ô salTherapy tạm thay bằng Lalarecipe vì ảnh salTherapy trong kho media sai sản phẩm (hũ dòng Mỹ, hàng bán là túi vòi). Có ảnh đúng thì đổi lại.
+  - id: "lalarecipe"
     mau_nen: "hong-nhat"
     co: "rong"
-    tieu_de: "salTherapy"
-    phu_de_truoc: "Tẩy tế bào chết muối biển."
-    san_pham: ["8801990000337", "8801990000351", "8801990000320"]
-    mo_ta_anh: "Ba hũ tẩy tế bào chết muối và dầu salTherapy"
+    tieu_de: "Lalarecipe"
+    phu_de_truoc: "Bộ Yuzu Vita C."
+    san_pham: ["8809675771909", "8809638307466", "8809638307473"]
+    mo_ta_anh: "Toner pad, ampoule và kem dưỡng Yuzu Vita C của Lalarecipe"
     nut:
       - chu: "Xem sản phẩm"
-        den: "/danh-muc?thuong-hieu=salTherapy"
+        den: "/danh-muc?thuong-hieu=Lalarecipe"
         kieu: "chinh"
 
 qua_lopoe:

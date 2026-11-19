@@ -4,7 +4,6 @@
  * Không chứa chữ: chữ là HTML (components/cuon-3d/CuonLopoe3D.tsx). Cảnh chỉ nhận tiến trình p (0→1).
  */
 import * as THREE from "three";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 
 type TuThe = { x: number; y: number; s: number; ry: number; rz: number; z: number; o: number };
@@ -82,7 +81,7 @@ export function noiSuy(keys: Khoa[], p: number, dt: boolean): TuThe {
 }
 
 export type LoaiHat = "thua" | "sen" | "phan-tu" | "rau-ma" | "xoan";
-export interface TaiSan { ampoule_glb: string; sua_rua_mat: string; kem_duong: string }
+export interface TaiSan { ampoule_than: string; ampoule_nap: string; sua_rua_mat: string; kem_duong: string }
 export interface ViTriNhan { x: number; y: number; o: number }
 
 export interface Canh {
@@ -168,57 +167,47 @@ export function taoCanh(
   taoTuyp("srm", opts.taiSan.sua_rua_mat, 366 / 989);
   taoTuyp("kem", opts.taiSan.kem_duong, 368 / 980);
 
-  // Ampoule 3D + nắp nhỏ giọt tháo được
+  // Ampoule: ảnh thật tách nền, tách 2 mảnh (nắp nhỏ giọt + thân) để nhấc nắp và nhỏ giọt (CĐT 20/11: dùng ảnh giống thật thay mô hình glb tạm)
   const ampG = new THREE.Group();
   scene.add(ampG);
   SP.amp = { g: ampG };
   const NAP: { nhom: THREE.Group | null; giot: THREE.Mesh | null; gon: THREE.Mesh | null } = { nhom: null, giot: null, gon: null };
+  let caoThanAmp = CAO * 0.66;
   const longMat = () => new THREE.MeshPhysicalMaterial({ color: 0x86afe6, roughness: 0.15, clearcoat: 0.8, envMapIntensity: 1.1, transparent: true, opacity: 0.85, depthWrite: false });
-  new GLTFLoader().load(
-    opts.taiSan.ampoule_glb,
-    (gltf) => {
-      const m = gltf.scene;
-      const than = new THREE.MeshPhysicalMaterial({ color: 0xe9f2ff, roughness: 0.06, clearcoat: 1, clearcoatRoughness: 0.04, envMapIntensity: 1.6, transparent: true, opacity: 0.22, depthWrite: false });
-      const long = new THREE.MeshPhysicalMaterial({ color: 0x86afe6, roughness: 0.18, clearcoat: 0.6, envMapIntensity: 0.9, transparent: true, opacity: 0.78, depthWrite: false });
-      const chu = new THREE.MeshStandardMaterial({ color: 0x151515, roughness: 0.5, transparent: true });
-      m.traverse((o: any) => {
-        if (!o.isMesh) return;
-        o.material = o.name.includes("Body") ? than : o.name.includes("Liquid") ? long : chu;
-        o.renderOrder = o.name.includes("Liquid") ? 1 : o.name.includes("Body") ? 2 : 3;
-      });
-      const nap = new THREE.Group();
-      m.add(nap);
-      const co = new THREE.Mesh(new THREE.CylinderGeometry(0.0128, 0.0135, 0.024, 48), new THREE.MeshPhysicalMaterial({ color: 0x9cc2f0, roughness: 0.12, clearcoat: 1, transparent: true, opacity: 0.85 }));
-      co.position.y = 0.102;
-      nap.add(co);
-      const vien = new THREE.Mesh(new THREE.CylinderGeometry(0.0145, 0.0145, 0.004, 48), new THREE.MeshPhysicalMaterial({ color: 0xc4dbf7, roughness: 0.1, clearcoat: 1, transparent: true, opacity: 0.7 }));
-      vien.position.y = 0.091;
-      nap.add(vien);
-      const bop = new THREE.Mesh(new THREE.CapsuleGeometry(0.0075, 0.011, 8, 32), new THREE.MeshStandardMaterial({ color: 0xf1e8d4, roughness: 0.55, transparent: true }));
-      bop.position.y = 0.126;
-      nap.add(bop);
-      const ong = new THREE.Mesh(new THREE.CylinderGeometry(0.0026, 0.0018, 0.066, 20), new THREE.MeshPhysicalMaterial({ color: 0xdbe9fb, roughness: 0.05, clearcoat: 1, transparent: true, opacity: 0.45 }));
-      ong.position.y = 0.057;
-      nap.add(ong);
-      const giot = new THREE.Mesh(new THREE.SphereGeometry(0.0042, 24, 16), longMat());
-      m.add(giot);
-      const gon = new THREE.Mesh(new THREE.RingGeometry(0.92, 1, 64), new THREE.MeshBasicMaterial({ color: 0x5d8fd6, transparent: true, opacity: 0.6, side: THREE.DoubleSide, depthWrite: false }));
-      gon.rotation.x = -Math.PI / 2;
-      m.add(gon);
-      m.scale.setScalar(CAO / 0.1335);
-      m.position.y = -CAO / 2;
-      ampG.add(m);
-      const bong = taoBong();
-      bong.scale.set(1.3, 0.5, 1);
-      bong.position.y = -CAO / 2 - 0.02;
-      ampG.add(bong);
-      Object.assign(NAP, { nhom: nap, giot, gon });
-      SP.amp.bong = bong;
-      opts.onSanSang?.();
-    },
-    undefined,
-    () => opts.onSanSang?.(),
-  );
+  {
+    // Kích thước theo điểm ảnh của bộ ảnh: thân 294×654, nắp 294×275 (cùng bề rộng, cùng trục)
+    const DV = CAO / 989; // đơn vị cảnh trên mỗi điểm ảnh (chuẩn theo chiều cao tuýp 989px)
+    const rong = 294 * DV, caoThan = 654 * DV, caoNap = 275 * DV;
+    caoThanAmp = caoThan;
+    const taiAnh = (url: string) => { const t = tai.load(url); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t; };
+    const than = new THREE.Mesh(new THREE.PlaneGeometry(rong, caoThan), new THREE.MeshBasicMaterial({ map: taiAnh(opts.taiSan.ampoule_than), transparent: true, toneMapped: false }));
+    than.position.y = -CAO / 2 + caoThan / 2;
+    than.renderOrder = 2;
+    ampG.add(than);
+    const nap = new THREE.Group();
+    const anhNap = new THREE.Mesh(new THREE.PlaneGeometry(rong, caoNap), new THREE.MeshBasicMaterial({ map: taiAnh(opts.taiSan.ampoule_nap), transparent: true, toneMapped: false }));
+    anhNap.position.y = -CAO / 2 + caoThan + caoNap / 2 - 0.02;
+    anhNap.renderOrder = 3;
+    nap.add(anhNap);
+    ampG.add(nap);
+    const giot = new THREE.Mesh(new THREE.SphereGeometry(0.08, 24, 16), longMat());
+    giot.visible = false;
+    ampG.add(giot);
+    const gon = new THREE.Mesh(new THREE.RingGeometry(0.92, 1, 64), new THREE.MeshBasicMaterial({ color: 0x5d8fd6, transparent: true, opacity: 0.6, side: THREE.DoubleSide, depthWrite: false }));
+    gon.rotation.x = -Math.PI / 2;
+    gon.visible = false;
+    ampG.add(gon);
+    const bong = taoBong();
+    bong.scale.set(rong * 1.5, 0.5, 1);
+    bong.position.y = -CAO / 2 - 0.02;
+    ampG.add(bong);
+    Object.assign(NAP, { nhom: nap, giot, gon });
+    SP.amp.bong = bong;
+    // Báo sẵn sàng khi ảnh thân đã tải (fallback 1,5s nếu ảnh lỗi)
+    const tx = than.material.map!;
+    const xong = () => opts.onSanSang?.();
+    if (tx.image && (tx.image as HTMLImageElement).complete) xong(); else { const t = setTimeout(xong, 1500); tai.manager.onLoad = () => { clearTimeout(t); xong(); }; }
+  }
 
   // Hạt thành phần: biểu tượng 3D trừu tượng (W053 sẽ thay bằng ảnh thật / phân tử đúng cấu trúc)
   const vatLieu = (c: number) => new THREE.MeshPhysicalMaterial({ color: c, roughness: 0.35, clearcoat: 0.6, envMapIntensity: 1.2 });
@@ -386,10 +375,10 @@ export function taoCanh(
   const ve = (p: number, time: number) => {
     for (const k of ["srm", "amp", "kem"] as const) {
       const s = noiSuy(KHOA[k], p, dienThoai), g = SP[k].g;
-      const tho = opts.giamChuyenDong ? 0 : Math.sin(time * 0.0011 + (k === "amp" ? 1 : k === "kem" ? 2 : 0)) * 0.035;
+      const tho = opts.giamChuyenDong || dienThoai ? 0 : Math.sin(time * 0.0011 + (k === "amp" ? 1 : k === "kem" ? 2 : 0)) * 0.035;
       g.position.set(s.x * nuaW, s.y * nuaH + tho, s.z);
       g.scale.setScalar(s.s);
-      g.rotation.set(0, k === "amp" ? s.ry : kep(s.ry, -0.32, 0.32), s.rz);
+      g.rotation.set(0, kep(s.ry, -0.32, 0.32), s.rz);
       datMo(g, s.o);
       if (SP[k].bong) SP[k].bong!.visible = Math.abs(s.rz) < 0.35;
       g.updateMatrixWorld();
@@ -430,23 +419,24 @@ export function taoCanh(
       return chieu(g, op * (g.position.z > -0.5 ? 1 : 0.25));
     });
 
-    // 4) Nắp nhỏ giọt
+    // 4) Nắp nhỏ giọt (đơn vị cảnh; đáy chai ở y = -CAO/2, miệng chai ở y = -CAO/2 + caoThan)
     if (NAP.nhom && NAP.giot && NAP.gon) {
       const nhac = seg(p, 0.43, 0.455) - seg(p, 0.5, 0.525), lech = seg(p, 0.452, 0.468) - seg(p, 0.495, 0.51);
-      NAP.nhom.position.set(lech * 0.036, nhac * 0.075, 0);
-      NAP.nhom.rotation.z = -lech * 0.12;
-      const f = seg(p, 0.466, 0.492), tx = lech * 0.036, ty = 0.024 + nhac * 0.075;
+      const LIFT = 0.42, LECH = 0.55;
+      NAP.nhom.position.set(lech * LECH, nhac * LIFT, 0.01);
+      NAP.nhom.rotation.z = -lech * 0.1;
+      const f = seg(p, 0.466, 0.492), tx = lech * LECH, dayChai = -CAO / 2, mieng = dayChai + caoThanAmp, ty = mieng - 0.06 + nhac * LIFT;
       NAP.giot.visible = f > 0 && f < 1 && nhac > 0.5;
       if (NAP.giot.visible) {
         const taoGiot = kep(f / 0.3), roi = kep((f - 0.3) / 0.7);
         NAP.giot.scale.setScalar(0.3 + 0.7 * taoGiot);
-        NAP.giot.position.set(tx, ty - 0.004 - roi * roi * (ty - 0.004), 0);
+        NAP.giot.position.set(tx, ty - 0.08 - roi * roi * (ty - 0.08 - dayChai), 0.05);
       }
       const gg = seg(p, 0.488, 0.508);
       NAP.gon.visible = gg > 0 && gg < 1;
       if (NAP.gon.visible) {
-        NAP.gon.position.set(tx, 0.0006, 0);
-        NAP.gon.scale.setScalar(0.002 + gg * 0.032);
+        NAP.gon.position.set(tx, dayChai + 0.012, 0.05);
+        NAP.gon.scale.setScalar(0.04 + gg * 0.6);
         (NAP.gon.material as THREE.MeshBasicMaterial).opacity = 0.6 * (1 - gg);
       }
     }
@@ -468,7 +458,7 @@ export function taoCanh(
       a.setXYZ(1, g.position.x - 0.22 * e, g.position.y, 0);
       a.needsUpdate = true;
       (line.material as THREE.LineBasicMaterial).opacity = 0.32 * e;
-      return chieu(g, dienThoai ? 0 : e);
+      return chieu(g, e);
     });
 
     // 6) No.1 + vòng giọt

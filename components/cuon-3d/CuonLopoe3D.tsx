@@ -39,7 +39,7 @@ function TuKhoa({ k }: { k: KhoiChu3D }) {
     <h3 className={`m-0 mt-2 mb-2.5 font-bold ${lop} ${k.vi_tri === "duoi-giua" ? "md:whitespace-nowrap" : ""}`}>
       {dong.length > 1
         ? dong.map((d, j) => (
-            <span key={j} className={`block whitespace-nowrap ${j ? "pl-[0.62em]" : ""} ${k.vi_tri === "duoi-giua" && j ? "md:pl-[1.2em]" : ""}`}>
+            <span key={j} className="block whitespace-nowrap">
               {d.trim().split(" ").map((t, i) => (
                 <Fragment key={i}>{i ? " " : ""}<span data-tu className={`inline-block ${j ? "text-xanh-lopoe" : ""}`}>{t}</span></Fragment>
               ))}
@@ -94,15 +94,15 @@ function KhoiChu({ k, veNut }: { k: KhoiChu3D; veNut: VeNut3D }) {
 function NhanThanhPhan({ ten, loi, giua }: { ten: string; loi: string; giua: boolean }) {
   return (
     <div data-nhan className={`absolute left-0 top-0 opacity-0 whitespace-nowrap will-change-transform rounded-2xl bg-trang/75 backdrop-blur-md shadow-[0_6px_20px_rgba(43,43,42,0.08)] px-3 py-1.5 md:px-4 md:py-2.5 ${giua ? "text-center" : ""}`}>
-      <b className="block text-[14px] md:text-[20px] font-bold tracking-[-0.01em] leading-tight text-den">{ten}</b>
-      <span className="hidden md:block text-[15px] font-medium text-den/75 mt-0.5">{loi}</span>
+      <b className="block text-[15px] md:text-[21px] font-bold tracking-[-0.01em] leading-tight text-den">{ten}</b>
+      <span className="block text-[12px] md:text-[15px] font-medium text-den/75 mt-0.5">{loi}</span>
     </div>
   );
 }
 
 /** Bản dự phòng: không có WebGL hoặc người dùng giảm chuyển động → ảnh tĩnh + chữ, không dính đoạn dài. */
 function BanTinh({ cfg, id }: { cfg: CauHinhLopoe3D; id?: string }) {
-  const anh: Record<string, string> = { srm: cfg.tai_san.sua_rua_mat, amp: "/chien-dich/lopoe-better-balance/ampoule-than.webp", kem: cfg.tai_san.kem_duong };
+  const anh: Record<string, string> = { srm: cfg.tai_san.sua_rua_mat, amp: cfg.tai_san.ampoule_than, kem: cfg.tai_san.kem_duong };
   return (
     <section id={id} aria-label="LOPOE Better Balance" className="bg-hong-nhat px-5 md:px-16 py-16 flex flex-col gap-16">
       {cfg.khoi.map((k) => {
@@ -189,13 +189,20 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
         const v = vt[i];
         if (!v || v.o < 0.01) { el.style.opacity = "0"; return; }
         el.style.opacity = String(v.o);
+        el.style.textAlign = giua ? "center" : "left";
         el.style.transform = `translate(${v.x + dx}px,${v.y + dy}px) translate(${giua ? "-50%" : "0"},-50%)`;
       });
     };
 
+    let soKhungRanh = 0, sanSangVe = false;
     const khung = (time: number) => {
       if (huy) return;
       const dich = tienTrinh();
+      // Đứng yên (không cuộn): vẽ 1/4 số khung để máy đỡ nóng và không giật
+      if (Math.abs(dich - p) < 1e-5 && sanSangVe) {
+        soKhungRanh += 1;
+        if (soKhungRanh % 4 !== 0) { if (hien) raf = requestAnimationFrame(khung); return; }
+      } else soKhungRanh = 0;
       const dt = Math.min(0.1, (time - truoc) / 1000);
       truoc = time;
       p += (dich - p) * (1 - Math.exp(-dt * 6));
@@ -206,7 +213,8 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
         const vt = canh.ve(p, time);
         const dienThoai = innerWidth < 768;
         datNhan(nhanSrm, vt.srm, 0, dienThoai ? 40 : 72, true);
-        datNhan(nhanAmp, vt.amp, 48, 0, false);
+        // Điện thoại: nhãn nằm dưới từng hạt, canh giữa; máy tính: nhãn bên phải hạt
+        datNhan(nhanAmp, vt.amp, dienThoai ? 0 : 48, dienThoai ? 46 : 0, dienThoai);
       }
       capNhatChu(p);
       if (hien) raf = requestAnimationFrame(khung);
@@ -225,7 +233,7 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
           so1: cfg.so_1,
           hienSo1: cfg.khoi.some((k) => k.id === "amp-giai-thuong"),
           giamChuyenDong: false,
-          onSanSang: () => setDaTai(true),
+          onSanSang: () => { sanSangVe = true; setDaTai(true); },
         });
         p = tienTrinh();
       });
@@ -250,7 +258,13 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
     });
     io.observe(elDoan);
 
-    const doiCo = () => canh?.doiCo();
+    let wTruoc = innerWidth, hTruoc = innerHeight;
+    const doiCo = () => {
+      // Thanh địa chỉ điện thoại ẩn/hiện làm innerHeight đổi vài chục px: bỏ qua để canvas không vẽ lại, tránh giật
+      if (innerWidth === wTruoc && Math.abs(innerHeight - hTruoc) < 140) return;
+      wTruoc = innerWidth; hTruoc = innerHeight;
+      canh?.doiCo();
+    };
     addEventListener("resize", doiCo);
 
     return () => {
@@ -276,7 +290,10 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
         <div aria-hidden="true" className={`absolute inset-x-0 bottom-[33vh] md:bottom-[18vh] flex items-end justify-center gap-[3vw] md:gap-[6.5vw] transition-opacity duration-700 ${daTai ? "opacity-0" : "opacity-100"}`}>
           {/* eslint-disable @next/next/no-img-element */}
           <img src={cfg.tai_san.sua_rua_mat} alt="" width={366} height={989} loading="lazy" decoding="async" className="h-[33vh] md:h-[47vh] w-auto" />
-          <img src="/chien-dich/lopoe-better-balance/ampoule-than.webp" alt="" width={290} height={675} loading="lazy" decoding="async" className="h-[25vh] md:h-[34vh] w-auto" />
+          <span className="flex flex-col items-center">
+            <img src={cfg.tai_san.ampoule_nap} alt="" width={294} height={275} loading="lazy" decoding="async" className="h-[9.2vh] md:h-[13vh] w-auto -mb-[0.2vh]" />
+            <img src={cfg.tai_san.ampoule_than} alt="" width={294} height={654} loading="lazy" decoding="async" className="h-[21.8vh] md:h-[31vh] w-auto" />
+          </span>
           <img src={cfg.tai_san.kem_duong} alt="" width={368} height={980} loading="lazy" decoding="async" className="h-[33vh] md:h-[47vh] w-auto" />
           {/* eslint-enable @next/next/no-img-element */}
         </div>

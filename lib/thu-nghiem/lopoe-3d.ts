@@ -31,7 +31,7 @@ const ThanhPhanSchema = z.object({
 });
 export const CauHinhLopoe3DSchema = z.object({
   hien_cho_duyet: z.boolean().default(false),
-  tai_san: z.object({ ampoule_glb: z.string(), sua_rua_mat: z.string(), kem_duong: z.string() }),
+  tai_san: z.object({ ampoule_than: z.string(), ampoule_nap: z.string(), sua_rua_mat: z.string(), kem_duong: z.string() }),
   mo_dau: z.object({ nho: z.string(), tieu_de: z.string(), cau: z.string(), nut: z.array(NutSchema).default([]) }),
   khoi: z.array(KhoiChu3DSchema).min(1),
   thanh_phan: z.object({ sua_rua_mat: z.array(ThanhPhanSchema).length(4), ampoule: z.array(ThanhPhanSchema).length(4) }),
