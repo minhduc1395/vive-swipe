@@ -17,6 +17,7 @@ const CU_CHUAN_9_CO = [
 
 const TRANG_KHACH_MENU = [
   "/",
+  "/new-arrival",
   "/chao",
   "/bat-dau",
   "/danh-muc",
@@ -98,6 +99,12 @@ test.describe("W033 · Landing là trang đầu, menu thống nhất, nút quay 
       await expect(logo).toHaveAttribute("href", "/");
 
       if (route === "/") {
+        await expect(nav.getByRole("link", { name: "New Arrival" })).not.toHaveAttribute(
+          "aria-current",
+          "page"
+        );
+      }
+      if (route === "/new-arrival") {
         await expect(nav.getByRole("link", { name: "New Arrival" })).toHaveAttribute(
           "aria-current",
           "page"

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { NutQuayLai } from "@/components/NutQuayLai";
+import { LogoVive } from "@/components/LogoVive";
 import { CAU_HINH_BOOTH } from "@/lib/cau-hinh";
 
 export const metadata: Metadata = {
@@ -17,13 +18,9 @@ export default function TrangChao() {
         </div>
 
         <div className="relative h-[400px] sm:h-[460px] shrink-0 bg-hong-nhat rounded-[36px] overflow-hidden">
-          <Image
-            src="/brand/vive-logo-chu.png"
-            alt="VIVE"
-            width={92}
-            height={24}
-            priority
-            className="absolute left-1/2 top-8 w-[92px] h-auto -translate-x-1/2"
+          <LogoVive
+            rong={92}
+            className="absolute left-1/2 top-8 -translate-x-1/2"
           />
 
           <div aria-hidden="true">

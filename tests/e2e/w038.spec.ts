@@ -87,7 +87,7 @@ test.describe("W038 · Khung trang cố định & điều hướng dùng chung",
     await kiemTraLogoConNguyen();
   });
 
-  test("2. Bấm logo từ /deal thì về /, mục New Arrival sáng (1440x900)", async ({
+  test("2. Bấm logo từ /deal thì về /, không mục nào sáng; bấm New Arrival về /new-arrival, mục đó sáng (1440x900)", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
@@ -102,8 +102,13 @@ test.describe("W038 · Khung trang cố định & điều hướng dùng chung",
 
     await expect(page).toHaveURL(/^http:\/\/[^/]+\/$/);
 
-    // Mục New Arrival sáng với aria-current="page"
+    // Ở /: không mục nào sáng theo W051
     const newArrival = page.locator('div[role="banner"] nav a:has-text("New Arrival")');
+    await expect(newArrival).not.toHaveAttribute("aria-current", "page");
+
+    // Bấm New Arrival -> /new-arrival, mục đó sáng
+    await newArrival.click();
+    await expect(page).toHaveURL(/\/new-arrival/);
     await expect(newArrival).toHaveAttribute("aria-current", "page");
   });
 
@@ -121,7 +126,7 @@ test.describe("W038 · Khung trang cố định & điều hướng dùng chung",
 
       // Lấy danh sách text của các nút điều hướng (bỏ qua logo text rỗng)
       const menuTexts = await topBar
-        .locator("nav a, .ml-auto a")
+        .locator('nav a, [data-testid="menu-phai"] a')
         .evaluateAll((els) =>
           els
             .map((el) => {
@@ -217,5 +222,65 @@ test.describe("W038 · Khung trang cố định & điều hướng dùng chung",
 
     // URL quay về danh mục gốc
     await expect(page).toHaveURL(/\/danh-muc$/);
+  });
+
+  test("5. Bấm Đăng nhập hiện toast 'Tính năng sắp ra mắt', URL không đổi (W051 sap_co)", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await datDaKhaoSat(page);
+
+    await page.goto("/deal");
+    const nutDangNhap = page.locator('div[role="banner"] a[data-sap-co="true"]');
+    await expect(nutDangNhap).toBeVisible();
+    await nutDangNhap.click();
+
+    // URL không đổi
+    await expect(page).toHaveURL(/\/deal/);
+
+    // Toast xuất hiện với text "Tính năng sắp ra mắt"
+    const toast = page.locator('[role="status"]');
+    await expect(toast).toBeVisible();
+    await expect(toast).toContainText("Tính năng sắp ra mắt");
+  });
+
+  test("6. Khoảng cách logo desktop tới New Arrival >= 24px (1024, 1440) và vùng bấm logo tablet >= 44px", async ({
+    page,
+  }) => {
+    await datDaKhaoSat(page);
+
+    for (const vp of [
+      { width: 1024, height: 768 },
+      { width: 1440, height: 900 },
+    ]) {
+      await page.setViewportSize(vp);
+      for (const route of ["/", "/new-arrival"]) {
+        await page.goto(route);
+        const topBar = page.locator('div[role="banner"]');
+        const logoBox = await topBar.locator('[data-testid="logo"]').boundingBox();
+        const firstNavBox = await topBar.locator("nav a").first().boundingBox();
+        expect(logoBox).not.toBeNull();
+        expect(firstNavBox).not.toBeNull();
+        if (logoBox && firstNavBox) {
+          const gap = firstNavBox.x - (logoBox.x + logoBox.width);
+          expect(
+            gap,
+            `Khoảng cách logo -> New Arrival tại ${route} (${vp.width}px) phải >= 24px, đo được ${gap}px`
+          ).toBeGreaterThanOrEqual(24);
+        }
+      }
+    }
+
+    await page.setViewportSize({ width: 820, height: 1180 });
+    await page.goto("/");
+    const tabletLogoLink = page
+      .locator('nav[aria-label="Điều hướng máy tính bảng"] a[href="/"]')
+      .first();
+    const box = await tabletLogoLink.boundingBox();
+    expect(box).not.toBeNull();
+    if (box) {
+      expect(box.width).toBeGreaterThanOrEqual(44);
+      expect(box.height).toBeGreaterThanOrEqual(44);
+    }
   });
 });

@@ -107,10 +107,10 @@ test.describe("W031 · Khung co giãn (AppShell) và điều hướng 3 mốc", 
       topDesktop.getByRole("link", { name: "Đã thích" })
     ).toBeVisible();
 
-    // Ô tìm kiếm và nút Giỏ, Đăng nhập
+    // Biểu tượng tìm kiếm và nút Giỏ, Đăng nhập
     const headerBanner = page.getByRole("banner");
     await expect(
-      headerBanner.getByPlaceholder("Tìm sản phẩm, thương hiệu")
+      headerBanner.getByRole("link", { name: "Tìm kiếm" })
     ).toBeVisible();
     await expect(
       headerBanner.getByRole("link", { name: /Giỏ/ })
