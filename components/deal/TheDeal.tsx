@@ -78,7 +78,7 @@ export function DuongMocQua({ deal, gon = false }: { deal: Deal; gon?: boolean }
         const tien = m.tu ?? m.tren ?? 0;
         return (
           <li key={i} className="relative flex-1 pt-[18px] text-[12px] leading-[1.35] min-w-0 pr-1">
-            <span className="absolute left-0 top-[1px] w-3 h-3 rounded-full bg-trang border-2 border-[#C9A79D]" aria-hidden="true" />
+            <span className="absolute left-0 top-[1px] w-3 h-3 rounded-full bg-trang border-2 border-moc" aria-hidden="true" />
             <b className="block text-[13px]">{m.tren ? "Trên " : ""}{tienNgan(tien)}</b>
             <span className={`text-xam ${gon ? "line-clamp-1" : ""}`}>{m.qua.replace(/^1\s+/, "")}</span>
           </li>
@@ -101,7 +101,7 @@ interface TheDealProps {
 export function TheDeal({ deal, sanPhamMap, onMo, onThemCombo, onThemBo, noiBat = false }: TheDealProps) {
   const nhom = nhomCuaDeal(deal);
   const han = nhanGioiHan(deal);
-  const nenNhan = nhom === "qua" ? "bg-hong-nhat" : nhom === "combo" ? "bg-bac-ha-nhat" : "bg-[#FFF4D6]";
+  const nenNhan = nhom === "qua" ? "bg-hong-nhat" : nhom === "combo" ? "bg-bac-ha-nhat" : "bg-vang-nhat";
   const dungLan = (e: React.MouseEvent) => e.stopPropagation();
 
   let than: React.ReactNode = null;
@@ -139,7 +139,7 @@ export function TheDeal({ deal, sanPhamMap, onMo, onThemCombo, onThemBo, noiBat 
         <span className="flex items-baseline gap-2 flex-wrap">
           <b className="text-[22px] tracking-[-0.01em]">{dinhDangTien(c.gia)}</b>
           {c.tongLe > c.gia && <s className="text-[13px] text-xam">{dinhDangTien(c.tongLe)}</s>}
-          {c.tietKiem > 0 && <span className="text-[12px] font-semibold text-[#2F6B45] bg-bac-ha-nhat px-2 py-0.5 rounded-full">−{tienNgan(c.tietKiem)}</span>}
+          {c.tietKiem > 0 && <span className="text-[12px] font-semibold text-xanh-dam bg-bac-ha-nhat px-2 py-0.5 rounded-full">−{tienNgan(c.tietKiem)}</span>}
         </span>
         <button type="button" onClick={(e) => { dungLan(e); onThemCombo(deal); }} className={lopNut("chinh-bac-ha", "vua")}>
           Thêm vào giỏ
@@ -195,7 +195,7 @@ export function TheDeal({ deal, sanPhamMap, onMo, onThemCombo, onThemBo, noiBat 
         </span>
         {han && (
           <span className="inline-flex items-center gap-1.5">
-            <i className="w-1.5 h-1.5 rounded-full bg-[#D9895F]" aria-hidden="true" />
+            <i className="w-1.5 h-1.5 rounded-full bg-cam" aria-hidden="true" />
             {han}
           </span>
         )}

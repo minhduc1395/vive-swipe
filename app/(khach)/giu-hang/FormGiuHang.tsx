@@ -169,7 +169,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
       {loiValidation && (
         <div
           role="alert"
-          className="rounded-[14px] bg-[#FDE8E8] border border-[#F8B4B4] p-3 text-[14px] text-[#9B1C1C] flex items-start gap-2"
+          className="rounded-[14px] bg-loi-nen border border-loi-vien p-3 text-[14px] text-loi flex items-start gap-2"
         >
           <svg
             width="18"
@@ -193,7 +193,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
         {/* Họ và tên */}
         <div className="flex flex-col gap-1.5">
           <label htmlFor="ten" className="text-[14px] font-medium text-den">
-            Họ và tên <span className="text-[#E02424]">*</span>
+            Họ và tên <span className="text-bat-buoc">*</span>
           </label>
           <input
             id="ten"
@@ -211,7 +211,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
         {/* Số điện thoại */}
         <div className="flex flex-col gap-1.5">
           <label htmlFor="sdt" className="text-[14px] font-medium text-den">
-            Số điện thoại <span className="text-[#E02424]">*</span>
+            Số điện thoại <span className="text-bat-buoc">*</span>
           </label>
           <input
             id="sdt"

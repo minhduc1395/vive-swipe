@@ -67,7 +67,7 @@ END:VCALENDAR`;
   };
 
   return (
-    <div className="flex flex-col gap-3 max-w-[480px] mx-auto bg-hong-nhat rounded-[28px] p-4 md:p-6 shadow-sm border border-[#F2E4E0]">
+    <div className="flex flex-col gap-3 max-w-[480px] mx-auto bg-hong-nhat rounded-[28px] p-4 md:p-6 shadow-sm border border-vien">
       {/* Nút quay lại & nút về trang quẹt */}
       <header className="flex items-center justify-between gap-2 pb-1">
         <NutQuayLai fallback="/gio" />
@@ -107,7 +107,7 @@ END:VCALENDAR`;
       {/* Thẻ mã giữ hàng & QR */}
       <section
         aria-label="Mã giữ hàng"
-        className="rounded-[26px] bg-trang p-5 flex flex-col items-center gap-2.5 shadow-sm border border-[#F2E4E0]"
+        className="rounded-[26px] bg-trang p-5 flex flex-col items-center gap-2.5 shadow-sm border border-vien"
       >
         <span className="text-[12px] font-semibold tracking-[1.6px] text-xam uppercase">
           MÃ GIỮ HÀNG
@@ -150,7 +150,7 @@ END:VCALENDAR`;
       {/* Thẻ món đã giữ */}
       <section
         aria-label="Món đã giữ"
-        className="rounded-[22px] bg-trang p-4 md:p-5 flex flex-col gap-2.5 text-[14px] shadow-sm border border-[#F2E4E0]"
+        className="rounded-[22px] bg-trang p-4 md:p-5 flex flex-col gap-2.5 text-[14px] shadow-sm border border-vien"
       >
         <div className="flex flex-col gap-2">
           {don.cacDong.map((d, idx) => (
@@ -168,7 +168,7 @@ END:VCALENDAR`;
           ))}
         </div>
 
-        <div className="h-[1px] bg-[#F2E4E0] my-1" />
+        <div className="h-[1px] bg-vien my-1" />
 
         <div className="flex justify-between items-center font-bold text-[15px] text-den">
           <span>Tổng ước tính</span>

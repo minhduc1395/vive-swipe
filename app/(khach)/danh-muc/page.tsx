@@ -388,7 +388,7 @@ function DanhMucNoiDung() {
             {dangXemDanhSach && (
               <NutQuayLai fallback="/danh-muc" onClick={xuLyVeTrangDau} ariaLabel="Quay lại · Về tất cả sản phẩm" />
             )}
-            <h1 className="m-0 text-[28px] md:text-[34px] font-bold tracking-[-0.6px] text-den">{tieuDeTrang}</h1>
+            <h1 className="tieu-de-trang">{tieuDeTrang}</h1>
           </header>
 
           <div className="px-5 md:px-8 pt-1 pb-3 max-w-[640px]">
@@ -510,7 +510,7 @@ function DanhMucNoiDung() {
                       <article
                         key={sp.id}
                         onClick={() => setSanPhamChiTiet(sp)}
-                        className="flex flex-col gap-1 cursor-pointer group"
+                        className="hien-dan flex flex-col gap-1 cursor-pointer group"
                       >
                         {/* Hộp ảnh */}
                         <div

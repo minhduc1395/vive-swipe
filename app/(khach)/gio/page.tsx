@@ -109,7 +109,7 @@ export default function TrangGio() {
     <div className="max-w-[1280px] w-full mx-auto flex-1 flex flex-col min-h-0 bg-trang text-den font-sans overflow-hidden">
         {/* Header */}
         <header className="px-5 pt-7 pb-2 flex items-baseline gap-2 shrink-0">
-          <h1 className="m-0 text-[28px] font-semibold tracking-tight">Giỏ hàng</h1>
+          <h1 className="tieu-de-trang">Giỏ hàng</h1>
           <span suppressHydrationWarning className="text-[15px] text-xam">
             {tongSoLuongGio} món
           </span>
@@ -236,7 +236,7 @@ export default function TrangGio() {
                     >
                       <div className="h-2 rounded-full bg-trang overflow-hidden">
                         <div
-                          className="h-2 rounded-full bg-den transition-all duration-300"
+                          className="h-2 rounded-full bg-moc transition-all duration-300"
                           style={{
                             width: `${Math.min(
                               100,
@@ -355,7 +355,7 @@ export default function TrangGio() {
             {/* 2. Danh sách sản phẩm trong giỏ */}
             <section
               aria-label="Sản phẩm trong giỏ"
-              className="flex flex-col divide-y divide-[#F2E4E0]"
+              className="flex flex-col divide-y divide-vien"
             >
               {ketQua.cac_dong.map((dong) => {
                 const sp =
@@ -371,7 +371,7 @@ export default function TrangGio() {
                 return (
                   <article
                     key={`${dong.loai}-${dong.id}`}
-                    className="flex gap-3 py-3.5 first:pt-0"
+                    className="hien-dan flex gap-3 py-3.5 first:pt-0"
                   >
                     {/* Ảnh sản phẩm / combo */}
                     <div
@@ -471,7 +471,7 @@ export default function TrangGio() {
           </div>
 
           {/* Cột phải: Tóm tắt đơn hàng dính trên máy tính */}
-          <div className="lg:sticky lg:top-6 flex flex-col gap-4 bg-[#FDFBF7] p-5 md:p-6 rounded-[24px] border border-[#F2E4E0] shadow-xs">
+          <div className="lg:sticky lg:top-6 flex flex-col gap-4 bg-nen-phu p-5 md:p-6 rounded-[24px] border border-vien shadow-xs">
             <h2 className="m-0 text-[18px] font-bold text-den">
               Tóm tắt đơn hàng
             </h2>
@@ -479,7 +479,7 @@ export default function TrangGio() {
             {/* 3. Tổng tiền */}
             <section
               aria-label="Tổng tiền"
-              className="flex flex-col gap-2 pt-2 text-[14px] border-t border-[#F2E4E0]"
+              className="flex flex-col gap-2 pt-2 text-[14px] border-t border-vien"
             >
               <div className="flex justify-between text-xam">
                 <span>Tạm tính theo giá lẻ</span>
@@ -504,7 +504,7 @@ export default function TrangGio() {
                 </div>
               )}
 
-              <div className="h-[1px] bg-[#F2E4E0] my-1" />
+              <div className="h-[1px] bg-vien my-1" />
 
               <div className="flex justify-between items-baseline">
                 <span className="font-semibold text-den text-[16px]">
