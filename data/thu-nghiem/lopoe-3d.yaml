@@ -1,0 +1,96 @@
+# Khối cuộn 3D LOPOE (W054) — trang thử nghiệm /thu-nghiem/lopoe-3d
+# Đổi chữ / mốc ở đây, không sửa code. Mốc a, b là tiến trình cuộn (0 → 1) của đoạn dính.
+# tu_khoa: "|" = chỗ xuống dòng có chủ đích (dòng 2 tô xanh, lùi vào).
+# nhan_dau: số chữ đầu tô xanh (khi không có "|"); nhan_tu: tô xanh từ chữ thứ mấy.
+# cau: *chữ* = nghiêng Playfair.
+# cho_duyet: true = câu cần bằng chứng (Luật Quảng cáo), chỉ hiện khi hien_cho_duyet: true.
+hien_cho_duyet: true   # trang thử nghiệm: hiện để duyệt. Khi gắn vào landing thật: false cho tới khi có chứng nhận Hwahae
+tai_san:
+  ampoule_glb: /thu-nghiem/lopoe-3d/ampoule.glb
+  sua_rua_mat: /thu-nghiem/lopoe-3d/srm.webp
+  kem_duong: /thu-nghiem/lopoe-3d/kem.webp
+mo_dau:
+  nho: "Mới tại VIVE"
+  tieu_de: "LOPOE Better Balance"
+  cau: "Bọt dày. Cấp ẩm. *Làm dịu.*"
+  nut:
+    - { chu: "Mua", den: "/danh-muc?thuong-hieu=LOPOE" }
+    - { chu: "Tìm hiểu thêm", den: "/new-arrival" }
+khoi:
+  - id: srm-cong-dung
+    a: 0.075
+    b: 0.155
+    vi_tri: phai
+    tu: phai
+    ten_nho: "Sữa rửa mặt"
+    tu_khoa: "pH 5.5"
+    nhan_tu: 1
+    co: lon
+    cau: "Sạch sâu. *Không căng rít.*"
+    chips: ["Cuốn bụi mịn", "Bọt đệm siêu mịn", "Êm cho da nhạy cảm"]
+  - id: srm-thanh-phan
+    a: 0.185
+    b: 0.27
+    vi_tri: tren-trai
+    tu: tren
+    ten_nho: "Sữa rửa mặt"
+    tu_khoa: "4 thành phần|xanh"
+    cau: "Cấp ẩm & *phục hồi.*"
+  - id: srm-giai-thuong
+    a: 0.30
+    b: 0.37
+    vi_tri: trai
+    tu: trai
+    ten_nho: "Sữa rửa mặt"
+    lon_nghieng: "Winner"
+    cau: "Hwahae Beauty Awards 2025"
+    chips: ["Không sulfate", "Thành phần sạch"]
+    cho_duyet: true
+  - id: amp-cong-dung
+    a: 0.42
+    b: 0.50
+    vi_tri: trai
+    tu: duoi
+    ten_nho: "Ampoule"
+    tu_khoa: "Cấp ẩm|cân bằng"
+    cau: "*Dịu da tức thì.*"
+    cau_lon: true
+  - id: amp-thanh-phan
+    a: 0.53
+    b: 0.62
+    vi_tri: cot
+    tu: phai
+    ten_nho: "Ampoule"
+    tu_khoa: "Hoạt chất|xanh"
+    cau: "Phục hồi & *khóa ẩm.*"
+  - id: amp-giai-thuong
+    a: 0.65
+    b: 0.72
+    vi_tri: duoi-giua
+    tu: duoi
+    tu_khoa: "Hwahae Beauty Awards 2025"
+    nhan_dau: 1
+    cau: "Hạng 1 *Tinh chất làm dịu*"
+    chips: ["Không hương liệu", "Hợp da nhạy cảm"]
+    cho_duyet: true
+  - id: kem-cong-dung
+    a: 0.78
+    b: 0.87
+    vi_tri: trai-duoi
+    tu: trai
+    ten_nho: "Kem dưỡng"
+    tu_khoa: "Sẵn sàng|trang điểm"
+    cau: "*Ready for makeup.*"
+    cau_lon: true
+thanh_phan:
+  sua_rua_mat:
+    - { loai: thua, ten: "Thùa xanh", loi: "Ngậm nước" }
+    - { loai: sen, ten: "Sen xanh", loi: "Dịu đỏ" }
+    - { loai: phan-tu, ten: "Vitamin B5", loi: "Phục hồi" }
+    - { loai: rau-ma, ten: "Rau má", loi: "Làm dịu" }
+  ampoule:
+    - { loai: thua, ten: "Lá thùa", loi: "Ngậm nước sâu" }
+    - { loai: sen, ten: "Sen xanh", loi: "Thanh lọc, dịu đỏ" }
+    - { loai: xoan, ten: "Hyaluronic Acid", loi: "Ẩm đa tầng" }
+    - { loai: phan-tu, ten: "Panthenol + Niacinamide", loi: "Khóa ẩm, củng cố hàng rào da" }
+so_1: "No.1"   # chữ lớn sau ampoule ở phần giải thưởng (cho_duyet)
