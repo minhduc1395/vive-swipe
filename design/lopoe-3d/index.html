@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LOPOE Better Balance · mockup cuộn 3D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,500&display=swap" rel="stylesheet">
+<style>
+  :root{--hong:#E8D2CC;--hong-nhat:#F7EEEB;--bac-ha:#CFE3D5;--bac-ha-nhat:#EAF3ED;--den:#2B2B2A;--xam:#737373;--nen-phu:#F4F2F1}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Be Vietnam Pro",system-ui,sans-serif;color:var(--den);background:#fff;-webkit-font-smoothing:antialiased}
+  em,.nhan{font-family:"Playfair Display",serif;font-style:italic;font-weight:500}
+  header{position:sticky;top:0;z-index:20;height:48px;display:flex;align-items:center;justify-content:center;gap:28px;font-size:13px;background:rgba(255,255,255,.72);backdrop-filter:saturate(180%) blur(18px);-webkit-backdrop-filter:saturate(180%) blur(18px)}
+  header img{height:16px;display:block}
+  header a{color:var(--den);text-decoration:none;opacity:.8}
+  .khoi-truoc,.khoi-sau{min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;padding:80px 24px}
+  .khoi-truoc{background:var(--nen-phu)}
+  .khoi-sau{background:var(--hong-nhat)}
+  h2.lon{font-size:clamp(34px,5vw,56px);font-weight:700;letter-spacing:-.02em;line-height:1.08}
+  .phu-de{font-size:clamp(17px,1.8vw,22px);color:var(--xam)}
+  .goi-y{font-size:12px;color:var(--xam);letter-spacing:.08em;text-transform:uppercase;margin-top:18px}
+
+  #lopoe{position:relative;height:1500vh}
+  .dinh{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+  canvas#c{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .lop{position:absolute;inset:0;pointer-events:none}
+  .lop a{pointer-events:auto}
+
+  .mo-dau{position:absolute;left:0;right:0;top:9vh;text-align:center;padding:0 24px}
+  .mo-dau .nho{font-size:15px;color:var(--xam);font-weight:500;margin-bottom:6px}
+  .mo-dau h2{font-size:clamp(36px,5.4vw,64px);font-weight:700;letter-spacing:-.025em;line-height:1.04}
+  .mo-dau p{font-size:clamp(18px,2vw,24px);margin-top:10px}
+  .nut{display:flex;gap:22px;justify-content:center;align-items:center;margin-top:20px}
+  .nut a{font-size:15px;text-decoration:none;color:var(--den)}
+  .nut .chinh{background:var(--den);color:#fff;border-radius:999px;padding:10px 20px;min-height:40px;display:inline-flex;align-items:center}
+  .nut .phu::after{content:" ›"}
+
+  /* Khối chữ: mỗi phần một vị trí riêng */
+  .o-chu{position:absolute;opacity:0;visibility:hidden}
+  .o-chu .ten-nho{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--xam)}
+  .o-chu .so{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--xam);margin-top:14px}
+  .o-chu .so b{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#fff;color:var(--den);font-size:11px}
+  .o-chu h3{font-size:clamp(34px,4.2vw,58px);font-weight:700;letter-spacing:-.025em;line-height:1.04;margin:12px 0 6px}
+  .o-chu h3 .tu{display:inline-block;will-change:transform,opacity}
+  .o-chu .sau-tieu-de{font-size:clamp(18px,1.8vw,24px);color:var(--xam);font-weight:500}
+  .o-chu ul{list-style:none;display:grid;gap:10px;margin-top:22px}
+  .o-chu li{font-size:16px;line-height:1.5;color:#4a4a48;padding-left:18px;position:relative}
+  .o-chu li::before{content:"";position:absolute;left:0;top:.62em;width:6px;height:6px;border-radius:50%;background:var(--den);opacity:.35}
+  .o-chu h3.tu-khoa{font-size:clamp(76px,8vw,132px);font-weight:700;letter-spacing:-.05em;line-height:.9;margin:14px 0 10px}
+  .o-chu h3.tu-khoa.vua{font-size:clamp(46px,5.4vw,84px);letter-spacing:-.035em;line-height:.98}
+  .o-chu .tu.nhan-mau{color:#6f93c9}
+  #lopoe .vi-trai .tu.nhan-mau,#lopoe .vi-phai .tu.nhan-mau{}
+  .o-chu .cau{font-size:clamp(20px,2vw,28px);font-weight:500;letter-spacing:-.01em;line-height:1.25}
+  .o-chu .cau.lon{font-size:clamp(28px,3vw,44px)}
+  .o-chu .cau em{color:var(--xam)}
+  .o-chu .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+  .o-chu .chips span{font-size:13px;font-weight:500;padding:7px 14px;border-radius:999px;background:rgba(255,255,255,.62);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:inset 0 0 0 1px rgba(43,43,42,.08)}
+  .vi-duoi-giua .chips{justify-content:center}
+  .o-chu .lon-nghieng{font-family:"Playfair Display",serif;font-style:italic;font-weight:500;font-size:clamp(64px,8vw,120px);line-height:.95;letter-spacing:-.02em;margin-top:10px}
+  .vi-phai{left:57vw;top:50%;width:min(34vw,460px);transform:translateY(-50%)}
+  .vi-trai{left:max(7vw,32px);top:50%;width:min(34vw,460px);transform:translateY(-50%)}
+  .vi-tren-trai{left:max(6vw,28px);top:13vh;width:min(30vw,400px)}
+  .vi-cot{left:46vw;top:8vh;width:min(40vw,520px)}
+  .vi-duoi-giua{left:50%;bottom:6vh;width:min(84vw,980px);transform:translateX(-50%);text-align:center}
+  .vi-duoi-giua .so{justify-content:center}
+  .vi-duoi-giua ul{grid-template-columns:1fr 1fr;gap:28px;text-align:left}
+  .vi-trai-duoi{left:max(7vw,32px);bottom:12vh;width:min(34vw,460px)}
+
+  /* Nhãn bám theo vật thể 3D (thành phần) */
+  .nhan-3d{position:absolute;left:0;top:0;opacity:0;white-space:nowrap;will-change:transform,opacity}
+  .nhan-3d b{display:block;font-size:15px;font-weight:600}
+  .nhan-3d span{display:block;font-size:13px;color:var(--xam);margin-top:2px}
+  .nhan-3d.giua{text-align:center}
+
+  /* Tiến trình 3 sản phẩm */
+  .tien-trinh{position:absolute;right:28px;top:50%;transform:translateY(-50%);display:grid;gap:14px;opacity:0}
+  .tien-trinh div{display:flex;align-items:center;gap:10px;justify-content:flex-end;font-size:11px;letter-spacing:.06em;color:var(--xam)}
+  .tien-trinh i{width:3px;height:34px;border-radius:2px;background:rgba(43,43,42,.14);position:relative;overflow:hidden}
+  .tien-trinh i span{position:absolute;inset:0;background:var(--den);transform-origin:top;transform:scaleY(0)}
+  .tien-trinh .dang{color:var(--den);font-weight:600}
+
+  @media (max-width:767px){
+    #lopoe{height:1600vh}
+    .mo-dau{top:7vh}
+    .vi-phai,.vi-trai,.vi-tren-trai,.vi-cot,.vi-duoi-giua,.vi-trai-duoi{left:20px;right:20px;width:auto;top:auto;bottom:4vh;transform:none;text-align:left}
+    .vi-duoi-giua .so{justify-content:flex-start}
+    .vi-duoi-giua ul{grid-template-columns:1fr;gap:10px}
+    .o-chu h3{font-size:30px}
+    .o-chu h3.tu-khoa{font-size:64px}
+    .o-chu h3.tu-khoa.vua{font-size:36px}
+    .o-chu .cau{font-size:18px}
+    .o-chu .cau.lon{font-size:24px}
+    .o-chu .chips{margin-top:14px}
+    .vi-duoi-giua .chips{justify-content:flex-start}
+    .o-chu .lon-nghieng{font-size:56px}
+    .o-chu ul{margin-top:14px}
+    .o-chu li{font-size:14px}
+    .nhan-3d span{display:none}
+    .nhan-3d b{font-size:12px}
+    .tien-trinh{display:none}
+  }
+  @media (min-width:768px){ .o-chu .chi-dt{display:none} }
+  .chua-tai{position:absolute;inset:0;display:grid;place-items:center;font-size:13px;color:var(--xam)}
+</style>
+</head>
+<body>
+<header>
+  <img src="img/vive-logo-chu.png" alt="VIVE">
+  <a href="#">New Arrival</a><a href="#">Quẹt</a><a href="#">Sản phẩm</a><a href="#">Deal</a>
+</header>
+
+<section class="khoi-truoc">
+  <h2 class="lon">K-Beauty Experience</h2>
+  <p class="phu-de">Khối trước (giữ chỗ). Cuộn xuống để xem LOPOE.</p>
+  <p class="goi-y">Cuộn ↓</p>
+</section>
+
+<section id="lopoe" aria-label="LOPOE Better Balance">
+  <div class="dinh">
+    <canvas id="c" aria-hidden="true"></canvas>
+    <div class="chua-tai" id="chua-tai">Đang tải mô hình…</div>
+    <div class="lop" id="lop">
+      <div class="mo-dau" id="mo-dau">
+        <p class="nho">Mới tại VIVE</p>
+        <h2>LOPOE Better Balance</h2>
+        <p>Bọt dày. Cấp ẩm. <em>Làm dịu.</em></p>
+        <div class="nut"><a class="chinh" href="#">Mua</a><a class="phu" href="#">Tìm hiểu thêm</a></div>
+      </div>
+
+      <!-- SỮA RỬA MẶT -->
+      <div class="o-chu vi-phai" data-a=".075" data-b=".155" data-tu="phai">
+        <p class="ten-nho">Sữa rửa mặt</p>
+        <p class="so"><b>01</b> Công dụng</p>
+        <h3 class="tu-khoa" data-nhan="1">pH 5.5</h3>
+        <p class="cau">Sạch sâu. <em>Không căng rít.</em></p>
+        <p class="chips"><span>Cuốn bụi mịn</span><span>Bọt đệm siêu mịn</span><span>Êm cho da nhạy cảm</span></p>
+      </div>
+      <div class="o-chu vi-tren-trai" data-a=".185" data-b=".27" data-tu="tren">
+        <p class="ten-nho">Sữa rửa mặt</p>
+        <p class="so"><b>02</b> Thành phần</p>
+        <h3 class="tu-khoa vua" data-nhan="0">4 thành phần xanh</h3>
+        <p class="cau">Cấp ẩm &amp; <em>phục hồi.</em></p>
+        <p class="chips chi-dt"><span>Thùa xanh · ngậm nước</span><span>Sen xanh · dịu đỏ</span><span>Vitamin B5 · phục hồi</span><span>Rau má · làm dịu</span></p>
+      </div>
+      <div class="o-chu vi-trai" data-a=".30" data-b=".37" data-tu="trai">
+        <p class="ten-nho">Sữa rửa mặt</p>
+        <p class="so"><b>03</b> Giải thưởng</p>
+        <p class="lon-nghieng">Winner</p>
+        <p class="cau">Hwahae Beauty Awards 2025</p>
+        <p class="chips"><span>Không sulfate</span><span>Thành phần sạch</span></p>
+      </div>
+
+      <!-- AMPOULE -->
+      <div class="o-chu vi-trai" data-a=".42" data-b=".50" data-tu="duoi">
+        <p class="ten-nho">Ampoule</p>
+        <p class="so"><b>01</b> Công dụng</p>
+        <h3 class="tu-khoa vua" data-nhan="2">Cấp ẩm cân bằng</h3>
+        <p class="cau lon"><em>Dịu da tức thì.</em></p>
+      </div>
+      <div class="o-chu vi-cot" data-a=".53" data-b=".62" data-tu="phai">
+        <p class="ten-nho">Ampoule</p>
+        <p class="so"><b>02</b> Thành phần</p>
+        <h3 class="tu-khoa vua" data-nhan="1">Hoạt chất xanh</h3>
+        <p class="cau">Phục hồi &amp; <em>khóa ẩm.</em></p>
+        <p class="chips chi-dt"><span>Lá thùa · ngậm nước sâu</span><span>Sen xanh · dịu đỏ</span><span>Hyaluronic Acid · ẩm đa tầng</span><span>Panthenol + Niacinamide · khóa ẩm</span></p>
+      </div>
+      <div class="o-chu vi-duoi-giua" data-a=".65" data-b=".72" data-tu="duoi">
+        <p class="so"><b>03</b> Giải thưởng · Ampoule</p>
+        <h3 class="tu-khoa vua" data-nhan="2">Tinh chất làm dịu</h3>
+        <p class="cau">Hwahae Trending Glow Awards 2025</p>
+        <p class="chips"><span>Không hương liệu</span><span>Hợp da nhạy cảm</span></p>
+      </div>
+
+      <!-- KEM DƯỠNG -->
+      <div class="o-chu vi-trai-duoi" data-a=".78" data-b=".87" data-tu="trai">
+        <p class="ten-nho">Kem dưỡng</p>
+        <p class="so"><b>01</b> Công dụng</p>
+        <h3 class="tu-khoa vua" data-nhan="1">Sẵn sàng trang điểm</h3>
+        <p class="cau lon"><em>Ready for makeup.</em></p>
+      </div>
+
+      <div class="tien-trinh" id="tien-trinh" aria-hidden="true">
+        <div>Sữa rửa mặt <i><span></span></i></div>
+        <div>Ampoule <i><span></span></i></div>
+        <div>Kem dưỡng <i><span></span></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="khoi-sau">
+  <h2 class="lon">Người Hàn chọn kỹ.</h2>
+  <p class="phu-de">Khối tiếp theo (giữ chỗ): chỉ xuất hiện sau khi giới thiệu xong cả 3 sản phẩm.</p>
+</section>
+
+<script type="importmap">
+{"imports":{"three":"./js/three.module.min.js","three/addons/":"./js/addons/"}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import AMP_B64 from './models/ampoule-glb.js';
+
+const giamChuyenDong = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const doan = document.getElementById('lopoe');
+const canvas = document.getElementById('c');
+const kep=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+const muot=t=>t*t*(3-2*t);
+const seg=(p,a,b)=>muot(kep((p-a)/(b-a)));
+
+/* =========================================================
+   KỊCH BẢN (p = tiến trình cuộn 0→1 của đoạn LOPOE)
+   0.000–0.045 Bộ 3
+   SỮA RỬA MẶT
+   0.045–0.075 trượt sang trái, phóng to
+   0.075–0.155 Công dụng: bọt khí trào từ nắp, bao quanh tuýp (chữ bên phải)
+   0.155–0.185 vào giữa
+   0.185–0.270 Thành phần: 4 hạt thành phần bay quỹ đạo quanh tuýp, nhãn bám theo (chữ góc trên trái)
+   0.270–0.300 sang phải, nghiêng
+   0.300–0.370 Giải thưởng: vòng nguyệt quế mọc sau tuýp (chữ bên trái)
+   AMPOULE
+   0.370–0.420 sữa rửa mặt bay lên góc phải; ampoule trồi từ dưới lên, xoay
+   0.420–0.500 Công dụng: nắp nhỏ giọt nhấc lên, nhỏ 1 giọt, gợn sóng (chữ bên trái)
+   0.500–0.530 lướt sang trái
+   0.530–0.620 Thành phần: 4 hạt bóc tách thành cột có đường nối (chữ đầu cột)
+   0.620–0.650 về giữa, to hơn
+   0.650–0.720 Giải thưởng: xoay 1 vòng, chữ "No.1" lớn phía sau, vòng giọt (chữ dưới giữa)
+   KEM DƯỠNG
+   0.720–0.770 ampoule xoáy vào sâu; kem rơi từ trên xuống, nảy nhẹ, nghiêng
+   0.770–0.870 Công dụng: dải kem chảy ra thành xoắn (chữ dưới trái)
+   0.870–0.940 cả 3 về lại thành bộ
+   0.940–1.000 đứng yên, rồi khối sau cuộn lên
+   ========================================================= */
+const T=(x,y,s=1,ry=0,rz=0,z=0,o=1)=>({x,y,s,ry,rz,z,o});
+const K=(p,d,m)=>[p,d,m||null];
+const BO3={ srm:[T(-.30,-.16,1,.18,0),T(-.56,-.02,.7,.18,0)], amp:[T(0,-.20,1,0,0),T(0,-.06,.7,0,0)], kem:[T(.30,-.16,1,-.18,0),T(.56,-.02,.7,-.18,0)] };
+const AMP_CUOI=[{...BO3.amp[0],ry:Math.PI*4},{...BO3.amp[1],ry:Math.PI*4}];
+const tuDong=s=>T(s.x*.32,.32+s.y*.42,s.s*.72,s.ry,s.rz,s.z,s.o); // bố cục điện thoại suy từ máy tính
+const KHOA={
+  srm:[K(0,...BO3.srm),K(.045,...BO3.srm),
+    K(.075,T(-.42,-.02,1.32,-.2,.08)),
+    K(.155,T(-.40,.02,1.32,.22,-.04)),
+    K(.185,T(0,-.04,1.2,0,0)),
+    K(.27, T(0,0,1.2,0,0)),
+    K(.30, T(.42,-.02,1.3,-.2,-.24)),
+    K(.37, T(.44,.02,1.3,.2,-.18)),
+    K(.42, T(1.1,1.0,.8,.5,-.9,-1,0),T(1.6,1.6,.6,.5,-.9,-1,0)),
+    K(.87, T(1.1,1.0,.8,.5,-.9,-1,0),T(1.6,1.6,.6,.5,-.9,-1,0)),
+    K(.94,...BO3.srm),K(1,...BO3.srm)],
+  amp:[K(0,...BO3.amp),K(.045,...BO3.amp),
+    K(.075,T(0,-.5,.5,0,0,-6,0),T(0,-.3,.4,0,0,-6,0)),
+    K(.36, T(.30,-1.6,1.3,-1.6,0,0,0),T(0,-1.6,.9,-1.6,0,0,0)),
+    K(.37, T(.30,-1.6,1.3,-1.6,0,0,1),T(0,-1.6,.9,-1.6,0,0,1)),
+    K(.42, T(.30,-.03,1.3,0,0),T(0,.04,.8,0,0)),
+    K(.50, T(.30,-.01,1.3,0,0),T(0,.05,.8,0,0)),
+    K(.53, T(-.42,-.02,1.3,-.5,0),T(-.38,.26,.8,-.5,0)),
+    K(.62, T(-.42,.01,1.3,.5,0),T(-.38,.28,.8,.5,0)),
+    K(.65, T(0,-.06,1.5,0,0)),
+    K(.72, T(0,-.04,1.5,Math.PI*2,0)),
+    K(.77, T(-.6,.1,.4,Math.PI*3,0,-8,0)),
+    K(.87, T(-.6,.1,.4,Math.PI*3,0,-8,0)),
+    K(.94,...AMP_CUOI),K(1,...AMP_CUOI)],
+  kem:[K(0,...BO3.kem),K(.045,...BO3.kem),
+    K(.075,T(.65,-.5,.6,-.6,.3,-5,0),T(1.2,-.5,.5,-.6,.3,-5,0)),
+    K(.715,T(.05,1.6,1.2,0,.9,0,0),T(-.25,1.7,.8,0,.9,0,0)),
+    K(.72, T(.05,1.6,1.2,0,.9,0,1),T(-.25,1.7,.8,0,.9,0,1)),
+    K(.745,T(.05,.09,1.2,0,.42),T(-.25,.24,.8,0,.42)),
+    K(.758,T(.05,.20,1.2,0,.6),T(-.25,.33,.8,0,.6)),
+    K(.77, T(.05,.18,1.2,0,.55),T(-.25,.30,.8,0,.5)),
+    K(.87, T(.05,.20,1.2,0,.58),T(-.25,.32,.8,0,.53)),
+    K(.94,...BO3.kem),K(1,...BO3.kem)]
+};
+function noiSuy(keys,p,dt){
+  const lay=k=>dt?(k[2]||tuDong(k[1])):k[1];
+  if(p<=keys[0][0]) return lay(keys[0]);
+  for(let i=1;i<keys.length;i++){
+    if(p<=keys[i][0]){ const a=lay(keys[i-1]),b=lay(keys[i]); const t=muot((p-keys[i-1][0])/(keys[i][0]-keys[i-1][0]||1)); const r={}; for(const k in a) r[k]=a[k]+(b[k]-a[k])*t; return r; }
+  }
+  return lay(keys[keys.length-1]);
+}
+
+/* ================= Cảnh ================= */
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.05;
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(30,1,.1,100); camera.position.set(0,0,10);
+scene.environment=new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(),.04).texture;
+scene.add(new THREE.HemisphereLight(0xffffff,0xe8d2cc,.6));
+const key=new THREE.DirectionalLight(0xffffff,1.6); key.position.set(3,5,6); scene.add(key);
+
+const nenMat=new THREE.ShaderMaterial({
+  uniforms:{uA:{value:new THREE.Color('#F7EEEB')},uB:{value:new THREE.Color('#F3DED8')},uC:{value:new THREE.Vector2(0,-.1)}},
+  vertexShader:`varying vec2 vUv; void main(){vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+  fragmentShader:`varying vec2 vUv; uniform vec3 uA; uniform vec3 uB; uniform vec2 uC;
+    void main(){ vec2 q=vUv*2.-1.; float d=length((q-uC)*vec2(1.,1.25));
+      vec3 c=mix(uB,uA,smoothstep(.0,1.15,d));
+      float d2=length(q-vec2(-uC.x*.8,.65)); c=mix(c,vec3(1.),smoothstep(1.1,.0,d2)*.35);
+      gl_FragColor=vec4(c,1.);}`,depthWrite:false});
+const nen=new THREE.Mesh(new THREE.PlaneGeometry(1,1),nenMat); nen.position.z=-20; nen.renderOrder=-1; scene.add(nen);
+
+// độ mờ cho cả nhóm (nhớ độ mờ gốc của từng vật liệu)
+function datMo(obj,o){ obj.traverse(m=>{ if(!m.material) return; const ms=Array.isArray(m.material)?m.material:[m.material];
+  ms.forEach(mt=>{ if(mt.userData.goc===undefined){ mt.userData.goc=mt.opacity; mt.transparent=true; } mt.opacity=mt.userData.goc*o; }); }); obj.visible=o>.01; }
+
+function taoBong(){
+  const cv=document.createElement('canvas'); cv.width=cv.height=128; const g=cv.getContext('2d');
+  const gr=g.createRadialGradient(64,64,0,64,64,64); gr.addColorStop(0,'rgba(43,43,42,.28)'); gr.addColorStop(1,'rgba(43,43,42,0)');
+  g.fillStyle=gr; g.fillRect(0,0,128,128);
+  const m=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(cv),transparent:true,depthWrite:false}));
+  m.rotation.x=-Math.PI/2; return m;
+}
+
+const CAO=2.55; const SP={};
+const tai=new THREE.TextureLoader();
+function taoTuyp(ten,url,tiLe){
+  const g=new THREE.Group(); const tex=tai.load(url); tex.colorSpace=THREE.SRGBColorSpace; tex.anisotropy=8;
+  g.add(new THREE.Mesh(new THREE.PlaneGeometry(CAO*tiLe,CAO),new THREE.MeshBasicMaterial({map:tex,transparent:true,toneMapped:false})));
+  const bong=taoBong(); bong.scale.set(CAO*tiLe*1.5,.5,1); bong.position.y=-CAO/2-.02; g.add(bong);
+  scene.add(g); SP[ten]={g,bong};
+}
+taoTuyp('srm','img/srm.webp',366/989);
+taoTuyp('kem','img/kem.webp',368/980);
+
+/* ---- Ampoule 3D + nắp nhỏ giọt tháo được ---- */
+const ampG=new THREE.Group(); scene.add(ampG); SP.amp={g:ampG};
+const NAP={nhom:null,giot:null,gon:null};
+const longMat=()=>new THREE.MeshPhysicalMaterial({color:0x86afe6,roughness:.15,clearcoat:.8,envMapIntensity:1.1,transparent:true,opacity:.85,depthWrite:false});
+const ampBuf=Uint8Array.from(atob(AMP_B64),c=>c.charCodeAt(0)).buffer;
+new GLTFLoader().parse(ampBuf,'',gltf=>{
+  const m=gltf.scene;
+  const than=new THREE.MeshPhysicalMaterial({color:0xe9f2ff,roughness:.06,clearcoat:1,clearcoatRoughness:.04,envMapIntensity:1.6,transparent:true,opacity:.22,depthWrite:false});
+  const long=new THREE.MeshPhysicalMaterial({color:0x86afe6,roughness:.18,clearcoat:.6,envMapIntensity:.9,transparent:true,opacity:.78,depthWrite:false});
+  const chu=new THREE.MeshStandardMaterial({color:0x151515,roughness:.5,transparent:true});
+  m.traverse(o=>{ if(!o.isMesh) return; o.material=o.name.includes('Body')?than:o.name.includes('Liquid')?long:chu;
+    o.renderOrder=o.name.includes('Liquid')?1:o.name.includes('Body')?2:3; });
+  const nap=new THREE.Group(); m.add(nap);
+  const co=new THREE.Mesh(new THREE.CylinderGeometry(.0128,.0135,.024,48),new THREE.MeshPhysicalMaterial({color:0x9cc2f0,roughness:.12,clearcoat:1,transparent:true,opacity:.85}));
+  co.position.y=.102; nap.add(co);
+  const vien=new THREE.Mesh(new THREE.CylinderGeometry(.0145,.0145,.004,48),new THREE.MeshPhysicalMaterial({color:0xc4dbf7,roughness:.1,clearcoat:1,transparent:true,opacity:.7}));
+  vien.position.y=.091; nap.add(vien);
+  const bop=new THREE.Mesh(new THREE.CapsuleGeometry(.0075,.011,8,32),new THREE.MeshStandardMaterial({color:0xf1e8d4,roughness:.55,transparent:true}));
+  bop.position.y=.126; nap.add(bop);
+  const ong=new THREE.Mesh(new THREE.CylinderGeometry(.0026,.0018,.066,20),new THREE.MeshPhysicalMaterial({color:0xdbe9fb,roughness:.05,clearcoat:1,transparent:true,opacity:.45}));
+  ong.position.y=.057; nap.add(ong);
+  const giot=new THREE.Mesh(new THREE.SphereGeometry(.0042,24,16),longMat()); m.add(giot);
+  const gon=new THREE.Mesh(new THREE.RingGeometry(.92,1,64),new THREE.MeshBasicMaterial({color:0x5d8fd6,transparent:true,opacity:.6,side:THREE.DoubleSide,depthWrite:false}));
+  gon.rotation.x=-Math.PI/2; m.add(gon);
+  m.scale.setScalar(CAO/.1335); m.position.y=-CAO/2; ampG.add(m);
+  const bong=taoBong(); bong.scale.set(1.3,.5,1); bong.position.y=-CAO/2-.02; ampG.add(bong);
+  Object.assign(NAP,{nhom:nap,giot,gon}); SP.amp.bong=bong;
+  document.getElementById('chua-tai').remove();
+},()=>{ document.getElementById('chua-tai').textContent='Không tải được mô hình ampoule'; });
+
+/* ---- Hạt thành phần: biểu tượng 3D trừu tượng (không phải ảnh thật) ---- */
+const vatLieu=(c,o={})=>new THREE.MeshPhysicalMaterial({color:c,roughness:.35,clearcoat:.6,envMapIntensity:1.2,...o});
+function hat(loai){
+  const g=new THREE.Group(), ben=new THREE.Group(); g.add(ben);
+  if(loai==='thua'){ // thùa xanh: hoa thị lá nhọn
+    for(let i=0;i<9;i++){ const l=new THREE.Mesh(new THREE.ConeGeometry(.045,.36,10),vatLieu(0x7fae8a));
+      const a=i/9*Math.PI*2; l.position.set(Math.cos(a)*.07,.06,Math.sin(a)*.07); l.rotation.set(Math.sin(a)*.6,0,-Math.cos(a)*.6); ben.add(l); }
+    const l=new THREE.Mesh(new THREE.ConeGeometry(.05,.42,10),vatLieu(0x6c9d78)); l.position.y=.12; ben.add(l);
+  } else if(loai==='sen'){ // hoa sen xanh
+    for(let r=0;r<2;r++) for(let i=0;i<8;i++){ const c=new THREE.Mesh(new THREE.SphereGeometry(1,16,12),vatLieu(r?0xb7cdf2:0x8fb0e6));
+      c.scale.set(.05,.018,.15); const a=(i+r*.5)/8*Math.PI*2; c.position.set(Math.cos(a)*.11,-.02+r*.04,Math.sin(a)*.11);
+      c.rotation.set(0,-a+Math.PI/2,0); c.rotateX(r?-.9:-.5); ben.add(c); }
+    const nhuy=new THREE.Mesh(new THREE.SphereGeometry(.045,16,12),vatLieu(0xf1d27a)); nhuy.position.y=.03; ben.add(nhuy);
+  } else if(loai==='rauma'){ // rau má: lá tròn
+    for(let i=0;i<3;i++){ const d=new THREE.Mesh(new THREE.CylinderGeometry(.11,.11,.012,32),vatLieu(0x8fbf7f));
+      const a=i/3*Math.PI*2; d.position.set(Math.cos(a)*.09,.04*i-.04,Math.sin(a)*.09); d.rotation.set(.9,a,.3); ben.add(d); }
+  } else if(loai==='xoan'){ // hyaluronic acid: chuỗi xoắn
+    for(let i=0;i<12;i++){ const t=i/11, a=t*Math.PI*3.2; const b=new THREE.Mesh(new THREE.SphereGeometry(.035,16,12),vatLieu(i%2?0x9cc2f0:0xdbe9fb));
+      b.position.set(Math.cos(a)*.09,(t-.5)*.36,Math.sin(a)*.09); ben.add(b); }
+  } else { // phân tử bi và que (vitamin B5 / panthenol & niacinamide)
+    const mau=[0xffffff,0xe8d2cc,0xcfe3d5,0xffffff,0xe8d2cc,0xcfe3d5];
+    const dinh=[[0,0,0],[.15,.08,0],[-.13,.1,.04],[.02,-.15,.05],[.2,-.08,-.06],[-.2,-.08,-.05]];
+    dinh.forEach((vv,i)=>{ const b=new THREE.Mesh(new THREE.SphereGeometry(i?.045:.06,18,14),vatLieu(mau[i])); b.position.set(...vv); ben.add(b);
+      if(i){ const goc=new THREE.Vector3(...dinh[i<4?0:1]), ngon=new THREE.Vector3(...vv); const len=goc.distanceTo(ngon);
+        const que=new THREE.Mesh(new THREE.CylinderGeometry(.012,.012,len,8),vatLieu(0xbfbfbf)); que.position.copy(goc).lerp(ngon,.5);
+        que.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),ngon.clone().sub(goc).normalize()); ben.add(que); } });
+  }
+  g.add(new THREE.Mesh(new THREE.SphereGeometry(.34,32,24),new THREE.MeshPhysicalMaterial({color:0xffffff,roughness:.05,clearcoat:1,envMapIntensity:2,iridescence:.8,transparent:true,opacity:.2,depthWrite:false})));
+  g.userData.ben=ben; g.visible=false; scene.add(g); return g;
+}
+const lop=document.getElementById('lop');
+function nhan(ten,loi,giua=false){ const d=document.createElement('div'); d.className='nhan-3d'+(giua?' giua':''); d.innerHTML=`<b>${ten}</b><span>${loi}</span>`; lop.appendChild(d); return d; }
+
+const TP_SRM=[['thua','Thùa xanh','Ngậm nước'],['sen','Sen xanh','Dịu đỏ'],['phantu','Vitamin B5','Phục hồi'],['rauma','Rau má','Làm dịu']]
+  .map(([l,t,d])=>({g:hat(l),el:nhan(t,d,true)}));
+const TP_AMP=[['thua','Lá thùa','Ngậm nước sâu'],['sen','Sen xanh','Thanh lọc, dịu đỏ'],['xoan','Hyaluronic Acid','Ẩm đa tầng'],['phantu','Panthenol + Niacinamide','Khóa ẩm, củng cố hàng rào da']]
+  .map(([l,t,d])=>{ const g=hat(l); const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(),new THREE.Vector3()]),new THREE.LineBasicMaterial({color:0x2b2b2a,transparent:true,opacity:.25})); line.visible=false; scene.add(line); return {g,el:nhan(t,d),line}; });
+
+/* ---- Bọt khí (sữa rửa mặt · công dụng) ---- */
+const NB=70;
+const bot=new THREE.InstancedMesh(new THREE.SphereGeometry(1,24,16),new THREE.MeshPhysicalMaterial({color:0xffffff,roughness:.04,clearcoat:1,envMapIntensity:2.4,iridescence:1,iridescenceIOR:1.3,transparent:true,opacity:.5,depthWrite:false}),NB);
+bot.frustumCulled=false; bot.visible=false; scene.add(bot);
+const botDL=[...Array(NB)].map(()=>({a:Math.random()*Math.PI*2,r:1.0+Math.random()*1.2,z:(Math.random()-.5)*1.8,s:.04+Math.pow(Math.random(),2.2)*.2,d:Math.random(),w:Math.random()*6}));
+
+/* ---- Vòng nguyệt quế (sữa rửa mặt · giải thưởng) ---- */
+const vongLa=new THREE.Group(); vongLa.visible=false; scene.add(vongLa); const LA=[];
+const vang=new THREE.MeshStandardMaterial({color:0xcbb08e,metalness:.5,roughness:.32,transparent:true});
+for(const ben of [-1,1]) for(let j=0;j<11;j++){
+  const a=-Math.PI/2+ben*(.32+j*.22); const l=new THREE.Mesh(new THREE.SphereGeometry(1,16,12),vang);
+  l.position.set(Math.cos(a)*1.6,Math.sin(a)*1.6,0); l.rotation.z=a+(ben>0?.5:-.5)+Math.PI/2; l.userData.s=new THREE.Vector3(.07,.2,.04);
+  l.scale.setScalar(1e-4); vongLa.add(l); LA.push({l,j});
+}
+const vanh=new THREE.Mesh(new THREE.TorusGeometry(1.85,.01,8,160),vang); vongLa.add(vanh);
+
+/* ---- "No.1" phía sau + vòng giọt (ampoule · giải thưởng) ---- */
+const so1=new THREE.Mesh(new THREE.PlaneGeometry(8,4),new THREE.MeshBasicMaterial({transparent:true,depthWrite:false,opacity:0}));
+so1.visible=false; scene.add(so1);
+function veSo1(){ const cv=document.createElement('canvas'); cv.width=1600; cv.height=800; const g=cv.getContext('2d');
+  g.font='italic 500 600px "Playfair Display", serif'; g.textAlign='center'; g.textBaseline='middle';
+  g.fillStyle='rgba(43,43,42,.07)'; g.fillText('No.1',800,430); g.lineWidth=3; g.strokeStyle='rgba(43,43,42,.28)'; g.strokeText('No.1',800,430);
+  const t=new THREE.CanvasTexture(cv); t.colorSpace=THREE.SRGBColorSpace; so1.material.map=t; so1.material.needsUpdate=true; }
+document.fonts.load('italic 500 100px "Playfair Display"').then(veSo1,veSo1);
+const GIOT=[...Array(14)].map((_,i)=>{ const m=new THREE.Mesh(new THREE.SphereGeometry(.05+(i%3)*.025,20,14),longMat()); m.visible=false; scene.add(m); return m; });
+
+/* ---- Dải kem (kem dưỡng · công dụng) ---- */
+const kemMat=new THREE.MeshPhysicalMaterial({color:0xf8f3ee,roughness:.38,clearcoat:.5,envMapIntensity:1.1,transparent:true});
+let daiKem=null;
+let nuaW=1,nuaH=1,dienThoai=false;
+function dungDaiKem(){
+  if(daiKem){ scene.remove(daiKem); daiKem.geometry.dispose(); }
+  const s=noiSuy(KHOA.kem,.80,dienThoai);
+  const pos=new THREE.Vector3(s.x*nuaW,s.y*nuaH,s.z); const h=CAO/2*s.s+.06;
+  const huong=new THREE.Vector3(Math.sin(s.rz),-Math.cos(s.rz),0);
+  const mieng=pos.clone().addScaledVector(huong,h);
+  const day=dienThoai?-.02*nuaH:-.58*nuaH;
+  const goc=new THREE.Vector3(mieng.x+(dienThoai?.2:.5),day,0);
+  const pts=[mieng.clone(),mieng.clone().addScaledVector(huong,.35),new THREE.Vector3((mieng.x+goc.x)/2+.25,(mieng.y+day)/2,.1)];
+  const soVong=2.6, R=dienThoai?.38:.6;
+  for(let i=0;i<=60;i++){ const t=i/60; const a=Math.PI/2-t*soVong*Math.PI*2; const r=R*(1-t*.8);
+    pts.push(new THREE.Vector3(goc.x+Math.cos(a)*r,day+.06+t*R*.95,Math.sin(a)*r*.7)); }
+  daiKem=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),600,dienThoai?.06:.085,14),kemMat); daiKem.visible=false; scene.add(daiKem);
+}
+
+/* ================= Khung nhìn ================= */
+function doiCo(){
+  const w=canvas.clientWidth,h=canvas.clientHeight;
+  renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix();
+  nuaH=Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*camera.position.z; nuaW=nuaH*camera.aspect;
+  dienThoai=w<768;
+  const sz=Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*(camera.position.z+20)*2;
+  nen.scale.set(sz*camera.aspect*1.05,sz*1.05,1);
+  dungDaiKem();
+}
+addEventListener('resize',doiCo); doiCo();
+
+/* ================= Chữ ================= */
+const moDau=document.getElementById('mo-dau');
+const OCHU=[...document.querySelectorAll('.o-chu')].map(el=>{
+  const h=el.querySelector('h3'); if(h){ const n=h.dataset.nhan===undefined?99:+h.dataset.nhan; h.innerHTML=h.textContent.split(' ').map((t,i)=>`<span class="tu${i>=n?' nhan-mau':''}">${t}</span>`).join(' '); }
+  return {el,a:+el.dataset.a,b:+el.dataset.b,tu:el.dataset.tu,tus:[...el.querySelectorAll('.tu')],con:[...el.querySelectorAll('.ten-nho,.so,.lon-nghieng,.cau,.chips span')]};
+});
+const LECH={phai:[40,0],trai:[-40,0],tren:[0,-30],duoi:[0,40]};
+const tt=document.getElementById('tien-trinh'); const vach=tt.querySelectorAll('span'), dong=tt.querySelectorAll('div');
+function capNhatChu(p){
+  const oMo=1-seg(p,.025,.045); moDau.style.opacity=oMo; moDau.style.transform=`translateY(${-30*(1-oMo)}px)`; moDau.style.visibility=oMo<.01?'hidden':'visible';
+  for(const o of OCHU){
+    const vao=seg(p,o.a-.012,o.a+.012), ra=1-seg(p,o.b-.014,o.b+.006), op=Math.min(vao,ra);
+    o.el.style.opacity=op>.01?1:0; o.el.style.visibility=op<.01?'hidden':'visible';
+    if(op<.01) continue;
+    const [dx,dy]=LECH[o.tu]; const t=kep((p-o.a+.014)/.032); // từng dòng hiện nối tiếp
+    o.tus.forEach((w,i)=>{ const e=muot(kep(t*1.6-i*.18))*ra; w.style.opacity=e; w.style.transform=`translate(${dx*(1-e)*.5}px,${(dy||18)*(1-e)}px)`; });
+    o.con.forEach((c,i)=>{ const e=muot(kep(t*1.4-.1-i*.09))*ra; c.style.opacity=e; c.style.transform=`translate(${dx*(1-e)}px,${dy*(1-e)}px)`; });
+  }
+  const khoang=[[.045,.37],[.37,.72],[.72,.87]];
+  tt.style.opacity=seg(p,.05,.08)*(1-seg(p,.87,.9));
+  khoang.forEach(([a,b],i)=>{ vach[i].style.transform=`scaleY(${kep((p-a)/(b-a))})`; dong[i].classList.toggle('dang',p>=a&&p<b); });
+  const mau=p<.37?['#F7EEEB','#F3DED8']:p<.72?['#F4F7FB','#D8E7F6']:p<.87?['#FBF7F3','#EAF3ED']:['#F7EEEB','#EAF3ED'];
+  nenMat.uniforms.uA.value.lerp(new THREE.Color(mau[0]),.06); nenMat.uniforms.uB.value.lerp(new THREE.Color(mau[1]),.06);
+}
+const tam=new THREE.Vector3();
+function datNhan(el,obj,op,dx=0,dy=0){
+  if(op<.01){ el.style.opacity=0; return; }
+  tam.setFromMatrixPosition(obj.matrixWorld).project(camera);
+  const x=(tam.x*.5+.5)*canvas.clientWidth+dx, y=(-tam.y*.5+.5)*canvas.clientHeight+dy;
+  el.style.opacity=op; el.style.transform=`translate(${x}px,${y}px) translate(${el.classList.contains('giua')?'-50%':'0'},-50%)`;
+}
+
+/* ================= Hiệu ứng riêng của từng phần ================= */
+const v=new THREE.Vector3(), v2=new THREE.Vector3(), mt=new THREE.Matrix4(), qt=new THREE.Quaternion(), sc=new THREE.Vector3();
+function hieuUng(p,time){
+  const srm=SP.srm.g, amp=SP.amp.g;
+  // 1) Bọt khí trào từ nắp tuýp, bao quanh rồi bay lên
+  const eB=seg(p,.07,.14), raB=seg(p,.152,.19);
+  bot.visible=eB>0&&raB<1;
+  if(bot.visible){
+    const nap=srm.localToWorld(new THREE.Vector3(0,-CAO/2+.12,0));
+    const k=dienThoai?.55:1;
+    botDL.forEach((b,i)=>{
+      const e=muot(kep(eB*1.7-b.d*.7));
+      const dich=v2.set(srm.position.x+Math.cos(b.a)*b.r*k*(Math.cos(b.a)>0?.75:1.15), srm.position.y+Math.sin(b.a)*b.r*k*1.1+raB*3.2*(.6+b.d), b.z);
+      const lac=giamChuyenDong?0:Math.sin(time*.0012+b.w)*.06;
+      v.copy(nap).lerp(dich,e); v.x+=lac; v.y+=lac*.6;
+      mt.compose(v,qt.identity(),sc.setScalar(Math.max(b.s*k*e*(1-raB*.9),1e-4))); bot.setMatrixAt(i,mt);
+    });
+    bot.instanceMatrix.needsUpdate=true; bot.material.opacity=.5*(1-raB);
+  }
+  // 2) Thành phần sữa rửa mặt: bay quỹ đạo elip quanh tuýp
+  const eQ=seg(p,.18,.215), raQ=seg(p,.262,.288);
+  TP_SRM.forEach((t,i)=>{
+    const op=eQ*(1-raQ); datMo(t.g,op);
+    const goc=(p-.185)/.085*Math.PI*1.1+i*Math.PI/2+.4; const r=(dienThoai?1.05:1.95)*(.3+.7*eQ)*(1+raQ*.6);
+    t.g.position.set(srm.position.x+Math.cos(goc)*r, srm.position.y+Math.sin(goc)*(dienThoai?.55:.75)-.05, Math.sin(goc)*1.4);
+    t.g.scale.setScalar((dienThoai?.62:.92)*(.4+.6*eQ));
+    t.g.userData.ben.rotation.y=time*.0006+i; t.g.updateMatrixWorld();
+    datNhan(t.el,t.g,op*(t.g.position.z>-.5?1:.25),0,dienThoai?32:58);
+  });
+  // 3) Vòng nguyệt quế mọc sau tuýp
+  const eV=seg(p,.295,.33), raV=seg(p,.365,.395);
+  vongLa.visible=eV>0&&raV<1;
+  if(vongLa.visible){
+    vongLa.position.set(srm.position.x,srm.position.y+.05,-.8); vongLa.scale.setScalar((dienThoai?.62:1)*(1+raV*.4));
+    LA.forEach(({l,j})=>{ const e=seg(p,.298+j*.0028,.315+j*.0028)*(1-raV); l.scale.copy(l.userData.s).multiplyScalar(Math.max(e,1e-4)); });
+    vanh.scale.setScalar(Math.max(eV*(1-raV),1e-4)); vang.opacity=1-raV;
+  }
+  // 4) Ampoule: nhấc nắp nhỏ giọt, nhỏ 1 giọt, gợn sóng
+  if(NAP.nhom){
+    const nhac=seg(p,.43,.455)-seg(p,.50,.525), lech=seg(p,.452,.468)-seg(p,.495,.51);
+    NAP.nhom.position.set(lech*.036,nhac*.075,0); NAP.nhom.rotation.z=-lech*.12;
+    const f=seg(p,.466,.492), tx=lech*.036, ty=.024+nhac*.075;
+    NAP.giot.visible=f>0&&f<1&&nhac>.5;
+    if(NAP.giot.visible){ const tao=kep(f/.3), roi=kep((f-.3)/.7); NAP.giot.scale.setScalar(.3+.7*tao); NAP.giot.position.set(tx,ty-.004-roi*roi*(ty-.004),0); }
+    const g=seg(p,.488,.508); NAP.gon.visible=g>0&&g<1;
+    if(NAP.gon.visible){ NAP.gon.position.set(tx,.0006,0); NAP.gon.scale.setScalar(.002+g*.032); NAP.gon.material.opacity=.6*(1-g); }
+  }
+  // 5) Thành phần ampoule: bóc tách khỏi chai thành cột, có đường nối
+  TP_AMP.forEach((t,i)=>{
+    const e=seg(p,.532+i*.012,.556+i*.012)*(1-seg(p,.612,.636)); datMo(t.g,e); t.line.visible=e>.01;
+    const tu=v.copy(amp.position); tu.y+=.2-i*.15;
+    const den=dienThoai?v2.set(.45*nuaW,nuaH*(.66-i*.2),0):v2.set(-.02*nuaW,nuaH*(.06-i*.22),0);
+    t.g.position.copy(tu).lerp(den,e); t.g.scale.setScalar((dienThoai?.5:.62)*(.3+.7*e)); t.g.userData.ben.rotation.y=time*.0007+i*1.3;
+    t.g.updateMatrixWorld();
+    const a=t.line.geometry.attributes.position; a.setXYZ(0,amp.position.x+.45,amp.position.y+.25-i*.12,0); a.setXYZ(1,t.g.position.x-.22*e,t.g.position.y,0); a.needsUpdate=true; t.line.material.opacity=.22*e;
+    datNhan(t.el,t.g,dienThoai?0:e,40,0);
+  });
+  // 6) "No.1" lớn phía sau + vòng giọt quanh ampoule
+  const eN=seg(p,.645,.675)*(1-seg(p,.712,.74));
+  so1.material.opacity=eN; so1.visible=eN>.01; so1.position.set(amp.position.x,amp.position.y+.25,-2.6); so1.scale.setScalar((dienThoai?.45:1)*(.86+.14*eN));
+  GIOT.forEach((m,i)=>{ m.visible=eN>.01; if(!m.visible) return; const a=i/GIOT.length*Math.PI*2+(p-.645)*14; const r=(dienThoai?1.0:1.55)*(.6+.4*eN);
+    m.position.set(amp.position.x+Math.cos(a)*r,amp.position.y+Math.sin(a*2)*.35+.1,Math.sin(a)*r); m.material.opacity=.85*eN; });
+  // 7) Dải kem chảy ra thành xoắn
+  if(daiKem){ const e=seg(p,.785,.85), ra=seg(p,.868,.9); daiKem.visible=e>0&&ra<1;
+    const n=daiKem.geometry.index.count; daiKem.geometry.setDrawRange(0,Math.floor(n*e/6)*6); kemMat.opacity=1-ra; }
+}
+
+/* ================= Vòng lặp ================= */
+function tienTrinh(){ const r=doan.getBoundingClientRect(); return kep(-r.top/(r.height-innerHeight)); }
+let p=tienTrinh(), truoc=performance.now();
+function khung(time){
+  const dich=tienTrinh(); const dt=Math.min(.1,(time-truoc)/1000); truoc=time;
+  p+=giamChuyenDong?(dich-p):(dich-p)*(1-Math.exp(-dt*6)); if(Math.abs(dich-p)<1e-5) p=dich;
+  if(window.__p!=null) p=window.__p; // chỉ dùng khi kiểm thử
+  for(const k of ['srm','amp','kem']){
+    const s=noiSuy(KHOA[k],p,dienThoai), g=SP[k].g;
+    const tho=giamChuyenDong?0:Math.sin(time*.0011+(k==='amp'?1:k==='kem'?2:0))*.035;
+    g.position.set(s.x*nuaW,s.y*nuaH+tho,s.z); g.scale.setScalar(s.s);
+    g.rotation.set(0,k==='amp'?s.ry:kep(s.ry,-.32,.32),s.rz); datMo(g,s.o); if(SP[k].bong) SP[k].bong.visible=Math.abs(s.rz)<.35; g.updateMatrixWorld();
+  }
+  hieuUng(p,time);
+  capNhatChu(p);
+  renderer.render(scene,camera);
+  requestAnimationFrame(khung);
+}
+requestAnimationFrame(khung);
+</script>
+</body>
+</html>

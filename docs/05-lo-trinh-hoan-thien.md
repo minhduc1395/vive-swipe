@@ -99,6 +99,7 @@ Làm đúng thứ tự, mỗi việc một nhánh mới tách từ `main` mới 
 | 1e | **W051** | Menu chuẩn kiểu web theo landing v3: logo về `/`, bỏ Ghé LL2, New Arrival → `/new-arrival` (thay phần "logo về New Arrival" của W038) | tasks/W051.md |
 | 1f | **W050** | Trang chủ mới `/` theo `design/landing-v3`, mọi nút nối đúng trang (bảng trong task); landing cũ giữ ở `/new-arrival` | tasks/W050.md |
 | 1g | **W052** | Đồng bộ thiết kế các trang khách còn lại theo landing v3 | tasks/W052.md |
+| 1h | **W054** | Khối cuộn 3D LOPOE ở `/thu-nghiem/lopoe-3d` theo `design/lopoe-3d` (chưa gắn landing); tài sản thật từ W053 (Antigravity Media) | tasks/W054.md |
 | 4b | **W005** | Web đọc ảnh từ kho media Supabase (tasks/W005.md, docs/06) | Đổi ảnh trong kho là web đổi, không cần deploy |
 | 5 | **W029** | Trang `/personal-color` bản tạm theo `design/Pawlette.dc.html` | Có link từ New Arrival |
 | 6 | **W032** | Sau khi W028 merge: ma trận §2.4 vào CI, đo hiệu năng §2.3 | CI xanh cả Chromium và WebKit |
