@@ -82,14 +82,15 @@ Việc nào bị chặn vì chờ chủ dự án thì làm việc kế tiếp, k
 ## 4b. Claude làm thay Antigravity (19/11, Antigravity hết quota)
 Đã xong, đã merge vào main, mỗi task có mục "Đã làm (Claude, 19/11). Antigravity KHÔNG làm lại":
 W040 (#30), W042 (#31), W041 + W048 (#32), W039 (#33), W052 (#34), W054 (#35), W032 làm lại từ main (#36, PR #23 cũ đã đóng).
-20/11: **W056** (lưới combo + thương hiệu đổi nhịp, màu cửa hàng, ảnh kho media theo mã `san_pham` trong `trang-chu.yaml`). **W055** (khối 2 trang chủ = cuộn 3D LOPOE, huy hiệu Hwahae ở Ampoule, lưới combo kiểu apple.com + hàng combo trượt ngang). File chữ 3D dùng chung: `data/thu-nghiem/lopoe-3d.yaml`; khóa `lopoe` cũ trong `trang-chu.yaml` đã bỏ.
+20/11: **W057** (LOPOE 3D ảnh thật, chữ gọn; quẹt chạm mở chi tiết + mô tả tạm `lib/mo-ta-tam.ts` + khóa cuộn `lib/khoa-cuon.ts`). **W056** (lưới combo + thương hiệu đổi nhịp, màu cửa hàng, ảnh kho media theo mã `san_pham` trong `trang-chu.yaml`). **W055** (khối 2 trang chủ = cuộn 3D LOPOE, huy hiệu Hwahae ở Ampoule, lưới combo kiểu apple.com + hàng combo trượt ngang). File chữ 3D dùng chung: `data/thu-nghiem/lopoe-3d.yaml`; khóa `lopoe` cũ trong `trang-chu.yaml` đã bỏ.
 
 **Antigravity khi có quota lại, làm theo thứ tự:**
 1. `git pull` main, đọc handoff `20261119-*_claude_antigravity_*` mới nhất. Không mở lại nhánh cũ (`w032-v2` và các nhánh trước 19/11 chiều).
 2. **W044** song ngữ, **W045** sửa sản phẩm song ngữ ở trang kho, **W046** nhập/xuất Excel: chưa ai làm.
 3. Phần còn lại của **W032** (mục "Còn lại" trong task: LCP `/new-arrival`, Accessibility ≥ 95, đo trên Cloud Run, `toHaveScreenshot`).
-4. **W054/W055**: thay tài sản tạm bằng tài sản thật khi Antigravity Media xong W053 (khối 3D giờ nằm trên trang chủ, kiểm cả `/`).
-5. **W018** email deal: vẫn chờ tên miền gửi email.
+4. **W054/W055/W057**: khối 3D trên trang chủ hiện dùng ảnh thật tách nền (mặt phẳng); khi Antigravity Media xong W053 (mô hình xoay được) thì thay. Kiểm cả `/`.
+5. **W047**: điền `mo_ta` thật; `moTaTam()` tự ẩn khi `mo_ta` có.
+6. **W018** email deal: vẫn chờ tên miền gửi email.
 
 Lưu ý chạy e2e cục bộ: khởi động lại server dev trước mỗi lượt chạy toàn bộ (test quản trị sửa kho tạm dev, làm `anh-media.spec.ts` đỏ nếu dùng lại server).
 

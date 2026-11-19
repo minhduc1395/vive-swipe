@@ -319,21 +319,21 @@
       ]
     },
     {
-      "id": "saltherapy",
+      "id": "lalarecipe",
       "mau_nen": "hong-nhat",
       "co": "rong",
-      "tieu_de": "salTherapy",
-      "phu_de_truoc": "Tẩy tế bào chết muối biển.",
+      "tieu_de": "Lalarecipe",
+      "phu_de_truoc": "Bộ Yuzu Vita C.",
       "san_pham": [
-        "8801990000337",
-        "8801990000351",
-        "8801990000320"
+        "8809675771909",
+        "8809638307466",
+        "8809638307473"
       ],
-      "mo_ta_anh": "Ba hũ tẩy tế bào chết muối và dầu salTherapy",
+      "mo_ta_anh": "Toner pad, ampoule và kem dưỡng Yuzu Vita C của Lalarecipe",
       "nut": [
         {
           "chu": "Xem sản phẩm",
-          "den": "/danh-muc?thuong-hieu=salTherapy",
+          "den": "/danh-muc?thuong-hieu=Lalarecipe",
           "kieu": "chinh"
         }
       ]

@@ -7,8 +7,11 @@
 #   hoặc khi hien_cho_duyet: true (chỉ dùng ở trang thử để duyệt).
 # huy_hieu: ảnh huy hiệu gốc của nhãn, CHỈ gắn vào đúng sản phẩm được trao giải.
 hien_cho_duyet: false
+# Ảnh thật tách nền từ kho media (LOPOE-CF/AMP/CR tach-nen.png, QA duyệt 18/11), làm sạch viền 20/11.
+# Ampoule tách 2 mảnh cùng bề rộng để nhấc nắp nhỏ giọt. Mô hình glb tạm đã bỏ (CĐT 20/11: chưa giống thật).
 tai_san:
-  ampoule_glb: /thu-nghiem/lopoe-3d/ampoule.glb
+  ampoule_than: /thu-nghiem/lopoe-3d/ampoule-than.webp
+  ampoule_nap: /thu-nghiem/lopoe-3d/ampoule-nap.webp
   sua_rua_mat: /thu-nghiem/lopoe-3d/srm.webp
   kem_duong: /thu-nghiem/lopoe-3d/kem.webp
 mo_dau:
@@ -29,7 +32,7 @@ khoi:
     nhan_tu: 1
     co: lon
     cau: "Sạch sâu. *Không căng rít.*"
-    chips: ["Cuốn bụi mịn", "Bọt đệm siêu mịn", "Êm cho da nhạy cảm"]
+    chips: ["Bọt đệm siêu mịn", "Êm cho da nhạy cảm"]
   - id: srm-thanh-phan
     a: 0.185
     b: 0.27
@@ -46,9 +49,9 @@ khoi:
     vi_tri: trai
     tu: trai
     ten_nho: "Sữa rửa mặt"
-    tu_khoa: "Không|sulfate"
+    tu_khoa: "Sạch|không khô"
     co: lon
-    cau: "*Thành phần sạch.*"
+    cau: "*Rửa xong vẫn mềm.*"
     cau_lon: true
   - id: amp-cong-dung
     a: 0.42
@@ -65,7 +68,8 @@ khoi:
     vi_tri: cot
     tu: phai
     ten_nho: "Ampoule"
-    tu_khoa: "Hoạt chất|xanh"
+    tu_khoa: "4 hoạt chất"
+    nhan_tu: 1
     cau: "Phục hồi & *khóa ẩm.*"
   # Bằng chứng: huy hiệu "2025 상반기 hwahae awards · 라이징 트렌드 | 진정 · 1위 · 에센스/앰플/세럼" (CĐT gửi 20/11)
   - id: amp-giai-thuong
@@ -78,8 +82,7 @@ khoi:
       mo_ta: "Huy hiệu Hwahae Awards nửa đầu 2025, hạng 1 Xu hướng nổi bật, nhóm Làm dịu, Essence/Ampoule/Serum"
     tu_khoa: "Hwahae Awards 2025"
     nhan_dau: 1
-    cau: "Hạng 1 *Xu hướng nổi bật · Làm dịu*"
-    chips: ["Nửa đầu năm 2025", "Essence · Ampoule · Serum"]
+    cau: "Hạng 1 *Ampoule làm dịu*"
     cho_duyet: true
   - id: kem-cong-dung
     a: 0.78

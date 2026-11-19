@@ -111,8 +111,10 @@ export function TheSanPham({
       onVaoGio();
     } else {
       setKeo({ x: 0, y: 0, dangKeo: false });
+      // Chạm nhẹ (không kéo quá 8px, dưới 400ms) = mở chi tiết (CĐT 20/11)
+      if (Math.abs(x) < 8 && Math.abs(y) < 8 && dt < 400) onMoChiTiet();
     }
-  }, [onThich, onBoQua, onVaoGio, onDragStateChange]);
+  }, [onThich, onBoQua, onVaoGio, onDragStateChange, onMoChiTiet]);
 
   const handlePointerUp = () => {
     ketThucKeo();

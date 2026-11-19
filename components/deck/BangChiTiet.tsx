@@ -9,6 +9,8 @@ import { dinhDangTien } from "@/lib/dinh-dang";
 import { duongDanAnh } from "@/lib/anh";
 import { layNhanLoaiDa, layNhanVanDe } from "@/lib/nhan";
 import { layCacDealCuaSanPham } from "@/lib/deals/ghi-chu";
+import { moTaTam } from "@/lib/mo-ta-tam";
+import { useKhoaCuon } from "@/lib/khoa-cuon";
 
 interface BangChiTietProps {
   sanPham: SanPham | null;
@@ -29,6 +31,7 @@ export function BangChiTiet({
 }: BangChiTietProps) {
   const { deals } = useDuLieu();
   const [anhLoi, setAnhLoi] = useState<boolean>(false);
+  useKhoaCuon(dangMo && sanPham !== null);
 
   if (!dangMo || !sanPham) return null;
 
@@ -51,6 +54,7 @@ export function BangChiTiet({
       <div
         className="w-full max-w-[480px] md:max-w-[560px] max-h-[85vh] bg-trang rounded-t-[28px] md:rounded-[28px] overflow-hidden flex flex-col relative animate-in slide-in-from-bottom duration-300 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
+        onWheel={(e) => e.stopPropagation()}
       >
         {/* Nắp kéo */}
         <div
@@ -90,7 +94,7 @@ export function BangChiTiet({
         </button>
 
         {/* Nội dung cuộn */}
-        <div className="flex-1 overflow-y-auto px-5 pt-2 pb-6 flex flex-col gap-4">
+        <div className="flex-1 overflow-y-auto overscroll-contain px-5 pt-2 pb-6 flex flex-col gap-4">
           {/* Hộp ảnh */}
           <div
             className={`w-full h-[196px] rounded-[22px] ${nenAnh} flex items-center justify-center shrink-0 overflow-hidden`}
@@ -204,17 +208,15 @@ export function BangChiTiet({
             </div>
           ) : null}
 
-          {/* Mô tả ngắn */}
-          {sanPham.mo_ta && (
-            <div className="flex flex-col gap-1.5 pt-2 border-t border-vien">
-              <h3 className="m-0 text-[13px] font-semibold tracking-[1px] text-xam uppercase">
-                Giới thiệu
-              </h3>
-              <p className="m-0 text-[14px] leading-relaxed text-den/90">
-                {sanPham.mo_ta}
-              </p>
-            </div>
-          )}
+          {/* Giới thiệu: mô tả thật (W047) hoặc mô tả tạm ghép từ dữ liệu, luôn có */}
+          <div className="flex flex-col gap-1.5 pt-2 border-t border-vien" data-mo-ta={sanPham.mo_ta ? "that" : "tam"}>
+            <h3 className="m-0 text-[13px] font-semibold tracking-[1px] text-xam uppercase">
+              Giới thiệu
+            </h3>
+            <p className="m-0 text-[14px] leading-relaxed text-den/90">
+              {sanPham.mo_ta || moTaTam(sanPham)}
+            </p>
+          </div>
         </div>
 
         {/* Nút hành động */}
