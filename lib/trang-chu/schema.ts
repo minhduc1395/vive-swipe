@@ -56,7 +56,10 @@ export const ThuongHieuKhoiSchema = z.object({
 
 export const OTrongLuoiSchema = z.object({
   id: z.string().min(1),
-  mau_nen: z.enum(["hong-nhat", "bac-ha", "hong", "bac-ha-nhat", "xanh-nhat", "toi"]),
+  /** Màu nền theo bảng màu cửa hàng (docs/03 mục 1). Không có nền đen/tối cho ô (CĐT 20/11). */
+  mau_nen: z.enum(["hong-nhat", "bac-ha", "hong", "bac-ha-nhat", "trang"]),
+  /** W056: cỡ ô trong lưới 6 cột: vua = 1/2, rong = 2/3, nho = 1/3 */
+  co: z.enum(["vua", "rong", "nho"]).default("vua"),
   tieu_de: z.string().min(1),
   phu_de_truoc: z.string().optional(),
   phu_de_nghieng: z.string().optional(),
@@ -68,6 +71,8 @@ export const OTrongLuoiSchema = z.object({
   anh_sp: z.boolean().optional(),
   /** W055: nhiều ảnh sản phẩm đứng cạnh nhau (combo), ảnh nền trong suốt */
   anh_bo: z.array(z.string().min(1)).min(2).optional(),
+  /** W056: ảnh sản phẩm từ kho media theo mã (bảng san_pham), 1–3 mã */
+  san_pham: z.array(z.string().min(1)).min(1).max(3).optional(),
   mo_ta_anh: z.string().optional(),
   so_lon: z.string().optional(),
   /** W055: dòng nhỏ dưới phụ đề, lấy quà của deal_id ("Tặng ... Số lượng có hạn.") */
@@ -89,10 +94,11 @@ export const QuaLopoeKhoiSchema = z.object({
 /** W055: thẻ combo trong hàng trượt ngang. Giá, quà lấy từ deal_id trong data/deals.yaml. */
 export const TheComboSchema = z.object({
   deal_id: z.string().min(1),
-  mau_nen: z.enum(["hong-nhat", "bac-ha", "hong", "bac-ha-nhat", "xanh-nhat", "toi"]),
+  mau_nen: z.enum(["hong-nhat", "bac-ha", "hong", "bac-ha-nhat", "trang"]),
   nhan: z.string().min(1),
   ten: z.string().min(1),
   anh_bo: z.array(z.string().min(1)).optional(),
+  san_pham: z.array(z.string().min(1)).min(1).max(3).optional(),
   so_lon: z.string().optional(),
 });
 

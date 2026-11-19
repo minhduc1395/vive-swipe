@@ -75,7 +75,12 @@ thuong_hieu:
     - ten: "Dermagarden"
       den: "/danh-muc?thuong-hieu=Dermagarden"
 
+# W055/W056: lưới 6 cột kiểu apple.com. co: vua = 1/2 hàng, rong = 2/3, nho = 1/3.
+# Mỗi hàng cộng đủ 6 phần: vua+vua · vua+vua · rong+nho · nho+nho+nho · nho+rong.
+# Màu nền chỉ dùng bảng màu cửa hàng: hong, hong-nhat, bac-ha, bac-ha-nhat, trang (không nền tối, CĐT 20/11).
+# Giá và quà của ô combo tự lấy từ deal_id (data/deals.yaml), không gõ tay. Ảnh sản phẩm: san_pham = mã trong kho media.
 luoi_doi:
+  # Hàng 1
   - id: "personal-color"
     mau_nen: "hong-nhat"
     tieu_de: "Personal color"
@@ -102,9 +107,9 @@ luoi_doi:
         sap_co: true
         kieu: "chinh"
 
-  # W055: thêm ô combo kiểu apple.com. Giá và quà tự lấy từ deal_id (data/deals.yaml), không gõ tay.
+  # Hàng 2: combo LOPOE
   - id: "combo-lopoe-bo3"
-    mau_nen: "toi"
+    mau_nen: "bac-ha-nhat"
     tieu_de: "Bộ 3 LOPOE"
     deal_id: "LOPOE-COMBO-BO3"
     nhan_thuong_hieu: "Better Balance"
@@ -123,7 +128,7 @@ luoi_doi:
         kieu: "phu"
 
   - id: "combo-lopoe-kem-amp"
-    mau_nen: "xanh-nhat"
+    mau_nen: "hong-nhat"
     tieu_de: "Kem + Ampoule"
     deal_id: "LOPOE-COMBO-KEM-AMP"
     nhan_thuong_hieu: "LOPOE"
@@ -140,8 +145,10 @@ luoi_doi:
         den: "/danh-muc?thuong-hieu=LOPOE"
         kieu: "phu"
 
+  # Hàng 3: 1 ô rộng + 1 ô nhỏ
   - id: "deal-pdrn"
     mau_nen: "hong"
+    co: "rong"
     tieu_de: "Combo PDRN Pink"
     deal_id: "COMBO-PINK"
     nhan_thuong_hieu: "Medicube"
@@ -153,22 +160,47 @@ luoi_doi:
         den: "/deal?id=COMBO-PINK"
         kieu: "chinh"
 
+  - id: "repiel"
+    mau_nen: "bac-ha-nhat"
+    co: "nho"
+    tieu_de: "Rep!el"
+    phu_de_truoc: "Serum và toner pad."
+    san_pham: ["8809198846238?v=2", "8809198846252"]
+    mo_ta_anh: "Serum CICA-Niacin và toner pad Vita-Toning của Rep!el"
+    nut:
+      - chu: "Xem sản phẩm"
+        den: "/danh-muc?thuong-hieu=Rep%21el"
+        kieu: "chinh"
+
+  # Hàng 4: 3 ô nhỏ
+  - id: "tiela"
+    mau_nen: "hong-nhat"
+    co: "nho"
+    tieu_de: "Tiela"
+    phu_de_truoc: "Dưỡng thể có hương."
+    san_pham: ["8800282110150", "8800282110174"]
+    mo_ta_anh: "Kem dưỡng thể và tẩy da chết toàn thân Tiela"
+    nut:
+      - chu: "Xem sản phẩm"
+        den: "/danh-muc?thuong-hieu=Tiela"
+        kieu: "chinh"
+
   - id: "combo-vampire-glow"
-    mau_nen: "toi"
+    mau_nen: "bac-ha"
+    co: "nho"
     tieu_de: "Vampire Glow"
     deal_id: "COMBO-VAMPIRE-GLOW"
     nhan_thuong_hieu: "Medicube"
-    so_lon: "Glow"
+    san_pham: ["8809982769866", "8800256115174"]
+    mo_ta_anh: "Kem Deep Vita C và serum Glutathione Glow của Medicube"
     nut:
       - chu: "Xem deal"
         den: "/deal?id=COMBO-VAMPIRE-GLOW"
         kieu: "chinh"
-      - chu: "Mua"
-        den: "/danh-muc?thuong-hieu=Medicube"
-        kieu: "phu"
 
   - id: "combo-lopoe-2srm"
-    mau_nen: "hong-nhat"
+    mau_nen: "hong"
+    co: "nho"
     tieu_de: "2 sữa rửa mặt"
     deal_id: "LOPOE-COMBO-2SRM"
     nhan_thuong_hieu: "LOPOE"
@@ -181,12 +213,11 @@ luoi_doi:
       - chu: "Xem deal"
         den: "/deal?id=LOPOE-COMBO-2SRM"
         kieu: "chinh"
-      - chu: "Mua"
-        den: "/danh-muc?thuong-hieu=LOPOE"
-        kieu: "phu"
 
+  # Hàng 5: 1 ô nhỏ + 1 ô rộng
   - id: "deal-mat-na"
     mau_nen: "bac-ha-nhat"
+    co: "nho"
     tieu_de: "Mua 4 tặng 1"
     deal_id: "DC-05"
     nhan_thuong_hieu: "Mặt nạ Uniura"
@@ -194,6 +225,18 @@ luoi_doi:
     nut:
       - chu: "Xem deal"
         den: "/deal?id=DC-05"
+        kieu: "chinh"
+
+  - id: "saltherapy"
+    mau_nen: "hong-nhat"
+    co: "rong"
+    tieu_de: "salTherapy"
+    phu_de_truoc: "Tẩy tế bào chết muối biển."
+    san_pham: ["8801990000337", "8801990000351", "8801990000320"]
+    mo_ta_anh: "Ba hũ tẩy tế bào chết muối và dầu salTherapy"
+    nut:
+      - chu: "Xem sản phẩm"
+        den: "/danh-muc?thuong-hieu=salTherapy"
         kieu: "chinh"
 
 qua_lopoe:
@@ -217,12 +260,12 @@ truot_combo:
     kieu: "phu"
   the:
     - deal_id: "LOPOE-COMBO-BO3"
-      mau_nen: "toi"
+      mau_nen: "bac-ha-nhat"
       nhan: "LOPOE"
       ten: "Bộ 3 Better Balance"
       anh_bo: ["/trang-chu/srm.webp", "/trang-chu/ampoule.webp", "/trang-chu/kem.webp"]
     - deal_id: "LOPOE-COMBO-KEM-AMP"
-      mau_nen: "xanh-nhat"
+      mau_nen: "hong-nhat"
       nhan: "LOPOE"
       ten: "Kem dưỡng + Ampoule"
       anh_bo: ["/trang-chu/kem.webp", "/trang-chu/ampoule.webp"]
@@ -237,15 +280,15 @@ truot_combo:
       ten: "PDRN Pink"
       anh_bo: ["/trang-chu/medicube-pdrn.webp"]
     - deal_id: "COMBO-VAMPIRE-GLOW"
-      mau_nen: "toi"
+      mau_nen: "bac-ha"
       nhan: "Medicube"
       ten: "Vampire Glow"
-      so_lon: "Glow"
+      san_pham: ["8809982769866", "8800256115174"]
     - deal_id: "COMBO-ZOMBIE"
-      mau_nen: "bac-ha"
+      mau_nen: "hong"
       nhan: "SKINFOOD"
       ten: "Zombie hồi sinh"
-      so_lon: "Honey"
+      san_pham: ["8809511276704", "8809511276728"]
     - deal_id: "DC-05"
       mau_nen: "hong-nhat"
       nhan: "Uniura"
