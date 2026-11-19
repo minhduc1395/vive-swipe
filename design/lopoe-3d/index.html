@@ -60,6 +60,8 @@
   .o-chu .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
   .o-chu .chips span{font-size:13px;font-weight:500;padding:7px 14px;border-radius:999px;background:rgba(255,255,255,.62);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:inset 0 0 0 1px rgba(43,43,42,.08)}
   .vi-duoi-giua .chips{justify-content:center}
+  .o-chu h3.giai{white-space:nowrap}
+  @media (max-width:767px){ .o-chu h3.giai{white-space:normal} }
   .o-chu .lon-nghieng{font-family:"Playfair Display",serif;font-style:italic;font-weight:500;font-size:clamp(64px,8vw,120px);line-height:.95;letter-spacing:-.02em;margin-top:10px}
   .vi-phai{left:57vw;top:50%;width:min(34vw,460px);transform:translateY(-50%)}
   .vi-trai{left:max(7vw,32px);top:50%;width:min(34vw,460px);transform:translateY(-50%)}
@@ -164,8 +166,8 @@
         <p class="chips chi-dt"><span>Lá thùa · ngậm nước sâu</span><span>Sen xanh · dịu đỏ</span><span>Hyaluronic Acid · ẩm đa tầng</span><span>Panthenol + Niacinamide · khóa ẩm</span></p>
       </div>
       <div class="o-chu vi-duoi-giua" data-a=".65" data-b=".72" data-tu="duoi">
-        <h3 class="tu-khoa vua" >Tinh chất|làm dịu</h3>
-        <p class="cau">Hwahae Trending Glow Awards 2025</p>
+        <h3 class="tu-khoa vua giai" data-nhan-dau="1">Hwahae Beauty Awards 2025</h3>
+        <p class="cau">Hạng 1 <em>Tinh chất làm dịu</em></p>
         <p class="chips"><span>Không hương liệu</span><span>Hợp da nhạy cảm</span></p>
       </div>
 
@@ -409,8 +411,10 @@ const vanh=new THREE.Mesh(new THREE.TorusGeometry(1.85,.01,8,160),vang); vongLa.
 const so1=new THREE.Mesh(new THREE.PlaneGeometry(8,4),new THREE.MeshBasicMaterial({transparent:true,depthWrite:false,opacity:0}));
 so1.visible=false; scene.add(so1);
 function veSo1(){ const cv=document.createElement('canvas'); cv.width=1600; cv.height=800; const g=cv.getContext('2d');
-  g.font='italic 500 600px "Playfair Display", serif'; g.textAlign='center'; g.textBaseline='middle';
-  g.fillStyle='rgba(43,43,42,.07)'; g.fillText('No.1',800,430); g.lineWidth=3; g.strokeStyle='rgba(43,43,42,.28)'; g.strokeText('No.1',800,430);
+  g.font='italic 500 640px "Playfair Display", serif'; g.textAlign='center'; g.textBaseline='middle';
+  const gr=g.createLinearGradient(0,120,0,720); gr.addColorStop(0,'#9dbbea'); gr.addColorStop(1,'#5f86c6');
+  g.shadowColor='rgba(43,60,90,.18)'; g.shadowBlur=40; g.shadowOffsetY=18;
+  g.fillStyle=gr; g.fillText('No.1',800,420);
   const t=new THREE.CanvasTexture(cv); t.colorSpace=THREE.SRGBColorSpace; so1.material.map=t; so1.material.needsUpdate=true; }
 document.fonts.load('italic 500 100px "Playfair Display"').then(veSo1,veSo1);
 const GIOT=[...Array(14)].map((_,i)=>{ const m=new THREE.Mesh(new THREE.SphereGeometry(.05+(i%3)*.025,20,14),longMat()); m.visible=false; scene.add(m); return m; });
@@ -453,7 +457,7 @@ const OCHU=[...document.querySelectorAll('.o-chu')].map(el=>{
     // "|" = chỗ xuống dòng có chủ đích; dòng 2 tô màu và lùi vào. Không có "|" thì data-nhan = chữ thứ mấy bắt đầu tô màu
     const dong=h.textContent.split('|');
     if(dong.length>1) h.innerHTML=dong.map((d,j)=>`<span class="dong${j?' lui':''}">`+d.trim().split(' ').map(t=>`<span class="tu${j?' nhan-mau':''}">${t}</span>`).join(' ')+'</span>').join('');
-    else { const n=h.dataset.nhan===undefined?99:+h.dataset.nhan; h.innerHTML=h.textContent.split(' ').map((t,i)=>`<span class="tu${i>=n?' nhan-mau':''}">${t}</span>`).join(' '); }
+    else { const n=h.dataset.nhan===undefined?99:+h.dataset.nhan, d=+(h.dataset.nhanDau||0); h.innerHTML=h.textContent.split(' ').map((t,i)=>`<span class="tu${(i>=n||i<d)?' nhan-mau':''}">${t}</span>`).join(' '); }
   }
   return {el,a:+el.dataset.a,b:+el.dataset.b,tu:el.dataset.tu,tus:[...el.querySelectorAll('.tu')],con:[...el.querySelectorAll('.ten-nho,.lon-nghieng,.cau,.chips span')]};
 });
@@ -542,7 +546,7 @@ function hieuUng(p,time){
   });
   // 6) "No.1" lớn phía sau + vòng giọt quanh ampoule
   const eN=seg(p,.645,.675)*(1-seg(p,.712,.74));
-  so1.material.opacity=eN; so1.visible=eN>.01; so1.position.set(amp.position.x,amp.position.y+.25,-2.6); so1.scale.setScalar((dienThoai?.45:1)*(.86+.14*eN));
+  so1.material.opacity=eN; so1.visible=eN>.01; so1.position.set(amp.position.x,amp.position.y+(dienThoai?.35:.75),-2.6); so1.scale.setScalar((dienThoai?.5:1.15)*(.7+.3*eN));
   GIOT.forEach((m,i)=>{ m.visible=eN>.01; if(!m.visible) return; const a=i/GIOT.length*Math.PI*2+(p-.645)*14; const r=(dienThoai?1.0:1.55)*(.6+.4*eN);
     m.position.set(amp.position.x+Math.cos(a)*r,amp.position.y+Math.sin(a*2)*.35+.1,Math.sin(a)*r); m.material.opacity=.85*eN; });
   // 7) Dải kem chảy ra thành xoắn
