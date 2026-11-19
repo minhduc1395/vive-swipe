@@ -8,30 +8,51 @@ test.describe("Trang Danh mục - tìm kiếm và lọc sản phẩm (W026)", ()
     });
   });
 
-  test("màn landing hiển thị đủ 12 loại sản phẩm, số món khớp dữ liệu", async ({
+  test("W042: vào /danh-muc thấy ngay lưới sản phẩm; chọn Mặt nạ lọc ngay, số kết quả khớp", async ({
     page,
   }) => {
     await page.goto("/danh-muc");
-    await expect(page.locator("h1")).toHaveText("Danh mục");
+    await expect(page.locator("h1")).toHaveText("Sản phẩm");
+    // Màn đầu đã có ít nhất 4 thẻ sản phẩm, không cần bấm gì
+    await expect(page.locator("article").nth(3)).toBeVisible();
+    await expect(page.getByText(/^\d+ sản phẩm$/)).toBeVisible();
 
-    // Kiểm tra ô Mặt nạ có hiển thị số món
-    const nutMatNa = page.getByRole("button", { name: /Mặt nạ/ });
-    await expect(nutMatNa).toBeVisible();
-
-    // Lấy số món trên nút Mặt nạ
-    const textMatNa = await nutMatNa.innerText();
-    const match = textMatNa.match(/(\d+)\s*món/);
-    expect(match).not.toBeNull();
-    const soMonTrenNut = parseInt(match![1], 10);
-    expect(soMonTrenNut).toBeGreaterThan(0);
-
-    // Bấm vào Mặt nạ để vào màn kết quả
-    await nutMatNa.click();
+    const chipMatNa = page.getByRole("button", { name: "Mặt nạ", exact: true }).first();
+    await chipMatNa.click();
     await expect(page).toHaveURL(/loai=mat-na/);
     await expect(page.locator("h1")).toHaveText("Mặt nạ");
+    const soKetQua = parseInt((await page.getByText(/^\d+ sản phẩm$/).innerText()).split(" ")[0], 10);
+    expect(soKetQua).toBeGreaterThan(0);
+    await expect(page.locator("article")).toHaveCount(Math.min(soKetQua, 24));
 
-    // Kiểm tra text "X món" trên header kết quả khớp đúng với số món trên nút
-    await expect(page.getByText(`${soMonTrenNut} món`)).toBeVisible();
+    // Xóa lọc về tất cả
+    await page.getByRole("button", { name: "Xóa lọc" }).first().click();
+    await expect(page).toHaveURL(/\/danh-muc$/);
+  });
+
+  test("W042: ô Xếp là nút + danh sách chọn (không còn select), đổi xếp ghi lên URL", async ({ page }) => {
+    await page.goto("/danh-muc?loai=mat-na");
+    await expect(page.locator("select")).toHaveCount(0);
+    const nutXep = page.getByRole("button", { name: /Xếp: Gợi ý/ });
+    await expect(nutXep).toBeVisible();
+    const hop = await nutXep.boundingBox();
+    expect(hop!.height).toBeGreaterThanOrEqual(40);
+    await nutXep.click();
+    await page.getByRole("option", { name: "Giá thấp → cao" }).click();
+    await expect(page).toHaveURL(/xep=gia-tang/);
+    await expect(page.getByRole("button", { name: /Xếp: Giá thấp → cao/ })).toBeVisible();
+    // Esc đóng menu
+    await page.getByRole("button", { name: /Xếp:/ }).click();
+    await expect(page.getByRole("listbox")).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("listbox")).toHaveCount(0);
+  });
+
+  test("W042: gõ tìm kiếm là lọc ngay, không cần Enter", async ({ page }) => {
+    await page.goto("/danh-muc");
+    await page.getByPlaceholder("Tìm tên, thương hiệu, thành phần").fill("cica");
+    await expect(page).toHaveURL(/tim=cica/);
+    await expect(page.locator("article", { hasText: /Cica/i }).first()).toBeVisible();
   });
 
   test("tìm kiếm không phân biệt dấu: vitamin c, cica, phan nuoc", async ({
@@ -119,13 +140,13 @@ test.describe("Trang Danh mục - tìm kiếm và lọc sản phẩm (W026)", ()
     await expect(page.locator("h1")).toHaveText("Toner pad");
 
     // Nút quay lại về tất cả danh mục
-    const nutQuayLai = page.getByLabel("Về tất cả danh mục");
+    const nutQuayLai = page.getByLabel("Về tất cả sản phẩm");
     await expect(nutQuayLai).toBeVisible();
     await nutQuayLai.click();
 
     // Quay lại màn landing
     await expect(page).toHaveURL(/^http:\/\/[^/]+\/danh-muc$/);
-    await expect(page.locator("h1")).toHaveText("Danh mục");
+    await expect(page.locator("h1")).toHaveText("Sản phẩm");
   });
 
   test("thanh điều hướng 5 tab luôn nằm gọn trong viewport ở màn hình nhỏ (390x664)", async ({
@@ -154,10 +175,10 @@ test.describe("Trang Danh mục - tìm kiếm và lọc sản phẩm (W026)", ()
     const linkDanhMuc = page.getByRole("link", { name: /Sản phẩm|Danh mục/ }).first();
     await linkDanhMuc.click();
     await expect(page).toHaveURL(/\/danh-muc$/);
-    await expect(page.locator("h1")).toHaveText("Danh mục");
+    await expect(page.locator("h1")).toHaveText("Sản phẩm");
 
     // 3. Chọn Mặt nạ
-    const nutMatNa = page.getByRole("button", { name: /Mặt nạ/ });
+    const nutMatNa = page.getByRole("button", { name: "Mặt nạ", exact: true }).first();
     await nutMatNa.click();
     await expect(page).toHaveURL(/loai=mat-na/);
     await expect(page.locator("h1")).toHaveText("Mặt nạ");
@@ -167,6 +188,6 @@ test.describe("Trang Danh mục - tìm kiếm và lọc sản phẩm (W026)", ()
 
     // Phải về lại đúng màn lưới danh mục (/danh-muc), không nhảy về /quet
     await expect(page).toHaveURL(/\/danh-muc$/);
-    await expect(page.locator("h1")).toHaveText("Danh mục");
+    await expect(page.locator("h1")).toHaveText("Sản phẩm");
   });
 });
