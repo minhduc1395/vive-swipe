@@ -37,6 +37,7 @@ deals:
   # ---------- LOPOE ----------
   - id: LOPOE-25
     ten: LOPOE giảm 25% khi mua kèm
+    ten_en: 25% off LOPOE with any other item
     loai: giam_khi_mua_kem
     trang_thai: DA_DUYET
     may_rui: false
@@ -44,12 +45,15 @@ deals:
     <<: *popup
     ap_dung_cho: [LOPOE-CF, LOPOE-AMP, LOPOE-CR]
     dieu_kien: Hóa đơn có ít nhất 1 sản phẩm không phải LOPOE
+    dieu_kien_en: Cart contains at least 1 non-LOPOE item
     gia_uu_dai: {LOPOE-CF: 186000, LOPOE-AMP: 314000, LOPOE-CR: 411000}
     khong_cong_voi: [LOPOE-COMBO-2SRM, LOPOE-COMBO-KEM-AMP, LOPOE-COMBO-BO3, KM-10]
     hook: LOPOE giảm 25% khi mua kèm sản phẩm bất kỳ tại VIVE
+    hook_en: Get 25% off LOPOE when you buy any other item at VIVE
 
   - id: LOPOE-COMBO-2SRM
     ten: Combo 2 sữa rửa mặt LOPOE
+    ten_en: LOPOE 2x Cleansing Foam Combo
     loai: combo
     trang_thai: DA_DUYET
     may_rui: false
@@ -60,10 +64,12 @@ deals:
     qua: Túi sample và 1 kem chống nắng hoặc kem mềm da   # tên, giá món quà chưa chốt
     gioi_han_qua: 15
     hook: Sữa rửa mặt LOPOE combo 2 chai 349K
+    hook_en: "LOPOE Cleansing Foam combo: 2 bottles for 349K"
     can_xac_nhan: Tên và giá kem chống nắng, kem mềm da
 
   - id: LOPOE-COMBO-KEM-AMP
     ten: Combo kem dưỡng và ampoule LOPOE
+    ten_en: LOPOE Moisture Cream & Ampoule Combo
     loai: combo
     trang_thai: DA_DUYET
     may_rui: false
@@ -77,6 +83,7 @@ deals:
 
   - id: LOPOE-COMBO-BO3
     ten: Bộ 3 LOPOE
+    ten_en: LOPOE Better Balance Trio
     loai: combo
     trang_thai: DA_DUYET
     may_rui: false
@@ -88,21 +95,26 @@ deals:
     gioi_han_qua: 10
     khi_het_qua: {gia_combo: 889000, qua: null}
     hook: Mua bộ 3 LOPOE, tặng thêm kem dưỡng
+    hook_en: Buy the LOPOE Trio, get an extra Moisture Cream
 
   - id: KM-10
     ten: 10 đơn LOPOE đầu tiên, mua 2 tính tiền 1
+    ten_en: "First 10 LOPOE orders: buy 2, pay for 1"
     loai: mua_x_tang_y
     trang_thai: DA_DUYET
     may_rui: false
     hien_thi: false   # "10 đơn đầu" tính tại quầy từ 14/11, web không biết còn suất hay không. Bật khi chủ dự án xác nhận còn suất.
     <<: *popup
     dieu_kien: Mua 2 món LOPOE cùng loại, giá niêm yết, tính tiền 1; kèm 1 toner pad và 3 gói serum dùng thử. 1 suất mỗi khách
+    dieu_kien_en: Buy 2 identical LOPOE items at list price, pay for 1; includes 1 toner pad and 3 trial serum sachets. Limit 1 per customer
     gioi_han: 10
     hook: "10 đơn LOPOE đầu tiên: mua 1 được 5"
+    hook_en: "First 10 LOPOE orders: buy 1, get 5"
     ghi_chu_noi_dung: Điều kiện ghi "mua 2 tính tiền 1", không ghi "tặng 1 sản phẩm cùng loại"
 
   - id: KM-13
     ten: Mua LOPOE tặng sản phẩm fullsize
+    ten_en: Buy LOPOE get full-size gift
     loai: qua_khi_mua
     nhom_qua: hoa_don
     trang_thai: DA_DUYET
@@ -110,6 +122,7 @@ deals:
     hien_thi: true
     <<: *popup
     dieu_kien: Mua lẻ 1 món LOPOE. Quà theo giá khách trả cho món LOPOE
+    dieu_kien_en: Purchase any single LOPOE item. Gift tier based on amount paid for LOPOE
     anh_san_pham: [LOPOE-CF, LOPOE-AMP, LOPOE-CR]
     bang_qua:   # nội bộ để web ước tính; công khai chỉ ghi "tặng sản phẩm fullsize", không ghi tên món
       - {id: LOPOE-CF, gia_tra: 249000, qua: 1 muối tắm salTherapy}
@@ -119,9 +132,11 @@ deals:
       - {id: LOPOE-CR, gia_tra: 411000, qua: 1 mặt nạ Uniura}
       - {id: LOPOE-CR, gia_tra: 549000, qua: 1 sữa tắm salTherapy 400ml}
     hook: Mua LOPOE, tặng sản phẩm fullsize
+    hook_en: Buy LOPOE, get a full-size product
 
   - id: KM-11
     ten: Combo 2 mặt nạ SKINFOOD tặng sữa rửa mặt LOPOE
+    ten_en: Buy 2 SKINFOOD masks get free LOPOE Cleansing Foam
     loai: qua_khi_mua
     nhom_qua: hoa_don
     trang_thai: DA_DUYET
@@ -129,16 +144,19 @@ deals:
     hien_thi: true
     <<: *popup
     dieu_kien: Mua combo Mask Party (2 Food Mask SKINFOOD, POS CB06 đến CB20)
+    dieu_kien_en: Buy Mask Party combo (2 SKINFOOD Food Masks, POS CB06 to CB20)
     gia_combo: 500000
     qua: 1 sữa rửa mặt LOPOE
     gioi_han_qua: 9
     khi_het_qua: {qua: null, uu_dai: Được mua sữa rửa mặt LOPOE giá 125.000}
     hook: Mua combo 2 mặt nạ Skinfood, tặng sữa rửa mặt LOPOE
+    hook_en: Buy 2 Skinfood food masks, get free LOPOE Cleansing Foam
     can_xac_nhan: Chủ dự án báo 500.000 (14/11), POS ghi 449.000. Cần đồng bộ giá; danh sách 2 mặt nạ trong từng mã CB06 đến CB20
 
   # ---------- Quà theo tổng tiền ----------
   - id: KM-08
     ten: Mua Medicube, Celimax, SKINFOOD tặng LOPOE
+    ten_en: Buy Medicube, Celimax, SKINFOOD get LOPOE gift
     loai: qua_theo_nguong_nhan
     nhom_qua: hoa_don
     trang_thai: DA_DUYET
@@ -152,6 +170,7 @@ deals:
       - {tu: 1100000, qua: 1 ampoule LOPOE, gioi_han: 20}
       - {tu: 1300000, qua: 1 kem dưỡng LOPOE, gioi_han: 15}
     hook: Mua Medicube, Celimax, Skinfood từ 700K, tặng sữa rửa mặt LOPOE
+    hook_en: Spend 700K on Medicube, Celimax, Skinfood to get free LOPOE Cleansing Foam
     goi_y:   # bộ gợi ý để web đề xuất (khách tự gom món khác vẫn được). Giá = tổng giá lẻ hoặc giá combo POS
       - {id: G-01, ten: COMBO PINK, san_pham: ["8800256108053", "8800289467714"], gia: 999000, moc: 700000}
       - {id: G-02, ten: COMBO VAMPIRE GLOW, san_pham: ["8809982769866", "8800256115174"], gia: 896000, moc: 700000}
@@ -169,6 +188,7 @@ deals:
 
   - id: BAC-HOA-DON
     ten: Quà theo hóa đơn từ 800K
+    ten_en: Gift with purchase from 800K
     loai: qua_theo_nguong_don
     nhom_qua: hoa_don
     trang_thai: DA_DUYET
@@ -181,6 +201,7 @@ deals:
 
   - id: KM-09
     ten: Voucher 15% nhà hàng Union Square
+    ten_en: 15% Union Square restaurant voucher
     loai: qua_theo_nguong_don
     nhom_qua: cong_them
     trang_thai: DA_DUYET
@@ -190,10 +211,12 @@ deals:
     moc:
       - {tren: 1000000, qua: 1 voucher giảm 15% tại nhà hàng Union Square (cho hóa đơn nhà hàng trên 1 triệu)}
     hook: Hóa đơn trên 1 triệu, tặng thêm voucher 15% nhà hàng Union Square
+    hook_en: Orders over 1M get an extra 15% Union Square restaurant voucher
 
   # ---------- Chương trình đang chạy khác ----------
   - id: COMBO-PINK
     ten: COMBO PINK Medicube PDRN
+    ten_en: Medicube PDRN PINK COMBO
     loai: combo
     trang_thai: DANG_CHAY   # combo có sẵn trên POS (CB05)
     may_rui: false
@@ -204,6 +227,7 @@ deals:
 
   - id: COMBO-VAMPIRE-GLOW
     ten: COMBO VAMPIRE GLOW Medicube
+    ten_en: Medicube VAMPIRE GLOW COMBO
     loai: combo
     trang_thai: DANG_CHAY   # POS CB21
     may_rui: false
@@ -214,6 +238,7 @@ deals:
 
   - id: COMBO-ZOMBIE
     ten: COMBO ZOMBIE HỒI SINH SKINFOOD
+    ten_en: SKINFOOD ZOMBIE REVIVAL COMBO
     loai: combo
     trang_thai: DANG_CHAY   # POS CB25: toner và tinh chất keo ong
     may_rui: false
@@ -225,6 +250,7 @@ deals:
 
   - id: DC-05
     ten: Uniura mua 4 tặng 1
+    ten_en: Uniura Buy 4 Get 1 Free
     loai: mua_x_tang_y
     trang_thai: DANG_CHAY
     may_rui: false
@@ -232,10 +258,12 @@ deals:
     <<: *popup
     ap_dung_cho: ["8800274071278", "8800274071247", "8800274071285", "8800274071292"]
     dieu_kien: 5 miếng giá 396.000 (giá 99.000 là giá 1 miếng)
+    dieu_kien_en: 5 masks for 396,000 (unit price 99,000)
     gia_combo: 396000
 
   - id: DC-06
     ten: Medicube Age-R Booster Pro tặng 2 hộp Uniura
+    ten_en: Medicube Age-R Booster Pro + 2 free Uniura boxes
     loai: qua_khi_mua
     trang_thai: DANG_CHAY
     may_rui: false
@@ -246,15 +274,17 @@ deals:
 
   - id: DC-01
     ten: Theo dõi 3 kênh nhận 1 sample
+    ten_en: Follow 3 channels get 1 sample
     loai: khong_can_mua
     trang_thai: DANG_CHAY
     may_rui: false
     hien_thi: false   # Hướng dẫn chung: quà follow do nhân viên giới thiệu bằng lời, không in. Hỏi chủ dự án có cho nêu trên web không
     <<: *popup
     dieu_kien: Theo dõi Facebook, Instagram, TikTok rồi đưa màn hình cho nhân viên, chọn 1 sample
+    dieu_kien_en: Follow Facebook, Instagram, TikTok and show screen to staff, choose 1 sample
 
   # ---------- Khuyến mại may rủi: KHÔNG hiển thị cho đến khi đã đăng ký Sở Công Thương ----------
-  - {id: DC-02, ten: Vòng quay may mắn 10 ô, loai: may_rui, trang_thai: DANG_CHAY, may_rui: true, da_dang_ky: false, hien_thi: false}
-  - {id: DC-04, ten: Lá thăm trong sample, loai: may_rui, trang_thai: DANG_CHAY, may_rui: true, da_dang_ky: false, hien_thi: false}
-  - {id: KM-12, ten: Vòng quay LOPOE, loai: may_rui, trang_thai: DA_DUYET, may_rui: true, da_dang_ky: false, hien_thi: false}
-  - {id: KM-12b, ten: Bốc thăm máy uốn mi Beaund, loai: may_rui, trang_thai: DA_DUYET, may_rui: true, da_dang_ky: false, hien_thi: false}
+  - {id: DC-02, ten: Vòng quay may mắn 10 ô, ten_en: Lucky Wheel 10 slots, loai: may_rui, trang_thai: DANG_CHAY, may_rui: true, da_dang_ky: false, hien_thi: false}
+  - {id: DC-04, ten: Lá thăm trong sample, ten_en: Lucky draw inside sample, loai: may_rui, trang_thai: DANG_CHAY, may_rui: true, da_dang_ky: false, hien_thi: false}
+  - {id: KM-12, ten: Vòng quay LOPOE, ten_en: LOPOE Lucky Wheel, loai: may_rui, trang_thai: DA_DUYET, may_rui: true, da_dang_ky: false, hien_thi: false}
+  - {id: KM-12b, ten: Bốc thăm máy uốn mi Beaund, ten_en: Beaund Lashcurl Lucky Draw, loai: may_rui, trang_thai: DA_DUYET, may_rui: true, da_dang_ky: false, hien_thi: false}
