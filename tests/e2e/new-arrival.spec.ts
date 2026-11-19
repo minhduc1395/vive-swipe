@@ -24,7 +24,11 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
     await expect(page.getByText("MỚI TẠI VIVE · NỘI ĐỊA HÀN")).toBeVisible();
     await expect(page.getByRole("heading", { name: /LOPOE/i, level: 1 })).toBeVisible();
     await expect(page.getByRole("link", { name: "Xem bộ sản phẩm" })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Giữ hàng tại booth" })).toBeVisible();
+    await expect(
+      page
+        .getByRole("region", { name: "Phần đầu chiến dịch" })
+        .getByRole("link", { name: "Giữ hàng tại booth" })
+    ).toBeVisible();
 
     await expect(page.getByText(/BETTER BALANCE · NỘI ĐỊA HÀN/).first()).toBeVisible();
 
@@ -41,12 +45,21 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
 
     await expect(page.getByText("LL2").first()).toBeVisible();
     await expect(page.getByText("VIVE | K-Beauty Experience").first()).toBeVisible();
-    await expect(page.getByRole("link", { name: "Chỉ đường" })).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "Chỉ đường" }).first()
+    ).toBeVisible();
 
-    await expect(page.locator("footer")).toBeVisible();
-    await expect(page.getByText("Facebook: VIVE - K Beauty Experience")).toBeVisible();
-    await expect(page.getByText("Instagram: @vive.k_beauty")).toBeVisible();
-    await expect(page.getByText("TikTok: @viveuniverse")).toBeVisible();
+    const footer = page.locator("footer");
+    await expect(footer).toBeVisible();
+    await expect(
+      footer.getByRole("link", { name: /Facebook VIVE - K Beauty Experience/i })
+    ).toBeVisible();
+    await expect(
+      footer.getByRole("link", { name: /Instagram @vive\.k_beauty/i })
+    ).toBeVisible();
+    await expect(
+      footer.getByRole("link", { name: /TikTok @viveuniverse/i })
+    ).toBeVisible();
   });
 
   test("co giãn 9 cỡ màn hình ở deviceScaleFactor 2–3: #canh khớp khung nhìn, hộp bao trong vùng, không đè chữ, không tràn quạt 430px", async ({

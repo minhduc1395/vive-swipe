@@ -2,6 +2,7 @@
   {
     "ma": "lopoe-better-balance",
     "ten": "LOPOE Better Balance",
+    "ten_en": "LOPOE Better Balance",
     "bat_dau": "2026-11-14",
     "ket_thuc": "2026-11-29",
     "uu_tien": 10,
@@ -15,12 +16,14 @@
         "loai": "hero",
         "kieu": "san-pham-3d",
         "nhan_tren": "MỚI TẠI VIVE · NỘI ĐỊA HÀN",
+        "nhan_tren_en": "NEW AT VIVE · KOREAN BRANDS",
         "tieu_de": [
           "LOPOE",
           "~Better",
           "Balance"
         ],
         "mo_ta": "Bộ ba sữa rửa mặt, ampoule, kem dưỡng. Mua kèm sản phẩm bất kỳ, LOPOE giảm 25%.",
+        "mo_ta_en": "Cleansing foam, ampoule and moisture cream. Buy with any other item and get 25% off LOPOE.",
         "san_pham": [
           "LOPOE-CF",
           "LOPOE-AMP",
@@ -29,7 +32,7 @@
         "nut": [
           {
             "chu": "Xem bộ sản phẩm",
-            "den": "/danh-muc?thuong_hieu=LOPOE"
+            "den": "/danh-muc?thuong-hieu=LOPOE"
           },
           {
             "chu": "Giữ hàng tại booth",
@@ -128,6 +131,7 @@
         "loai": "tieu-diem",
         "id": "ampoule-better-balance",
         "nhan_phu": "AMPOULE · 50ML",
+        "nhan_phu_en": "AMPOULE · 50ML",
         "tieu_de": [
           "Better Balance",
           "~Ampoule"
@@ -137,7 +141,8 @@
         "deal_id": "LOPOE-25",
         "cta_chinh": {
           "chu": "Xem sản phẩm",
-          "den": "/danh-muc?thuong_hieu=LOPOE"
+          "chu_en": "View product",
+          "den": "/danh-muc?thuong-hieu=LOPOE&sp=LOPOE-AMP"
         },
         "anh": [
           "/chien-dich/lopoe-better-balance/ampoule-than.webp",
@@ -336,7 +341,9 @@
       },
       {
         "loai": "chuong-trinh",
-        "tieu_de": "Đang chạy tại booth",
+        "tieu_de": "Đang có tại",
+        "tieu_de_en": "Now at",
+        "logo_sau_tieu_de": true,
         "deal": [
           "COMBO-PINK",
           "DC-05",
@@ -348,8 +355,10 @@
       {
         "loai": "doi-tac",
         "doi_tac": "pawlette",
-        "tieu_de": "Tông nào hợp bạn?",
-        "mo_ta": "Đo personal color cùng Pawlette, rồi thử lớp nền đúng tông ngay tại booth.",
+        "tieu_de": "Tone bạn màu nào?",
+        "tieu_de_en": "Which season is your skin tone?",
+        "mo_ta": "Đo personal color cùng Pawlette, rồi thử lớp nền đúng tone ngay tại booth.",
+        "mo_ta_en": "Personal color analysis with Pawlette, then test matching foundation right at the booth.",
         "gia_goi": 378000,
         "link": "/personal-color"
       },
@@ -357,14 +366,18 @@
         "loai": "booth",
         "tieu_de": "VIVE | K-Beauty Experience",
         "dia_chi": "Tầng LL2 Union Square, 171 Đồng Khởi, Phường Sài Gòn",
+        "dia_chi_en": "Level LL2, Union Square, 171 Dong Khoi, Saigon Ward, Ho Chi Minh City",
         "gio": "10:00 – 21:00",
-        "ngay_cuoi": "đến 29/11"
+        "gio_en": "10:00 AM – 9:00 PM",
+        "ngay_cuoi": "đến 29/11",
+        "ngay_cuoi_en": "until Nov 29"
       }
     ]
   },
   {
     "ma": "mac-dinh",
     "ten": "VIVE New Arrival",
+    "ten_en": "VIVE New Arrival",
     "bat_dau": "2026-01-01",
     "ket_thuc": "2026-12-31",
     "uu_tien": 1,
@@ -378,12 +391,14 @@
         "loai": "hero",
         "kieu": "san-pham-3d",
         "nhan_tren": "MỚI TẠI VIVE · NỘI ĐỊA HÀN",
+        "nhan_tren_en": "NEW AT VIVE · KOREAN BRANDS",
         "tieu_de": [
           "K-BEAUTY",
           "~New",
           "Arrival"
         ],
         "mo_ta": "Trải nghiệm mỹ phẩm nội địa Hàn Quốc thịnh hành nhất ngay tại Tầng LL2 Union Square.",
+        "mo_ta_en": "The most popular Korean beauty brands, right at Level LL2, Union Square.",
         "san_pham": [
           "LOPOE-CF",
           "LOPOE-AMP",
@@ -446,6 +461,7 @@
         "loai": "tieu-diem",
         "id": "ampoule-mac-dinh",
         "nhan_phu": "AMPOULE · 50ML",
+        "nhan_phu_en": "AMPOULE · 50ML",
         "tieu_de": [
           "Better Balance",
           "~Ampoule"
@@ -455,6 +471,7 @@
         "deal_id": "LOPOE-25",
         "cta_chinh": {
           "chu": "Khám phá sản phẩm",
+          "chu_en": "Discover products",
           "den": "/danh-muc"
         },
         "anh": [
@@ -500,11 +517,14 @@
       {
         "loai": "bang-chu",
         "chu": "K-BEAUTY EXPERIENCE · NỘI ĐỊA HÀN · MỚI TẠI VIVE · LL2 UNION SQUARE · ",
+        "chu_en": "K-BEAUTY EXPERIENCE · KOREAN BRANDS · NEW AT VIVE · LL2 UNION SQUARE · ",
         "mau_nen": "#CFE3D5"
       },
       {
         "loai": "chuong-trinh",
-        "tieu_de": "Chương trình nổi bật",
+        "tieu_de": "Đang có tại",
+        "tieu_de_en": "Now at",
+        "logo_sau_tieu_de": true,
         "deal": [
           "COMBO-PINK",
           "DC-05",
@@ -515,8 +535,10 @@
       {
         "loai": "doi-tac",
         "doi_tac": "pawlette",
-        "tieu_de": "Tông nào hợp bạn?",
-        "mo_ta": "Đo personal color cùng Pawlette, rồi thử lớp nền đúng tông ngay tại booth.",
+        "tieu_de": "Tone bạn màu nào?",
+        "tieu_de_en": "Which season is your skin tone?",
+        "mo_ta": "Đo personal color cùng Pawlette, rồi thử lớp nền đúng tone ngay tại booth.",
+        "mo_ta_en": "Personal color analysis with Pawlette, then test matching foundation right at the booth.",
         "gia_goi": 378000,
         "link": "/personal-color"
       },
@@ -524,8 +546,11 @@
         "loai": "booth",
         "tieu_de": "VIVE | K-Beauty Experience",
         "dia_chi": "Tầng LL2 Union Square, 171 Đồng Khởi, Phường Sài Gòn",
+        "dia_chi_en": "Level LL2, Union Square, 171 Dong Khoi, Saigon Ward, Ho Chi Minh City",
         "gio": "10:00 – 21:00",
-        "ngay_cuoi": "đến 29/11"
+        "gio_en": "10:00 AM – 9:00 PM",
+        "ngay_cuoi": "đến 29/11",
+        "ngay_cuoi_en": "until Nov 29"
       }
     ]
   }
