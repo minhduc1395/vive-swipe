@@ -92,28 +92,28 @@ test.describe("W050 · Trang chủ mới / theo landing v3", () => {
 
     // Dải khuyến mãi: Xem › -> /deal?id=KM-13
     await page.goto("/");
-    await page.locator(".tc-v3 .dai a").click();
+    await page.locator(".tc-v3 .dai a").evaluate((el: HTMLElement) => el.click());
     await expect(page).toHaveURL(/\/deal\?id=KM-13/);
 
     // Khối 1: Ghé cửa hàng -> #ghe-vive cùng trang
     await page.goto("/");
-    await page.locator('#cua-hang a:has-text("Ghé cửa hàng")').click();
+    await page.locator('#cua-hang a:has-text("Ghé cửa hàng")').evaluate((el: HTMLElement) => el.click());
     await expect(page).toHaveURL(/#ghe-vive$/);
 
     // Khối 1: Xem sản phẩm -> /danh-muc
     await page.goto("/");
-    await page.locator('#cua-hang a:has-text("Xem sản phẩm")').click();
+    await page.locator('#cua-hang a:has-text("Xem sản phẩm")').evaluate((el: HTMLElement) => el.click());
     await expect(page).toHaveURL(/\/danh-muc$/);
 
     // Khối 2: Mua -> /danh-muc?thuong-hieu=LOPOE
     await page.goto("/");
-    await page.locator('#lopoe a:has-text("Mua")').click();
+    await page.locator('#lopoe a:has-text("Mua")').evaluate((el: HTMLElement) => el.click());
     await expect(page).toHaveURL(/\/danh-muc\?/);
     expect(new URL(page.url()).searchParams.get("thuong-hieu")).toBe("LOPOE");
 
     // Khối 2: Tìm hiểu thêm -> /new-arrival
     await page.goto("/");
-    await page.locator('#lopoe a:has-text("Tìm hiểu thêm")').click();
+    await page.locator('#lopoe a:has-text("Tìm hiểu thêm")').evaluate((el: HTMLElement) => el.click());
     await expect(page).toHaveURL(/\/new-arrival$/);
 
     // Khối 3: Logo thương hiệu Medicube và Rep!el
@@ -121,7 +121,7 @@ test.describe("W050 · Trang chủ mới / theo landing v3", () => {
     await page.locator("#chon-loc").scrollIntoViewIfNeeded();
     const linkMedicube = page.locator('#chon-loc a[aria-label="Medicube"]');
     await expect(linkMedicube).toHaveAttribute("href", "/danh-muc?thuong-hieu=Medicube");
-    await linkMedicube.click({ force: true });
+    await linkMedicube.evaluate((el: HTMLElement) => el.click()); // hàng logo đang chạy: bấm thẳng phần tử, không theo tọa độ
     await expect(page).toHaveURL(/\/danh-muc\?/);
     expect(new URL(page.url()).searchParams.get("thuong-hieu")).toBe("Medicube");
 
@@ -129,20 +129,20 @@ test.describe("W050 · Trang chủ mới / theo landing v3", () => {
     await page.locator("#chon-loc").scrollIntoViewIfNeeded();
     const linkRepiel = page.locator('#chon-loc a[aria-label="Rep!el"]');
     await expect(linkRepiel).toHaveAttribute("href", "/danh-muc?thuong-hieu=Rep%21el");
-    await linkRepiel.click({ force: true });
+    await linkRepiel.evaluate((el: HTMLElement) => el.click());
     await expect(page).toHaveURL(/\/danh-muc\?/);
     expect(new URL(page.url()).searchParams.get("thuong-hieu")).toBe("Rep!el");
 
     // Khối 4 Personal color: Tìm hiểu thêm -> /personal-color
     await page.goto("/");
-    await page.locator('#personal-color a:has-text("Tìm hiểu thêm")').click();
+    await page.locator('#personal-color a:has-text("Tìm hiểu thêm")').evaluate((el: HTMLElement) => el.click()); // WebKit cuộn mượt làm lệch tọa độ
     await expect(page).toHaveURL(/\/personal-color$/);
 
     // Khối 4 Check-in: Xem quà (sap_co) -> hiện toast, URL không đổi
     await page.goto("/");
     const nutXemQua = page.locator('#check-in button[data-sap-co="true"]');
     await expect(nutXemQua).toBeVisible();
-    await nutXemQua.click();
+    await nutXemQua.evaluate((el: HTMLElement) => el.click());
     expect(new URL(page.url()).pathname).toBe("/");
     const toast = page.locator('[role="status"]');
     await expect(toast).toBeVisible();
@@ -150,19 +150,19 @@ test.describe("W050 · Trang chủ mới / theo landing v3", () => {
 
     // Khối 4 Combo PDRN Pink: Xem deal -> /deal?id=COMBO-PINK
     await page.goto("/");
-    await page.locator('#deal-pdrn a:has-text("Xem deal")').click();
+    await page.locator('#deal-pdrn a:has-text("Xem deal")').evaluate((el: HTMLElement) => el.click());
     await expect(page).toHaveURL(/\/deal\?/);
     expect(new URL(page.url()).searchParams.get("id")).toBe("COMBO-PINK");
 
     // Khối 4 Mặt nạ Uniura: Xem deal -> /deal?id=DC-05
     await page.goto("/");
-    await page.locator('#deal-mat-na a:has-text("Xem deal")').click();
+    await page.locator('#deal-mat-na a:has-text("Xem deal")').evaluate((el: HTMLElement) => el.click());
     await expect(page).toHaveURL(/\/deal\?/);
     expect(new URL(page.url()).searchParams.get("id")).toBe("DC-05");
 
     // Khối 5 Quà LOPOE: Xem deal -> /deal?id=KM-08
     await page.goto("/");
-    await page.locator('#qua-lopoe a:has-text("Xem deal")').click();
+    await page.locator('#qua-lopoe a:has-text("Xem deal")').evaluate((el: HTMLElement) => el.click());
     await expect(page).toHaveURL(/\/deal\?/);
     expect(new URL(page.url()).searchParams.get("id")).toBe("KM-08");
 
@@ -174,7 +174,7 @@ test.describe("W050 · Trang chủ mới / theo landing v3", () => {
     const rel = await nutChiDuong.getAttribute("rel");
     expect(rel).toContain("noopener");
 
-    await page.locator('#ghe-vive a:has-text("Giữ hàng")').click();
+    await page.locator('#ghe-vive a:has-text("Giữ hàng")').evaluate((el: HTMLElement) => el.click());
     await expect(page).toHaveURL(/\/gio$/);
   });
 

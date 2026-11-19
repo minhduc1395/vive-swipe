@@ -678,7 +678,7 @@ function DanhMucNoiDung() {
 
 export default function TrangDanhMuc() {
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<div className="min-h-[100svh]" aria-hidden="true" />}>
       <DanhMucNoiDung />
     </Suspense>
   );

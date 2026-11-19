@@ -70,8 +70,9 @@ function NoiDungDeal() {
     };
   }, []);
 
+  // W032: hiện thẻ ngay từ HTML server (hồ sơ rỗng), sắp lại theo hồ sơ sau khi đọc bộ nhớ, tránh nhảy bố cục (CLS)
   const dealsChoBan = useMemo(() => {
-    if (!daSanSang) return [];
+    if (!daSanSang) return layDanhSachDealChoBan(deals, {}, sanPhamMap, [], []);
     return layDanhSachDealChoBan(
       deals,
       hoSo,
@@ -297,7 +298,7 @@ function NoiDungDeal() {
 
 export default function TrangDeal() {
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<div className="min-h-[100svh]" aria-hidden="true" />}>
       <NoiDungDeal />
     </Suspense>
   );
