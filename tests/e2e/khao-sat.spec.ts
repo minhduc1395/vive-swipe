@@ -102,7 +102,7 @@ test.describe("Màn chào và 3 câu hỏi khởi tạo (W010)", () => {
     });
     await page.goto("/");
     await expect(page).toHaveURL(/^http:\/\/[^/]+\/$/);
-    await expect(page.getByRole("heading", { name: /LOPOE/i, level: 1 })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /VIVE/i, level: 1 })).toBeVisible();
 
     // 3. Đã khảo sát vào /quet -> mở thẳng deck
     await page.goto("/quet");

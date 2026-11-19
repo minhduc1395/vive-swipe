@@ -1,8 +1,12 @@
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import { CAU_HINH_BOOTH } from "@/lib/cau-hinh";
-import { DOANH_NGHIEP } from "@/lib/data";
+import doanhNghiepJson from "@/lib/data/doanh-nghiep.json";
+import type { DoanhNghiep } from "@/lib/data/types";
 import "./chan-trang.css";
+
+// Đọc thẳng JSON (không qua "@/lib/data") để trang chủ không kéo zod vào gói JS đầu (W050, LCP).
+const DOANH_NGHIEP = doanhNghiepJson as DoanhNghiep;
 
 interface ChanTrangProps {
   className?: string;
@@ -70,8 +74,12 @@ export function ChanTrang({ className = "" }: ChanTrangProps) {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 className="ct-logo"
-                src="/brand/vive-logo-chu.png"
+                src="/brand/vive-logo-chu.webp"
                 alt="VIVE"
+                width={54}
+                height={26}
+                loading="lazy"
+                decoding="async"
               />
               <p className="ct-cau">{CHU_CHAN_TRANG.moTa}</p>
             </div>

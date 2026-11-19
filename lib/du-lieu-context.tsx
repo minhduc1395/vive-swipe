@@ -9,11 +9,6 @@ import React, {
 } from "react";
 import { SAN_PHAM as SAN_PHAM_TINH, DEALS as DEALS_TINH } from "@/lib/data";
 import type { SanPham, Deal } from "@/lib/data/types";
-import {
-  taiSanPhamTuSupabase,
-  taiDealsTuSupabase,
-  xoaCacheDuLieu,
-} from "@/lib/supabase/du-lieu";
 import { actionLayDuLieuKhachDev } from "@/app/quan-tri/actions";
 
 interface DuLieuContextType {
@@ -38,6 +33,11 @@ export function DuLieuProvider({ children }: { children: React.ReactNode }) {
   const [daSanSang, setDaSanSang] = useState<boolean>(false);
 
   const layDuLieuTuNguon = useCallback(async (epBuoc: boolean) => {
+    const {
+      taiSanPhamTuSupabase,
+      taiDealsTuSupabase,
+      xoaCacheDuLieu,
+    } = await import("@/lib/supabase/du-lieu");
     if (epBuoc) xoaCacheDuLieu();
     const [sp, dl, devOverride] = await Promise.all([
       taiSanPhamTuSupabase(),
@@ -70,6 +70,7 @@ export function DuLieuProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let mounted = true;
+    let initTimer = 0;
 
     const timer = setTimeout(() => {
       if (mounted) {
@@ -77,19 +78,24 @@ export function DuLieuProvider({ children }: { children: React.ReactNode }) {
       }
     }, 2000);
 
-    layDuLieuTuNguon(false)
-      .then((ketQua) => {
-        if (mounted) apDungKetQua(ketQua);
-      })
-      .catch((err) => {
-        console.warn("[DuLieuProvider] Lỗi tải dữ liệu Supabase:", err);
-      })
-      .finally(() => {
-        if (mounted) {
-          clearTimeout(timer);
-          setDaSanSang(true);
-        }
-      });
+    const rafId = window.requestAnimationFrame(() => {
+      initTimer = window.setTimeout(() => {
+        if (!mounted) return;
+        layDuLieuTuNguon(false)
+          .then((ketQua) => {
+            if (mounted) apDungKetQua(ketQua);
+          })
+          .catch((err) => {
+            console.warn("[DuLieuProvider] Lỗi tải dữ liệu Supabase:", err);
+          })
+          .finally(() => {
+            if (mounted) {
+              clearTimeout(timer);
+              setDaSanSang(true);
+            }
+          });
+      }, 150);
+    });
 
     const handleRefresh = () => {
       layDuLieuTuNguon(true)
@@ -102,6 +108,8 @@ export function DuLieuProvider({ children }: { children: React.ReactNode }) {
     window.addEventListener("vive_du_lieu_updated", handleRefresh);
     return () => {
       mounted = false;
+      window.cancelAnimationFrame(rafId);
+      if (initTimer) window.clearTimeout(initTimer);
       clearTimeout(timer);
       window.removeEventListener("vive_du_lieu_updated", handleRefresh);
     };

@@ -1,0 +1,239 @@
+{
+  "dai_thong_bao": {
+    "deal_id": "KM-13",
+    "mac_dinh_chu": "Mua LOPOE, tặng sản phẩm fullsize",
+    "nut": {
+      "chu": "Xem ›",
+      "den": "/deal?id=KM-13",
+      "kieu": "chinh"
+    }
+  },
+  "cua_hang": {
+    "phu_de": "K-Beauty Experience",
+    "mo_ta_anh": "Mặt tiền VIVE với nhiều phương án trang trí",
+    "cot": 6,
+    "hang": 4,
+    "anh_mat_tien": [
+      "/trang-chu/mt/0.webp",
+      "/trang-chu/mt/1.webp",
+      "/trang-chu/mt/2.webp",
+      "/trang-chu/mt/3.webp",
+      "/trang-chu/mt/4.webp",
+      "/trang-chu/mt/5.webp"
+    ],
+    "nut": [
+      {
+        "chu": "Ghé cửa hàng",
+        "den": "#ghe-vive",
+        "kieu": "chinh"
+      },
+      {
+        "chu": "Xem sản phẩm",
+        "den": "/danh-muc",
+        "kieu": "phu"
+      }
+    ]
+  },
+  "lopoe": {
+    "tieu_de": "LOPOE Better Balance",
+    "phu_de": "Bọt dày. Cấp ẩm. Làm dịu.",
+    "mo_ta_bo": "Bộ ba LOPOE Better Balance",
+    "anh_trai": "/trang-chu/srm.webp",
+    "anh_giua": "/trang-chu/ampoule.webp",
+    "anh_phai": "/trang-chu/kem.webp",
+    "nut": [
+      {
+        "chu": "Mua",
+        "den": "/danh-muc?thuong-hieu=LOPOE",
+        "kieu": "chinh"
+      },
+      {
+        "chu": "Tìm hiểu thêm",
+        "den": "/new-arrival",
+        "kieu": "phu"
+      }
+    ]
+  },
+  "thuong_hieu": {
+    "tieu_de": "Người Hàn chọn kỹ.",
+    "dong_logo_hau": "mang về.",
+    "nhan_aria": "Thương hiệu đang có tại VIVE",
+    "danh_sach": [
+      {
+        "ten": "Medicube",
+        "den": "/danh-muc?thuong-hieu=Medicube",
+        "logo_slug": "medicube",
+        "logo": "/brand/thuong-hieu/medicube.png"
+      },
+      {
+        "ten": "SKINFOOD",
+        "den": "/danh-muc?thuong-hieu=SKINFOOD"
+      },
+      {
+        "ten": "Rep!el",
+        "den": "/danh-muc?thuong-hieu=Rep%21el",
+        "logo_slug": "repiel"
+      },
+      {
+        "ten": "Celimax",
+        "den": "/danh-muc?thuong-hieu=Celimax",
+        "logo_slug": "celimax",
+        "logo": "/brand/thuong-hieu/celimax.png"
+      },
+      {
+        "ten": "LOPOE",
+        "den": "/danh-muc?thuong-hieu=LOPOE",
+        "logo_slug": "lopoe",
+        "logo": "/brand/thuong-hieu/lopoe.png"
+      },
+      {
+        "ten": "JUNGSAEMMOOL",
+        "den": "/danh-muc?thuong-hieu=JUNGSAEMMOOL",
+        "logo_slug": "jungsaemmool",
+        "logo": "/brand/thuong-hieu/jungsaemmool.png"
+      },
+      {
+        "ten": "ISOI",
+        "den": "/danh-muc?thuong-hieu=ISOI"
+      },
+      {
+        "ten": "Edit.B",
+        "den": "/danh-muc?thuong-hieu=Edit.B"
+      },
+      {
+        "ten": "Lalarecipe",
+        "den": "/danh-muc?thuong-hieu=Lalarecipe"
+      },
+      {
+        "ten": "Dermal",
+        "den": "/danh-muc?thuong-hieu=Dermal",
+        "logo_slug": "dermal"
+      },
+      {
+        "ten": "salTherapy",
+        "den": "/danh-muc?thuong-hieu=salTherapy"
+      },
+      {
+        "ten": "Tiela",
+        "den": "/danh-muc?thuong-hieu=Tiela"
+      },
+      {
+        "ten": "Beaund",
+        "den": "/danh-muc?thuong-hieu=Beaund"
+      },
+      {
+        "ten": "Uniura",
+        "den": "/danh-muc?thuong-hieu=Uniura"
+      },
+      {
+        "ten": "Aprilskin",
+        "den": "/danh-muc?thuong-hieu=Aprilskin"
+      },
+      {
+        "ten": "Dermagarden",
+        "den": "/danh-muc?thuong-hieu=Dermagarden"
+      }
+    ]
+  },
+  "luoi_doi": [
+    {
+      "id": "personal-color",
+      "mau_nen": "hong-nhat",
+      "tieu_de": "Personal color",
+      "phu_de_truoc": "Tìm ",
+      "phu_de_nghieng": "tone",
+      "phu_de_sau": " của riêng bạn.",
+      "anh": "/trang-chu/vive-personal-color.webp",
+      "mo_ta_anh": "Góc personal color tại VIVE",
+      "nut": [
+        {
+          "chu": "Tìm hiểu thêm",
+          "den": "/personal-color",
+          "kieu": "chinh"
+        }
+      ]
+    },
+    {
+      "id": "check-in",
+      "mau_nen": "bac-ha",
+      "tieu_de": "Thử. Chụp. Nhận quà.",
+      "phu_de_truoc": "Ngay tại ",
+      "co_logo": true,
+      "anh": "/trang-chu/vive-checkin.webp",
+      "mo_ta_anh": "Khu check-in tại VIVE",
+      "nut": [
+        {
+          "chu": "Xem quà",
+          "den": null,
+          "sap_co": true,
+          "kieu": "chinh"
+        }
+      ]
+    },
+    {
+      "id": "deal-pdrn",
+      "mau_nen": "hong",
+      "tieu_de": "Combo PDRN Pink",
+      "deal_id": "COMBO-PINK",
+      "nhan_thuong_hieu": "Medicube",
+      "anh": "/trang-chu/medicube-pdrn.webp",
+      "anh_sp": true,
+      "mo_ta_anh": "Tinh chất và kem PDRN Pink Medicube",
+      "nut": [
+        {
+          "chu": "Xem deal",
+          "den": "/deal?id=COMBO-PINK",
+          "kieu": "chinh"
+        }
+      ]
+    },
+    {
+      "id": "deal-mat-na",
+      "mau_nen": "bac-ha-nhat",
+      "tieu_de": "Mua 4 tặng 1",
+      "deal_id": "DC-05",
+      "nhan_thuong_hieu": "Mặt nạ Uniura",
+      "so_lon": "4+1",
+      "nut": [
+        {
+          "chu": "Xem deal",
+          "den": "/deal?id=DC-05",
+          "kieu": "chinh"
+        }
+      ]
+    }
+  ],
+  "qua_lopoe": {
+    "deal_id": "KM-08",
+    "tien_to_tieu_de": "Từ ",
+    "hau_to_tieu_de": ", tặng LOPOE",
+    "anh": "/trang-chu/srm.webp",
+    "mo_ta_anh": "Sữa rửa mặt LOPOE",
+    "nut": [
+      {
+        "chu": "Xem deal",
+        "den": "/deal?id=KM-08",
+        "kieu": "chinh"
+      }
+    ]
+  },
+  "ghe_vive": {
+    "tien_to_tieu_de": "Ghé ",
+    "dia_diem_ngan": "Union Square",
+    "chu_lon": "LL2",
+    "nut": [
+      {
+        "chu": "Chỉ đường",
+        "den": null,
+        "nguon_den": "doanh_nghiep.ban_do",
+        "mo_tab_moi": true,
+        "kieu": "chinh"
+      },
+      {
+        "chu": "Giữ hàng",
+        "den": "/gio",
+        "kieu": "phu"
+      }
+    ]
+  }
+}

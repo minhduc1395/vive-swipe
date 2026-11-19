@@ -137,6 +137,7 @@ export function ThanhTab({
           <Link
             key={tab.key}
             href={tab.href}
+            prefetch={false}
             aria-current={dangChon ? "page" : undefined}
             className={`relative min-w-0 min-h-[44px] flex flex-col items-center justify-center gap-1 no-underline focus-visible:outline-2 focus-visible:outline-den rounded-xl transition-colors ${
               dangChon ? "text-[#2B2B2A] font-semibold" : "text-[#737373] hover:text-[#2B2B2A] font-medium"

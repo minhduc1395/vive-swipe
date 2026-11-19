@@ -47,7 +47,8 @@ test.describe("W033 · Landing là trang đầu, menu thống nhất, nút quay 
       // Khách mới
       await page.goto("/");
       await expect(page).toHaveURL(/^http:\/\/[^/]+\/$/);
-      await expect(page.getByRole("heading", { name: /LOPOE/i, level: 1 })).toBeVisible();
+      await expect(page.getByRole("heading", { name: /VIVE/i, level: 1 })).toBeVisible();
+      await expect(page.getByText("K-Beauty Experience", { exact: true })).toBeVisible();
 
       // Khách đã khảo sát/quẹt quay lại
       await page.evaluate(() => {
@@ -56,7 +57,8 @@ test.describe("W033 · Landing là trang đầu, menu thống nhất, nút quay 
       });
       await page.goto("/");
       await expect(page).toHaveURL(/^http:\/\/[^/]+\/$/);
-      await expect(page.getByRole("heading", { name: /LOPOE/i, level: 1 })).toBeVisible();
+      await expect(page.getByRole("heading", { name: /VIVE/i, level: 1 })).toBeVisible();
+      await expect(page.getByText("K-Beauty Experience", { exact: true })).toBeVisible();
 
       await page.evaluate(() => localStorage.clear());
     }

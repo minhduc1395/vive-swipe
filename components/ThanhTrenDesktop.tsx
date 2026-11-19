@@ -33,6 +33,7 @@ export function ThanhTrenDesktop({
         {/* Trái: Logo VIVE -> về / (trang chủ mới W050) */}
         <Link
           href="/"
+          prefetch={false}
           aria-label="Trang chủ VIVE"
           className="flex items-center shrink-0 focus-visible:outline-2 focus-visible:outline-den rounded"
         >
@@ -52,6 +53,7 @@ export function ThanhTrenDesktop({
               <Link
                 key={muc.key}
                 href={muc.href}
+                prefetch={false}
                 aria-current={dangChon ? "page" : undefined}
                 className={`text-[13px] whitespace-nowrap transition-colors focus-visible:outline-2 focus-visible:outline-den flex items-center gap-1.5 ${
                   dangChon
@@ -78,6 +80,7 @@ export function ThanhTrenDesktop({
           {/* Biểu tượng tìm kiếm */}
           <Link
             href="/danh-muc"
+            prefetch={false}
             aria-label="Tìm kiếm"
             className="text-[#2B2B2A]/82 hover:text-[#2B2B2A] transition-colors focus-visible:outline-2 focus-visible:outline-den p-1"
           >
@@ -98,6 +101,7 @@ export function ThanhTrenDesktop({
           {/* Giỏ hàng (biểu tượng + nhãn + số lượng) */}
           <Link
             href="/gio"
+            prefetch={false}
             aria-label={
               soLuongGio > 0 ? `Giỏ hàng (${soLuongGio} món)` : "Giỏ hàng"
             }

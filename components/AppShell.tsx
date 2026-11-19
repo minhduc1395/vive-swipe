@@ -9,7 +9,22 @@ import { ThanhDocTablet } from "./ThanhDocTablet";
 import { ThanhTab } from "./ThanhTab";
 import { ChanTrang } from "./ChanTrang";
 import { Toast, hienToast } from "./ui/Toast";
-import { layDanhSachDaThich, layGioHang } from "@/lib/kho-luu-tru";
+
+function docSoLuongLocal(khoa: string, tinhTongSoLuong: boolean): number {
+  try {
+    const raw = window.localStorage.getItem(khoa);
+    if (!raw) return 0;
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return 0;
+    if (!tinhTongSoLuong) return parsed.length;
+    return parsed.reduce((sum, item) => {
+      const sl = typeof item?.soLuong === "number" ? item.soLuong : 0;
+      return sum + sl;
+    }, 0);
+  } catch {
+    return 0;
+  }
+}
 
 export interface AppShellProps {
   children: React.ReactNode;
@@ -47,11 +62,10 @@ export function AppShell({
   useEffect(() => {
     const capNhatSoDem = () => {
       if (propSoLuongThich === undefined) {
-        setSoThich(layDanhSachDaThich().length);
+        setSoThich(docSoLuongLocal("vive_da_thich", false));
       }
       if (propSoLuongGio === undefined) {
-        const gio = layGioHang();
-        setSoGio(gio.reduce((sum, item) => sum + item.soLuong, 0));
+        setSoGio(docSoLuongLocal("vive_gio_hang", true));
       }
     };
 
@@ -68,7 +82,7 @@ export function AppShell({
   const tongThich = propSoLuongThich ?? soThich;
   const tongGio = propSoLuongGio ?? soGio;
 
-  const isLanding = pathname === "/" || pathname === "/new-arrival";
+  const isLanding = pathname === "/new-arrival";
 
   const isFixedH =
     khoaChieuCao ||
@@ -91,6 +105,7 @@ export function AppShell({
         <header className="flex md:hidden h-[48px] shrink-0 px-4 items-center justify-between border-b border-[rgba(43,43,42,0.06)] bg-[rgba(255,255,255,0.85)] backdrop-blur-md sticky top-0 z-40">
           <Link
             href="/"
+            prefetch={false}
             aria-label="Trang chủ VIVE"
             className="inline-flex items-center min-h-[44px] focus-visible:outline-2 focus-visible:outline-den rounded"
           >
@@ -99,6 +114,7 @@ export function AppShell({
           <div className="flex items-center gap-1">
             <Link
               href="/new-arrival"
+              prefetch={false}
               aria-current={pathname === "/new-arrival" ? "page" : undefined}
               className={`min-h-[44px] px-2.5 inline-flex items-center text-[13px] rounded-lg transition-colors ${
                 pathname === "/new-arrival"

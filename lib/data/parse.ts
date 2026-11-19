@@ -300,3 +300,5 @@ export function parseDoanhNghiepYaml(yamlText: string): DoanhNghiep {
 
   return ketQua.data;
 }
+
+export { parseTrangChuYaml } from "../trang-chu/schema";

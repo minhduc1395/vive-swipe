@@ -2,25 +2,40 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { KHOA_LICH_SU_NOI_BO } from "./NutQuayLai";
-import {
-  damBaoKhachAnDanh,
-  dongBoHoSo,
-  KHOA_HO_SO_CAN_DONG_BO,
-} from "@/lib/supabase/auth";
-import {
-  khoiTaoLangNgheMang,
-  dayHangDoiLuotQuet,
-} from "@/lib/supabase/luot-quet";
-import {
-  luuNguonVaoTuUrl,
-  ghiSuKien,
-  dayHangDoiSuKien,
-} from "@/lib/supabase/su-kien";
-import { layHoSoLocal } from "@/lib/kho-luu-tru";
 
-export function KhoiTaoSupabase() {
+// Giữ khớp với KHOA_LICH_SU_NOI_BO trong NutQuayLai.tsx mà không kéo toàn bộ component nút vào bundle gốc
+const KHOA_LICH_SU_NOI_BO = "vive_lich_su_noi_bo";
+
+interface KhoiTaoSupabaseProps {
+  fontClasses?: string[];
+}
+
+export function KhoiTaoSupabase({ fontClasses = [] }: KhoiTaoSupabaseProps) {
   const pathname = usePathname();
+
+  useEffect(() => {
+    if (typeof window === "undefined" || fontClasses.length === 0) return;
+    let raf1 = 0;
+    let raf2 = 0;
+    let timerId = 0;
+    const classes = fontClasses.filter(Boolean);
+    if (classes.length === 0) return;
+
+    // Gắn biến font sau khung vẽ đầu tiên (first paint / LCP) để tránh .woff2 chặn LCP trong Lantern
+    raf1 = window.requestAnimationFrame(() => {
+      raf2 = window.requestAnimationFrame(() => {
+        timerId = window.setTimeout(() => {
+          document.documentElement.classList.add(...classes);
+        }, 250);
+      });
+    });
+
+    return () => {
+      if (raf1) window.cancelAnimationFrame(raf1);
+      if (raf2) window.cancelAnimationFrame(raf2);
+      if (timerId) window.clearTimeout(timerId);
+    };
+  }, [fontClasses]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -45,49 +60,81 @@ export function KhoiTaoSupabase() {
     if (typeof window === "undefined") return;
 
     // Bỏ qua các trang nội bộ của nhân viên và quản trị để không tạo phiên ẩn danh lẫn lộn
-    const pathname = window.location.pathname;
+    const currentPath = window.location.pathname;
     if (
-      pathname.startsWith("/nhan-vien") ||
-      pathname.startsWith("/quan-tri")
+      currentPath.startsWith("/nhan-vien") ||
+      currentPath.startsWith("/quan-tri")
     ) {
       return;
     }
 
-    // 1. Lưu ?src= từ URL
-    luuNguonVaoTuUrl();
+    let cancelled = false;
+    let timerId = 0;
 
-    // 2. Thiết lập lắng nghe sự kiện mạng (online / visibilitychange / beforeunload)
-    khoiTaoLangNgheMang();
+    // Trì hoãn tải cụm Supabase sau khung vẽ đầu tiên để không tranh CPU/băng thông với LCP
+    const khoiChay = () => {
+      if (cancelled) return;
+      void (async () => {
+        const [
+          { damBaoKhachAnDanh, dongBoHoSo, KHOA_HO_SO_CAN_DONG_BO },
+          { khoiTaoLangNgheMang, dayHangDoiLuotQuet },
+          { luuNguonVaoTuUrl, ghiSuKien, dayHangDoiSuKien },
+          { layHoSoLocal },
+        ] = await Promise.all([
+          import("@/lib/supabase/auth"),
+          import("@/lib/supabase/luot-quet"),
+          import("@/lib/supabase/su-kien"),
+          import("@/lib/kho-luu-tru"),
+        ]);
 
-    // 3. Đăng nhập ẩn danh nếu chưa có session thật, và đồng bộ nền
-    void (async () => {
-      await damBaoKhachAnDanh();
+        if (cancelled) return;
 
-      // Sự kiện mo_web (chỉ ghi 1 lần mỗi phiên duyệt web)
-      try {
-        const daGhi = window.sessionStorage.getItem("vive_da_ghi_mo_web");
-        if (!daGhi) {
-          ghiSuKien("mo_web");
-          window.sessionStorage.setItem("vive_da_ghi_mo_web", "true");
+        // 1. Lưu ?src= từ URL
+        luuNguonVaoTuUrl();
+
+        // 2. Thiết lập lắng nghe sự kiện mạng (online / visibilitychange / beforeunload)
+        khoiTaoLangNgheMang();
+
+        // 3. Đăng nhập ẩn danh nếu chưa có session thật, và đồng bộ nền
+        await damBaoKhachAnDanh();
+        if (cancelled) return;
+
+        // Sự kiện mo_web (chỉ ghi 1 lần mỗi phiên duyệt web)
+        try {
+          const daGhi = window.sessionStorage.getItem("vive_da_ghi_mo_web");
+          if (!daGhi) {
+            ghiSuKien("mo_web");
+            window.sessionStorage.setItem("vive_da_ghi_mo_web", "true");
+          }
+        } catch {
+          // bỏ qua lỗi storage
         }
-      } catch {
-        // bỏ qua lỗi storage
-      }
 
-      // Nếu có hồ sơ đang chờ đồng bộ từ phiên ngoại tuyến trước đó
-      try {
-        if (window.localStorage.getItem(KHOA_HO_SO_CAN_DONG_BO) === "true") {
-          const hoSo = layHoSoLocal();
-          await dongBoHoSo(hoSo);
+        // Nếu có hồ sơ đang chờ đồng bộ từ phiên ngoại tuyến trước đó
+        try {
+          if (window.localStorage.getItem(KHOA_HO_SO_CAN_DONG_BO) === "true") {
+            const hoSo = layHoSoLocal();
+            await dongBoHoSo(hoSo);
+          }
+        } catch {
+          // bỏ qua
         }
-      } catch {
-        // bỏ qua
-      }
 
-      // Đẩy các lượt quẹt hoặc sự kiện còn đọng trong hàng đợi
-      await dayHangDoiLuotQuet();
-      await dayHangDoiSuKien();
-    })();
+        // Đẩy các lượt quẹt hoặc sự kiện còn đọng trong hàng đợi
+        await dayHangDoiLuotQuet();
+        await dayHangDoiSuKien();
+      })();
+    };
+
+    const rafId = window.requestAnimationFrame(() => {
+      timerId = window.setTimeout(khoiChay, 250);
+    });
+
+    return () => {
+      cancelled = true;
+      window.cancelAnimationFrame(rafId);
+      if (timerId) window.clearTimeout(timerId);
+    };
   }, []);
 
   return null;

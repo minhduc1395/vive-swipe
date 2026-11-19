@@ -99,7 +99,7 @@ export default function TrangPersonalColor() {
 
             <div className="flex flex-wrap items-center gap-4 pt-1">
               <Link
-                href="/#booth"
+                href="/#ghe-vive"
                 className="min-h-[54px] md:h-[58px] px-7 rounded-full bg-den text-trang hover:bg-black transition-colors inline-flex items-center gap-2.5 text-[15px] md:text-[16px] font-semibold no-underline"
               >
                 <span>Đặt lịch tại booth</span>
