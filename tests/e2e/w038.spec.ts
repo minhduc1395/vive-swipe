@@ -87,7 +87,7 @@ test.describe("W038 · Khung trang cố định & điều hướng dùng chung",
     await kiemTraLogoConNguyen();
   });
 
-  test("2. Bấm logo từ /deal thì về /, mục New Arrival sáng (1440x900)", async ({
+  test("2. Bấm logo từ /deal thì về /, không mục nào sáng; bấm New Arrival về /new-arrival, mục đó sáng (1440x900)", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
@@ -102,8 +102,13 @@ test.describe("W038 · Khung trang cố định & điều hướng dùng chung",
 
     await expect(page).toHaveURL(/^http:\/\/[^/]+\/$/);
 
-    // Mục New Arrival sáng với aria-current="page"
+    // Ở /: không mục nào sáng theo W051
     const newArrival = page.locator('div[role="banner"] nav a:has-text("New Arrival")');
+    await expect(newArrival).not.toHaveAttribute("aria-current", "page");
+
+    // Bấm New Arrival -> /new-arrival, mục đó sáng
+    await newArrival.click();
+    await expect(page).toHaveURL(/\/new-arrival/);
     await expect(newArrival).toHaveAttribute("aria-current", "page");
   });
 
@@ -217,5 +222,25 @@ test.describe("W038 · Khung trang cố định & điều hướng dùng chung",
 
     // URL quay về danh mục gốc
     await expect(page).toHaveURL(/\/danh-muc$/);
+  });
+
+  test("5. Bấm Đăng nhập hiện toast 'Tính năng sắp ra mắt', URL không đổi (W051 sap_co)", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await datDaKhaoSat(page);
+
+    await page.goto("/deal");
+    const nutDangNhap = page.locator('div[role="banner"] a[data-sap-co="true"]');
+    await expect(nutDangNhap).toBeVisible();
+    await nutDangNhap.click();
+
+    // URL không đổi
+    await expect(page).toHaveURL(/\/deal/);
+
+    // Toast xuất hiện với text "Tính năng sắp ra mắt"
+    const toast = page.locator('[role="status"]');
+    await expect(toast).toBeVisible();
+    await expect(toast).toContainText("Tính năng sắp ra mắt");
   });
 });

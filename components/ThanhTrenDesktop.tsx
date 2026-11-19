@@ -3,117 +3,21 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LogoVive } from "@/components/LogoVive";
-import { kiemTraMucDangChon } from "@/lib/dieu-huong";
+import {
+  CAC_MUC_MENU_DESKTOP,
+  kiemTraMucDangChon,
+} from "@/lib/dieu-huong";
+import { hienToast } from "@/components/ui/Toast";
 
 interface ThanhTrenDesktopProps {
   soLuongThich?: number;
   soLuongGio?: number;
 }
 
-const CAC_MUC_MENU = [
-  {
-    href: "/",
-    label: "New Arrival",
-    key: "new-arrival",
-    icon: (
-      <svg
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-      </svg>
-    ),
-  },
-  {
-    href: "/quet",
-    label: "Quẹt",
-    key: "quet",
-    icon: (
-      <svg
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        <rect x="6" y="3" width="13" height="17" rx="2.5" />
-        <path d="M3.5 7v11.5A2.5 2.5 0 0 0 6 21h9" />
-      </svg>
-    ),
-  },
-  {
-    href: "/danh-muc",
-    label: "Sản phẩm",
-    key: "danh-muc",
-    icon: (
-      <svg
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        <rect x="3" y="3" width="7" height="7" rx="1.5" />
-        <rect x="14" y="3" width="7" height="7" rx="1.5" />
-        <rect x="3" y="14" width="7" height="7" rx="1.5" />
-        <rect x="14" y="14" width="7" height="7" rx="1.5" />
-      </svg>
-    ),
-  },
-  {
-    href: "/deal",
-    label: "Deal",
-    key: "deal",
-    icon: (
-      <svg
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        <path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z" />
-        <circle cx="7.5" cy="7.5" r="1.5" />
-      </svg>
-    ),
-  },
-  {
-    href: "/da-thich",
-    label: "Đã thích",
-    key: "da-thich",
-    icon: (
-      <svg
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-      </svg>
-    ),
-  },
-];
-
+/**
+ * Thanh menu chuẩn cho máy tính (≥ 1024px) theo bản mẫu landing v3 (W051).
+ * Cao 48px, nền kính mờ (backdrop-filter), dính trên cùng, chữ 13px, không nút đen, không viền tối.
+ */
 export function ThanhTrenDesktop({
   soLuongThich = 0,
   soLuongGio = 0,
@@ -123,24 +27,24 @@ export function ThanhTrenDesktop({
   return (
     <div
       role="banner"
-      className="hidden lg:block sticky top-0 z-50 bg-trang border-b border-[#F7EEEB]"
+      className="hidden lg:block sticky top-0 z-50 h-[48px] bg-[rgba(255,255,255,0.78)] backdrop-blur-[20px] backdrop-saturate-[180%] border-b border-[rgba(43,43,42,0.06)]"
     >
-      <div className="max-w-[1280px] mx-auto px-8 h-[72px] flex items-center gap-6">
-        {/* Logo VIVE */}
+      <div className="max-w-[1024px] h-full mx-auto px-[22px] flex items-center justify-between">
+        {/* Trái: Logo VIVE -> về / (trang chủ mới W050) */}
         <Link
           href="/"
           aria-label="Trang chủ VIVE"
           className="flex items-center shrink-0 focus-visible:outline-2 focus-visible:outline-den rounded"
         >
-          <LogoVive rong={76} />
+          <LogoVive rong={46} />
         </Link>
 
-        {/* Menu chính */}
+        {/* Giữa: Menu chính (New Arrival, Quẹt, Sản phẩm, Deal, Đã thích) */}
         <nav
           aria-label="Điều hướng máy tính"
-          className="flex items-center gap-1 min-w-0"
+          className="flex items-center gap-[30px]"
         >
-          {CAC_MUC_MENU.map((muc) => {
+          {CAC_MUC_MENU_DESKTOP.map((muc) => {
             const dangChon = kiemTraMucDangChon(muc.key, pathname);
             const soDem = muc.key === "da-thich" ? soLuongThich : 0;
 
@@ -149,18 +53,17 @@ export function ThanhTrenDesktop({
                 key={muc.key}
                 href={muc.href}
                 aria-current={dangChon ? "page" : undefined}
-                className={`h-11 px-3 rounded-full flex items-center gap-2 text-[15px] whitespace-nowrap shrink-0 transition-colors focus-visible:outline-2 focus-visible:outline-den ${
+                className={`text-[13px] whitespace-nowrap transition-colors focus-visible:outline-2 focus-visible:outline-den flex items-center gap-1.5 ${
                   dangChon
-                    ? "bg-[#F7EEEB] text-den font-semibold"
-                    : "text-[#2B2B2A] hover:bg-[#F7EEEB]/60 font-medium"
+                    ? "text-[#2B2B2A] font-bold"
+                    : "text-[#2B2B2A]/82 hover:text-[#2B2B2A] font-medium"
                 }`}
               >
-                <span className="hidden xl:inline-flex">{muc.icon}</span>
-                <span>{muc.label}</span>
+                <span>{muc.nhan.vi}</span>
                 {soDem > 0 && (
                   <span
                     aria-label={`${soDem} món`}
-                    className="min-w-[20px] h-5 px-1.5 rounded-full bg-den text-trang text-[12px] font-semibold inline-flex items-center justify-center leading-none"
+                    className="min-w-[16px] h-4 px-1 rounded-full bg-[#E8D2CC] text-den text-[10px] font-bold inline-flex items-center justify-center leading-none"
                   >
                     {soDem > 99 ? "99+" : soDem}
                   </span>
@@ -170,78 +73,72 @@ export function ThanhTrenDesktop({
           })}
         </nav>
 
-        {/* Cụm công cụ bên phải: Ô tìm kiếm, Giỏ, Đăng nhập */}
-        <div className="ml-auto flex items-center gap-3">
-          {/* Ô tìm kiếm nhanh */}
-          <form
-            action="/danh-muc"
-            method="GET"
-            role="search"
-            className="relative hidden xl:flex items-center"
+        {/* Phải: Biểu tượng tìm sản phẩm, Giỏ hàng, Đăng nhập */}
+        <div className="ml-auto flex items-center gap-[22px]">
+          {/* Biểu tượng tìm kiếm */}
+          <Link
+            href="/danh-muc"
+            aria-label="Tìm kiếm"
+            className="text-[#2B2B2A]/82 hover:text-[#2B2B2A] transition-colors focus-visible:outline-2 focus-visible:outline-den p-1"
           >
-            <label className="h-11 w-[220px] px-4 rounded-full bg-[#F7EEEB] flex items-center gap-2.5 focus-within:ring-2 focus-within:ring-den/20 transition-all cursor-text">
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#737373"
-                strokeWidth="1.9"
-                strokeLinecap="round"
-                aria-hidden="true"
-              >
-                <circle cx="11" cy="11" r="7" />
-                <path d="M20 20l-4-4" />
-              </svg>
-              <span className="sr-only">Tìm sản phẩm</span>
-              <input
-                type="search"
-                name="tim"
-                placeholder="Tìm sản phẩm, thương hiệu"
-                className="border-0 outline-none bg-transparent text-[14px] text-den w-full placeholder:text-[#737373]"
-              />
-            </label>
-          </form>
+            <svg
+              className="w-[17px] h-[17px] block"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              aria-hidden="true"
+            >
+              <circle cx="10.5" cy="10.5" r="6.5" />
+              <path d="M15.5 15.5 21 21" />
+            </svg>
+          </Link>
 
-          {/* Nút Giỏ hàng */}
+          {/* Giỏ hàng (biểu tượng + nhãn + số lượng) */}
           <Link
             href="/gio"
             aria-label={
               soLuongGio > 0 ? `Giỏ hàng (${soLuongGio} món)` : "Giỏ hàng"
             }
-            className="h-11 px-4.5 rounded-full bg-den text-trang flex items-center gap-2 text-[15px] font-semibold whitespace-nowrap shrink-0 hover:opacity-90 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-den"
+            className="flex items-center gap-1.5 text-[13px] font-medium text-[#2B2B2A]/82 hover:text-[#2B2B2A] transition-colors focus-visible:outline-2 focus-visible:outline-den"
           >
             <svg
-              width="18"
-              height="18"
+              className="w-[17px] h-[17px] block"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="#FFFFFF"
+              stroke="currentColor"
               strokeWidth="1.8"
               strokeLinejoin="round"
               aria-hidden="true"
             >
-              <path d="M5 8h14l-1 12H6L5 8z" />
-              <path d="M9 8V6a3 3 0 0 1 6 0v2" />
+              <path d="M5 8h14l-1 12H6L5 8Z" />
+              <path d="M9 8V6.5a3 3 0 0 1 6 0V8" />
             </svg>
             <span>Giỏ</span>
             {soLuongGio > 0 && (
               <span
-                aria-hidden="true"
-                className="min-w-[20px] h-5 px-1.5 rounded-full bg-[#E8D2CC] text-den text-[12px] font-bold inline-flex items-center justify-center leading-none"
+                aria-label={`${soLuongGio} món`}
+                className="min-w-[16px] h-4 px-1 rounded-full bg-[#E8D2CC] text-den text-[10px] font-bold inline-flex items-center justify-center leading-none"
               >
                 {soLuongGio > 99 ? "99+" : soLuongGio}
               </span>
             )}
           </Link>
 
-          {/* Nút Đăng nhập */}
-          <Link
+          {/* Đăng nhập (W051: chưa xong W030 nên dùng cơ chế sap_co, click hiện toast) */}
+          <a
             href="/dang-nhap"
-            className="h-11 px-4 rounded-full border border-[#E8D2CC] text-den flex items-center text-[14px] font-semibold whitespace-nowrap shrink-0 hover:bg-[#F7EEEB] transition-colors focus-visible:outline-2 focus-visible:outline-den"
+            onClick={(e) => {
+              e.preventDefault();
+              hienToast("Tính năng sắp ra mắt");
+            }}
+            data-sap-co="true"
+            aria-label="Đăng nhập"
+            className="text-[13px] font-medium text-[#2B2B2A]/82 hover:text-[#2B2B2A] transition-colors focus-visible:outline-2 focus-visible:outline-den cursor-pointer"
           >
-            Đăng nhập
-          </Link>
+            <span>Đăng nhập</span>
+          </a>
         </div>
       </div>
     </div>

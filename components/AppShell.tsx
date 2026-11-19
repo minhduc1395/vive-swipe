@@ -8,6 +8,7 @@ import { ThanhTrenDesktop } from "./ThanhTrenDesktop";
 import { ThanhDocTablet } from "./ThanhDocTablet";
 import { ThanhTab } from "./ThanhTab";
 import { ChanTrang } from "./ChanTrang";
+import { Toast, hienToast } from "./ui/Toast";
 import { layDanhSachDaThich, layGioHang } from "@/lib/kho-luu-tru";
 
 export interface AppShellProps {
@@ -85,24 +86,41 @@ export function AppShell({
         isFixedH ? "h-dvh overflow-hidden" : "min-h-dvh"
       } ${className}`}
     >
-      {/* 0. Thanh trên mảnh cho điện thoại (< 768px): cao 52px, Logo (về New Arrival) · Đăng nhập (nút phụ) */}
+      {/* 0. Thanh trên mảnh cho điện thoại (< 768px): cao 48px theo landing v3 (W051), Logo (về /) · New Arrival · Đăng nhập (sap_co) */}
       {coHienDieuHuong && (
-        <header className="flex md:hidden h-[52px] shrink-0 px-4 items-center justify-between border-b border-[#F7EEEB] bg-trang sticky top-0 z-40">
+        <header className="flex md:hidden h-[48px] shrink-0 px-4 items-center justify-between border-b border-[rgba(43,43,42,0.06)] bg-[rgba(255,255,255,0.85)] backdrop-blur-md sticky top-0 z-40">
           <Link
             href="/"
             aria-label="Trang chủ VIVE"
-            className="inline-flex items-center min-h-[44px]"
+            className="inline-flex items-center min-h-[44px] focus-visible:outline-2 focus-visible:outline-den rounded"
           >
-            <LogoVive rong={56} />
+            <LogoVive rong={46} />
           </Link>
-          <Link
-            href="/dang-nhap"
-            className="min-h-[44px] inline-flex items-center justify-center"
-          >
-            <span className="h-8 px-3 rounded-full bg-[#F7EEEB] text-den text-[13px] font-semibold inline-flex items-center hover:bg-[#E8D2CC] transition-colors">
-              Đăng nhập
-            </span>
-          </Link>
+          <div className="flex items-center gap-1">
+            <Link
+              href="/new-arrival"
+              aria-current={pathname === "/new-arrival" ? "page" : undefined}
+              className={`min-h-[44px] px-2.5 inline-flex items-center text-[13px] rounded-lg transition-colors ${
+                pathname === "/new-arrival"
+                  ? "text-[#2B2B2A] font-bold"
+                  : "text-[#2B2B2A]/82 hover:text-[#2B2B2A] font-medium"
+              }`}
+            >
+              New Arrival
+            </Link>
+            <a
+              href="/dang-nhap"
+              onClick={(e) => {
+                e.preventDefault();
+                hienToast("Tính năng sắp ra mắt");
+              }}
+              data-sap-co="true"
+              aria-label="Đăng nhập"
+              className="min-h-[44px] px-2.5 inline-flex items-center text-[13px] font-medium text-[#2B2B2A]/82 hover:text-[#2B2B2A] transition-colors cursor-pointer"
+            >
+              <span>Đăng nhập</span>
+            </a>
+          </div>
         </header>
       )}
 
@@ -134,6 +152,9 @@ export function AppShell({
       {coHienDieuHuong && (
         <ThanhTab soLuongThich={tongThich} soLuongGio={tongGio} />
       )}
+
+      {/* 4. Toast trạng thái toàn cục (W050, W051, W040) */}
+      <Toast />
     </div>
   );
 }

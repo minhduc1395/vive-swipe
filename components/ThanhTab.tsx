@@ -2,28 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { kiemTraMucDangChon } from "@/lib/dieu-huong";
+import { CAC_MUC_TAB_MOBILE, kiemTraMucDangChon } from "@/lib/dieu-huong";
 
 interface ThanhTabProps {
   soLuongThich?: number;
   soLuongGio?: number;
 }
 
-const MUC_TAB = [
-  { href: "/quet", label: "Quẹt", key: "quet" },
-  { href: "/danh-muc", label: "Sản phẩm", key: "danh-muc" },
-  { href: "/da-thich", label: "Đã thích", key: "da-thich" },
-  { href: "/deal", label: "Deal", key: "deal" },
-  { href: "/gio", label: "Giỏ", key: "gio" },
-] as const;
-
-type TabKey = (typeof MUC_TAB)[number]["key"];
-
 function BieuTuongTab({
   tabKey,
   dangChon,
 }: {
-  tabKey: TabKey;
+  tabKey: string;
   dangChon: boolean;
 }) {
   const strokeWidth = dangChon ? 2.1 : 1.8;
@@ -99,6 +89,7 @@ function BieuTuongTab({
         </svg>
       );
     case "gio":
+    default:
       return (
         <svg
           width="24"
@@ -111,16 +102,16 @@ function BieuTuongTab({
           strokeLinejoin="round"
           aria-hidden="true"
         >
-          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-          <path d="M3 6h18" />
-          <path d="M16 10a4 4 0 0 1-8 0" />
+          <path d="M5 8h14l-1 12H6L5 8Z" />
+          <path d="M9 8V6.5a3 3 0 0 1 6 0V8" />
         </svg>
       );
   }
 }
 
 /**
- * Thanh điều hướng dưới cố định 5 tab: Quẹt · Danh mục · Đã thích · Deal · Giỏ.
+ * Thanh điều hướng dưới cố định 5 tab cho điện thoại: Quẹt · Sản phẩm · Đã thích · Deal · Giỏ (W051).
+ * Kiểu dáng kính mờ v3, chữ nhỏ, màu token, không nút đen.
  */
 export function ThanhTab({
   soLuongThich = 0,
@@ -131,9 +122,9 @@ export function ThanhTab({
   return (
     <nav
       aria-label="Điều hướng chính"
-      className="mt-auto sticky bottom-0 z-40 shrink-0 min-h-[76px] px-1 pt-2 pb-[max(14px,env(safe-area-inset-bottom,0px))] border-t border-vien bg-trang grid grid-cols-5 md:hidden"
+      className="mt-auto sticky bottom-0 z-40 shrink-0 min-h-[64px] px-1 pt-1.5 pb-[max(10px,env(safe-area-inset-bottom,0px))] border-t border-[rgba(43,43,42,0.06)] bg-[rgba(255,255,255,0.85)] backdrop-blur-md grid grid-cols-5 md:hidden"
     >
-      {MUC_TAB.map((tab) => {
+      {CAC_MUC_TAB_MOBILE.map((tab) => {
         const dangChon = kiemTraMucDangChon(tab.key, pathname);
         const soDem =
           tab.key === "da-thich"
@@ -147,14 +138,14 @@ export function ThanhTab({
             key={tab.key}
             href={tab.href}
             aria-current={dangChon ? "page" : undefined}
-            className={`relative min-w-0 min-h-[44px] flex flex-col items-center justify-center gap-1 no-underline focus-visible:outline-2 focus-visible:outline-den rounded-xl ${
-              dangChon ? "text-den font-semibold" : "text-xam font-medium"
+            className={`relative min-w-0 min-h-[44px] flex flex-col items-center justify-center gap-1 no-underline focus-visible:outline-2 focus-visible:outline-den rounded-xl transition-colors ${
+              dangChon ? "text-[#2B2B2A] font-semibold" : "text-[#737373] hover:text-[#2B2B2A] font-medium"
             }`}
           >
             {dangChon && (
               <span
                 aria-hidden="true"
-                className="absolute -top-2 w-6 h-[2px] rounded-full bg-den"
+                className="absolute -top-1.5 w-6 h-[2px] rounded-full bg-[#2B2B2A]"
               />
             )}
             <span className="relative flex items-center justify-center">
@@ -162,14 +153,14 @@ export function ThanhTab({
               {soDem > 0 && (
                 <span
                   aria-label={`${soDem} món`}
-                  className="absolute -top-[5px] -right-[11px] min-w-[18px] h-[18px] px-1 rounded-full border-2 border-trang bg-den text-trang text-[10px] font-bold leading-none flex items-center justify-center"
+                  className="absolute -top-[5px] -right-[11px] min-w-[17px] h-[17px] px-1 rounded-full bg-[#E8D2CC] text-den text-[10px] font-bold leading-none flex items-center justify-center"
                 >
                   {soDem > 99 ? "99+" : soDem}
                 </span>
               )}
             </span>
             <span className="text-[11px] leading-[1.2] whitespace-nowrap">
-              {tab.label}
+              {tab.nhan.vi}
             </span>
           </Link>
         );

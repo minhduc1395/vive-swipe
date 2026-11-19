@@ -24,7 +24,7 @@ export function LogoVive({ rong, className = "" }: LogoViveProps) {
       priority
       data-testid="logo"
       className={`block shrink-0 ${className}`}
-      style={{ width: `${rong}px`, height: `${cao}px` }}
+      style={{ width: `${rong}px`, height: "auto" }}
     />
   );
 }
