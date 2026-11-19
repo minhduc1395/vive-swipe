@@ -5,7 +5,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import type { Deal, DoanhNghiep } from "@/lib/data/types";
 import { dinhDangGioV3, dinhDangNgan } from "@/lib/trang-chu/dinh-dang";
-import type { TrangChuConfig } from "@/lib/trang-chu/schema";
+import type { TheCombo, TrangChuConfig } from "@/lib/trang-chu/schema";
+import type { CauHinhLopoe3D } from "@/lib/thu-nghiem/lopoe-3d";
+import { CuonLopoe3D, type VeNut3D } from "@/components/cuon-3d/CuonLopoe3D";
 import { hienToast } from "@/components/ui/Toast";
 import { NutTrangChu } from "./NutTrangChu";
 import "./trang-chu.css";
@@ -15,6 +17,7 @@ const ANH_TRONG_SUOT =
 
 interface TrangChuClientProps {
   cauHinh: TrangChuConfig;
+  lopoe3D: CauHinhLopoe3D;
   deals: Deal[];
   doanhNghiep: DoanhNghiep;
   gioMoCua: string;
@@ -27,16 +30,19 @@ const HUONG_CLIP = [
   "inset(0 0 100% 0)",
 ] as const;
 
-const KE_TREN_MAT_TIEN = { x: 0.37, y: 0.575, h: 0.05 };
-const TY_LE_SRM = 366 / 989;
-const GIOT_TINH_CHAT = [0, 1, 2, 3, 4, 5].map((i) => ({
-  x: ((i % 3) - 1) * 0.28 + (i > 2 ? 0.12 : -0.06),
-  tre: i * 0.06,
-  cao: 0.55 + (i % 2) * 0.25,
-}));
+/** Giá và quà combo đọc từ deal (hết quà thì dùng giá, quà khi_het_qua). */
+function giaVaQua(deal: Deal | undefined): { gia: string; qua: string } {
+  if (!deal) return { gia: "", qua: "" };
+  const hetQua = deal.het_qua && deal.khi_het_qua;
+  const giaSo = hetQua ? deal.khi_het_qua?.gia_combo ?? deal.gia_combo : deal.gia_combo;
+  const quaGoc = hetQua ? deal.khi_het_qua?.qua ?? null : deal.qua ?? null;
+  const qua = quaGoc ? `Tặng ${quaGoc.charAt(0).toLowerCase()}${quaGoc.slice(1)}. Số lượng có hạn.` : "";
+  return { gia: giaSo ? dinhDangNgan(giaSo) : "", qua };
+}
 
 export function TrangChuClient({
   cauHinh,
+  lopoe3D,
   deals,
   doanhNghiep,
   gioMoCua,
@@ -44,14 +50,6 @@ export function TrangChuClient({
   const rootRef = useRef<HTMLDivElement>(null);
   const ghepRef = useRef<HTMLDivElement>(null);
   const luoiAnhRef = useRef<HTMLDivElement>(null);
-  const lopoeKhoiRef = useRef<HTMLElement>(null);
-  const boBaRef = useRef<HTMLDivElement>(null);
-  const quangRef = useRef<HTMLSpanElement>(null);
-  const bayRef = useRef<HTMLDivElement>(null);
-  const dichBayRef = useRef<HTMLImageElement>(null);
-  const spGiuaRef = useRef<HTMLImageElement>(null);
-  const spPhaiRef = useRef<HTMLImageElement>(null);
-  const giotRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const tuongLogoRef = useRef<HTMLDivElement>(null);
   const [daTaiAnhDuoi, setDaTaiAnhDuoi] = useState(false);
 
@@ -305,154 +303,17 @@ export function TrangChuClient({
     };
   }, [cauHinh.cua_hang.anh_mat_tien, cot, hang]);
 
-  // 3. Hoạt ảnh khối LOPOE theo cuộn 2 chiều (lăn xuống tới, lăn lên lùi)
-  useEffect(() => {
-    const bay = bayRef.current;
-    const trai = dichBayRef.current;
-    const giua = spGiuaRef.current;
-    const phai = spPhaiRef.current;
-    const khoi = lopoeKhoiRef.current;
-    const boBa = boBaRef.current;
-    const quang = quangRef.current;
-    const anhMatTien = luoiAnhRef.current;
-
-    if (
-      !bay ||
-      !trai ||
-      !giua ||
-      !phai ||
-      !khoi ||
-      !boBa ||
-      !quang ||
-      !anhMatTien
-    ) {
-      return;
-    }
-
-    const giamChuyenDong = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    if (giamChuyenDong) {
-      quang.style.opacity = "1";
-      quang.style.transform = "scale(1)";
-      trai.style.opacity = "1";
-      giua.style.opacity = "1";
-      giua.style.transform = "none";
-      phai.style.opacity = "1";
-      phai.style.transform = "none";
-      bay.style.display = "none";
-      bay.style.opacity = "0";
-      return;
-    }
-
-    const de = (t: number) =>
-      t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-    const ra = (t: number) => 1 - Math.pow(1 - t, 3);
-    const kep = (v: number, min = 0, max = 1) =>
-      Math.max(min, Math.min(max, v));
-    const doan = (p: number, a: number, b: number) => kep((p - a) / (b - a));
-
-    const ve = () => {
-      const H = window.innerHeight;
-      const k = khoi.getBoundingClientRect();
-      const b = boBa.getBoundingClientRect();
-      const A = H - k.top;
-      const B = b.top + b.height / 2 - H / 2;
-      const p = A <= 0 ? 0 : B <= 0 ? 1 : A / (A + B);
-
-      const q = de(doan(p, 0.25, 1));
-      quang.style.opacity = String(q);
-      quang.style.transform = `scale(${0.3 + 0.7 * q})`;
-
-      const g = de(doan(p, 0.3, 0.9));
-      giua.style.opacity = String(doan(p, 0.3, 0.45));
-      giua.style.transform = `translateY(${(1 - g) * 160}px) rotate(${(1 - g) * 18}deg) scale(${0.75 + 0.25 * g})`;
-
-      const f = de(doan(p, 0.2, 0.85));
-      phai.style.opacity = String(doan(p, 0.2, 0.35));
-      phai.style.transform = `translateX(${(1 - f) * Math.min(window.innerWidth * 0.35, 320)}px) rotate(${(1 - f) * 22}deg)`;
-
-      giotRefs.current.forEach((el, i) => {
-        if (!el) return;
-        const o = GIOT_TINH_CHAT[i];
-        const t = doan(p, 0.35 + o.tre, 0.95);
-        el.style.left = `calc(50% + ${o.x * b.width}px)`;
-        el.style.bottom = `${60 + ra(t) * b.height * o.cao}px`;
-        el.style.opacity =
-          t > 0 && t < 1 ? String(Math.sin(Math.PI * t)) : "0";
-        el.style.transform = `scale(${0.6 + t * 0.8})`;
-      });
-
-      const a = anhMatTien.getBoundingClientRect();
-      const d = trai.getBoundingClientRect();
-      if (window.scrollY <= 2 || p <= 0 || p >= 1) {
-        bay.style.display = "none";
-        bay.style.opacity = "0";
-        trai.style.opacity = p >= 1 ? "1" : "0";
-        return;
-      }
-      bay.style.display = "block";
-      trai.style.opacity = "0";
-
-      const sx = a.left + a.width * KE_TREN_MAT_TIEN.x;
-      const sy = a.top + a.height * KE_TREN_MAT_TIEN.y;
-      const sh = a.height * KE_TREN_MAT_TIEN.h;
-      const nho = de(doan(p, 0, 0.15));
-      const e = de(doan(p, 0.15, 1));
-      const h0 = sh * (1 + 1.6 * nho);
-      const y0 = sy - sh * 0.5 * nho;
-      const ex = d.left + d.width / 2;
-      const ey = d.bottom;
-      const vong =
-        Math.sin(Math.PI * e) *
-        Math.min(window.innerWidth * 0.2, 240) *
-        (sx < ex ? -1 : 1);
-      const x = sx + (ex - sx) * e + vong;
-      const y = y0 + (ey - y0) * e;
-      const h = h0 + (d.height - h0) * e;
-
-      bay.style.height = `${h}px`;
-      bay.style.transform = `translate(${x - (h * TY_LE_SRM) / 2}px, ${y - h}px) rotate(${Math.sin(Math.PI * e) * -16}deg)`;
-      bay.style.opacity = String(kep(p / 0.03));
-    };
-
-    let cho = false;
-    let rafId = 0;
-    const lich = () => {
-      if (!cho) {
-        cho = true;
-        rafId = window.requestAnimationFrame(() => {
-          cho = false;
-          ve();
-        });
-      }
-    };
-
-    window.addEventListener("scroll", lich, { passive: true });
-    window.addEventListener("resize", lich);
-    window.addEventListener("load", ve);
-    ve();
-
-    return () => {
-      window.removeEventListener("scroll", lich);
-      window.removeEventListener("resize", lich);
-      window.removeEventListener("load", ve);
-      if (rafId) window.cancelAnimationFrame(rafId);
-    };
-  }, []);
+  // Nút trong khối LOPOE 3D: dùng đúng kiểu nút trang chủ (nút đầu "chinh", sau "phu")
+  const veNut3D: VeNut3D = (n, i) => (
+    <NutTrangChu
+      key={n.chu}
+      nut={{ chu: n.chu, den: n.den, kieu: i === 0 ? "chinh" : "phu" }}
+      banDoUrl={doanhNghiep.ban_do}
+    />
+  );
 
   return (
     <div ref={rootRef} className={daTaiAnhDuoi ? "tc-v3 co-serif" : "tc-v3"}>
-      {/* Tuýp sữa rửa mặt bay từ kệ trên mặt tiền xuống khối LOPOE */}
-      <div ref={bayRef} id="bay" aria-hidden="true">
-        <img
-          src={daTaiAnhDuoi ? cauHinh.lopoe.anh_trai : ANH_TRONG_SUOT}
-          alt=""
-          fetchPriority="low"
-          decoding="async"
-        />
-      </div>
-
       {/* Dải khuyến mãi trên cùng */}
       <div className="dai">
         <span>{chuDaiKhuyenMai}. </span>
@@ -530,65 +391,8 @@ export function TrangChuClient({
           </div>
         </section>
 
-        {/* Khối 2: LOPOE Better Balance */}
-        <section ref={lopoeKhoiRef} className="o lon" id="lopoe">
-          <div className="hien">
-            <h2>{cauHinh.lopoe.tieu_de}</h2>
-            <p>{cauHinh.lopoe.phu_de}</p>
-            <div className="nut">
-              {cauHinh.lopoe.nut.map((n) => (
-                <NutTrangChu
-                  key={n.chu}
-                  nut={n}
-                  banDoUrl={doanhNghiep.ban_do}
-                />
-              ))}
-            </div>
-          </div>
-          <div
-            ref={boBaRef}
-            className="hinh bo-ba"
-            aria-label={cauHinh.lopoe.mo_ta_bo}
-            role="img"
-          >
-            <span ref={quangRef} className="quang" aria-hidden="true" />
-            {GIOT_TINH_CHAT.map((_, idx) => (
-              <span
-                key={idx}
-                ref={(el) => {
-                  giotRefs.current[idx] = el;
-                }}
-                className="giot"
-                aria-hidden="true"
-              />
-            ))}
-            <img
-              ref={dichBayRef}
-              id="dich-bay"
-              src={daTaiAnhDuoi ? cauHinh.lopoe.anh_trai : ANH_TRONG_SUOT}
-              alt=""
-              loading="lazy"
-              decoding="async"
-            />
-            <img
-              ref={spGiuaRef}
-              id="sp-giua"
-              className="giua"
-              src={daTaiAnhDuoi ? cauHinh.lopoe.anh_giua : ANH_TRONG_SUOT}
-              alt=""
-              loading="lazy"
-              decoding="async"
-            />
-            <img
-              ref={spPhaiRef}
-              id="sp-phai"
-              src={daTaiAnhDuoi ? cauHinh.lopoe.anh_phai : ANH_TRONG_SUOT}
-              alt=""
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
-        </section>
+        {/* Khối 2: LOPOE Better Balance cuộn 3D (W055, chữ ở data/thu-nghiem/lopoe-3d.yaml) */}
+        <CuonLopoe3D cfg={lopoe3D} id="lopoe" veNut={veNut3D} />
 
         {/* Khối 3: Người Hàn chọn kỹ. [VIVE] mang về. + tường 16 logo */}
         <section className="o lon" id="chon-loc">
@@ -660,16 +464,15 @@ export function TrangChuClient({
           </div>
         </section>
 
-        {/* Khối 4: Lưới 2 cột (Personal color · Check-in · Combo PDRN Pink · Mặt nạ Uniura) */}
+        {/* Khối 4: Lưới 2 cột kiểu apple.com (Personal color · Check-in · combo LOPOE · PDRN Pink · Vampire Glow · Uniura) */}
         <div className="luoi">
           {cauHinh.luoi_doi.map((o) => {
             const dealCuaO = o.deal_id ? dealsMap.get(o.deal_id) : undefined;
-            const giaNgan = dealCuaO?.gia_combo
-              ? dinhDangNgan(dealCuaO.gia_combo)
-              : "";
+            const { gia: giaNgan, qua: dongQua } = giaVaQua(dealCuaO);
+            const lop = `o nen-${o.mau_nen}${o.mau_nen === "toi" ? " toi" : ""}`;
 
             return (
-              <section key={o.id} className="o" id={o.id}>
+              <section key={o.id} className={lop} id={o.id}>
                 <div className="hien">
                   <h2>{o.tieu_de}</h2>
                   {o.co_logo ? (
@@ -696,6 +499,7 @@ export function TrangChuClient({
                       {giaNgan ? ` · ${giaNgan}` : ""}
                     </p>
                   ) : null}
+                  {o.hien_qua && dongQua && <p className="dong-nho">{dongQua}</p>}
 
                   <div className="nut">
                     {o.nut.map((n) => (
@@ -708,7 +512,24 @@ export function TrangChuClient({
                   </div>
                 </div>
 
-                {o.so_lon ? (
+                {o.anh_bo ? (
+                  <div
+                    className={`hinh bo bo-${o.anh_bo.length}`}
+                    role="img"
+                    aria-label={o.mo_ta_anh || o.tieu_de}
+                  >
+                    {o.anh_bo.map((a, i) => (
+                      <img
+                        key={`${a}-${i}`}
+                        src={daTaiAnhDuoi ? a : ANH_TRONG_SUOT}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        className={a.includes("ampoule") ? "nho" : undefined}
+                      />
+                    ))}
+                  </div>
+                ) : o.so_lon ? (
                   <div className="so-lon hien" aria-hidden="true">
                     {o.so_lon}
                   </div>
@@ -752,6 +573,14 @@ export function TrangChuClient({
           </div>
         </section>
 
+        {/* Khối 5b: Hàng combo trượt ngang (W055) */}
+        <HangCombo
+          cauHinh={cauHinh.truot_combo}
+          dealsMap={dealsMap}
+          daTaiAnh={daTaiAnhDuoi}
+          banDoUrl={doanhNghiep.ban_do}
+        />
+
         {/* Khối 6: Ô tối "Ghé [logo]" */}
         <section className="o lon toi" id="ghe-vive">
           <div className="hien">
@@ -785,5 +614,106 @@ export function TrangChuClient({
         </section>
       </main>
     </div>
+  );
+}
+
+function HangCombo({
+  cauHinh,
+  dealsMap,
+  daTaiAnh,
+  banDoUrl,
+}: {
+  cauHinh: TrangChuConfig["truot_combo"];
+  dealsMap: Map<string, Deal>;
+  daTaiAnh: boolean;
+  banDoUrl?: string;
+}) {
+  const hangRef = useRef<HTMLDivElement>(null);
+  const [dau, setDau] = useState(true);
+  const [cuoi, setCuoi] = useState(false);
+
+  useEffect(() => {
+    const el = hangRef.current;
+    if (!el) return;
+    const capNhat = () => {
+      setDau(el.scrollLeft <= 4);
+      setCuoi(el.scrollLeft + el.clientWidth >= el.scrollWidth - 4);
+    };
+    capNhat();
+    el.addEventListener("scroll", capNhat, { passive: true });
+    window.addEventListener("resize", capNhat);
+    return () => {
+      el.removeEventListener("scroll", capNhat);
+      window.removeEventListener("resize", capNhat);
+    };
+  }, []);
+
+  const truot = (huong: 1 | -1) => {
+    const el = hangRef.current;
+    if (!el) return;
+    const the = el.querySelector<HTMLElement>(".the-combo");
+    const buoc = (the?.offsetWidth ?? 320) + 12;
+    el.scrollBy({ left: huong * buoc * 2, behavior: "smooth" });
+  };
+
+  const theHienThi = cauHinh.the.filter((t: TheCombo) => {
+    const d = dealsMap.get(t.deal_id);
+    return d && d.hien_thi && !d.may_rui;
+  });
+
+  return (
+    <section className="hang-combo" id="hang-combo" aria-label={cauHinh.tieu_de}>
+      <div className="dau-hang hien">
+        <div>
+          <h2>{cauHinh.tieu_de}</h2>
+          {cauHinh.phu_de && <p>{cauHinh.phu_de}</p>}
+        </div>
+        <div className="dieu-khien">
+          <NutTrangChu nut={cauHinh.nut} banDoUrl={banDoUrl} />
+          <button type="button" className="mui" aria-label="Combo trước" disabled={dau} onClick={() => truot(-1)}>
+            <span aria-hidden="true">‹</span>
+          </button>
+          <button type="button" className="mui" aria-label="Combo tiếp theo" disabled={cuoi} onClick={() => truot(1)}>
+            <span aria-hidden="true">›</span>
+          </button>
+        </div>
+      </div>
+      <div ref={hangRef} className="truot" tabIndex={0} aria-label="Danh sách combo, trượt ngang">
+        {theHienThi.map((t) => {
+          const d = dealsMap.get(t.deal_id)!;
+          const { gia, qua } = giaVaQua(d);
+          return (
+            <Link
+              key={t.deal_id}
+              href={`/deal?id=${encodeURIComponent(t.deal_id)}`}
+              prefetch={false}
+              className={`the-combo nen-${t.mau_nen}${t.mau_nen === "toi" ? " toi" : ""}`}
+            >
+              <span className="nhan">{t.nhan}</span>
+              <span className="ten">{t.ten}</span>
+              {gia && <span className="gia">{gia}</span>}
+              {qua && <span className="qua">{qua}</span>}
+              <span className="hinh-the" aria-hidden="true">
+                {t.anh_bo ? (
+                  t.anh_bo.map((a, i) => (
+                    <img
+                      key={`${a}-${i}`}
+                      src={daTaiAnh ? a : ANH_TRONG_SUOT}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                      className={a.includes("ampoule") ? "nho" : a.includes("medicube") ? "rong" : undefined}
+                    />
+                  ))
+                ) : t.so_lon ? (
+                  <span className="so-the">{t.so_lon}</span>
+                ) : null}
+              </span>
+              <span className="xem">Xem deal ›</span>
+            </Link>
+          );
+        })}
+      </div>
+    </section>
   );
 }

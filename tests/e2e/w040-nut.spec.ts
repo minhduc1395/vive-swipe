@@ -12,7 +12,8 @@ for (const duongDan of TRANG) {
       const DEN = "rgb(43, 43, 42)";
       const nut = [...document.querySelectorAll<HTMLElement>("button, a[href], [role=button]")].filter((el) => {
         const r = el.getBoundingClientRect();
-        return r.width > 0 && r.height > 0 && getComputedStyle(el).visibility !== "hidden";
+        // Thẻ/ô cả khối (vd thẻ combo nền tối, cao > 100px) không phải nút
+        return r.width > 0 && r.height > 0 && r.height <= 100 && getComputedStyle(el).visibility !== "hidden";
       });
       const nenDen = nut.filter((el) => getComputedStyle(el).backgroundColor === DEN).map((el) => el.textContent?.trim() ?? "");
       const vienDen = nut.filter((el) => {

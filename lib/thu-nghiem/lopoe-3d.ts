@@ -3,12 +3,12 @@ import path from "node:path";
 import yaml from "js-yaml";
 import { z } from "zod";
 
-const NutSchema = z.object({ chu: z.string().min(1), den: z.string().min(1) });
+const NutSchema = z.object({ chu: z.string().min(1), den: z.string().min(1).nullable() });
 export const KhoiChu3DSchema = z.object({
   id: z.string().min(1),
   a: z.number().min(0).max(1),
   b: z.number().min(0).max(1),
-  vi_tri: z.enum(["phai", "trai", "tren-trai", "cot", "duoi-giua", "trai-duoi"]),
+  vi_tri: z.enum(["phai", "trai", "tren-trai", "cot", "duoi-giua", "trai-duoi", "tren-giua"]),
   tu: z.enum(["phai", "trai", "tren", "duoi"]),
   ten_nho: z.string().optional(),
   tu_khoa: z.string().optional(),
@@ -19,6 +19,9 @@ export const KhoiChu3DSchema = z.object({
   cau: z.string().optional(),
   cau_lon: z.boolean().optional(),
   chips: z.array(z.string()).default([]),
+  /** Huy hiệu gốc của nhãn (bằng chứng cho câu cho_duyet). Chỉ gắn vào đúng sản phẩm được trao. */
+  huy_hieu: z.object({ anh: z.string().min(1), mo_ta: z.string().min(1) }).optional(),
+  nut: z.array(NutSchema).default([]),
   cho_duyet: z.boolean().default(false),
 });
 const ThanhPhanSchema = z.object({
@@ -41,8 +44,14 @@ export function parseCauHinhLopoe3D(text: string): CauHinhLopoe3D {
   return CauHinhLopoe3DSchema.parse(yaml.load(text));
 }
 
-/** Đọc data/thu-nghiem/lopoe-3d.yaml (chạy lúc build, trang tĩnh). Ẩn khối cho_duyet khi hien_cho_duyet = false. */
-export function docCauHinhLopoe3D(): CauHinhLopoe3D {
+/** Khối được hiện: câu cần bằng chứng chỉ hiện khi có huy hiệu (bằng chứng) hoặc đang ở chế độ duyệt. */
+export function locKhoiDuocHien(cfg: CauHinhLopoe3D, cheDoDuyet = false): CauHinhLopoe3D {
+  const hien = cheDoDuyet || cfg.hien_cho_duyet;
+  return { ...cfg, khoi: cfg.khoi.filter((k) => !k.cho_duyet || hien || Boolean(k.huy_hieu)) };
+}
+
+/** Đọc data/thu-nghiem/lopoe-3d.yaml (để ngoài data/chien-dich cho bộ đọc chiến dịch không đọc nhầm) (chạy lúc build, trang tĩnh). */
+export function docCauHinhLopoe3D(cheDoDuyet = false): CauHinhLopoe3D {
   const cfg = parseCauHinhLopoe3D(fs.readFileSync(path.join(process.cwd(), "data", "thu-nghiem", "lopoe-3d.yaml"), "utf8"));
-  return cfg.hien_cho_duyet ? cfg : { ...cfg, khoi: cfg.khoi.filter((k) => !k.cho_duyet) };
+  return locKhoiDuocHien(cfg, cheDoDuyet);
 }

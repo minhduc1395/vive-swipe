@@ -34,26 +34,6 @@
       }
     ]
   },
-  "lopoe": {
-    "tieu_de": "LOPOE Better Balance",
-    "phu_de": "Bọt dày. Cấp ẩm. Làm dịu.",
-    "mo_ta_bo": "Bộ ba LOPOE Better Balance",
-    "anh_trai": "/trang-chu/srm.webp",
-    "anh_giua": "/trang-chu/ampoule.webp",
-    "anh_phai": "/trang-chu/kem.webp",
-    "nut": [
-      {
-        "chu": "Mua",
-        "den": "/danh-muc?thuong-hieu=LOPOE",
-        "kieu": "chinh"
-      },
-      {
-        "chu": "Tìm hiểu thêm",
-        "den": "/new-arrival",
-        "kieu": "phu"
-      }
-    ]
-  },
   "thuong_hieu": {
     "tieu_de": "Người Hàn chọn kỹ.",
     "dong_logo_hau": "mang về.",
@@ -171,6 +151,57 @@
       ]
     },
     {
+      "id": "combo-lopoe-bo3",
+      "mau_nen": "toi",
+      "tieu_de": "Bộ 3 LOPOE",
+      "deal_id": "LOPOE-COMBO-BO3",
+      "nhan_thuong_hieu": "Better Balance",
+      "anh_bo": [
+        "/trang-chu/srm.webp",
+        "/trang-chu/ampoule.webp",
+        "/trang-chu/kem.webp"
+      ],
+      "mo_ta_anh": "Sữa rửa mặt, ampoule và kem dưỡng LOPOE Better Balance",
+      "hien_qua": true,
+      "nut": [
+        {
+          "chu": "Xem deal",
+          "den": "/deal?id=LOPOE-COMBO-BO3",
+          "kieu": "chinh"
+        },
+        {
+          "chu": "Mua",
+          "den": "/danh-muc?thuong-hieu=LOPOE",
+          "kieu": "phu"
+        }
+      ]
+    },
+    {
+      "id": "combo-lopoe-kem-amp",
+      "mau_nen": "xanh-nhat",
+      "tieu_de": "Kem + Ampoule",
+      "deal_id": "LOPOE-COMBO-KEM-AMP",
+      "nhan_thuong_hieu": "LOPOE",
+      "anh_bo": [
+        "/trang-chu/kem.webp",
+        "/trang-chu/ampoule.webp"
+      ],
+      "mo_ta_anh": "Kem dưỡng và ampoule LOPOE Better Balance",
+      "hien_qua": true,
+      "nut": [
+        {
+          "chu": "Xem deal",
+          "den": "/deal?id=LOPOE-COMBO-KEM-AMP",
+          "kieu": "chinh"
+        },
+        {
+          "chu": "Mua",
+          "den": "/danh-muc?thuong-hieu=LOPOE",
+          "kieu": "phu"
+        }
+      ]
+    },
+    {
       "id": "deal-pdrn",
       "mau_nen": "hong",
       "tieu_de": "Combo PDRN Pink",
@@ -184,6 +215,51 @@
           "chu": "Xem deal",
           "den": "/deal?id=COMBO-PINK",
           "kieu": "chinh"
+        }
+      ]
+    },
+    {
+      "id": "combo-vampire-glow",
+      "mau_nen": "toi",
+      "tieu_de": "Vampire Glow",
+      "deal_id": "COMBO-VAMPIRE-GLOW",
+      "nhan_thuong_hieu": "Medicube",
+      "so_lon": "Glow",
+      "nut": [
+        {
+          "chu": "Xem deal",
+          "den": "/deal?id=COMBO-VAMPIRE-GLOW",
+          "kieu": "chinh"
+        },
+        {
+          "chu": "Mua",
+          "den": "/danh-muc?thuong-hieu=Medicube",
+          "kieu": "phu"
+        }
+      ]
+    },
+    {
+      "id": "combo-lopoe-2srm",
+      "mau_nen": "hong-nhat",
+      "tieu_de": "2 sữa rửa mặt",
+      "deal_id": "LOPOE-COMBO-2SRM",
+      "nhan_thuong_hieu": "LOPOE",
+      "anh_bo": [
+        "/trang-chu/srm.webp",
+        "/trang-chu/srm.webp"
+      ],
+      "mo_ta_anh": "Hai sữa rửa mặt LOPOE Better Balance",
+      "hien_qua": true,
+      "nut": [
+        {
+          "chu": "Xem deal",
+          "den": "/deal?id=LOPOE-COMBO-2SRM",
+          "kieu": "chinh"
+        },
+        {
+          "chu": "Mua",
+          "den": "/danh-muc?thuong-hieu=LOPOE",
+          "kieu": "phu"
         }
       ]
     },
@@ -214,6 +290,78 @@
         "chu": "Xem deal",
         "den": "/deal?id=KM-08",
         "kieu": "chinh"
+      }
+    ]
+  },
+  "truot_combo": {
+    "tieu_de": "Thêm combo.",
+    "phu_de": "Giá combo tại VIVE. Quà số lượng có hạn.",
+    "nut": {
+      "chu": "Xem tất cả deal",
+      "den": "/deal",
+      "kieu": "phu"
+    },
+    "the": [
+      {
+        "deal_id": "LOPOE-COMBO-BO3",
+        "mau_nen": "toi",
+        "nhan": "LOPOE",
+        "ten": "Bộ 3 Better Balance",
+        "anh_bo": [
+          "/trang-chu/srm.webp",
+          "/trang-chu/ampoule.webp",
+          "/trang-chu/kem.webp"
+        ]
+      },
+      {
+        "deal_id": "LOPOE-COMBO-KEM-AMP",
+        "mau_nen": "xanh-nhat",
+        "nhan": "LOPOE",
+        "ten": "Kem dưỡng + Ampoule",
+        "anh_bo": [
+          "/trang-chu/kem.webp",
+          "/trang-chu/ampoule.webp"
+        ]
+      },
+      {
+        "deal_id": "LOPOE-COMBO-2SRM",
+        "mau_nen": "hong-nhat",
+        "nhan": "LOPOE",
+        "ten": "2 sữa rửa mặt",
+        "anh_bo": [
+          "/trang-chu/srm.webp",
+          "/trang-chu/srm.webp"
+        ]
+      },
+      {
+        "deal_id": "COMBO-PINK",
+        "mau_nen": "hong",
+        "nhan": "Medicube",
+        "ten": "PDRN Pink",
+        "anh_bo": [
+          "/trang-chu/medicube-pdrn.webp"
+        ]
+      },
+      {
+        "deal_id": "COMBO-VAMPIRE-GLOW",
+        "mau_nen": "toi",
+        "nhan": "Medicube",
+        "ten": "Vampire Glow",
+        "so_lon": "Glow"
+      },
+      {
+        "deal_id": "COMBO-ZOMBIE",
+        "mau_nen": "bac-ha",
+        "nhan": "SKINFOOD",
+        "ten": "Zombie hồi sinh",
+        "so_lon": "Honey"
+      },
+      {
+        "deal_id": "DC-05",
+        "mau_nen": "hong-nhat",
+        "nhan": "Uniura",
+        "ten": "Mặt nạ mua 4 tặng 1",
+        "so_lon": "4+1"
       }
     ]
   },

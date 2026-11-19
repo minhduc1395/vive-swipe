@@ -10,7 +10,12 @@ import {
   timSanPhamTheoId,
 } from "@/lib/data";
 import { docDanhSachChienDichTuDisk } from "@/lib/chien-dich";
-import { parseTrangChuYaml, TRANG_CHU_CONFIG } from "@/lib/trang-chu";
+import { parseTrangChuYaml, TRANG_CHU_CONFIG, type NutTrangChu } from "@/lib/trang-chu";
+import { docCauHinhLopoe3D } from "@/lib/thu-nghiem/lopoe-3d";
+
+const LOPOE_3D = docCauHinhLopoe3D();
+/** Neo cùng trang hợp lệ: id khối có thật trên trang chủ */
+const NEO_HOP_LE = new Set(["#ghe-vive", ...TRANG_CHU_CONFIG.luoi_doi.map((o) => `#${o.id}`)]);
 
 const ROOT = process.cwd();
 
@@ -46,7 +51,7 @@ const THUONG_HIEU_HIEN_THI = new Set(
 
 function kiemTraDichHopLe(den: string, nhanNguCanh: string) {
   if (den.startsWith("#")) {
-    expect(den, `${nhanNguCanh}: neo cùng trang phải khác rỗng`).toBe("#ghe-vive");
+    expect(NEO_HOP_LE.has(den), `${nhanNguCanh}: neo "${den}" không có khối tương ứng trên trang chủ`).toBe(true);
     return;
   }
 
@@ -115,7 +120,8 @@ describe("W050 + W041 · Cấu hình trang chủ YAML & kiểm đích", () => {
     expect(parsed.cua_hang.cot).toBe(6);
     expect(parsed.cua_hang.hang).toBe(4);
     expect(parsed.cua_hang.anh_mat_tien).toHaveLength(6);
-    expect(parsed.luoi_doi).toHaveLength(4);
+    expect(parsed.luoi_doi.length).toBeGreaterThanOrEqual(8);
+    expect(parsed.truot_combo.the.length).toBeGreaterThanOrEqual(5);
   });
 
   it("mọi nút trong trang-chu.yaml đều có chữ và đích hợp lệ (bỏ qua sap_co)", () => {
@@ -125,10 +131,12 @@ describe("W050 + W041 · Cấu hình trang chủ YAML & kiểm đích", () => {
     );
     const cfg = parseTrangChuYaml(yamlText);
 
-    const cacNut = [
+    const cacNut: { nhom: string; nut: NutTrangChu }[] = [
       { nhom: "dai_thong_bao", nut: cfg.dai_thong_bao.nut },
       ...cfg.cua_hang.nut.map((n) => ({ nhom: "cua_hang", nut: n })),
-      ...cfg.lopoe.nut.map((n) => ({ nhom: "lopoe", nut: n })),
+      ...LOPOE_3D.mo_dau.nut.map((n) => ({ nhom: "lopoe_3d.mo_dau", nut: { ...n, kieu: "chinh" as const } })),
+      ...LOPOE_3D.khoi.flatMap((k) => k.nut.map((n) => ({ nhom: `lopoe_3d.${k.id}`, nut: { ...n, kieu: "chinh" as const } }))),
+      { nhom: "truot_combo", nut: cfg.truot_combo.nut },
       ...cfg.luoi_doi.flatMap((o) =>
         o.nut.map((n) => ({ nhom: `luoi_doi.${o.id}`, nut: n }))
       ),
@@ -205,13 +213,27 @@ describe("W050 + W041 · Cấu hình trang chủ YAML & kiểm đích", () => {
     }
   });
 
+  it("W055 · ô combo và thẻ trượt trỏ deal có thật, đang hiện, không may rủi, có giá", () => {
+    const ids = [
+      ...TRANG_CHU_CONFIG.luoi_doi.flatMap((o) => (o.deal_id ? [o.deal_id] : [])),
+      ...TRANG_CHU_CONFIG.truot_combo.the.map((t) => t.deal_id),
+    ];
+    for (const id of ids) {
+      const d = timDealTheoId(id);
+      expect(d, `deal ${id}`).toBeDefined();
+      expect(d?.hien_thi, `deal ${id} đang ẩn`).toBe(true);
+      expect(d?.may_rui, `deal ${id} may rủi`).toBe(false);
+      expect(d?.gia_combo, `deal ${id} thiếu gia_combo`).toBeGreaterThan(0);
+    }
+  });
+
   it("ảnh trang chủ và mặt tiền đều tồn tại trong public/", () => {
     const danhSachAnh = [
       ...TRANG_CHU_CONFIG.cua_hang.anh_mat_tien,
-      TRANG_CHU_CONFIG.lopoe.anh_trai,
-      TRANG_CHU_CONFIG.lopoe.anh_giua,
-      TRANG_CHU_CONFIG.lopoe.anh_phai,
-      ...TRANG_CHU_CONFIG.luoi_doi.flatMap((o) => (o.anh ? [o.anh] : [])),
+      ...Object.values(LOPOE_3D.tai_san),
+      ...LOPOE_3D.khoi.flatMap((k) => (k.huy_hieu ? [k.huy_hieu.anh] : [])),
+      ...TRANG_CHU_CONFIG.luoi_doi.flatMap((o) => [...(o.anh ? [o.anh] : []), ...(o.anh_bo ?? [])]),
+      ...TRANG_CHU_CONFIG.truot_combo.the.flatMap((t) => t.anh_bo ?? []),
       TRANG_CHU_CONFIG.qua_lopoe.anh,
     ];
 
