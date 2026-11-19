@@ -2,6 +2,7 @@ import { lopNut } from "@/components/ui/Nut";
 import Link from "next/link";
 import type { KhoiBooth } from "@/lib/chien-dich/types";
 import { CAU_HINH_BOOTH } from "@/lib/cau-hinh";
+import { DOANH_NGHIEP } from "@/lib/data";
 
 interface KhoiBoothProps {
   khoi: KhoiBooth;
@@ -83,7 +84,7 @@ export function KhoiBooth({ khoi }: KhoiBoothProps) {
 
         <div className="flex flex-wrap gap-3 pb-2">
           <a
-            href="https://maps.google.com/?q=Union+Square+171+Dong+Khoi+Ben+Nghe+Quan+1+Ho+Chi+Minh"
+            href={DOANH_NGHIEP.ban_do ?? "https://maps.google.com/?q=Union+Square+Ho+Chi+Minh"}
             target="_blank"
             rel="noopener noreferrer"
             className={lopNut("chinh","lon")}
@@ -106,7 +107,7 @@ export function KhoiBooth({ khoi }: KhoiBoothProps) {
             </svg>
           </a>
           <Link
-            href="/danh-muc"
+            href="/gio"
             className={lopNut("phu","lon")}
           >
             Giữ hàng trước khi đến

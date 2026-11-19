@@ -111,7 +111,7 @@ export function LandingClient({
         {otherBlocks.map((khoi, index) => {
           switch (khoi.loai) {
             case "chuong-trinh":
-              return <KhoiChuongTrinh key={index} khoi={khoi} />;
+              return <KhoiChuongTrinh key={index} khoi={khoi} anhRieng={raMatBlock?.loai === "ra-mat" ? raMatBlock.anh_san_pham : undefined} />;
             case "dem-nguoc":
               return <KhoiDemNguoc key={index} khoi={khoi} />;
             case "doi-tac":

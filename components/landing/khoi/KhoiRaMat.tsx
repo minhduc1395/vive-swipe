@@ -2,6 +2,7 @@
 import { lopNut } from "@/components/ui/Nut";
 
 import Link from "next/link";
+import { dichDeal } from "@/lib/chien-dich/dich-den";
 import type { KhoiRaMat as KhoiRaMatType } from "@/lib/chien-dich/types";
 import { timDealTheoId, timSanPhamTheoId } from "@/lib/data";
 import { dinhDangTienGio } from "@/lib/dinh-dang";
@@ -51,9 +52,9 @@ export function KhoiRaMat({ khoi }: KhoiRaMatProps) {
                 className="rounded-[20px] lg:rounded-[24px] bg-white px-4 py-3.5 lg:px-5 lg:py-4 shadow-[0_10px_24px_rgba(43,43,42,0.06)] flex items-center justify-between gap-3"
               >
                 <div className="min-w-0 flex flex-col gap-0.5">
-                  <span className="text-[15px] lg:text-[16px] font-semibold text-den leading-snug">
+                  <Link href={dichDeal(d.id)} className="text-[15px] lg:text-[16px] font-semibold text-den leading-snug no-underline hover:underline underline-offset-4">
                     {d.ten}
-                  </span>
+                  </Link>
                   {d.qua && (
                     <span className="text-[12px] text-xam leading-snug">
                       {d.qua} (khi còn quà)

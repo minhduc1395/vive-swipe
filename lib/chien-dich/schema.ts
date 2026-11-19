@@ -84,6 +84,9 @@ export const KhoiRaMatSchema = z.object({
 export const KhoiChuongTrinhSchema = z.object({
   loai: z.literal("chuong-trinh"),
   tieu_de: z.string().min(1),
+  tieu_de_en: z.string().optional(),
+  /** W048: logo VIVE đứng sau tiêu đề ("Đang có tại [logo]") */
+  logo_sau_tieu_de: z.boolean().optional(),
   deal: z.array(z.string()),
   o_to: z.string().optional(),
 });
