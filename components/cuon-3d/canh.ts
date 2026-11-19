@@ -93,7 +93,7 @@ export interface Canh {
 
 export function taoCanh(
   canvas: HTMLCanvasElement,
-  opts: { taiSan: TaiSan; hatSrm: LoaiHat[]; hatAmp: LoaiHat[]; so1: string; giamChuyenDong: boolean; onSanSang?: () => void },
+  opts: { taiSan: TaiSan; hatSrm: LoaiHat[]; hatAmp: LoaiHat[]; so1: string; hienSo1?: boolean; giamChuyenDong: boolean; onSanSang?: () => void },
 ): Canh {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   const dt0 = window.innerWidth < 768;
@@ -281,7 +281,7 @@ export function taoCanh(
         }
       });
     }
-    g.add(new THREE.Mesh(new THREE.SphereGeometry(0.34, 32, 24), new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.05, clearcoat: 1, envMapIntensity: 2, iridescence: 0.8, transparent: true, opacity: 0.2, depthWrite: false })));
+    g.add(new THREE.Mesh(new THREE.SphereGeometry(0.34, 32, 24), new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.05, clearcoat: 1, envMapIntensity: 2, iridescence: 0.8, transparent: true, opacity: 0.14, depthWrite: false })));
     g.userData.ben = ben;
     g.visible = false;
     scene.add(g);
@@ -303,25 +303,6 @@ export function taoCanh(
   bot.visible = false;
   scene.add(bot);
   const botDL = [...Array(NB)].map(() => ({ a: Math.random() * Math.PI * 2, r: 1.0 + Math.random() * 1.2, z: (Math.random() - 0.5) * 1.8, s: 0.04 + Math.pow(Math.random(), 2.2) * 0.2, d: Math.random(), w: Math.random() * 6 }));
-
-  // Vòng nguyệt quế
-  const vongLa = new THREE.Group();
-  vongLa.visible = false;
-  scene.add(vongLa);
-  const LA: { l: THREE.Mesh; j: number; s: THREE.Vector3 }[] = [];
-  const vang = new THREE.MeshStandardMaterial({ color: 0xcbb08e, metalness: 0.5, roughness: 0.32, transparent: true });
-  for (const ben of [-1, 1])
-    for (let j = 0; j < 11; j++) {
-      const a = -Math.PI / 2 + ben * (0.32 + j * 0.22);
-      const l = new THREE.Mesh(new THREE.SphereGeometry(1, 16, 12), vang);
-      l.position.set(Math.cos(a) * 1.6, Math.sin(a) * 1.6, 0);
-      l.rotation.z = a + (ben > 0 ? 0.5 : -0.5) + Math.PI / 2;
-      l.scale.setScalar(1e-4);
-      vongLa.add(l);
-      LA.push({ l, j, s: new THREE.Vector3(0.07, 0.2, 0.04) });
-    }
-  const vanh = new THREE.Mesh(new THREE.TorusGeometry(1.85, 0.01, 8, 160), vang);
-  vongLa.add(vanh);
 
   // "No.1" lớn sau ampoule (hook chính phần giải thưởng)
   const so1 = new THREE.Mesh(new THREE.PlaneGeometry(8, 4), new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false, opacity: 0 }));
@@ -443,22 +424,11 @@ export function taoCanh(
       const goc = ((p - 0.185) / 0.085) * Math.PI * 1.1 + (i * Math.PI) / 2 + 0.4;
       const r = (dienThoai ? 1.05 : 1.95) * (0.3 + 0.7 * eQ) * (1 + raQ * 0.6);
       g.position.set(srm.position.x + Math.cos(goc) * r, srm.position.y + Math.sin(goc) * (dienThoai ? 0.55 : 0.75) - 0.05, Math.sin(goc) * 1.4);
-      g.scale.setScalar((dienThoai ? 0.62 : 0.92) * (0.4 + 0.6 * eQ));
+      g.scale.setScalar((dienThoai ? 0.72 : 1.08) * (0.4 + 0.6 * eQ));
       g.userData.ben.rotation.y = time * 0.0006 + i;
       g.updateMatrixWorld();
       return chieu(g, op * (g.position.z > -0.5 ? 1 : 0.25));
     });
-
-    // 3) Vòng nguyệt quế
-    const eV = seg(p, 0.295, 0.33), raV = seg(p, 0.365, 0.395);
-    vongLa.visible = eV > 0 && raV < 1;
-    if (vongLa.visible) {
-      vongLa.position.set(srm.position.x, srm.position.y + 0.05, -0.8);
-      vongLa.scale.setScalar((dienThoai ? 0.62 : 1) * (1 + raV * 0.4));
-      for (const { l, j, s } of LA) l.scale.copy(s).multiplyScalar(Math.max(seg(p, 0.298 + j * 0.0028, 0.315 + j * 0.0028) * (1 - raV), 1e-4));
-      vanh.scale.setScalar(Math.max(eV * (1 - raV), 1e-4));
-      vang.opacity = 1 - raV;
-    }
 
     // 4) Nắp nhỏ giọt
     if (NAP.nhom && NAP.giot && NAP.gon) {
@@ -490,21 +460,21 @@ export function taoCanh(
       tu.y += 0.2 - i * 0.15;
       const den = dienThoai ? v2.set(0.45 * nuaW, nuaH * (0.66 - i * 0.2), 0) : v2.set(-0.02 * nuaW, nuaH * (0.06 - i * 0.22), 0);
       g.position.copy(tu).lerp(den, e);
-      g.scale.setScalar((dienThoai ? 0.5 : 0.62) * (0.3 + 0.7 * e));
+      g.scale.setScalar((dienThoai ? 0.58 : 0.74) * (0.3 + 0.7 * e));
       g.userData.ben.rotation.y = time * 0.0007 + i * 1.3;
       g.updateMatrixWorld();
       const a = line.geometry.attributes.position as THREE.BufferAttribute;
       a.setXYZ(0, amp.position.x + 0.45, amp.position.y + 0.25 - i * 0.12, 0);
       a.setXYZ(1, g.position.x - 0.22 * e, g.position.y, 0);
       a.needsUpdate = true;
-      (line.material as THREE.LineBasicMaterial).opacity = 0.22 * e;
+      (line.material as THREE.LineBasicMaterial).opacity = 0.32 * e;
       return chieu(g, dienThoai ? 0 : e);
     });
 
     // 6) No.1 + vòng giọt
     const eN = seg(p, 0.645, 0.675) * (1 - seg(p, 0.712, 0.74));
     (so1.material as THREE.MeshBasicMaterial).opacity = eN;
-    so1.visible = eN > 0.01;
+    so1.visible = opts.hienSo1 !== false && eN > 0.01;
     so1.position.set(amp.position.x, amp.position.y + (dienThoai ? 0.35 : 0.75), -2.6);
     so1.scale.setScalar((dienThoai ? 0.5 : 1.15) * (0.7 + 0.3 * eN));
     GIOT.forEach((m, i) => {
@@ -525,7 +495,7 @@ export function taoCanh(
     }
 
     // màu nền theo chương
-    const mau = p < 0.37 ? ["#F7EEEB", "#F3DED8"] : p < 0.72 ? ["#F4F7FB", "#D8E7F6"] : p < 0.87 ? ["#FBF7F3", "#EAF3ED"] : ["#F7EEEB", "#EAF3ED"];
+    const mau = p < 0.37 ? ["#F7EEEB", "#F3DED8"] : p < 0.72 ? ["#F4F7FB", "#D8E7F6"] : p < 0.87 ? ["#FBF7F3", "#EAF3ED"] : p < 0.95 ? ["#F7EEEB", "#EAF3ED"] : ["#FFFFFF", "#F4F1EE"];
     nenMat.uniforms.uA.value.lerp(mauNen.a.set(mau[0]), 0.06);
     nenMat.uniforms.uB.value.lerp(mauNen.b.set(mau[1]), 0.06);
 

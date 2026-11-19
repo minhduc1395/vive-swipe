@@ -4,6 +4,18 @@ import Link from "next/link";
 import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
 import type { CauHinhLopoe3D, KhoiChu3D } from "@/lib/thu-nghiem/lopoe-3d";
 import { lopNut } from "@/components/ui/Nut";
+import { hienToast } from "@/components/ui/Toast";
+
+type Nut3D = { chu: string; den: string | null };
+/** Cách vẽ nút: trang chủ truyền NutTrangChu để giữ đúng kiểu nút landing; mặc định dùng nút chung (W040). */
+export type VeNut3D = (n: Nut3D, thuTu: number) => ReactNode;
+
+const veNutMacDinh: VeNut3D = (n, i) =>
+  n.den ? (
+    <Link key={n.chu} href={n.den} prefetch={false} className={i === 0 ? lopNut("chinh", "vua") : lopNut("chu", "vua")}>{n.chu}</Link>
+  ) : (
+    <button key={n.chu} type="button" data-sap-co="true" onClick={() => hienToast("Tính năng sắp ra mắt")} className={i === 0 ? lopNut("chinh", "vua") : lopNut("chu", "vua")}>{n.chu}</button>
+  );
 import type { Canh, LoaiHat } from "./canh";
 
 const kep = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
@@ -48,21 +60,32 @@ const VI_TRI: Record<KhoiChu3D["vi_tri"], string> = {
   cot: "md:left-[46vw] md:top-[8vh] md:w-[min(40vw,520px)]",
   "duoi-giua": "md:left-1/2 md:bottom-[6vh] md:w-[min(84vw,980px)] md:-translate-x-1/2 md:text-center",
   "trai-duoi": "md:left-[max(7vw,32px)] md:bottom-[12vh] md:w-[min(34vw,460px)]",
+  "tren-giua": "max-md:!top-[8vh] max-md:!bottom-auto max-md:text-center md:left-1/2 md:top-[8vh] md:w-[min(84vw,980px)] md:-translate-x-1/2 md:text-center",
 };
 
-function KhoiChu({ k }: { k: KhoiChu3D }) {
+function KhoiChu({ k, veNut }: { k: KhoiChu3D; veNut: VeNut3D }) {
+  const giua = k.vi_tri === "duoi-giua" || k.vi_tri === "tren-giua";
   return (
     <div data-khoi={k.id} className={`absolute opacity-0 invisible max-md:left-5 max-md:right-5 max-md:bottom-[calc(4vh+72px)] ${VI_TRI[k.vi_tri]}`}>
+      {k.huy_hieu && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img data-con src={k.huy_hieu.anh} alt={k.huy_hieu.mo_ta} width={211} height={212} loading="lazy" decoding="async" className={`block w-[88px] h-auto mb-3 drop-shadow-[0_10px_24px_rgba(60,90,130,0.22)] ${giua ? "md:mx-auto" : ""} ${k.vi_tri === "duoi-giua" ? "md:absolute md:mb-0 md:w-[150px] md:left-[calc(min(42vw,490px)-45vw)] md:bottom-[calc(100%+14vh)]" : "md:w-[124px]"}`} />
+      )}
       {k.ten_nho && <p data-con className="m-0 text-[12px] font-semibold tracking-[0.1em] uppercase text-xam">{k.ten_nho}</p>}
       {k.lon_nghieng && <p data-con className="m-0 mt-2.5 font-serif italic font-medium text-[56px] md:text-[clamp(64px,8vw,120px)] leading-[0.95] tracking-[-0.02em]">{k.lon_nghieng}</p>}
       <TuKhoa k={k} />
       {k.cau && <p data-con className={`m-0 font-medium tracking-[-0.01em] leading-[1.25] ${k.cau_lon ? "text-[24px] md:text-[clamp(28px,3vw,44px)]" : "text-[18px] md:text-[clamp(20px,2vw,28px)]"}`}>{chuNghieng(k.cau)}</p>}
       {k.chips.length > 0 && (
-        <p className={`m-0 mt-4 md:mt-5 flex flex-wrap gap-2 ${k.vi_tri === "duoi-giua" ? "md:justify-center" : ""}`}>
+        <p className={`m-0 mt-4 md:mt-5 flex flex-wrap gap-2 ${giua ? "justify-center" : ""}`}>
           {k.chips.map((c) => (
             <span data-con key={c} className="text-[13px] font-medium px-3.5 py-1.5 rounded-full bg-trang/60 backdrop-blur-md shadow-[inset_0_0_0_1px_rgba(43,43,42,0.08)]">{c}</span>
           ))}
         </p>
+      )}
+      {k.nut.length > 0 && (
+        <div data-con className={`mt-5 flex flex-wrap items-center gap-3.5 pointer-events-auto ${giua ? "justify-center" : ""}`}>
+          {k.nut.map((n, i) => veNut(n, i))}
+        </div>
       )}
     </div>
   );
@@ -70,18 +93,18 @@ function KhoiChu({ k }: { k: KhoiChu3D }) {
 
 function NhanThanhPhan({ ten, loi, giua }: { ten: string; loi: string; giua: boolean }) {
   return (
-    <div data-nhan className={`absolute left-0 top-0 opacity-0 whitespace-nowrap will-change-transform ${giua ? "text-center" : ""}`}>
-      <b className="block text-[12px] md:text-[15px] font-semibold">{ten}</b>
-      <span className="hidden md:block text-[13px] text-xam mt-0.5">{loi}</span>
+    <div data-nhan className={`absolute left-0 top-0 opacity-0 whitespace-nowrap will-change-transform rounded-2xl bg-trang/75 backdrop-blur-md shadow-[0_6px_20px_rgba(43,43,42,0.08)] px-3 py-1.5 md:px-4 md:py-2.5 ${giua ? "text-center" : ""}`}>
+      <b className="block text-[14px] md:text-[20px] font-bold tracking-[-0.01em] leading-tight text-den">{ten}</b>
+      <span className="hidden md:block text-[15px] font-medium text-den/75 mt-0.5">{loi}</span>
     </div>
   );
 }
 
 /** Bản dự phòng: không có WebGL hoặc người dùng giảm chuyển động → ảnh tĩnh + chữ, không dính đoạn dài. */
-function BanTinh({ cfg }: { cfg: CauHinhLopoe3D }) {
+function BanTinh({ cfg, id }: { cfg: CauHinhLopoe3D; id?: string }) {
   const anh: Record<string, string> = { srm: cfg.tai_san.sua_rua_mat, amp: "/chien-dich/lopoe-better-balance/ampoule-than.webp", kem: cfg.tai_san.kem_duong };
   return (
-    <section aria-label="LOPOE Better Balance" className="bg-hong-nhat px-5 md:px-16 py-16 flex flex-col gap-16">
+    <section id={id} aria-label="LOPOE Better Balance" className="bg-hong-nhat px-5 md:px-16 py-16 flex flex-col gap-16">
       {cfg.khoi.map((k) => {
         const sp = k.id.startsWith("srm") ? "srm" : k.id.startsWith("amp") ? "amp" : "kem";
         return (
@@ -89,6 +112,10 @@ function BanTinh({ cfg }: { cfg: CauHinhLopoe3D }) {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={anh[sp]} alt="" className="h-[220px] w-auto object-contain mx-auto" />
             <div>
+              {k.huy_hieu && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={k.huy_hieu.anh} alt={k.huy_hieu.mo_ta} width={211} height={212} loading="lazy" className="block w-[96px] h-auto mb-3" />
+              )}
               {k.ten_nho && <p className="m-0 text-[12px] font-semibold tracking-[0.1em] uppercase text-xam">{k.ten_nho}</p>}
               {k.lon_nghieng && <p className="m-0 font-serif italic text-[56px] leading-none">{k.lon_nghieng}</p>}
               {k.tu_khoa && <h3 className="m-0 mt-2 text-[40px] font-bold tracking-[-0.03em] leading-none">{k.tu_khoa.replace("|", " ")}</h3>}
@@ -102,7 +129,7 @@ function BanTinh({ cfg }: { cfg: CauHinhLopoe3D }) {
   );
 }
 
-export function CuonLopoe3D({ cfg }: { cfg: CauHinhLopoe3D }) {
+export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLopoe3D; id?: string; veNut?: VeNut3D }) {
   const doan = useRef<HTMLElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const lop = useRef<HTMLDivElement>(null);
@@ -120,7 +147,7 @@ export function CuonLopoe3D({ cfg }: { cfg: CauHinhLopoe3D }) {
   useEffect(() => {
     if (cheDo !== "3d" || !canvas.current || !doan.current || !lop.current) return;
     let canh: Canh | null = null;
-    let raf = 0, hien = false, huy = false, p = 0, truoc = performance.now();
+    let raf = 0, hien = false, huy = false, p = 0, truoc = performance.now(), dangTai = false;
     const elDoan = doan.current, elLop = lop.current, elCanvas = canvas.current;
 
     const moDau = elLop.querySelector<HTMLElement>("[data-mo-dau]");
@@ -142,7 +169,8 @@ export function CuonLopoe3D({ cfg }: { cfg: CauHinhLopoe3D }) {
         moDau.style.visibility = o < 0.01 ? "hidden" : "visible";
       }
       for (const { k, el, tus, con } of khoi) {
-        const vao = seg(p, k.a - 0.012, k.a + 0.012), ra = 1 - seg(p, k.b - 0.014, k.b + 0.006), op = Math.min(vao, ra);
+        // khối cuối (b = 1) giữ nguyên tới khi nhả khung dính
+        const vao = seg(p, k.a - 0.012, k.a + 0.012), ra = k.b >= 1 ? 1 : 1 - seg(p, k.b - 0.014, k.b + 0.006), op = Math.min(vao, ra);
         el.style.opacity = op > 0.01 ? "1" : "0";
         el.style.visibility = op < 0.01 ? "hidden" : "visible";
         if (op < 0.01) continue;
@@ -177,12 +205,42 @@ export function CuonLopoe3D({ cfg }: { cfg: CauHinhLopoe3D }) {
       if (canh) {
         const vt = canh.ve(p, time);
         const dienThoai = innerWidth < 768;
-        datNhan(nhanSrm, vt.srm, 0, dienThoai ? 32 : 58, true);
-        datNhan(nhanAmp, vt.amp, 40, 0, false);
+        datNhan(nhanSrm, vt.srm, 0, dienThoai ? 40 : 72, true);
+        datNhan(nhanAmp, vt.amp, 48, 0, false);
       }
       capNhatChu(p);
       if (hien) raf = requestAnimationFrame(khung);
     };
+
+    // Tải three.js + mô hình khi khối sắp vào khung nhìn (không tranh tải với ảnh đầu trang)
+    const taiCanh = () => {
+      if (dangTai) return;
+      dangTai = true;
+      import("./canh").then(({ taoCanh }) => {
+        if (huy) return;
+        canh = taoCanh(elCanvas, {
+          taiSan: cfg.tai_san,
+          hatSrm: cfg.thanh_phan.sua_rua_mat.map((t) => t.loai as LoaiHat),
+          hatAmp: cfg.thanh_phan.ampoule.map((t) => t.loai as LoaiHat),
+          so1: cfg.so_1,
+          hienSo1: cfg.khoi.some((k) => k.id === "amp-giai-thuong"),
+          giamChuyenDong: false,
+          onSanSang: () => setDaTai(true),
+        });
+        p = tienTrinh();
+      });
+    };
+    // Điều kiện: khối đã gần khung nhìn VÀ (người dùng đã tương tác hoặc trang rảnh 3s sau khi tải xong)
+    let gan = false, sanSang = false;
+    const thu = () => { if (gan && sanSang) taiCanh(); };
+    const ioTai = new IntersectionObserver(([e]) => { gan = e.isIntersecting; if (gan) thu(); if (dangTai) ioTai.disconnect(); }, { rootMargin: "120% 0px" });
+    ioTai.observe(elDoan);
+    const suKien = ["scroll", "wheel", "touchstart", "keydown", "pointerdown"] as const;
+    const kichHoat = () => { sanSang = true; suKien.forEach((t) => removeEventListener(t, kichHoat)); thu(); };
+    suKien.forEach((t) => addEventListener(t, kichHoat, { passive: true }));
+    let henRanh = 0;
+    const khiTaiXong = () => { henRanh = window.setTimeout(kichHoat, 3000); };
+    if (document.readyState === "complete") khiTaiXong(); else addEventListener("load", khiTaiXong, { once: true });
 
     // Chỉ vẽ khi khối đang trong khung nhìn
     const io = new IntersectionObserver(([e]) => {
@@ -192,18 +250,6 @@ export function CuonLopoe3D({ cfg }: { cfg: CauHinhLopoe3D }) {
     });
     io.observe(elDoan);
 
-    import("./canh").then(({ taoCanh }) => {
-      if (huy) return;
-      canh = taoCanh(elCanvas, {
-        taiSan: cfg.tai_san,
-        hatSrm: cfg.thanh_phan.sua_rua_mat.map((t) => t.loai as LoaiHat),
-        hatAmp: cfg.thanh_phan.ampoule.map((t) => t.loai as LoaiHat),
-        so1: cfg.so_1,
-        giamChuyenDong: false,
-        onSanSang: () => setDaTai(true),
-      });
-      p = tienTrinh();
-    });
     const doiCo = () => canh?.doiCo();
     addEventListener("resize", doiCo);
 
@@ -211,30 +257,39 @@ export function CuonLopoe3D({ cfg }: { cfg: CauHinhLopoe3D }) {
       huy = true;
       cancelAnimationFrame(raf);
       io.disconnect();
+      ioTai.disconnect();
+      suKien.forEach((t) => removeEventListener(t, kichHoat));
+      removeEventListener("load", khiTaiXong);
+      clearTimeout(henRanh);
       removeEventListener("resize", doiCo);
       canh?.huy();
     };
   }, [cheDo, cfg]);
 
-  if (cheDo === "tinh") return <BanTinh cfg={cfg} />;
+  if (cheDo === "tinh") return <BanTinh cfg={cfg} id={id} />;
 
   return (
-    <section ref={doan} aria-label="LOPOE Better Balance" className="relative h-[1600vh] md:h-[1500vh]">
+    <section ref={doan} id={id} aria-label="LOPOE Better Balance" className="relative h-[1600vh] md:h-[1500vh] bg-hong-nhat">
       <div className="sticky top-0 h-[100svh] overflow-hidden">
-        <canvas ref={canvas} aria-hidden="true" className="absolute inset-0 w-full h-full block" />
-        {!daTai && <div className="absolute inset-0 grid place-items-center text-[13px] text-xam">Đang tải…</div>}
+        <canvas ref={canvas} aria-hidden="true" className={`absolute inset-0 w-full h-full block transition-opacity duration-700 ${daTai ? "opacity-100" : "opacity-0"}`} />
+        {/* Ảnh tĩnh bộ 3 trong lúc tải cảnh 3D, cùng vị trí với khung đầu của cảnh */}
+        <div aria-hidden="true" className={`absolute inset-x-0 bottom-[33vh] md:bottom-[18vh] flex items-end justify-center gap-[3vw] md:gap-[6.5vw] transition-opacity duration-700 ${daTai ? "opacity-0" : "opacity-100"}`}>
+          {/* eslint-disable @next/next/no-img-element */}
+          <img src={cfg.tai_san.sua_rua_mat} alt="" width={366} height={989} loading="lazy" decoding="async" className="h-[33vh] md:h-[47vh] w-auto" />
+          <img src="/chien-dich/lopoe-better-balance/ampoule-than.webp" alt="" width={290} height={675} loading="lazy" decoding="async" className="h-[25vh] md:h-[34vh] w-auto" />
+          <img src={cfg.tai_san.kem_duong} alt="" width={368} height={980} loading="lazy" decoding="async" className="h-[33vh] md:h-[47vh] w-auto" />
+          {/* eslint-enable @next/next/no-img-element */}
+        </div>
         <div ref={lop} className="absolute inset-0 pointer-events-none">
-          <div data-mo-dau className="absolute left-0 right-0 top-[9vh] md:top-[11vh] text-center px-6">
-            <p className="m-0 mb-1.5 text-[15px] text-xam font-medium">{cfg.mo_dau.nho}</p>
-            <h2 className="m-0 text-[36px] md:text-[clamp(36px,5.4vw,64px)] font-bold tracking-[-0.025em] leading-[1.04]">{cfg.mo_dau.tieu_de}</h2>
-            <p className="m-0 mt-2.5 text-[18px] md:text-[clamp(18px,2vw,24px)]">{chuNghieng(cfg.mo_dau.cau)}</p>
-            <div className="mt-5 flex justify-center items-center gap-5 pointer-events-auto">
-              {cfg.mo_dau.nut.map((n, i) => (
-                <Link key={n.den} href={n.den} className={i === 0 ? lopNut("chinh", "vua") : lopNut("chu", "vua")}>{n.chu}</Link>
-              ))}
+          <div data-mo-dau className="absolute left-0 right-0 top-[8vh] md:top-[9vh] text-center px-6">
+            <p className="m-0 mb-1.5 text-[15px] md:text-[17px] text-xam font-medium">{cfg.mo_dau.nho}</p>
+            <h2 className="m-0 text-[34px] md:text-[56px] font-semibold tracking-[-0.015em] leading-[1.07]">{cfg.mo_dau.tieu_de}</h2>
+            <p className="m-0 mt-1.5 text-[19px] md:text-[28px] leading-[1.14]">{chuNghieng(cfg.mo_dau.cau)}</p>
+            <div className="mt-[18px] flex justify-center items-center gap-3.5 flex-wrap pointer-events-auto">
+              {cfg.mo_dau.nut.map((n, i) => veNut(n, i))}
             </div>
           </div>
-          {cfg.khoi.map((k) => <KhoiChu key={k.id} k={k} />)}
+          {cfg.khoi.map((k) => <KhoiChu key={k.id} k={k} veNut={veNut} />)}
           <div data-nhom-nhan="srm">{cfg.thanh_phan.sua_rua_mat.map((t) => <NhanThanhPhan key={t.ten} ten={t.ten} loi={t.loi} giua />)}</div>
           <div data-nhom-nhan="amp">{cfg.thanh_phan.ampoule.map((t) => <NhanThanhPhan key={t.ten} ten={t.ten} loi={t.loi} giua={false} />)}</div>
           <div data-tien-trinh aria-hidden="true" className="hidden md:grid absolute right-7 top-1/2 -translate-y-1/2 gap-3.5 opacity-0">

@@ -38,16 +38,6 @@ export const CuaHangKhoiSchema = z.object({
   nut: z.array(NutTrangChuSchema).min(1),
 });
 
-export const LopoeKhoiSchema = z.object({
-  tieu_de: z.string().min(1),
-  phu_de: z.string().min(1),
-  mo_ta_bo: z.string().min(1),
-  anh_trai: z.string().min(1),
-  anh_giua: z.string().min(1),
-  anh_phai: z.string().min(1),
-  nut: z.array(NutTrangChuSchema).min(1),
-});
-
 export const ThuongHieuLogoSchema = z.object({
   ten: z.string().min(1),
   den: z.string().min(1),
@@ -66,7 +56,7 @@ export const ThuongHieuKhoiSchema = z.object({
 
 export const OTrongLuoiSchema = z.object({
   id: z.string().min(1),
-  mau_nen: z.enum(["hong-nhat", "bac-ha", "hong", "bac-ha-nhat"]),
+  mau_nen: z.enum(["hong-nhat", "bac-ha", "hong", "bac-ha-nhat", "xanh-nhat", "toi"]),
   tieu_de: z.string().min(1),
   phu_de_truoc: z.string().optional(),
   phu_de_nghieng: z.string().optional(),
@@ -76,8 +66,12 @@ export const OTrongLuoiSchema = z.object({
   nhan_thuong_hieu: z.string().optional(),
   anh: z.string().min(1).optional(),
   anh_sp: z.boolean().optional(),
+  /** W055: nhiều ảnh sản phẩm đứng cạnh nhau (combo), ảnh nền trong suốt */
+  anh_bo: z.array(z.string().min(1)).min(2).optional(),
   mo_ta_anh: z.string().optional(),
   so_lon: z.string().optional(),
+  /** W055: dòng nhỏ dưới phụ đề, lấy quà của deal_id ("Tặng ... Số lượng có hạn.") */
+  hien_qua: z.boolean().optional(),
   nut: z.array(NutTrangChuSchema).min(1),
 });
 
@@ -92,6 +86,25 @@ export const QuaLopoeKhoiSchema = z.object({
   nut: z.array(NutTrangChuSchema).min(1),
 });
 
+/** W055: thẻ combo trong hàng trượt ngang. Giá, quà lấy từ deal_id trong data/deals.yaml. */
+export const TheComboSchema = z.object({
+  deal_id: z.string().min(1),
+  mau_nen: z.enum(["hong-nhat", "bac-ha", "hong", "bac-ha-nhat", "xanh-nhat", "toi"]),
+  nhan: z.string().min(1),
+  ten: z.string().min(1),
+  anh_bo: z.array(z.string().min(1)).optional(),
+  so_lon: z.string().optional(),
+});
+
+export type TheCombo = z.infer<typeof TheComboSchema>;
+
+export const TruotComboSchema = z.object({
+  tieu_de: z.string().min(1),
+  phu_de: z.string().optional(),
+  nut: NutTrangChuSchema,
+  the: z.array(TheComboSchema).min(3),
+});
+
 export const GheViveKhoiSchema = z.object({
   tien_to_tieu_de: z.string().min(1),
   dia_diem_ngan: z.string().min(1),
@@ -102,10 +115,10 @@ export const GheViveKhoiSchema = z.object({
 export const TrangChuConfigSchema = z.object({
   dai_thong_bao: DaiThongBaoSchema,
   cua_hang: CuaHangKhoiSchema,
-  lopoe: LopoeKhoiSchema,
   thuong_hieu: ThuongHieuKhoiSchema,
   luoi_doi: z.array(OTrongLuoiSchema).min(1),
   qua_lopoe: QuaLopoeKhoiSchema,
+  truot_combo: TruotComboSchema,
   ghe_vive: GheViveKhoiSchema,
 });
 

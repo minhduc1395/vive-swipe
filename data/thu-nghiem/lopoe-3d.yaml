@@ -1,10 +1,12 @@
-# Khối cuộn 3D LOPOE (W054) — trang thử nghiệm /thu-nghiem/lopoe-3d
+# Khối cuộn 3D LOPOE: khối 2 trang chủ `/` (W055) và trang thử /thu-nghiem/lopoe-3d (W054).
 # Đổi chữ / mốc ở đây, không sửa code. Mốc a, b là tiến trình cuộn (0 → 1) của đoạn dính.
 # tu_khoa: "|" = chỗ xuống dòng có chủ đích (dòng 2 tô xanh, lùi vào).
 # nhan_dau: số chữ đầu tô xanh (khi không có "|"); nhan_tu: tô xanh từ chữ thứ mấy.
 # cau: *chữ* = nghiêng Playfair.
-# cho_duyet: true = câu cần bằng chứng (Luật Quảng cáo), chỉ hiện khi hien_cho_duyet: true.
-hien_cho_duyet: true   # trang thử nghiệm: hiện để duyệt. Khi gắn vào landing thật: false cho tới khi có chứng nhận Hwahae
+# cho_duyet: true = câu cần bằng chứng (Luật Quảng cáo). Chỉ hiện khi có huy_hieu (bằng chứng CĐT gửi)
+#   hoặc khi hien_cho_duyet: true (chỉ dùng ở trang thử để duyệt).
+# huy_hieu: ảnh huy hiệu gốc của nhãn, CHỈ gắn vào đúng sản phẩm được trao giải.
+hien_cho_duyet: false
 tai_san:
   ampoule_glb: /thu-nghiem/lopoe-3d/ampoule.glb
   sua_rua_mat: /thu-nghiem/lopoe-3d/srm.webp
@@ -36,16 +38,18 @@ khoi:
     ten_nho: "Sữa rửa mặt"
     tu_khoa: "4 thành phần|xanh"
     cau: "Cấp ẩm & *phục hồi.*"
-  - id: srm-giai-thuong
+  # 19/11 chỗ này là "Winner · Hwahae Beauty Awards 2025" + vòng lá. 20/11 CĐT bỏ vòng lá.
+  # Huy hiệu Hwahae CĐT gửi là của Ampoule (đặt ở amp-giai-thuong), chưa có bằng chứng giải cho sữa rửa mặt.
+  - id: srm-diu-nhe
     a: 0.30
     b: 0.37
     vi_tri: trai
     tu: trai
     ten_nho: "Sữa rửa mặt"
-    lon_nghieng: "Winner"
-    cau: "Hwahae Beauty Awards 2025"
-    chips: ["Không sulfate", "Thành phần sạch"]
-    cho_duyet: true
+    tu_khoa: "Không|sulfate"
+    co: lon
+    cau: "*Thành phần sạch.*"
+    cau_lon: true
   - id: amp-cong-dung
     a: 0.42
     b: 0.50
@@ -63,15 +67,19 @@ khoi:
     ten_nho: "Ampoule"
     tu_khoa: "Hoạt chất|xanh"
     cau: "Phục hồi & *khóa ẩm.*"
+  # Bằng chứng: huy hiệu "2025 상반기 hwahae awards · 라이징 트렌드 | 진정 · 1위 · 에센스/앰플/세럼" (CĐT gửi 20/11)
   - id: amp-giai-thuong
     a: 0.65
     b: 0.72
     vi_tri: duoi-giua
     tu: duoi
-    tu_khoa: "Hwahae Beauty Awards 2025"
+    huy_hieu:
+      anh: /chien-dich/lopoe-better-balance/hwahae-awards-2025-h1.webp
+      mo_ta: "Huy hiệu Hwahae Awards nửa đầu 2025, hạng 1 Xu hướng nổi bật, nhóm Làm dịu, Essence/Ampoule/Serum"
+    tu_khoa: "Hwahae Awards 2025"
     nhan_dau: 1
-    cau: "Hạng 1 *Tinh chất làm dịu*"
-    chips: ["Không hương liệu", "Hợp da nhạy cảm"]
+    cau: "Hạng 1 *Xu hướng nổi bật · Làm dịu*"
+    chips: ["Nửa đầu năm 2025", "Essence · Ampoule · Serum"]
     cho_duyet: true
   - id: kem-cong-dung
     a: 0.78
@@ -82,6 +90,18 @@ khoi:
     tu_khoa: "Sẵn sàng|trang điểm"
     cau: "*Ready for makeup.*"
     cau_lon: true
+  # Kết: bộ 3 đứng lại, mời xem combo rồi nhả sang khối sau
+  - id: ket
+    a: 0.93
+    b: 1
+    vi_tri: tren-giua
+    tu: duoi
+    ten_nho: "Bộ 3 LOPOE"
+    tu_khoa: "Better Balance"
+    nhan_tu: 1
+    nut:
+      - { chu: "Xem combo", den: "#combo-lopoe-bo3" }
+      - { chu: "Mua", den: "/danh-muc?thuong-hieu=LOPOE" }
 thanh_phan:
   sua_rua_mat:
     - { loai: thua, ten: "Thùa xanh", loi: "Ngậm nước" }
@@ -93,4 +113,4 @@ thanh_phan:
     - { loai: sen, ten: "Sen xanh", loi: "Thanh lọc, dịu đỏ" }
     - { loai: xoan, ten: "Hyaluronic Acid", loi: "Ẩm đa tầng" }
     - { loai: phan-tu, ten: "Panthenol + Niacinamide", loi: "Khóa ẩm, củng cố hàng rào da" }
-so_1: "No.1"   # chữ lớn sau ampoule ở phần giải thưởng (cho_duyet)
+so_1: "No.1"   # chữ lớn sau ampoule ở phần giải thưởng, chỉ hiện khi khối amp-giai-thuong hiện

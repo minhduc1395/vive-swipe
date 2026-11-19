@@ -9,6 +9,7 @@
   --xam: #737373;
   --nen: #f6f4f2;
   --vien: rgba(43, 43, 42, 0.14);
+  --xanh-nhat: #edf2f9;
 
   background: #ffffff;
   color: var(--den);
@@ -156,7 +157,7 @@
   gap: 12px;
   padding: 0 12px;
   content-visibility: auto;
-  contain-intrinsic-size: auto 1200px;
+  contain-intrinsic-size: auto 2400px;
 }
 
 .tc-v3 .luoi .o {
@@ -277,89 +278,6 @@
   box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.45);
   pointer-events: none;
   z-index: 5;
-}
-
-/* Khối 2: LOPOE & ống bay theo cuộn */
-.tc-v3 #lopoe {
-  background: var(--bac-ha-nhat);
-}
-
-.tc-v3 #lopoe .bo-ba {
-  position: relative;
-  align-items: flex-end;
-  gap: 30px;
-  padding: 48px 0 76px;
-  overflow: visible;
-}
-
-.tc-v3 #lopoe .bo-ba img {
-  position: relative;
-  z-index: 2;
-  transform: none;
-  transition: none;
-  height: 380px;
-  width: auto;
-  max-inline-size: none;
-  filter: drop-shadow(0 26px 34px rgba(60, 90, 130, 0.18));
-}
-
-.tc-v3 #lopoe .bo-ba img.giua {
-  height: 274px;
-}
-
-.tc-v3 #lopoe .quang {
-  position: absolute;
-  z-index: 1;
-  left: 50%;
-  bottom: 40px;
-  width: 620px;
-  height: 620px;
-  margin-left: -310px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.95) 0,
-    rgba(207, 227, 213, 0.55) 38%,
-    rgba(191, 214, 242, 0) 68%
-  );
-  transform: scale(0.3);
-  opacity: 0;
-  pointer-events: none;
-}
-
-.tc-v3 #lopoe .giot {
-  position: absolute;
-  z-index: 3;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at 35% 30%,
-    #ffffff,
-    rgba(191, 214, 242, 0.75) 60%,
-    rgba(143, 175, 216, 0.55)
-  );
-  opacity: 0;
-  pointer-events: none;
-}
-
-.tc-v3 #bay {
-  display: none;
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 30;
-  pointer-events: none;
-  opacity: 0;
-  transform-origin: 50% 100%;
-  filter: drop-shadow(0 18px 24px rgba(60, 90, 130, 0.22));
-}
-
-.tc-v3 #bay img {
-  display: block;
-  height: 100%;
-  width: auto;
-  max-inline-size: none;
 }
 
 /* Khối 3: Chọn lọc & tường logo chạy vô tận */
@@ -555,6 +473,246 @@
   font-size: 170px;
 }
 
+/* W055: màu nền ô theo cấu hình (mau_nen) */
+.tc-v3 .nen-hong-nhat { background: var(--hong-nhat); }
+.tc-v3 .nen-hong { background: var(--hong); }
+.tc-v3 .nen-bac-ha { background: var(--bac-ha); }
+.tc-v3 .nen-bac-ha-nhat { background: var(--bac-ha-nhat); }
+.tc-v3 .nen-xanh-nhat { background: var(--xanh-nhat); }
+.tc-v3 .nen-toi { background: var(--den); }
+
+/* Dòng nhỏ dưới phụ đề (quà combo), như dòng chú thích của apple.com */
+.tc-v3 .o p.dong-nho {
+  margin-top: 10px;
+  font-size: 15px;
+  line-height: 1.35;
+  color: var(--xam);
+  max-width: 34ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tc-v3 .toi p.dong-nho {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* Ô combo: các sản phẩm đứng cạnh nhau */
+.tc-v3 .hinh.bo {
+  align-items: flex-end;
+  gap: 22px;
+  padding: 44px 0 52px;
+}
+
+.tc-v3 .hinh.bo img {
+  height: 270px;
+  width: auto;
+  max-inline-size: none;
+  filter: drop-shadow(0 24px 30px rgba(43, 43, 42, 0.18));
+}
+
+.tc-v3 .hinh.bo img.nho {
+  height: 200px;
+}
+
+.tc-v3 .toi .hinh.bo img {
+  filter: drop-shadow(0 24px 40px rgba(0, 0, 0, 0.55));
+}
+
+.tc-v3 .toi .so-lon {
+  color: var(--hong);
+}
+
+/* Hàng combo trượt ngang (hàng cuối phần combo) */
+.tc-v3 .hang-combo {
+  background: #ffffff;
+  padding: 56px 0 8px;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 640px;
+}
+
+.tc-v3 .dau-hang {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 0 max(20px, 4vw);
+}
+
+.tc-v3 .dau-hang h2 {
+  margin: 0;
+  font-size: 40px;
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.tc-v3 .dau-hang p {
+  margin: 6px 0 0;
+  font-size: 19px;
+  color: var(--xam);
+}
+
+.tc-v3 .dieu-khien {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+}
+
+.tc-v3 .mui {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 0;
+  background: var(--nen);
+  color: var(--den);
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, opacity 0.2s;
+}
+
+.tc-v3 .mui:hover:not(:disabled) {
+  background: var(--hong);
+}
+
+.tc-v3 .mui:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.tc-v3 .truot {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0 max(20px, 4vw);
+  padding: 28px max(20px, 4vw) 24px;
+  scrollbar-width: none;
+}
+
+.tc-v3 .truot::-webkit-scrollbar {
+  display: none;
+}
+
+.tc-v3 .truot:focus-visible {
+  outline: 2px solid var(--den);
+  outline-offset: -2px;
+}
+
+.tc-v3 .the-combo {
+  flex: 0 0 clamp(264px, 25vw, 340px);
+  min-height: 430px;
+  border-radius: 22px;
+  padding: 28px 26px 24px;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: var(--den);
+  scroll-snap-align: start;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.tc-v3 .the-combo:hover {
+  transform: scale(1.015);
+}
+
+.tc-v3 .the-combo .nhan {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--xam);
+}
+
+.tc-v3 .the-combo .ten {
+  margin-top: 8px;
+  font-size: 24px;
+  line-height: 1.15;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.tc-v3 .the-combo .gia {
+  margin-top: 6px;
+  font-size: 40px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.tc-v3 .the-combo .qua {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 1.35;
+  color: var(--xam);
+}
+
+.tc-v3 .the-combo .hinh-the {
+  margin-top: auto;
+  padding-top: 18px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 12px;
+  min-height: 170px;
+}
+
+.tc-v3 .the-combo .hinh-the img {
+  height: 168px;
+  width: auto;
+  max-inline-size: none;
+  filter: drop-shadow(0 16px 20px rgba(43, 43, 42, 0.18));
+}
+
+.tc-v3 .the-combo .hinh-the img.nho {
+  height: 124px;
+}
+
+.tc-v3 .the-combo .hinh-the img.rong {
+  height: 176px;
+}
+
+.tc-v3 .the-combo .so-the {
+  font-style: italic;
+  font-weight: 500;
+  font-size: 96px;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.tc-v3.co-serif .the-combo .so-the {
+  font-family: var(--font-playfair), Georgia, serif;
+}
+
+.tc-v3 .the-combo .xem {
+  margin-top: 16px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.tc-v3 .the-combo.toi {
+  color: #ffffff;
+}
+
+.tc-v3 .the-combo.toi .nhan,
+.tc-v3 .the-combo.toi .qua {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.tc-v3 .the-combo.toi .so-the {
+  color: var(--hong);
+}
+
+.tc-v3 .the-combo.toi .hinh-the img {
+  filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.55));
+}
+
 /* Hiện dần khi cuộn */
 .tc-v3 .hien {
   opacity: 0;
@@ -585,26 +743,16 @@
     animation: none !important;
   }
 
+  .tc-v3 .the-combo {
+    transition: none !important;
+  }
+
   .tc-v3 .tuong-logo,
   .tc-v3 .hien,
   .tc-v3 .hinh img {
     transition: none !important;
     opacity: 1 !important;
     transform: none !important;
-  }
-
-  .tc-v3 #lopoe .bo-ba img {
-    opacity: 1 !important;
-    transform: none !important;
-  }
-
-  .tc-v3 #lopoe .quang {
-    opacity: 1 !important;
-    transform: scale(1) !important;
-  }
-
-  .tc-v3 #bay {
-    display: none !important;
   }
 }
 
@@ -613,6 +761,7 @@
   .tc-v3 .luoi {
     grid-template-columns: 1fr;
     padding: 0;
+    contain-intrinsic-size: auto 4800px;
   }
 
   .tc-v3 .o {
@@ -655,28 +804,35 @@
     aspect-ratio: 4 / 3.6;
   }
 
-  .tc-v3 #lopoe .bo-ba {
-    gap: 14px;
-    padding: 36px 0 60px;
-  }
-
-  .tc-v3 #lopoe .quang {
-    width: 400px;
-    height: 400px;
-    margin-left: -200px;
-    bottom: 30px;
-  }
-
-  .tc-v3 #lopoe .bo-ba img {
-    height: 240px;
-  }
-
-  .tc-v3 #lopoe .bo-ba img.giua {
-    height: 175px;
-  }
-
   .tc-v3 #ghe-vive .so-lon {
     font-size: 140px;
+  }
+
+  .tc-v3 .hinh.bo {
+    gap: 14px;
+    padding: 36px 0 44px;
+  }
+
+  .tc-v3 .hinh.bo img {
+    height: 220px;
+  }
+
+  .tc-v3 .hinh.bo img.nho {
+    height: 164px;
+  }
+
+  .tc-v3 .dau-hang {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tc-v3 .dau-hang h2 {
+    font-size: 34px;
+  }
+
+  .tc-v3 .the-combo {
+    flex-basis: 76vw;
+    min-height: 400px;
   }
 
   .tc-v3 .tuong-logo {
@@ -715,19 +871,13 @@
     padding: 10px 18px;
   }
 
-  .tc-v3 #lopoe .bo-ba {
-    gap: 8px;
-  }
-
-  .tc-v3 #lopoe .bo-ba img {
-    height: 195px;
-  }
-
-  .tc-v3 #lopoe .bo-ba img.giua {
-    height: 145px;
-  }
-
   .tc-v3 #ghe-vive .so-lon {
     font-size: 112px;
   }
+}
+
+/* Neo #combo-... từ khối 3D: chừa chỗ cho thanh menu */
+.tc-v3 .luoi .o,
+.tc-v3 .hang-combo {
+  scroll-margin-top: 64px;
 }

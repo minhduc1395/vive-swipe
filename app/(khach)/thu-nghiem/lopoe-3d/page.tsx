@@ -9,8 +9,8 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-/** W054: trang thử nghiệm, chưa gắn landing, không có trên menu. */
+/** W054: trang thử để duyệt chữ (hiện cả câu chờ bằng chứng). Bản thật ở khối 2 trang chủ (W055). */
 export default function TrangLopoe3D() {
-  const cfg = docCauHinhLopoe3D();
+  const cfg = docCauHinhLopoe3D(true);
   return <CuonLopoe3D cfg={cfg} />;
 }

@@ -6,7 +6,7 @@ test.describe("W054 · Khối cuộn 3D LOPOE (thử nghiệm)", () => {
     await page.goto("/thu-nghiem/lopoe-3d");
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
     await expect(page.getByRole("heading", { name: "LOPOE Better Balance" })).toBeAttached();
-    await expect(page.locator("[data-khoi]")).toHaveCount(7);
+    await expect(page.locator("[data-khoi]")).toHaveCount(8);
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
     await expect(page.locator('a[href="/thu-nghiem/lopoe-3d"]')).toHaveCount(0);
   });
