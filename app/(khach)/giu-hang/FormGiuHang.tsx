@@ -1,4 +1,5 @@
 "use client";
+import { lopNut } from "@/components/ui/Nut";
 
 import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
@@ -96,7 +97,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
         </p>
         <Link
           href="/quet"
-          className="h-[48px] px-6 rounded-full bg-den text-trang font-semibold text-[15px] flex items-center justify-center"
+          className={lopNut("phu","lon")}
         >
           Quay lại quẹt sản phẩm
         </Link>
@@ -203,7 +204,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
             placeholder="Tên để nhân viên gọi"
             value={ten}
             onChange={(e) => setTen(e.target.value)}
-            className="h-[50px] rounded-[14px] border-[1.5px] border-[#E8D2CC] px-3.5 text-[15px] text-den placeholder:text-xam outline-none focus:border-den transition-colors bg-trang"
+            className="h-[50px] rounded-[14px] border-[1.5px] border-hong px-3.5 text-[15px] text-den placeholder:text-xam outline-none focus:border-hong transition-colors bg-trang"
           />
         </div>
 
@@ -221,7 +222,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
             placeholder="09xx xxx xxx"
             value={sdt}
             onChange={(e) => setSdt(e.target.value)}
-            className="h-[50px] rounded-[14px] border-[1.5px] border-[#E8D2CC] px-3.5 text-[15px] text-den placeholder:text-xam outline-none focus:border-den transition-colors bg-trang"
+            className="h-[50px] rounded-[14px] border-[1.5px] border-hong px-3.5 text-[15px] text-den placeholder:text-xam outline-none focus:border-hong transition-colors bg-trang"
           />
         </div>
 
@@ -241,7 +242,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
             placeholder="ten@email.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="h-[50px] rounded-[14px] border-[1.5px] border-[#E8D2CC] px-3.5 text-[15px] text-den placeholder:text-xam outline-none focus:border-den transition-colors bg-trang"
+            className="h-[50px] rounded-[14px] border-[1.5px] border-hong px-3.5 text-[15px] text-den placeholder:text-xam outline-none focus:border-hong transition-colors bg-trang"
           />
         </div>
 
@@ -257,8 +258,8 @@ export function FormGiuHang({ gioBanDau }: Props) {
               aria-pressed={ngayDen === "hom_nay"}
               className={`h-[48px] rounded-[14px] text-[15px] font-semibold transition-colors border-[1.5px] ${
                 ngayDen === "hom_nay"
-                  ? "bg-den text-trang border-den"
-                  : "bg-trang text-den border-[#E8D2CC] hover:bg-hong-nhat/50"
+                  ? "bg-hong text-den border-transparent font-semibold"
+                  : "bg-trang text-den border-hong hover:bg-hong-nhat/50"
               }`}
             >
               Hôm nay
@@ -269,8 +270,8 @@ export function FormGiuHang({ gioBanDau }: Props) {
               aria-pressed={ngayDen === "ngay_mai"}
               className={`h-[48px] rounded-[14px] text-[15px] font-semibold transition-colors border-[1.5px] ${
                 ngayDen === "ngay_mai"
-                  ? "bg-den text-trang border-den"
-                  : "bg-trang text-den border-[#E8D2CC] hover:bg-hong-nhat/50"
+                  ? "bg-hong text-den border-transparent font-semibold"
+                  : "bg-trang text-den border-hong hover:bg-hong-nhat/50"
               }`}
             >
               Ngày mai
@@ -318,7 +319,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
           <button
             type="submit"
             disabled={isPending}
-            className="w-full h-[54px] rounded-full bg-den text-trang font-semibold text-[17px] flex items-center justify-center transition-opacity hover:opacity-95 disabled:opacity-50 cursor-pointer shadow-sm"
+            className={lopNut("dam","lon",true) + " h-[54px] text-[17px] shadow-sm"}
           >
             {isPending ? "Đang xử lý..." : "Xác nhận giữ hàng"}
           </button>
@@ -336,7 +337,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
       >
         <div className="flex justify-between items-center gap-3 lg:hidden text-[13px]">
           <div className="flex flex-col gap-0.5">
-            <span className="text-[#5C5C5B]">Quà dự kiến</span>
+            <span className="text-xam-dam">Quà dự kiến</span>
             <strong className="font-semibold text-den line-clamp-1 max-w-[180px]">
               {ketQua.qua_du_kien || "Không có"}
             </strong>
@@ -367,7 +368,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
           </div>
         )}
         <div className="lg:border-t lg:border-vien lg:pt-3 flex justify-between items-baseline">
-          <span className="text-[13px] lg:text-[15px] font-medium lg:font-semibold text-[#5C5C5B] lg:text-den">
+          <span className="text-[13px] lg:text-[15px] font-medium lg:font-semibold text-xam-dam lg:text-den">
             {tongSoMon} món · tổng ước tính
           </span>
           <strong className="text-[18px] lg:text-[22px] font-bold text-den">

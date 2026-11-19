@@ -57,10 +57,10 @@ export function TheDealDacBiet({
               </svg>
               Deal hợp với bạn
             </span>
-            <span className="text-[12px] text-[#E8D2CC]">Số lượng có hạn</span>
+            <span className="text-[12px] text-hong">Số lượng có hạn</span>
           </div>
 
-          <span className="text-[14px] text-[#E8D2CC]">{moTaPhu}</span>
+          <span className="text-[14px] text-hong">{moTaPhu}</span>
 
           <h2 className="m-0 font-bold text-[24px] leading-[1.25] tracking-[-0.5px]">
             {dealTop.hook ?? dealTop.ten}
@@ -75,7 +75,7 @@ export function TheDealDacBiet({
                     key={idx}
                     className="flex justify-between py-2 border-b border-white/20 text-[13px]"
                   >
-                    <span className="text-[#E8D2CC]">Từ {dinhDangTien(mocGia)}</span>
+                    <span className="text-hong">Từ {dinhDangTien(mocGia)}</span>
                     <strong className="font-semibold text-trang line-clamp-1">
                       {m.qua}
                     </strong>
@@ -84,7 +84,7 @@ export function TheDealDacBiet({
               })}
             </div>
           ) : dealTop.dieu_kien ? (
-            <p className="m-0 text-[14px] text-[#E8D2CC] leading-relaxed">
+            <p className="m-0 text-[14px] text-hong leading-relaxed">
               {dealTop.dieu_kien}
             </p>
           ) : null}
@@ -92,7 +92,7 @@ export function TheDealDacBiet({
           {boGoiYDau && (
             <div className="flex items-center gap-2.5 mt-1 bg-white/10 rounded-2xl p-2.5">
               <div className="flex flex-col text-[13px]">
-                <span className="text-[#E8D2CC] text-[11px]">Gợi ý vừa mốc</span>
+                <span className="text-hong text-[11px]">Gợi ý vừa mốc</span>
                 <span className="font-semibold text-trang truncate">
                   {boGoiYDau.ten} · {dinhDangTien(boGoiYDau.gia)}
                 </span>
@@ -162,7 +162,7 @@ export function TheDealDacBiet({
         <h2 className="m-0 font-bold text-[24px] leading-[1.3] tracking-[-0.5px]">
           Đã có {soMonHopDa} món hợp da
         </h2>
-        <p className="m-0 text-[15px] leading-relaxed text-[#E8D2CC] max-w-[280px]">
+        <p className="m-0 text-[15px] leading-relaxed text-hong max-w-[280px]">
           Các sản phẩm bạn thích đang có các deal và quà tặng hấp dẫn hôm nay tại booth.
         </p>
       </div>

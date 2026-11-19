@@ -167,8 +167,8 @@ export function TheSanPham({
 
   const nenAnh =
     sanPham.danh_muc === "mat-na" || sanPham.danh_muc === "kem-duong"
-      ? "bg-[#EAF3ED]"
-      : "bg-[#F7EEEB]";
+      ? "bg-bac-ha-nhat"
+      : "bg-hong-nhat";
 
   const chipList = [
     ...(sanPham.van_de?.map(layNhanVanDe).slice(0, 2) ?? []),
@@ -243,7 +243,7 @@ export function TheSanPham({
 
         {/* Tag giảm giá */}
         {sanPham.giam_tren_tag && (
-          <span className="absolute top-2.5 left-2.5 h-7 px-2.5 rounded-full bg-den text-trang text-[12px] font-bold flex items-center">
+          <span className="absolute top-2.5 left-2.5 h-7 px-2.5 rounded-full bg-hong text-den text-[12px] font-bold flex items-center">
             {sanPham.giam_tren_tag}
           </span>
         )}
@@ -276,7 +276,7 @@ export function TheSanPham({
             opacity: likeOp,
             transform: `rotate(-16deg) scale(${0.8 + likeOp * 0.2})`,
           }}
-          className="absolute left-[18px] top-[26px] px-4 py-1.5 border-[3px] border-den rounded-xl bg-[#CFE3D5] text-den font-bold text-[30px] tracking-[4px] pointer-events-none transition-transform"
+          className="absolute left-[18px] top-[26px] px-4 py-1.5 border-[3px] border-den rounded-xl bg-bac-ha text-den font-bold text-[30px] tracking-[4px] pointer-events-none transition-transform"
         >
           THÍCH
         </div>

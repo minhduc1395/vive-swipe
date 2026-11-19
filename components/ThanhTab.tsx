@@ -140,13 +140,13 @@ export function ThanhTab({
             prefetch={false}
             aria-current={dangChon ? "page" : undefined}
             className={`relative min-w-0 min-h-[44px] flex flex-col items-center justify-center gap-1 no-underline focus-visible:outline-2 focus-visible:outline-den rounded-xl transition-colors ${
-              dangChon ? "text-[#2B2B2A] font-semibold" : "text-[#737373] hover:text-[#2B2B2A] font-medium"
+              dangChon ? "text-den font-semibold" : "text-xam hover:text-den font-medium"
             }`}
           >
             {dangChon && (
               <span
                 aria-hidden="true"
-                className="absolute -top-1.5 w-6 h-[2px] rounded-full bg-[#2B2B2A]"
+                className="absolute -top-1.5 w-6 h-[2px] rounded-full bg-den"
               />
             )}
             <span className="relative flex items-center justify-center">
@@ -154,7 +154,7 @@ export function ThanhTab({
               {soDem > 0 && (
                 <span
                   aria-label={`${soDem} món`}
-                  className="absolute -top-[5px] -right-[11px] min-w-[17px] h-[17px] px-1 rounded-full bg-[#E8D2CC] text-den text-[10px] font-bold leading-none flex items-center justify-center"
+                  className="absolute -top-[5px] -right-[11px] min-w-[17px] h-[17px] px-1 rounded-full bg-hong text-den text-[10px] font-bold leading-none flex items-center justify-center"
                 >
                   {soDem > 99 ? "99+" : soDem}
                 </span>

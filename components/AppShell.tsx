@@ -118,8 +118,8 @@ export function AppShell({
               aria-current={pathname === "/new-arrival" ? "page" : undefined}
               className={`min-h-[44px] px-2.5 inline-flex items-center text-[13px] rounded-lg transition-colors ${
                 pathname === "/new-arrival"
-                  ? "text-[#2B2B2A] font-bold"
-                  : "text-[#2B2B2A]/82 hover:text-[#2B2B2A] font-medium"
+                  ? "text-den font-bold"
+                  : "text-den/82 hover:text-den font-medium"
               }`}
             >
               New Arrival
@@ -132,7 +132,7 @@ export function AppShell({
               }}
               data-sap-co="true"
               aria-label="Đăng nhập"
-              className="min-h-[44px] px-2.5 inline-flex items-center text-[13px] font-medium text-[#2B2B2A]/82 hover:text-[#2B2B2A] transition-colors cursor-pointer"
+              className="min-h-[44px] px-2.5 inline-flex items-center text-[13px] font-medium text-den/82 hover:text-den transition-colors cursor-pointer"
             >
               <span>Đăng nhập</span>
             </a>

@@ -1,4 +1,5 @@
 "use client";
+import { lopNut } from "@/components/ui/Nut";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -181,8 +182,8 @@ export default function TrangBatDau() {
                     aria-pressed={daChon}
                     className={`h-[52px] box-border rounded-[16px] px-4 flex items-center justify-between gap-2 text-[15px] font-medium cursor-pointer text-left transition-all ${
                       daChon
-                        ? "bg-[#E8D2CC] border-[1.5px] border-den text-den"
-                        : "bg-trang border-[1.5px] border-[#E8D2CC] text-den hover:border-den/40"
+                        ? "bg-hong border-[1.5px] border-transparent text-den font-semibold"
+                        : "bg-nen-phu border-[1.5px] border-transparent text-den hover:bg-hong-nhat"
                     }`}
                   >
                     <span>{item.label}</span>
@@ -210,7 +211,7 @@ export default function TrangBatDau() {
               <button
                 type="button"
                 onClick={xuLyTiepTuc}
-                className="w-full h-[56px] box-border rounded-full bg-den text-trang flex items-center justify-center font-semibold text-[17px] cursor-pointer hover:bg-black transition-colors"
+                className={lopNut("chinh","lon",true)}
               >
                 Tiếp tục
               </button>
@@ -243,8 +244,8 @@ export default function TrangBatDau() {
                     aria-pressed={daChon}
                     className={`h-[52px] box-border rounded-[16px] px-4 flex items-center justify-between gap-2 text-[15px] font-medium cursor-pointer text-left transition-all ${
                       daChon
-                        ? "bg-[#E8D2CC] border-[1.5px] border-den text-den"
-                        : "bg-trang border-[1.5px] border-[#E8D2CC] text-den hover:border-den/40"
+                        ? "bg-hong border-[1.5px] border-transparent text-den font-semibold"
+                        : "bg-nen-phu border-[1.5px] border-transparent text-den hover:bg-hong-nhat"
                     }`}
                   >
                     <span className="truncate">{item.label}</span>
@@ -279,7 +280,7 @@ export default function TrangBatDau() {
               <button
                 type="button"
                 onClick={xuLyTiepTuc}
-                className="w-full h-[56px] box-border rounded-full bg-den text-trang flex items-center justify-center font-semibold text-[17px] cursor-pointer hover:bg-black transition-colors"
+                className={lopNut("chinh","lon",true)}
               >
                 Tiếp tục
               </button>
@@ -312,8 +313,8 @@ export default function TrangBatDau() {
                     aria-pressed={daChon}
                     className={`h-[52px] box-border rounded-[16px] px-4 flex items-center justify-between gap-2 text-[15px] font-medium cursor-pointer text-left transition-all ${
                       daChon
-                        ? "bg-[#E8D2CC] border-[1.5px] border-den text-den"
-                        : "bg-trang border-[1.5px] border-[#E8D2CC] text-den hover:border-den/40"
+                        ? "bg-hong border-[1.5px] border-transparent text-den font-semibold"
+                        : "bg-nen-phu border-[1.5px] border-transparent text-den hover:bg-hong-nhat"
                     }`}
                   >
                     <span>{item.label}</span>
@@ -348,7 +349,7 @@ export default function TrangBatDau() {
                     ngan_sach: nganSach,
                   });
                 }}
-                className="w-full h-[56px] box-border rounded-full bg-den text-trang flex items-center justify-center font-semibold text-[17px] no-underline hover:bg-black transition-colors"
+                className={lopNut("chinh","lon",true)}
               >
                 Bắt đầu quẹt
               </Link>

@@ -1,4 +1,5 @@
 "use client";
+import { lopNut } from "@/components/ui/Nut";
 
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
@@ -136,16 +137,16 @@ export default function TrangDeal() {
         <header className="px-5 md:px-8 pt-7 pb-2 flex flex-col gap-2.5">
           <h1 className="m-0 text-[28px] md:text-[32px] font-semibold tracking-[-0.3px]">
             Deal{" "}
-            <span className="bg-[#E8D2CC]/70 px-1 py-0.5 rounded-md">
+            <span className="bg-hong/70 px-1 py-0.5 rounded-md">
               cho bạn
             </span>
           </h1>
           <div className="flex flex-wrap items-center gap-1.5 text-[13px]">
-            <span className="text-[#737373]">Vì bạn thích</span>
+            <span className="text-xam">Vì bạn thích</span>
             {nhanGiaiThich.map((nhan) => (
               <span
                 key={nhan}
-                className="h-[26px] px-2.5 rounded-full bg-[#F7EEEB] text-den flex items-center font-medium"
+                className="h-[26px] px-2.5 rounded-full bg-hong-nhat text-den flex items-center font-medium"
               >
                 {nhan}
               </span>
@@ -156,7 +157,7 @@ export default function TrangDeal() {
         {/* Danh sách Deal */}
         <div className="px-4 md:px-8 pt-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 md:gap-5 items-start">
           {dealsChoBan.length === 0 ? (
-            <div className="md:col-span-2 lg:col-span-3 rounded-[20px] bg-[#F7EEEB] p-6 text-center text-xam">
+            <div className="md:col-span-2 lg:col-span-3 rounded-[20px] bg-hong-nhat p-6 text-center text-xam">
               Hiện chưa có deal nào đang chạy hôm nay. Vui lòng quay lại sau!
             </div>
           ) : (
@@ -174,7 +175,7 @@ export default function TrangDeal() {
           {/* Ô đăng ký email */}
           <section
             aria-label="Đăng ký nhận deal"
-            className="md:col-span-2 lg:col-span-3 rounded-[22px] bg-[#F7EEEB] p-5 flex flex-col gap-2.5 mt-2"
+            className="md:col-span-2 lg:col-span-3 rounded-[22px] bg-hong-nhat p-5 flex flex-col gap-2.5 mt-2"
           >
             <div className="flex items-center gap-2">
               <svg
@@ -198,7 +199,7 @@ export default function TrangDeal() {
             </div>
 
             {emailDaDangKy ? (
-              <div className="rounded-xl bg-trang p-3 text-[13px] text-[#2B2B2A] flex items-center justify-between gap-2 border border-vien">
+              <div className="rounded-xl bg-trang p-3 text-[13px] text-den flex items-center justify-between gap-2 border border-vien">
                 <span>
                   Đã đăng ký nhận deal tới: <strong>{emailDaDangKy}</strong>
                 </span>
@@ -225,7 +226,7 @@ export default function TrangDeal() {
                   onChange={(e) => setEmailInput(e.target.value)}
                   placeholder="Nhập email của bạn..."
                   required
-                  className="flex-1 min-w-0 h-11 px-3.5 rounded-xl border border-transparent bg-trang text-[14px] text-den focus:outline-none focus:border-den"
+                  className="flex-1 min-w-0 h-11 px-3.5 rounded-xl border border-transparent bg-trang text-[14px] text-den focus:outline-none focus:border-hong"
                 />
                 <button
                   type="submit"
@@ -265,10 +266,10 @@ function TheDealMuc({
     return (
       <article
         aria-label={deal.ten}
-        className="rounded-[24px] bg-[#F7EEEB] p-5 flex flex-col gap-3.5"
+        className="rounded-[24px] bg-hong-nhat p-5 flex flex-col gap-3.5"
       >
         <div className="flex items-center justify-between">
-          <span className="h-7 px-3 rounded-full bg-den text-trang text-[12px] font-semibold flex items-center gap-1.5">
+          <span className="h-7 px-3 rounded-full bg-hong text-den text-[12px] font-semibold flex items-center gap-1.5">
             <svg
               width="14"
               height="14"
@@ -288,7 +289,7 @@ function TheDealMuc({
             </svg>
             Quà theo hóa đơn
           </span>
-          <span className="text-[12px] text-[#5C5C5B]">Số lượng có hạn</span>
+          <span className="text-[12px] text-xam-dam">Số lượng có hạn</span>
         </div>
 
         <h2 className="m-0 text-[19px] leading-[1.3] font-semibold text-den">
@@ -312,7 +313,7 @@ function TheDealMuc({
                 key={idx}
                 className="rounded-[14px] bg-trang p-2.5 flex flex-col gap-0.5"
               >
-                <span className="text-[11px] text-[#5C5C5B]">{tenMoc}</span>
+                <span className="text-[11px] text-xam-dam">{tenMoc}</span>
                 <strong className="text-[12px] font-semibold text-den line-clamp-1">
                   {m.qua.replace(/^\d+\s*/, "")}
                 </strong>
@@ -337,7 +338,7 @@ function TheDealMuc({
                 >
                   <div className="flex items-center gap-2.5 min-w-0">
                     {anhDau ? (
-                      <div className="w-11 h-11 rounded-[10px] bg-[#F7EEEB] relative overflow-hidden shrink-0">
+                      <div className="w-11 h-11 rounded-[10px] bg-hong-nhat relative overflow-hidden shrink-0">
                         <Image
                           src={anhDau}
                           alt={bo.ten}
@@ -347,7 +348,7 @@ function TheDealMuc({
                         />
                       </div>
                     ) : (
-                      <div className="w-11 h-11 rounded-[10px] bg-[#F7EEEB] text-[10px] font-semibold flex items-center justify-center shrink-0">
+                      <div className="w-11 h-11 rounded-[10px] bg-hong-nhat text-[10px] font-semibold flex items-center justify-center shrink-0">
                         SET
                       </div>
                     )}
@@ -355,7 +356,7 @@ function TheDealMuc({
                       <strong className="text-[13px] font-semibold text-den truncate">
                         {bo.ten} · {dinhDangTien(bo.gia)}
                       </strong>
-                      <span className="text-[12px] text-[#5C5C5B]">
+                      <span className="text-[12px] text-xam-dam">
                         Đạt mốc tặng quà
                       </span>
                     </div>
@@ -363,7 +364,7 @@ function TheDealMuc({
                   <button
                     type="button"
                     onClick={() => onThemBoGoiY(bo.ten, bo.san_pham)}
-                    className="h-8 px-3 rounded-full bg-den text-trang text-[12px] font-medium shrink-0 cursor-pointer hover:opacity-90 border-none"
+                    className={lopNut("phu","nho")}
                   >
                     Thêm bộ
                   </button>
@@ -378,7 +379,7 @@ function TheDealMuc({
           <button
             type="button"
             onClick={() => onThemBoGoiY(boGoiYDau.ten, boGoiYDau.san_pham)}
-            className="w-full h-12 rounded-full bg-den text-trang font-semibold text-[15px] flex items-center justify-center cursor-pointer hover:opacity-90 border-none mt-1 transition-opacity"
+            className={lopNut("chinh-bac-ha","lon",true)}
           >
             Thêm {boGoiYDau.ten} vào giỏ
           </button>
@@ -407,7 +408,7 @@ function TheDealMuc({
     return (
       <article
         aria-label={deal.ten}
-        className="rounded-[24px] border border-[#E8D2CC] p-[18px] bg-trang flex flex-col gap-3"
+        className="rounded-[24px] border border-hong p-[18px] bg-trang flex flex-col gap-3"
       >
         <div className="flex items-center gap-3">
           {/* Ảnh các món chồng nhau */}
@@ -417,7 +418,7 @@ function TheDealMuc({
               return (
                 <div
                   key={sp.id}
-                  className={`w-[56px] h-[56px] rounded-[14px] bg-[#F7EEEB] border-2 border-trang relative overflow-hidden shrink-0 ${
+                  className={`w-[56px] h-[56px] rounded-[14px] bg-hong-nhat border-2 border-trang relative overflow-hidden shrink-0 ${
                     idx > 0 ? "-ml-4" : ""
                   }`}
                 >
@@ -478,7 +479,7 @@ function TheDealMuc({
         <button
           type="button"
           onClick={() => onThemCombo(deal)}
-          className="w-full h-11 rounded-full bg-den text-trang font-semibold text-[14px] flex items-center justify-center cursor-pointer hover:opacity-90 border-none transition-opacity"
+          className={lopNut("chinh-bac-ha","vua",true)}
         >
           Thêm combo vào giỏ
         </button>
@@ -496,7 +497,7 @@ function TheDealMuc({
     return (
       <article
         aria-label={deal.ten}
-        className="rounded-[24px] border border-[#E8D2CC] p-[18px] bg-trang flex flex-col gap-3"
+        className="rounded-[24px] border border-hong p-[18px] bg-trang flex flex-col gap-3"
       >
         <div className="flex items-center justify-between">
           <span className="h-6 px-2.5 rounded-full bg-bac-ha text-den text-[12px] font-semibold flex items-center">
@@ -539,7 +540,7 @@ function TheDealMuc({
 
         <Link
           href="/danh-muc"
-          className="w-full h-11 rounded-full border border-den/30 text-den font-semibold text-[14px] flex items-center justify-center no-underline hover:bg-black/5 transition-colors"
+          className={lopNut("phu","vua",true)}
         >
           Chọn món để mua kèm
         </Link>
@@ -551,10 +552,10 @@ function TheDealMuc({
   return (
     <article
       aria-label={deal.ten}
-      className="rounded-[24px] border border-[#E8D2CC] p-[18px] bg-trang flex flex-col gap-3"
+      className="rounded-[24px] border border-hong p-[18px] bg-trang flex flex-col gap-3"
     >
       <div className="flex items-center justify-between">
-        <span className="h-6 px-2.5 rounded-full bg-[#F7EEEB] text-den text-[12px] font-semibold flex items-center">
+        <span className="h-6 px-2.5 rounded-full bg-hong-nhat text-den text-[12px] font-semibold flex items-center">
           Ưu đãi đặc biệt
         </span>
         {deal.gioi_han && (
@@ -571,8 +572,8 @@ function TheDealMuc({
       )}
 
       {deal.qua && (
-        <div className="rounded-xl bg-[#F7EEEB] p-2.5 text-[13px] text-den flex items-center gap-2">
-          <span className="font-semibold text-bac-ha bg-den px-1.5 py-0.5 rounded text-[11px]">
+        <div className="rounded-xl bg-hong-nhat p-2.5 text-[13px] text-den flex items-center gap-2">
+          <span className="font-semibold text-den bg-bac-ha px-1.5 py-0.5 rounded text-[11px]">
             QUÀ TẶNG
           </span>
           <span className="line-clamp-1">{deal.qua}</span>
@@ -581,7 +582,7 @@ function TheDealMuc({
 
       <Link
         href="/danh-muc"
-        className="w-full h-11 rounded-full bg-den text-trang font-semibold text-[14px] flex items-center justify-center no-underline hover:opacity-90 transition-opacity"
+        className={lopNut("chinh","vua",true)}
       >
         Xem sản phẩm áp dụng
       </Link>

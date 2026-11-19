@@ -1,4 +1,5 @@
 "use client";
+import { lopNut } from "@/components/ui/Nut";
 
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
@@ -137,8 +138,8 @@ export default function TrangDaThich() {
                   onClick={() => setDanhMucChon(f.id)}
                   className={`h-9 px-3.5 rounded-full text-[14px] font-medium whitespace-nowrap transition-colors cursor-pointer shrink-0 ${
                     dangChon
-                      ? "bg-den text-trang border border-den"
-                      : "bg-trang text-den border border-[#E8D2CC] hover:border-den"
+                      ? "bg-hong text-den border border-transparent font-semibold"
+                      : "bg-nen-phu text-den border border-transparent hover:bg-hong-nhat"
                   }`}
                 >
                   {f.label} ({f.count})
@@ -177,13 +178,13 @@ export default function TrangDaThich() {
             <div className="flex gap-3">
               <Link
                 href="/quet"
-                className="h-11 px-5 rounded-full bg-den text-trang text-[14px] font-semibold inline-flex items-center justify-center shadow-sm"
+                className={lopNut("chinh")}
               >
                 Bắt đầu quẹt
               </Link>
               <Link
                 href="/danh-muc"
-                className="h-11 px-5 rounded-full bg-trang text-den border border-[#E8D2CC] text-[14px] font-semibold inline-flex items-center justify-center"
+                className="h-11 px-5 rounded-full bg-trang text-den border border-hong text-[14px] font-semibold inline-flex items-center justify-center"
               >
                 Xem danh mục
               </Link>
@@ -205,8 +206,8 @@ export default function TrangDaThich() {
             {sanPhamHienThi.map((sp) => {
               const bgMoi =
                 sp.danh_muc === "mat-na" || sp.danh_muc === "kem-duong"
-                  ? "bg-[#EAF3ED]"
-                  : "bg-[#F7EEEB]";
+                  ? "bg-bac-ha-nhat"
+                  : "bg-hong-nhat";
               const dealNote = layGhiChuDeal(sp, deals);
               const anhSrc = duongDanAnh(sp.anh, "nho");
 
@@ -232,7 +233,7 @@ export default function TrangDaThich() {
                       <span
                         role="img"
                         aria-label="Ảnh sản phẩm chờ bổ sung"
-                        className="text-[11px] font-semibold tracking-wider uppercase text-[#5C5C5B]"
+                        className="text-[11px] font-semibold tracking-wider uppercase text-xam-dam"
                       >
                         {sp.thuong_hieu}
                       </span>
@@ -283,7 +284,7 @@ export default function TrangDaThich() {
                       type="button"
                       aria-label="Thêm vào giỏ"
                       onClick={(e) => handleThemVaoGio(sp, e)}
-                      className="w-10 h-10 shrink-0 rounded-full bg-[#CFE3D5] hover:opacity-90 text-den flex items-center justify-center transition-transform active:scale-90 cursor-pointer"
+                      className="w-10 h-10 shrink-0 rounded-full bg-bac-ha hover:opacity-90 text-den flex items-center justify-center transition-transform active:scale-90 cursor-pointer"
                     >
                       <svg
                         width="18"

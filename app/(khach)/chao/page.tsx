@@ -1,3 +1,4 @@
+import { lopNut } from "@/components/ui/Nut";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
@@ -97,7 +98,7 @@ export default function TrangChao() {
           <div className="mt-auto pt-5 flex flex-col items-center gap-1.5">
             <Link
               href="/bat-dau"
-              className="w-full h-[56px] rounded-full bg-den text-trang no-underline flex items-center justify-center gap-2.5 font-semibold text-[16px] tracking-[0.2px] hover:bg-black transition-colors"
+              className={lopNut("chinh","lon",true)}
             >
               Bắt đầu quẹt
               <svg

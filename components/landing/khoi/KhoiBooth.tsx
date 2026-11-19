@@ -1,3 +1,4 @@
+import { lopNut } from "@/components/ui/Nut";
 import Link from "next/link";
 import type { KhoiBooth } from "@/lib/chien-dich/types";
 import { CAU_HINH_BOOTH } from "@/lib/cau-hinh";
@@ -85,7 +86,7 @@ export function KhoiBooth({ khoi }: KhoiBoothProps) {
             href="https://maps.google.com/?q=Union+Square+171+Dong+Khoi+Ben+Nghe+Quan+1+Ho+Chi+Minh"
             target="_blank"
             rel="noopener noreferrer"
-            className="h-14 px-7 rounded-full bg-den text-white font-semibold text-[16px] inline-flex items-center gap-2.5 hover:bg-black transition-transform active:scale-95"
+            className={lopNut("chinh","lon")}
           >
             Chỉ đường
             <svg
@@ -106,7 +107,7 @@ export function KhoiBooth({ khoi }: KhoiBoothProps) {
           </a>
           <Link
             href="/danh-muc"
-            className="h-14 px-7 rounded-full bg-white text-den font-semibold text-[16px] inline-flex items-center gap-2.5 hover:bg-white/80 border border-den/10 transition-transform active:scale-95 shadow-xs"
+            className={lopNut("phu","lon")}
           >
             Giữ hàng trước khi đến
           </Link>
