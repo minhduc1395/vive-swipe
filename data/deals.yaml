@@ -37,7 +37,7 @@ deals:
   # ---------- LOPOE ----------
   - id: LOPOE-25
     ten: LOPOE giảm 25% khi mua kèm
-    ten_en: 25% off LOPOE with any purchase
+    ten_en: 25% off LOPOE with any other item
     loai: giam_khi_mua_kem
     trang_thai: DA_DUYET
     may_rui: false
@@ -49,7 +49,7 @@ deals:
     gia_uu_dai: {LOPOE-CF: 186000, LOPOE-AMP: 314000, LOPOE-CR: 411000}
     khong_cong_voi: [LOPOE-COMBO-2SRM, LOPOE-COMBO-KEM-AMP, LOPOE-COMBO-BO3, KM-10]
     hook: LOPOE giảm 25% khi mua kèm sản phẩm bất kỳ tại VIVE
-    hook_en: Get 25% off LOPOE when purchased with any item at VIVE
+    hook_en: Get 25% off LOPOE when you buy any other item at VIVE
 
   - id: LOPOE-COMBO-2SRM
     ten: Combo 2 sữa rửa mặt LOPOE
@@ -64,12 +64,12 @@ deals:
     qua: Túi sample và 1 kem chống nắng hoặc kem mềm da   # tên, giá món quà chưa chốt
     gioi_han_qua: 15
     hook: Sữa rửa mặt LOPOE combo 2 chai 349K
-    hook_en: LOPOE Cleansing Foam combo: 2 bottles for 349K
+    hook_en: "LOPOE Cleansing Foam combo: 2 bottles for 349K"
     can_xac_nhan: Tên và giá kem chống nắng, kem mềm da
 
   - id: LOPOE-COMBO-KEM-AMP
     ten: Combo kem dưỡng và ampoule LOPOE
-    ten_en: LOPOE Barrier Cream & Ampoule Combo
+    ten_en: LOPOE Moisture Cream & Ampoule Combo
     loai: combo
     trang_thai: DA_DUYET
     may_rui: false
@@ -95,11 +95,11 @@ deals:
     gioi_han_qua: 10
     khi_het_qua: {gia_combo: 889000, qua: null}
     hook: Mua bộ 3 LOPOE, tặng thêm kem dưỡng
-    hook_en: Buy LOPOE Trio, get a free Barrier Cream
+    hook_en: Buy the LOPOE Trio, get an extra Moisture Cream
 
   - id: KM-10
     ten: 10 đơn LOPOE đầu tiên, mua 2 tính tiền 1
-    ten_en: First 10 LOPOE orders: Buy 2 Pay 1
+    ten_en: "First 10 LOPOE orders: buy 2, pay for 1"
     loai: mua_x_tang_y
     trang_thai: DA_DUYET
     may_rui: false
@@ -109,7 +109,7 @@ deals:
     dieu_kien_en: Buy 2 identical LOPOE items at list price, pay for 1; includes 1 toner pad and 3 trial serum sachets. Limit 1 per customer
     gioi_han: 10
     hook: "10 đơn LOPOE đầu tiên: mua 1 được 5"
-    hook_en: First 10 LOPOE orders: Buy 1 Get 5
+    hook_en: "First 10 LOPOE orders: buy 1, get 5"
     ghi_chu_noi_dung: Điều kiện ghi "mua 2 tính tiền 1", không ghi "tặng 1 sản phẩm cùng loại"
 
   - id: KM-13
@@ -188,7 +188,7 @@ deals:
 
   - id: BAC-HOA-DON
     ten: Quà theo hóa đơn từ 800K
-    ten_en: Tiered invoice gift from 800K
+    ten_en: Gift with purchase from 800K
     loai: qua_theo_nguong_don
     nhom_qua: hoa_don
     trang_thai: DA_DUYET
