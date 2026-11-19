@@ -58,6 +58,8 @@ function DanhMucNoiDung() {
   const timUrl = searchParams.get("tim") || "";
   const xepUrl = searchParams.get("xep") || "goi-y";
   const coDealUrl = searchParams.get("co-deal") === "1";
+  const spUrl = searchParams.get("sp") || "";
+  const moChiTietTuTrang = useRef(false);
   const [moLoc, setMoLoc] = useState(false);
   const hangChipLoai = useRef<HTMLDivElement>(null);
   // Chip loại đang chọn luôn nằm trong tầm nhìn của hàng cuộn ngang
@@ -73,7 +75,6 @@ function DanhMucNoiDung() {
   const [timKiemInput, setTimKiemInput] = useState<string>(timUrl);
   const [gioiHanHienThi, setGioiHanHienThi] = useState<number>(BUOC_TAI);
   const [daThich, setDaThich] = useState<string[]>([]);
-  const [sanPhamChiTiet, setSanPhamChiTiet] = useState<SanPham | null>(null);
 
   // Sync state từ storage
   useEffect(() => {
@@ -98,6 +99,23 @@ function DanhMucNoiDung() {
   // Tất cả sản phẩm hiển thị hợp lệ
   const { sanPham, deals } = useDuLieu();
   const tatCaSanPhamHienThi = useMemo(() => laySanPhamHienThi(sanPham), [sanPham]);
+
+  // W041: ?sp=<id> mở sẵn bảng chi tiết; đóng bảng thì bỏ sp (Back của trình duyệt cũng đóng)
+  const sanPhamChiTiet = useMemo<SanPham | null>(
+    () => (spUrl ? sanPham.find((s) => s.id === spUrl) ?? null : null),
+    [spUrl, sanPham]
+  );
+  const setSanPhamChiTiet = (sp: SanPham | null) => {
+    if (sp) {
+      moChiTietTuTrang.current = true;
+      capNhatBoLoc({ sp: sp.id }, { scroll: false });
+    } else if (moChiTietTuTrang.current) {
+      moChiTietTuTrang.current = false;
+      router.back();
+    } else {
+      capNhatBoLoc({ sp: "" }, { replace: true, scroll: false });
+    }
+  };
 
   // Đếm số món trên từng loại sản phẩm
   const soLuongTheoLoai = useMemo(() => {
@@ -128,8 +146,9 @@ function DanhMucNoiDung() {
       tim?: string;
       xep?: string;
       coDeal?: boolean;
+      sp?: string;
     },
-    options?: { replace?: boolean }
+    options?: { replace?: boolean; scroll?: boolean }
   ) => {
     const nextParams = new URLSearchParams(searchParams.toString());
 
@@ -154,6 +173,10 @@ function DanhMucNoiDung() {
       else nextParams.delete("xep");
     }
 
+    if (params.sp !== undefined) {
+      if (params.sp) nextParams.set("sp", params.sp);
+      else nextParams.delete("sp");
+    }
     if (params.coDeal !== undefined) {
       if (params.coDeal) nextParams.set("co-deal", "1");
       else nextParams.delete("co-deal");
@@ -161,10 +184,11 @@ function DanhMucNoiDung() {
 
     const queryStr = nextParams.toString();
     const target = `/danh-muc${queryStr ? `?${queryStr}` : ""}`;
+    const tuyChon = options?.scroll === false ? { scroll: false } : undefined;
     if (options?.replace) {
-      router.replace(target);
+      router.replace(target, tuyChon);
     } else {
-      router.push(target);
+      router.push(target, tuyChon);
     }
   };
 

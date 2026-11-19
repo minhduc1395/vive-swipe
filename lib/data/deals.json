@@ -143,6 +143,11 @@
     "het_qua": false,
     "bat_dau": "2026-11-14",
     "ket_thuc": "2026-11-29",
+    "anh_san_pham": [
+      "LOPOE-CF",
+      "LOPOE-AMP",
+      "LOPOE-CR"
+    ],
     "dieu_kien": "Mua lẻ 1 món LOPOE. Quà theo giá khách trả cho món LOPOE",
     "hook": "Mua LOPOE, tặng sản phẩm fullsize",
     "bang_qua": [
@@ -213,6 +218,11 @@
     "het_qua": false,
     "bat_dau": "2026-11-14",
     "ket_thuc": "2026-11-29",
+    "anh_san_pham": [
+      "LOPOE-CF",
+      "LOPOE-AMP",
+      "LOPOE-CR"
+    ],
     "hook": "Mua Medicube, Celimax, Skinfood từ 700K, tặng sữa rửa mặt LOPOE",
     "nhan_tinh": [
       "Medicube",

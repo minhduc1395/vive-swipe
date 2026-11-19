@@ -121,6 +121,8 @@ export const DealSchema = z.object({
   bat_dau: NgayISOSchema.nullable().optional().default(null),
   ket_thuc: NgayISOSchema.nullable().optional().default(null),
   ap_dung_cho: z.array(z.string().min(1)).optional(),
+  /** W048: mã sản phẩm có ảnh hiện trên thẻ deal (ưu tiên hơn thanh_phan, ap_dung_cho) */
+  anh_san_pham: z.array(z.string().min(1)).optional(),
   dieu_kien: z.string().optional(),
   gia_uu_dai: z.record(z.string(), z.number().int().positive()).optional(),
   khong_cong_voi: z.array(z.string().min(1)).optional(),

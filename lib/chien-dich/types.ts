@@ -84,6 +84,8 @@ export interface KhoiRaMat {
 export interface KhoiChuongTrinh {
   loai: "chuong-trinh";
   tieu_de: string;
+  tieu_de_en?: string;
+  logo_sau_tieu_de?: boolean;
   deal: string[];
   o_to?: string;
 }
