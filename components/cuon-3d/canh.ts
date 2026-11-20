@@ -425,10 +425,10 @@ export function taoCanh(
     // 4) Nắp nhỏ giọt (đơn vị cảnh; đáy chai ở y = -CAO/2, miệng chai ở y = -CAO/2 + caoThan)
     if (NAP.nhom && NAP.giot && NAP.gon) {
       const nhac = seg(p, 0.43, 0.455) - seg(p, 0.5, 0.525), lech = seg(p, 0.452, 0.468) - seg(p, 0.495, 0.51);
-      const LIFT = 0.78, LECH = 0.55; // nhấc đủ cao để lộ ống nhỏ giọt
+      const LIFT = 0.95, LECH = 0.55; // nhấc đủ cao để lộ đầu ống nhỏ giọt (ống dài 340px = 0.88 đơn vị)
       NAP.nhom.position.set(lech * LECH, nhac * LIFT, 0.01);
       NAP.nhom.rotation.z = -lech * 0.1;
-      const f = seg(p, 0.466, 0.492), tx = lech * LECH, dayChai = -CAO / 2, mieng = dayChai + caoThanAmp, ty = mieng - 0.06 + nhac * LIFT - 0.55; // giọt rơi từ đầu ống (ống dài ~0.55 dưới cổ khi đã nhấc)
+      const f = seg(p, 0.466, 0.492), tx = lech * LECH, dayChai = -CAO / 2, mieng = dayChai + caoThanAmp, ty = mieng - 0.02 + nhac * LIFT - 0.88; // giọt rơi từ đầu ống (đầu ống cách đáy nắp 340px ≈ 0.88)
       NAP.giot.visible = f > 0 && f < 1 && nhac > 0.5;
       if (NAP.giot.visible) {
         const taoGiot = kep(f / 0.3), roi = kep((f - 0.3) / 0.7);
