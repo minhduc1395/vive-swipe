@@ -12,6 +12,7 @@ hien_cho_duyet: false
 tai_san:
   ampoule_than: /thu-nghiem/lopoe-3d/ampoule-than.webp
   ampoule_nap: /thu-nghiem/lopoe-3d/ampoule-nap.webp
+  ampoule_co: /thu-nghiem/lopoe-3d/ampoule-co.webp
   sua_rua_mat: /thu-nghiem/lopoe-3d/srm.webp
   kem_duong: /thu-nghiem/lopoe-3d/kem.webp
 mo_dau:
