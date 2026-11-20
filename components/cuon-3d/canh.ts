@@ -175,7 +175,7 @@ export function taoCanh(
   let caoThanAmp = CAO * 0.66;
   const longMat = () => new THREE.MeshPhysicalMaterial({ color: 0x86afe6, roughness: 0.15, clearcoat: 0.8, envMapIntensity: 1.1, transparent: true, opacity: 0.85, depthWrite: false });
   {
-    // Kích thước theo điểm ảnh của bộ ảnh: thân 294×654; cổ chai 294×90; nắp 294×975 (bầu + cổ nắp ảnh thật CĐT chụp 20/11, ống vẽ lại 68px dài 340px),
+    // Kích thước theo điểm ảnh của bộ ảnh: thân 294×654; cổ chai 294×90; nắp 294×975 (bầu + cổ nắp ảnh thật CĐT chụp 20/11, ống vẽ lại 58px dài 400px),
     // đáy cổ nắp ở y = 365 của ảnh nắp, phần dưới là ống thủy tinh (nằm trong chai khi đóng)
     const DV = CAO / 989; // đơn vị cảnh trên mỗi điểm ảnh (chuẩn theo chiều cao tuýp 989px)
     const rong = 294 * DV, caoThan = 654 * DV, caoNap = 975 * DV, dayCoNap = 365 * DV;
@@ -432,10 +432,11 @@ export function taoCanh(
     // 4) Nắp nhỏ giọt (đơn vị cảnh; đáy chai ở y = -CAO/2, miệng chai ở y = -CAO/2 + caoThan)
     if (NAP.nhom && NAP.giot && NAP.gon) {
       const nhac = seg(p, 0.43, 0.455) - seg(p, 0.5, 0.525), lech = seg(p, 0.452, 0.468) - seg(p, 0.495, 0.51);
-      const LIFT = 0.95, LECH = 0.55; // nhấc đủ cao để lộ đầu ống nhỏ giọt (ống dài 340px = 0.88 đơn vị)
+      const LIFT = 1.27, LECH = 0.55; // nhấc đủ cao để đầu ống (dài 400px = 1.03) vượt khỏi cổ chai (82px)
       NAP.nhom.position.set(lech * LECH, nhac * LIFT, 0.01);
+      amp.position.y -= nhac * 0.3; // chai lún nhẹ khi rút nắp để nắp không vượt mép trên màn hình
       NAP.nhom.rotation.z = -lech * 0.1;
-      const f = seg(p, 0.466, 0.492), tx = lech * LECH, dayChai = -CAO / 2, mieng = dayChai + caoThanAmp, ty = mieng - 0.02 + nhac * LIFT - 0.88; // giọt rơi từ đầu ống (đầu ống cách đáy nắp 340px ≈ 0.88)
+      const f = seg(p, 0.466, 0.492), tx = lech * LECH, dayChai = -CAO / 2, mieng = dayChai + caoThanAmp, ty = mieng - 0.02 + nhac * LIFT - 1.03; // giọt rơi từ đầu ống (đầu ống cách đáy nắp 400px ≈ 1.03)
       NAP.giot.visible = f > 0 && f < 1 && nhac > 0.5;
       if (NAP.giot.visible) {
         const taoGiot = kep(f / 0.3), roi = kep((f - 0.3) / 0.7);
