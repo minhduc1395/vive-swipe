@@ -35,8 +35,8 @@ describe("lớp dữ liệu tĩnh (W007)", () => {
     expect(lopoe25?.ket_thuc).toBe("2026-11-29");
   });
 
-  it("lọc đúng 129 sản phẩm hiển thị và loại bỏ món hết hàng, ẩn hoặc thiếu ảnh", () => {
-    expect(laySanPhamHienThi()).toHaveLength(129);
+  it("lọc đúng 127 sản phẩm hiển thị và loại bỏ món hết hàng, ẩn hoặc thiếu ảnh (20/11: ẩn 2 máy Medicube, INV-005)", () => {
+    expect(laySanPhamHienThi()).toHaveLength(127);
 
     const mau: SanPham[] = [
       {

@@ -2165,12 +2165,12 @@
       "moi-loai-da"
     ],
     "mo_ta": null,
-    "con_hang": "true",
-    "ton": 3,
-    "hien_thi": true,
+    "con_hang": "false",
+    "ton": 0,
+    "hien_thi": false,
     "anh": "/products/8800289468759.webp",
     "pho_bien": 0.5,
-    "ghi_chu": null
+    "ghi_chu": "20/11 INV-005: máy đã trả lại nhãn Medicube; ẩn trên web"
   },
   {
     "id": "8800289468674",
@@ -2192,12 +2192,12 @@
       "moi-loai-da"
     ],
     "mo_ta": null,
-    "con_hang": "true",
-    "ton": 1,
-    "hien_thi": true,
+    "con_hang": "false",
+    "ton": 0,
+    "hien_thi": false,
     "anh": "/products/8800289468674.webp",
     "pho_bien": 0.5,
-    "ghi_chu": null
+    "ghi_chu": "20/11 INV-005: máy đã trả lại nhãn Medicube; ẩn trên web"
   },
   {
     "id": "8800256112227",

@@ -77,8 +77,8 @@ id,barcode,thuong_hieu,ten_goc,ten_hien_thi,quy_cach,gia_goc,gia_ban,giam_tren_t
 8809675771909,8809675771909,Lalarecipe,Yuzu Vita C Ampoule Pad,Toner pad Yuzu Vita C Ampoule Pad,,,298000,,toner-pad,sang-da,Vitamin C;Thanh yên,moi-loai-da,true,,true,8809675771909.webp,
 8809638307473,8809638307473,Lalarecipe,Yuzu Vita C Cream,Kem dưỡng Yuzu Vita C Cream,,,383000,,kem-duong,sang-da,Vitamin C;Thanh yên,moi-loai-da,true,,true,8809638307473.webp,
 8809875906569,8809875906569,Lalarecipe,Yuzu Vita C Eye Serum,Tinh chất Yuzu Vita C Eye Serum,,,319000,,tinh-chat,sang-da;vung-mat,Vitamin C;Thanh yên,moi-loai-da,true,,true,8809875906569.webp,
-8800289468759,8800289468759,Medicube,Age-R Booster Pro X2 · Pink,Máy chăm sóc da Age-R Booster Pro X2 · Hồng,,9500000,8550000,giảm 950.000,thiet-bi,chong-lao-hoa;thiet-bi,,moi-loai-da,true,3,true,8800289468759.webp,
-8800289468674,8800289468674,Medicube,Age-R Booster Pro X2 · White,Máy chăm sóc da Age-R Booster Pro X2 · Trắng,,9500000,8550000,giảm 950.000,thiet-bi,chong-lao-hoa;thiet-bi,,moi-loai-da,true,1,true,8800289468674.webp,
+8800289468759,8800289468759,Medicube,Age-R Booster Pro X2 · Pink,Máy chăm sóc da Age-R Booster Pro X2 · Hồng,,9500000,8550000,giảm 950.000,thiet-bi,chong-lao-hoa;thiet-bi,,moi-loai-da,false,0,false,8800289468759.webp,20/11 INV-005: máy đã trả lại nhãn Medicube; ẩn trên web
+8800289468674,8800289468674,Medicube,Age-R Booster Pro X2 · White,Máy chăm sóc da Age-R Booster Pro X2 · Trắng,,9500000,8550000,giảm 950.000,thiet-bi,chong-lao-hoa;thiet-bi,,moi-loai-da,false,0,false,8800289468674.webp,20/11 INV-005: máy đã trả lại nhãn Medicube; ẩn trên web
 8800256112227,8800256112227,Medicube,Collagen Jelly Cream,Kem dưỡng Collagen Jelly Cream,50ml,,520000,,kem-duong,cap-am;chong-lao-hoa,Collagen,da-kho,true,10,true,8800256112227.webp,
 8809982769866,8809982769866,Medicube,Deep Vita C Capsule Cream,Kem dưỡng Deep Vita C Capsule Cream,,,580000,,kem-duong,sang-da,Vitamin C,moi-loai-da,true,9,true,8809982769866.webp,
 8800256109661,8800256109661,Medicube,Deep Vita C Pad · Nâu,Toner pad Deep Vita C Pad · Nâu,,,615000,,toner-pad,sang-da,Vitamin C,moi-loai-da,true,10,true,8800256109661.webp,

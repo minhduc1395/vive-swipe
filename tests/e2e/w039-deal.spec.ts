@@ -22,11 +22,13 @@ test.describe("W039 · Trang Deal dạng thẻ gọn", () => {
     await page.setViewportSize({ width: 1280, height: 860 });
     await datDaKhaoSat(page);
     await page.goto("/deal");
-    await page.locator("article[aria-label='Mua Medicube, Celimax, SKINFOOD tặng LOPOE']").click();
-    await expect(page).toHaveURL(/id=KM-08/);
+    await page.locator("article[aria-label='Quà theo hóa đơn từ 800K']").click();
+    await expect(page).toHaveURL(/id=BAC-HOA-DON/);
     const keo = page.getByRole("dialog");
     await expect(keo).toBeVisible();
-    await expect(keo.getByRole("tab")).toHaveCount(3);
+    // Deal quà hóa đơn không có tab gợi ý theo mốc (KM-08 có 3 tab đã dừng 20/11); ngăn kéo hiện 2 mốc quà
+    await expect(keo.getByText("800K").first()).toBeVisible();
+    await expect(keo.getByText(/1,2 triệu/).first()).toBeVisible();
     const hop = (await keo.locator("> div").boundingBox())!;
     expect(Math.round(hop.width)).toBe(420);
     await page.keyboard.press("Escape");

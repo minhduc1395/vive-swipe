@@ -68,7 +68,7 @@ test.describe("W050 · Trang chủ mới / theo landing v3", () => {
     // Số liệu đọc từ data/ hiện đúng
     await expect(page.locator("#deal-pdrn")).toContainText("999K");
     await expect(page.locator("#deal-mat-na")).toContainText("396K");
-    await expect(page.locator("#qua-lopoe")).toContainText("700K");
+    await expect(page.locator("#qua-lopoe")).toContainText("800K"); // QA-003: mốc hóa đơn 800K thay KM-08
     // W055: ô combo và hàng trượt lấy giá, quà từ data/deals.yaml
     await expect(page.locator("#combo-lopoe-bo3")).toContainText("911K");
     await expect(page.locator("#combo-lopoe-bo3")).toContainText("Số lượng có hạn");
@@ -103,10 +103,10 @@ test.describe("W050 · Trang chủ mới / theo landing v3", () => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await datDaKhaoSat(page);
 
-    // Dải khuyến mãi: Xem › -> /deal?id=KM-13
+    // Dải khuyến mãi: Xem › -> /deal?id=BAC-HOA-DON (QA-003)
     await page.goto("/");
     await page.locator(".tc-v3 .dai a").evaluate((el: HTMLElement) => el.click());
-    await expectCham(page).toHaveURL(/\/deal\?id=KM-13/);
+    await expectCham(page).toHaveURL(/\/deal\?id=BAC-HOA-DON/);
 
     // Khối 1: Ghé cửa hàng -> #ghe-vive cùng trang
     await page.goto("/");
@@ -186,11 +186,11 @@ test.describe("W050 · Trang chủ mới / theo landing v3", () => {
     await expectCham(page).toHaveURL(/\/deal\?/);
     expect(new URL(page.url()).searchParams.get("id")).toBe("DC-05");
 
-    // Khối 5 Quà LOPOE: Xem deal -> /deal?id=KM-08
+    // Khối 5 Quà LOPOE: Xem deal -> /deal?id=BAC-HOA-DON (QA-003)
     await page.goto("/");
     await page.locator('#qua-lopoe a:has-text("Xem deal")').evaluate((el: HTMLElement) => el.click());
     await expectCham(page).toHaveURL(/\/deal\?/);
-    expect(new URL(page.url()).searchParams.get("id")).toBe("KM-08");
+    expect(new URL(page.url()).searchParams.get("id")).toBe("BAC-HOA-DON");
 
     // Khối 6 Ghé VIVE: Chỉ đường (link ngoài đúng doanh_nghiep.ban_do + tab mới + noopener) và Giữ hàng -> /gio
     await page.goto("/");

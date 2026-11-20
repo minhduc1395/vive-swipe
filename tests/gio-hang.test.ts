@@ -6,7 +6,7 @@ import { tinhGio } from "@/lib/deals/gio-hang";
 const NGAY_POPUP = "2026-11-17";
 
 describe("engine giỏ hàng tinhGio (W008)", () => {
-  it("1. 1 sữa rửa mặt LOPOE: 249.000; quà KM-13 muối tắm", () => {
+  it("1. 1 sữa rửa mặt LOPOE: 249.000; không quà (KM-13 dừng từ 20/11, QD-SALE-012)", () => {
     const kq = tinhGio(
       [{ san_pham_id: "LOPOE-CF", so_luong: 1 }],
       SAN_PHAM,
@@ -16,7 +16,7 @@ describe("engine giỏ hàng tinhGio (W008)", () => {
 
     expect(kq.tong_tam_tinh).toBe(249_000);
     expect(kq.tiet_kiem).toBe(0);
-    expect(kq.qua_du_kien).toBe("1 muối tắm salTherapy");
+    expect(kq.qua_du_kien).toBeNull();
     expect(kq.canh_bao).toBe("uoc_tinh");
   });
 
@@ -94,7 +94,7 @@ describe("engine giỏ hàng tinhGio (W008)", () => {
     expect(kq.qua_du_kien).toBe("1 sữa rửa mặt LOPOE");
   });
 
-  it("6. Medicube Triple Collagen toner + serum: 1.135.000; quà ampoule LOPOE", () => {
+  it("6. Medicube Triple Collagen toner + serum: 1.135.000; quà sữa rửa mặt LOPOE (mốc 800K, KM-08 đã dừng)", () => {
     const kq = tinhGio(
       [
         { san_pham_id: "8800256114320", so_luong: 1 },
@@ -106,7 +106,7 @@ describe("engine giỏ hàng tinhGio (W008)", () => {
     );
 
     expect(kq.tong_tam_tinh).toBe(1_135_000);
-    expect(kq.qua_du_kien).toBe("1 ampoule LOPOE");
+    expect(kq.qua_du_kien).toBe("1 sữa rửa mặt LOPOE");
   });
 
   it("7. 6 miếng Uniura bất kỳ: 396.000 + 99.000 = 495.000", () => {
@@ -127,7 +127,7 @@ describe("engine giỏ hàng tinhGio (W008)", () => {
     expect(kq.tiet_kiem).toBe(99_000);
   });
 
-  it("8. Celimax serum 600.000: moc_tiep_theo là KM-08 còn thiếu 100.000 và gợi ý từ Đã thích", () => {
+  it("8. Celimax serum 600.000: moc_tiep_theo là mốc 800K (BAC-HOA-DON) còn thiếu 200.000 và gợi ý từ Đã thích", () => {
     const kq = tinhGio(
       [{ san_pham_id: "8809875907412", so_luong: 1 }],
       SAN_PHAM,
@@ -144,10 +144,12 @@ describe("engine giỏ hàng tinhGio (W008)", () => {
 
     expect(kq.tong_tam_tinh).toBe(600_000);
     expect(kq.moc_tiep_theo).not.toBeNull();
-    expect(kq.moc_tiep_theo?.deal_id).toBe("KM-08");
-    expect(kq.moc_tiep_theo?.con_thieu).toBe(100_000);
+    expect(kq.moc_tiep_theo?.deal_id).toBe("BAC-HOA-DON");
+    expect(kq.moc_tiep_theo?.con_thieu).toBe(200_000);
     expect(kq.moc_tiep_theo?.qua).toBe("1 sữa rửa mặt LOPOE");
+    // Mốc hóa đơn tính mọi nhãn nên Rep!el cũng được gợi ý
     expect(kq.moc_tiep_theo?.goi_y.map((s) => s.id)).toEqual([
+      "8809198846184",
       "8809032673631",
       "8809463992615",
     ]);
@@ -202,11 +204,9 @@ describe("engine giỏ hàng tinhGio (W008)", () => {
     expect(kq.tong_le).toBe(1_444_000);
     expect(kq.tiet_kiem).toBe(209_000);
     expect(kq.tong_tam_tinh).toBe(1_235_000);
-    expect(kq.qua_du_kien).toBe("1 ampoule LOPOE");
-    expect(kq.moc_tiep_theo?.deal_id).toBe("KM-08");
-    expect(kq.moc_tiep_theo?.con_thieu).toBe(301_000);
-    expect(kq.moc_tiep_theo?.qua).toBe("1 kem dưỡng LOPOE");
-    expect(kq.moc_tiep_theo?.goi_y.map((s) => s.id)).toContain("8800256115174");
+    // 20/11: mốc 1,2 triệu tặng ampoule + voucher nhà hàng; KM-08 (mốc 1,3 triệu tặng kem) đã dừng nên không còn mốc tiếp theo
+    expect(kq.qua_du_kien).toBe("1 ampoule LOPOE và 1 voucher giảm 15% nhà hàng Union Square");
+    expect(kq.moc_tiep_theo).toBeNull();
   });
 
   it("gợi ý đổi combo khi giỏ có đủ món lẻ rẻ hơn và bỏ qua sản phẩm ẩn", () => {
@@ -228,7 +228,7 @@ describe("engine giỏ hàng tinhGio (W008)", () => {
     expect(kq.goi_y_doi_combo[0]?.tiet_kiem).toBe(146_000);
   });
 
-  it("cộng thêm quà DC-06 khi mua Age-R Booster Pro và không tính vào 1 quà hóa đơn", () => {
+  it("DC-06 đã dừng (INV-005, máy Medicube trả nhãn): mua Age-R Booster Pro không còn cộng quà Uniura", () => {
     const kq = tinhGio(
       [{ san_pham_id: "8800289468759", so_luong: 1 }],
       SAN_PHAM,
@@ -236,9 +236,8 @@ describe("engine giỏ hàng tinhGio (W008)", () => {
       NGAY_POPUP
     );
 
-    expect(kq.qua_du_kien).toBe("1 kem dưỡng LOPOE");
-    expect(kq.qua_cong_them).toContain(
-      "2 hộp mặt nạ Uniura (8 miếng, trị giá 792.000)"
-    );
+    expect(kq.qua_cong_them).toEqual([]);
+    // Máy đã ẩn khỏi web
+    expect(SAN_PHAM.find((s) => s.id === "8800289468759")?.hien_thi).toBe(false);
   });
 });

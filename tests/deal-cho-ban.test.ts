@@ -17,7 +17,7 @@ const NGAY_POPUP = "2026-11-18";
 describe("W016: Deal cho bạn và xếp theo diem_deal", () => {
   const sanPhamMap = new Map<string, SanPham>(SAN_PHAM.map((sp) => [sp.id, sp]));
 
-  it("Tiêu chí 1: Khách thích 2 món Medicube thấy KM-08 trong 3 deal đầu", () => {
+  it("Tiêu chí 1: Khách thích 2 món Medicube thấy combo Medicube trong 3 deal đầu (KM-08 dừng từ 20/11)", () => {
     // Tìm 2 sản phẩm Medicube trong dữ liệu thực
     const dsMedicube = SAN_PHAM.filter(
       (sp) => sp.thuong_hieu.toLowerCase() === "medicube"
@@ -46,14 +46,13 @@ describe("W016: Deal cho bạn và xếp theo diem_deal", () => {
 
     // Kiểm tra top 3 deal
     const baDealDau = dealsChoBan.slice(0, 3);
-    const coKm08TrongBaDealDau = baDealDau.some((d) => d.id === "KM-08");
+    const coComboMedicube = baDealDau.some((d) => d.id === "COMBO-PINK" || d.id === "COMBO-VAMPIRE-GLOW");
 
-    expect(coKm08TrongBaDealDau).toBe(true);
-
-    const km08 = dealsChoBan.find((d) => d.id === "KM-08");
-    expect(km08).toBeDefined();
-    // KM-08 phải có điểm liên quan cao
-    expect(km08!.lien_quan).toBeGreaterThanOrEqual(0.5);
+    expect(coComboMedicube).toBe(true);
+    // Vòng quay (DC-02) là ưu đãi chung, không đứng trên combo đúng nhãn khách thích
+    const viTriQuay = dealsChoBan.findIndex((d) => d.id === "DC-02");
+    const viTriPink = dealsChoBan.findIndex((d) => d.id === "COMBO-PINK");
+    expect(viTriPink).toBeLessThan(viTriQuay);
   });
 
   it("Tiêu chí 2: Không deal ẩn nào lọt vào trang", () => {
@@ -75,15 +74,12 @@ describe("W016: Deal cho bạn và xếp theo diem_deal", () => {
       expect(deal.may_rui && !deal.da_dang_ky).toBe(false);
     }
 
-    // 2. Các deal bị ẩn trong dữ liệu (KM-10, KM-09, DC-01, DC-02, DC-04, KM-12, KM-12b) không được xuất hiện
+    // 2. Các deal bị ẩn hoặc đã dừng (QD-SALE-012, INV-005) không được xuất hiện; vòng quay DC-02 được hiện (QD-DIR-018)
     const tapIdHienThi = new Set(dealsChoBan.map((d) => d.id));
-    expect(tapIdHienThi.has("KM-10")).toBe(false);
-    expect(tapIdHienThi.has("KM-09")).toBe(false);
-    expect(tapIdHienThi.has("DC-01")).toBe(false);
-    expect(tapIdHienThi.has("DC-02")).toBe(false);
-    expect(tapIdHienThi.has("DC-04")).toBe(false);
-    expect(tapIdHienThi.has("KM-12")).toBe(false);
-    expect(tapIdHienThi.has("KM-12b")).toBe(false);
+    for (const id of ["KM-10", "KM-09", "KM-08", "KM-11", "KM-13", "DC-01", "DC-04", "DC-06", "KM-12", "KM-12b"]) {
+      expect(tapIdHienThi.has(id), `deal ${id} phải ẩn`).toBe(false);
+    }
+    expect(tapIdHienThi.has("DC-02")).toBe(true);
   });
 
   it("Tính đúng giá trị kinh tế gia_tri theo docs/02 mục 6", () => {

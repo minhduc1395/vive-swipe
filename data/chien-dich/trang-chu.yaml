@@ -1,12 +1,12 @@
 # Cấu hình trang chủ `/` theo bản thiết kế landing v3 (W050).
 # Đổi sản phẩm, deal nổi bật hoặc đích nút = đổi file này, sau đó chạy `npm run build:data`.
 
-dai_thong_bao:
-  deal_id: "KM-13"
-  mac_dinh_chu: "Mua LOPOE, tặng sản phẩm fullsize"
+dai_thong_bao:   # QA-003 (20/11): 3 ưu đãi theo QD-SALE-012, KM-13 đã dừng
+  deal_id: "BAC-HOA-DON"
+  mac_dinh_chu: "Hóa đơn từ 800K tặng sữa rửa mặt LOPOE"
   nut:
     chu: "Xem ›"
-    den: "/deal?id=KM-13"
+    den: "/deal?id=BAC-HOA-DON"
     kieu: "chinh"
 
 cua_hang:
@@ -242,15 +242,16 @@ luoi_doi:
         den: "/danh-muc?thuong-hieu=Lalarecipe"
         kieu: "chinh"
 
-qua_lopoe:
-  deal_id: "KM-08"
+qua_lopoe:   # QA-003 (20/11): KM-08 đã dừng, dùng mốc hóa đơn 800K / 1,2 triệu
+  deal_id: "BAC-HOA-DON"
+  phu_de: "Mọi nhãn hàng. Gồm cả combo. Từ 1,2 triệu tặng ampoule và voucher nhà hàng 15%."
   tien_to_tieu_de: "Từ "
   hau_to_tieu_de: ", tặng LOPOE"
   anh: "/trang-chu/srm.webp"
   mo_ta_anh: "Sữa rửa mặt LOPOE"
   nut:
     - chu: "Xem deal"
-      den: "/deal?id=KM-08"
+      den: "/deal?id=BAC-HOA-DON"
       kieu: "chinh"
 
 # W055: hàng cuối phần combo, thẻ trượt ngang. Giá, quà lấy từ deal_id.
