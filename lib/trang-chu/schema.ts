@@ -56,8 +56,12 @@ export const ThuongHieuKhoiSchema = z.object({
 
 export const OTrongLuoiSchema = z.object({
   id: z.string().min(1),
-  /** Màu nền theo bảng màu cửa hàng (docs/03 mục 1). Không có nền đen/tối cho ô (CĐT 20/11). */
-  mau_nen: z.enum(["hong-nhat", "bac-ha", "hong", "bac-ha-nhat", "trang"]),
+  /**
+   * Màu nền ô theo bảng màu nội thất cửa hàng (USQ_LL1_VIVE rev14, Option 1 Natural–Modern–Warm):
+   * kem #F8F4EA (Ivory), be #E6D7C3 (Beige), cat #D2BBA3 (Sand), oliu-nhat (Olive pha trắng), oliu-vua (Olive nhạt), trang.
+   * Không nền đen/tối (CĐT 20/11). Đổi mã màu ở trang-chu.css, không đổi tên ở đây.
+   */
+  mau_nen: z.enum(["kem", "be", "cat", "oliu-nhat", "oliu-vua", "trang"]),
   /** W056: cỡ ô trong lưới 6 cột: vua = 1/2, rong = 2/3, nho = 1/3 */
   co: z.enum(["vua", "rong", "nho"]).default("vua"),
   tieu_de: z.string().min(1),
@@ -94,7 +98,7 @@ export const QuaLopoeKhoiSchema = z.object({
 /** W055: thẻ combo trong hàng trượt ngang. Giá, quà lấy từ deal_id trong data/deals.yaml. */
 export const TheComboSchema = z.object({
   deal_id: z.string().min(1),
-  mau_nen: z.enum(["hong-nhat", "bac-ha", "hong", "bac-ha-nhat", "trang"]),
+  mau_nen: z.enum(["kem", "be", "cat", "oliu-nhat", "oliu-vua", "trang"]),
   nhan: z.string().min(1),
   ten: z.string().min(1),
   anh_bo: z.array(z.string().min(1)).optional(),

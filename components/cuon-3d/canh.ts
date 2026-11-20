@@ -175,9 +175,10 @@ export function taoCanh(
   let caoThanAmp = CAO * 0.66;
   const longMat = () => new THREE.MeshPhysicalMaterial({ color: 0x86afe6, roughness: 0.15, clearcoat: 0.8, envMapIntensity: 1.1, transparent: true, opacity: 0.85, depthWrite: false });
   {
-    // Kích thước theo điểm ảnh của bộ ảnh: thân 294×654, nắp 294×275 (cùng bề rộng, cùng trục)
+    // Kích thước theo điểm ảnh của bộ ảnh: thân 294×654; nắp 294×975 là ảnh ống nhỏ giọt thật (ống cắt vừa lòng chai) (CĐT chụp 20/11),
+    // đáy cổ nắp ở y = 365 của ảnh nắp, phần dưới là ống thủy tinh (nằm trong chai khi đóng)
     const DV = CAO / 989; // đơn vị cảnh trên mỗi điểm ảnh (chuẩn theo chiều cao tuýp 989px)
-    const rong = 294 * DV, caoThan = 654 * DV, caoNap = 275 * DV;
+    const rong = 294 * DV, caoThan = 654 * DV, caoNap = 975 * DV, dayCoNap = 365 * DV;
     caoThanAmp = caoThan;
     const taiAnh = (url: string) => { const t = tai.load(url); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t; };
     const than = new THREE.Mesh(new THREE.PlaneGeometry(rong, caoThan), new THREE.MeshBasicMaterial({ map: taiAnh(opts.taiSan.ampoule_than), transparent: true, toneMapped: false }));
@@ -186,8 +187,10 @@ export function taoCanh(
     ampG.add(than);
     const nap = new THREE.Group();
     const anhNap = new THREE.Mesh(new THREE.PlaneGeometry(rong, caoNap), new THREE.MeshBasicMaterial({ map: taiAnh(opts.taiSan.ampoule_nap), transparent: true, toneMapped: false }));
-    anhNap.position.y = -CAO / 2 + caoThan + caoNap / 2 - 0.02;
-    anhNap.renderOrder = 3;
+    // Cổ nắp đặt sát miệng chai; ống nằm sau thân chai (thấy mờ qua kính), nhấc nắp thì ống đi theo
+    anhNap.position.y = -CAO / 2 + caoThan - 0.015 + dayCoNap - caoNap / 2; // đỉnh ảnh = miệng chai + dayCoNap
+    anhNap.position.z = -0.01;
+    anhNap.renderOrder = 1;
     nap.add(anhNap);
     ampG.add(nap);
     const giot = new THREE.Mesh(new THREE.SphereGeometry(0.08, 24, 16), longMat());
@@ -422,10 +425,10 @@ export function taoCanh(
     // 4) Nắp nhỏ giọt (đơn vị cảnh; đáy chai ở y = -CAO/2, miệng chai ở y = -CAO/2 + caoThan)
     if (NAP.nhom && NAP.giot && NAP.gon) {
       const nhac = seg(p, 0.43, 0.455) - seg(p, 0.5, 0.525), lech = seg(p, 0.452, 0.468) - seg(p, 0.495, 0.51);
-      const LIFT = 0.42, LECH = 0.55;
+      const LIFT = 0.78, LECH = 0.55; // nhấc đủ cao để lộ ống nhỏ giọt
       NAP.nhom.position.set(lech * LECH, nhac * LIFT, 0.01);
       NAP.nhom.rotation.z = -lech * 0.1;
-      const f = seg(p, 0.466, 0.492), tx = lech * LECH, dayChai = -CAO / 2, mieng = dayChai + caoThanAmp, ty = mieng - 0.06 + nhac * LIFT;
+      const f = seg(p, 0.466, 0.492), tx = lech * LECH, dayChai = -CAO / 2, mieng = dayChai + caoThanAmp, ty = mieng - 0.06 + nhac * LIFT - 0.55; // giọt rơi từ đầu ống (ống dài ~0.55 dưới cổ khi đã nhấc)
       NAP.giot.visible = f > 0 && f < 1 && nhac > 0.5;
       if (NAP.giot.visible) {
         const taoGiot = kep(f / 0.3), roi = kep((f - 0.3) / 0.7);

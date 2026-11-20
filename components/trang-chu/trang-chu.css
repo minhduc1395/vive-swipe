@@ -9,6 +9,14 @@
   --xam: #737373;
   --nen: #f6f4f2;
   --vien: rgba(43, 43, 42, 0.14);
+  /* Bảng màu nội thất cửa hàng (USQ_LL1_VIVE rev14, Option 1): Ivory, Beige, Sand, Oak, Olive */
+  --kem: #f8f4ea;
+  --be: #e6d7c3;
+  --cat: #d2bba3;
+  --soi: #c6a27a;
+  --oliu: #8fa270;
+  --oliu-vua: #cbd3b9;
+  --oliu-nhat: #e9ecdf;
 
   background: #ffffff;
   color: var(--den);
@@ -18,7 +26,7 @@
 
 /* Dải thông báo trên cùng */
 .tc-v3 .dai {
-  background: var(--hong-nhat);
+  background: var(--be);
   text-align: center;
   font-size: 14px;
   line-height: 1.4;
@@ -220,7 +228,7 @@
 
 /* Khối 1: Cửa hàng + ghép mảnh */
 .tc-v3 #cua-hang {
-  background: var(--hong-nhat);
+  background: var(--kem);
 }
 
 .tc-v3 #cua-hang h1 {
@@ -315,7 +323,7 @@
   width: calc(100% + 40px);
   margin: 44px -20px 0;
   padding: 34px 0;
-  background: var(--hong-nhat);
+  background: var(--kem);
   overflow: hidden;
   opacity: 0;
   transform: translateY(24px);
@@ -380,20 +388,12 @@
 }
 
 /* Khối 4: Lưới 4 ô */
-.tc-v3 #personal-color {
-  background: var(--hong-nhat);
-}
-
 .tc-v3 #personal-color .hinh img {
   width: 100%;
   height: 300px;
   object-fit: cover;
   object-position: 50% 30%;
   margin-top: 30px;
-}
-
-.tc-v3 #check-in {
-  background: var(--bac-ha);
 }
 
 .tc-v3 #check-in .hinh img {
@@ -419,10 +419,6 @@
 
 .tc-v3 #deal-pdrn {
   background: var(--hong);
-}
-
-.tc-v3 #deal-mat-na {
-  background: var(--bac-ha-nhat);
 }
 
 .tc-v3 #qua-lopoe {
@@ -496,10 +492,11 @@
 }
 
 /* W055: màu nền ô theo cấu hình (mau_nen) */
-.tc-v3 .nen-hong-nhat { background: var(--hong-nhat); }
-.tc-v3 .nen-hong { background: var(--hong); }
-.tc-v3 .nen-bac-ha { background: var(--bac-ha); }
-.tc-v3 .nen-bac-ha-nhat { background: var(--bac-ha-nhat); }
+.tc-v3 .nen-kem { background: var(--kem); }
+.tc-v3 .nen-be { background: var(--be); }
+.tc-v3 .nen-cat { background: var(--cat); }
+.tc-v3 .nen-oliu-nhat { background: var(--oliu-nhat); }
+.tc-v3 .nen-oliu-vua { background: var(--oliu-vua); }
 .tc-v3 .nen-trang { background: #ffffff; box-shadow: inset 0 0 0 1px rgba(43, 43, 42, 0.06); }
 
 /* Dòng nhỏ dưới phụ đề (quà combo), như dòng chú thích của apple.com */
@@ -556,7 +553,7 @@
 
 /* Hàng combo trượt ngang (hàng cuối phần combo) */
 .tc-v3 .hang-combo {
-  background: #ffffff;
+  background: var(--kem);
   padding: 56px 0 8px;
   content-visibility: auto;
   contain-intrinsic-size: auto 640px;
@@ -596,7 +593,7 @@
   height: 44px;
   border-radius: 50%;
   border: 0;
-  background: var(--nen);
+  background: var(--be);
   color: var(--den);
   font-size: 26px;
   line-height: 1;
@@ -608,7 +605,7 @@
 }
 
 .tc-v3 .mui:hover:not(:disabled) {
-  background: var(--hong);
+  background: var(--cat);
 }
 
 .tc-v3 .mui:disabled {
