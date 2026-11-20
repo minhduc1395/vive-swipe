@@ -86,7 +86,7 @@ test.describe("W012 · Đã thích và Giỏ hàng (giao diện)", () => {
       ).toBeVisible();
     });
 
-    test("Case 1 docs/02 mục 4.3: 1 SRM LOPOE -> 249.000đ; quà KM-13 muối tắm; không hiện giá trị nội bộ", async ({
+    test("Case 1 docs/02 mục 4.3: 1 SRM LOPOE -> 249.000đ; không quà (KM-13 dừng 20/11); không hiện giá trị nội bộ", async ({
       page,
     }) => {
       await page.addInitScript(() => {
@@ -103,10 +103,8 @@ test.describe("W012 · Đã thích và Giỏ hàng (giao diện)", () => {
       // Tổng ước tính 249.000đ
       await expect(page.getByText("249.000đ").first()).toBeVisible();
 
-      // Quà dự kiến: 1 muối tắm salTherapy
-      await expect(
-        page.getByText(/Quà dự kiến:\s*1 muối tắm salTherapy/)
-      ).toBeVisible();
+      // 20/11 (QD-SALE-012): KM-13 dừng, 1 SRM lẻ không còn quà
+      await expect(page.getByText(/Quà dự kiến:/)).toHaveCount(0);
 
       // TIÊU CHÍ XONG QUAN TRỌNG: Không hiện giá trị nội bộ của quà (49.000)
       const toanBoText = await page.innerText("body");
@@ -175,7 +173,7 @@ test.describe("W012 · Đã thích và Giỏ hàng (giao diện)", () => {
       expect(toanBoText).not.toContain("549.000");
     });
 
-    test("Case 8 docs/02 mục 4.3: Celimax serum 600K -> mốc tiếp theo thiếu 100K; gợi ý từ Đã thích", async ({
+    test("Case 8 docs/02 mục 4.3: Celimax serum 600K -> mốc 800K thiếu 200K (QD-SALE-012); gợi ý từ Đã thích", async ({
       page,
     }) => {
       await page.addInitScript(() => {
@@ -194,8 +192,8 @@ test.describe("W012 · Đã thích và Giỏ hàng (giao diện)", () => {
       });
 
       await page.goto("/gio");
-      // Thông báo mốc tiếp theo thiếu 100.000
-      await expect(page.getByText(/100\.000đ/)).toBeVisible();
+      // Thông báo mốc tiếp theo (800K) thiếu 200.000
+      await expect(page.getByText(/200\.000đ/)).toBeVisible();
       await expect(page.getByText(/1 sữa rửa mặt LOPOE/)).toBeVisible();
 
       // Có thẻ gợi ý từ Đã thích

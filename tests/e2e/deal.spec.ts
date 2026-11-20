@@ -33,11 +33,12 @@ test.describe("W016 · Deal cho bạn (/deal) và thẻ deal trong deck", () => 
     // Dòng giải thích theo hồ sơ: "Vì bạn thích ..."
     await expect(page.getByText("Vì bạn thích")).toBeVisible();
 
-    // KM-08 hiển thị ở đầu danh sách
-    const dealKm08 = page.locator('article[aria-label="Mua Medicube, Celimax, SKINFOOD tặng LOPOE"]');
-    await expect(dealKm08).toBeVisible();
-    await expect(dealKm08.getByText("Quà theo hóa đơn")).toBeVisible();
-    await expect(dealKm08.getByText("Số lượng có hạn")).toBeVisible();
+    // 20/11 (QD-SALE-012): KM-08 dừng; quà theo hóa đơn 800K là deal quà duy nhất
+    const dealQua = page.locator('article[aria-label="Quà theo hóa đơn từ 800K"]');
+    await expect(dealQua).toBeVisible();
+    await expect(dealQua.getByText("Quà theo hóa đơn", { exact: true })).toBeVisible();
+    await expect(dealQua.getByText("Số lượng có hạn")).toBeVisible();
+    await expect(page.locator('article[aria-label="Mua Medicube, Celimax, SKINFOOD tặng LOPOE"]')).toHaveCount(0);
   });
 
   test("thêm combo vào giỏ (1 dòng combo) và thêm bộ gợi ý vào giỏ (nhiều dòng lẻ)", async ({
