@@ -81,7 +81,7 @@ export function noiSuy(keys: Khoa[], p: number, dt: boolean): TuThe {
 }
 
 export type LoaiHat = "thua" | "sen" | "phan-tu" | "rau-ma" | "xoan";
-export interface TaiSan { ampoule_than: string; ampoule_nap: string; sua_rua_mat: string; kem_duong: string }
+export interface TaiSan { ampoule_than: string; ampoule_nap: string; ampoule_co: string; sua_rua_mat: string; kem_duong: string }
 export interface ViTriNhan { x: number; y: number; o: number }
 
 export interface Canh {
@@ -175,7 +175,7 @@ export function taoCanh(
   let caoThanAmp = CAO * 0.66;
   const longMat = () => new THREE.MeshPhysicalMaterial({ color: 0x86afe6, roughness: 0.15, clearcoat: 0.8, envMapIntensity: 1.1, transparent: true, opacity: 0.85, depthWrite: false });
   {
-    // Kích thước theo điểm ảnh của bộ ảnh: thân 294×654; nắp 294×975 là ảnh ống nhỏ giọt thật (ống cắt vừa lòng chai) (CĐT chụp 20/11),
+    // Kích thước theo điểm ảnh của bộ ảnh: thân 294×654; cổ chai 294×90; nắp 294×975 (bầu + cổ nắp ảnh thật CĐT chụp 20/11, ống vẽ lại 68px dài 340px),
     // đáy cổ nắp ở y = 365 của ảnh nắp, phần dưới là ống thủy tinh (nằm trong chai khi đóng)
     const DV = CAO / 989; // đơn vị cảnh trên mỗi điểm ảnh (chuẩn theo chiều cao tuýp 989px)
     const rong = 294 * DV, caoThan = 654 * DV, caoNap = 975 * DV, dayCoNap = 365 * DV;
@@ -185,6 +185,13 @@ export function taoCanh(
     than.position.y = -CAO / 2 + caoThan / 2;
     than.renderOrder = 2;
     ampG.add(than);
+    // Cổ chai nhô lên (nút nhựa trong có ren, ảnh 294×90, chồng 8px lên vai chai): nằm sau nắp để cổ nắp che kín khi đóng, lộ ra khi nhấc
+    const caoCo = 90 * DV;
+    const co = new THREE.Mesh(new THREE.PlaneGeometry(rong, caoCo), new THREE.MeshBasicMaterial({ map: taiAnh(opts.taiSan.ampoule_co), transparent: true, toneMapped: false }));
+    co.position.y = -CAO / 2 + caoThan - 8 * DV + caoCo / 2;
+    co.position.z = -0.02;
+    co.renderOrder = 0;
+    ampG.add(co);
     const nap = new THREE.Group();
     const anhNap = new THREE.Mesh(new THREE.PlaneGeometry(rong, caoNap), new THREE.MeshBasicMaterial({ map: taiAnh(opts.taiSan.ampoule_nap), transparent: true, toneMapped: false }));
     // Cổ nắp đặt sát miệng chai; ống nằm sau thân chai (thấy mờ qua kính), nhấc nắp thì ống đi theo
