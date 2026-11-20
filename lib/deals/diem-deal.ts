@@ -42,7 +42,12 @@ export function giaTriDeal(
     }
   }
 
-  // Quà theo mốc (KM-08, BAC-HOA-DON)
+  if (deal.loai === "may_rui") {
+    // Vòng quay: chi phí quà trung bình 18.500 / mốc 300.000 (doc LOPOE đã chốt 20/11 mục 4)
+    return 18_500 / 300_000;
+  }
+
+  // Quà theo mốc (BAC-HOA-DON)
   if (deal.moc && deal.moc.length > 0) {
     const tyLeCacMoc: number[] = [];
     for (const m of deal.moc) {
@@ -69,11 +74,6 @@ export function giaTriDeal(
   if (deal.id === "KM-11") {
     // Combo Mask Party tặng 1 mặt nạ (99.000 / 396.000)
     return 99_000 / 396_000;
-  }
-
-  if (deal.loai === "may_rui") {
-    // Vòng quay: chi phí quà trung bình 18.500 / mốc 300.000 (doc LOPOE đã chốt 20/11 mục 4)
-    return 18_500 / 300_000;
   }
 
   if (deal.id === "DC-05") {
