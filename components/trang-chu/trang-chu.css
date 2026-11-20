@@ -9,14 +9,16 @@
   --xam: #737373;
   --nen: #f6f4f2;
   --vien: rgba(43, 43, 42, 0.14);
-  /* Bảng màu nội thất cửa hàng (USQ_LL1_VIVE rev14, Option 1): Ivory, Beige, Sand, Oak, Olive */
-  --kem: #f8f4ea;
-  --be: #e6d7c3;
-  --cat: #d2bba3;
-  --soi: #c6a27a;
-  --oliu: #8fa270;
-  --oliu-vua: #cbd3b9;
-  --oliu-nhat: #e9ecdf;
+  /* Bảng màu nội thất cửa hàng: Option 2 "Fresh – Clean – Contemporary" (USQ_LL1_VIVE rev14 trang 19, CĐT chốt 20/11, QD-WEB-005).
+     Không có mã hex trong file, đo từ ảnh: trắng sữa, mint nhạt, sage, xanh nhạt, gỗ sồi, vàng champagne.
+     Tên token giữ nguyên (kem/be/cat/oliu) để yaml không đổi; chỉ đổi mã màu ở đây. */
+  --kem: #f7f5ef;      /* trắng sữa (Milk White) */
+  --be: #dbe5d3;       /* mint nhạt */
+  --cat: #c5d8ea;      /* xanh nhạt (Light Blue) */
+  --soi: #d6b88a;      /* gỗ sồi / vàng champagne */
+  --oliu: #8a9679;     /* sage đậm */
+  --oliu-vua: #b9c3a6; /* sage (Sage Green) */
+  --oliu-nhat: #e8ede1;/* sage pha trắng */
 
   background: #ffffff;
   color: var(--den);
