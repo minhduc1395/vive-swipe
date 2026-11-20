@@ -293,11 +293,14 @@ deals:
     ten: Vòng quay may mắn
     ten_en: Lucky wheel
     loai: may_rui
+    nhom_qua: cong_them   # lượt quay cộng thêm, không thay quà theo hóa đơn
     trang_thai: DANG_CHAY
     may_rui: true
     da_dang_ky: true
     hien_thi: true
     <<: *popup
+    moc:
+      - {tu: 300000, qua: 1 lượt quay vòng quay may mắn}
     dieu_kien: Hóa đơn từ 300K được quay 1 lượt. Từ 27/11, giữ hàng trên web rồi nhận tại booth được thêm 1 lượt
     dieu_kien_en: Orders from 300K get 1 spin. From 27/11, reserve on the web and pick up at the booth for 1 extra spin
     hook: Hóa đơn từ 300K, quay 1 lượt. Giữ hàng trên web, thêm 1 lượt
