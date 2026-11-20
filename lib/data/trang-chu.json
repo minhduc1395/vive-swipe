@@ -212,9 +212,10 @@
       "tieu_de": "Combo PDRN Pink",
       "deal_id": "COMBO-PINK",
       "nhan_thuong_hieu": "Medicube",
-      "anh": "/trang-chu/medicube-pdrn.webp",
-      "anh_sp": true,
-      "mo_ta_anh": "Tinh chất và kem PDRN Pink Medicube",
+      "anh_bo": [
+        "/trang-chu/medicube-pdrn-serum.webp"
+      ],
+      "mo_ta_anh": "Tinh chất PDRN Pink Peptide Serum của Medicube",
       "nut": [
         {
           "chu": "Xem deal",
@@ -268,11 +269,11 @@
       "tieu_de": "Vampire Glow",
       "deal_id": "COMBO-VAMPIRE-GLOW",
       "nhan_thuong_hieu": "Medicube",
-      "san_pham": [
-        "8809982769866",
-        "8800256115174"
+      "anh_bo": [
+        "/trang-chu/medicube-vitac-dong.webp",
+        "/trang-chu/medicube-glutathione.webp"
       ],
-      "mo_ta_anh": "Kem Deep Vita C và serum Glutathione Glow của Medicube",
+      "mo_ta_anh": "Kem Deep Vita C (hũ đóng nắp) và serum Glutathione Glow của Medicube",
       "nut": [
         {
           "chu": "Xem deal",
@@ -399,7 +400,7 @@
         "nhan": "Medicube",
         "ten": "PDRN Pink",
         "anh_bo": [
-          "/trang-chu/medicube-pdrn.webp"
+          "/trang-chu/medicube-pdrn-serum.webp"
         ]
       },
       {
@@ -407,9 +408,9 @@
         "mau_nen": "oliu-vua",
         "nhan": "Medicube",
         "ten": "Vampire Glow",
-        "san_pham": [
-          "8809982769866",
-          "8800256115174"
+        "anh_bo": [
+          "/trang-chu/medicube-vitac-dong.webp",
+          "/trang-chu/medicube-glutathione.webp"
         ]
       },
       {

@@ -146,15 +146,15 @@ luoi_doi:
         kieu: "phu"
 
   # Hàng 3: 1 ô rộng + 1 ô nhỏ
+  # 20/11 CĐT: ảnh hũ kem mở nắp (có vệt scoop) chưa hợp trang chủ → chỉ dùng chai serum; hũ kem chờ ảnh hộp nguyên (OPI chụp)
   - id: "deal-pdrn"
     mau_nen: "cat"
     co: "rong"
     tieu_de: "Combo PDRN Pink"
     deal_id: "COMBO-PINK"
     nhan_thuong_hieu: "Medicube"
-    anh: "/trang-chu/medicube-pdrn.webp"
-    anh_sp: true
-    mo_ta_anh: "Tinh chất và kem PDRN Pink Medicube"
+    anh_bo: ["/trang-chu/medicube-pdrn-serum.webp"]
+    mo_ta_anh: "Tinh chất PDRN Pink Peptide Serum của Medicube"
     nut:
       - chu: "Xem deal"
         den: "/deal?id=COMBO-PINK"
@@ -191,8 +191,9 @@ luoi_doi:
     tieu_de: "Vampire Glow"
     deal_id: "COMBO-VAMPIRE-GLOW"
     nhan_thuong_hieu: "Medicube"
-    san_pham: ["8809982769866", "8800256115174"]
-    mo_ta_anh: "Kem Deep Vita C và serum Glutathione Glow của Medicube"
+    # Hũ Deep Vita C đóng nắp (cắt từ ảnh chính hãng themedicube.co.kr, 20/11) thay ảnh hũ mở nắp
+    anh_bo: ["/trang-chu/medicube-vitac-dong.webp", "/trang-chu/medicube-glutathione.webp"]
+    mo_ta_anh: "Kem Deep Vita C (hũ đóng nắp) và serum Glutathione Glow của Medicube"
     nut:
       - chu: "Xem deal"
         den: "/deal?id=COMBO-VAMPIRE-GLOW"
@@ -279,12 +280,12 @@ truot_combo:
       mau_nen: "be"
       nhan: "Medicube"
       ten: "PDRN Pink"
-      anh_bo: ["/trang-chu/medicube-pdrn.webp"]
+      anh_bo: ["/trang-chu/medicube-pdrn-serum.webp"]
     - deal_id: "COMBO-VAMPIRE-GLOW"
       mau_nen: "oliu-vua"
       nhan: "Medicube"
       ten: "Vampire Glow"
-      san_pham: ["8809982769866", "8800256115174"]
+      anh_bo: ["/trang-chu/medicube-vitac-dong.webp", "/trang-chu/medicube-glutathione.webp"]
     - deal_id: "COMBO-ZOMBIE"
       mau_nen: "be"
       nhan: "SKINFOOD"
