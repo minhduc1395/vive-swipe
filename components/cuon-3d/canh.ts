@@ -81,7 +81,7 @@ export function noiSuy(keys: Khoa[], p: number, dt: boolean): TuThe {
 }
 
 export type LoaiHat = "thua" | "sen" | "phan-tu" | "rau-ma" | "xoan";
-export interface TaiSan { ampoule_than: string; ampoule_nap: string; ampoule_co: string; sua_rua_mat: string; kem_duong: string }
+export interface TaiSan { ampoule_than: string; ampoule_nap: string; ampoule_co: string; giot: string; sua_rua_mat: string; kem_duong: string }
 export interface ViTriNhan { x: number; y: number; o: number }
 
 export interface Canh {
@@ -127,7 +127,7 @@ export function taoCanh(
     obj.traverse((m: any) => {
       if (!m.material) return;
       for (const mt of Array.isArray(m.material) ? m.material : [m.material]) {
-        if (mt.userData.goc === undefined) { mt.userData.goc = mt.opacity; mt.transparent = true; }
+        if (mt.userData.goc === undefined) { mt.userData.goc = mt.opacity; mt.transparent = true; mt.depthWrite = false; } // vật mờ không ghi depth: tránh đục lỗ thân chai vẽ sau
         mt.opacity = mt.userData.goc * o;
       }
     });
@@ -171,8 +171,9 @@ export function taoCanh(
   const ampG = new THREE.Group();
   scene.add(ampG);
   SP.amp = { g: ampG };
-  const NAP: { nhom: THREE.Group | null; giot: THREE.Mesh | null; gon: THREE.Mesh | null } = { nhom: null, giot: null, gon: null };
+  const NAP: { nhom: THREE.Group | null; giot: THREE.Sprite | null; gon: THREE.Mesh | null } = { nhom: null, giot: null, gon: null };
   let caoThanAmp = CAO * 0.66;
+  const caoCoChai = (CAO / 989) * 92; // cổ chai nhô lên (ảnh ampoule-co: 92px), cùng đơn vị DV
   const longMat = () => new THREE.MeshPhysicalMaterial({ color: 0x86afe6, roughness: 0.15, clearcoat: 0.8, envMapIntensity: 1.1, transparent: true, opacity: 0.85, depthWrite: false });
   {
     // Kích thước theo điểm ảnh của bộ ảnh: thân 294×654; cổ chai 294×90; nắp 294×975 (bầu + cổ nắp ảnh thật CĐT chụp 20/11, ống cắt từ ảnh thật IMG_9767, rộng 58px dài 400px),
@@ -181,26 +182,27 @@ export function taoCanh(
     const rong = 294 * DV, caoThan = 654 * DV, caoNap = 975 * DV, dayCoNap = 365 * DV;
     caoThanAmp = caoThan;
     const taiAnh = (url: string) => { const t = tai.load(url); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t; };
-    const than = new THREE.Mesh(new THREE.PlaneGeometry(rong, caoThan), new THREE.MeshBasicMaterial({ map: taiAnh(opts.taiSan.ampoule_than), transparent: true, toneMapped: false }));
+    const than = new THREE.Mesh(new THREE.PlaneGeometry(rong, caoThan), new THREE.MeshBasicMaterial({ map: taiAnh(opts.taiSan.ampoule_than), transparent: true, toneMapped: false, depthWrite: false }));
     than.position.y = -CAO / 2 + caoThan / 2;
     than.renderOrder = 2;
     ampG.add(than);
     // Cổ chai nhô lên (cắt từ ảnh thật IMG_9765, thuỷ tinh có ren, ảnh 294×100, cổ cao 92px, chồng 8px lên vai chai): nằm sau nắp để cổ nắp che kín khi đóng, lộ ra khi nhấc
     const caoCo = 100 * DV;
-    const co = new THREE.Mesh(new THREE.PlaneGeometry(rong, caoCo), new THREE.MeshBasicMaterial({ map: taiAnh(opts.taiSan.ampoule_co), transparent: true, toneMapped: false }));
+    const co = new THREE.Mesh(new THREE.PlaneGeometry(rong, caoCo), new THREE.MeshBasicMaterial({ map: taiAnh(opts.taiSan.ampoule_co), transparent: true, toneMapped: false, depthWrite: false }));
     co.position.y = -CAO / 2 + caoThan - 8 * DV + caoCo / 2;
     co.position.z = -0.02;
     co.renderOrder = 0;
     ampG.add(co);
     const nap = new THREE.Group();
-    const anhNap = new THREE.Mesh(new THREE.PlaneGeometry(rong, caoNap), new THREE.MeshBasicMaterial({ map: taiAnh(opts.taiSan.ampoule_nap), transparent: true, toneMapped: false }));
+    const anhNap = new THREE.Mesh(new THREE.PlaneGeometry(rong, caoNap), new THREE.MeshBasicMaterial({ map: taiAnh(opts.taiSan.ampoule_nap), transparent: true, toneMapped: false, depthWrite: false }));
     // Cổ nắp đặt sát miệng chai; ống nằm sau thân chai (thấy mờ qua kính), nhấc nắp thì ống đi theo
     anhNap.position.y = -CAO / 2 + caoThan - 0.015 + dayCoNap - caoNap / 2; // đỉnh ảnh = miệng chai + dayCoNap
     anhNap.position.z = -0.01;
     anhNap.renderOrder = 1;
     nap.add(anhNap);
     ampG.add(nap);
-    const giot = new THREE.Mesh(new THREE.SphereGeometry(0.08, 24, 16), longMat());
+    // Giọt tinh chất: sprite giọt nước trong (giot.webp 128×192), hình thành ở đầu ống rồi rơi vào miệng chai
+    const giot = new THREE.Sprite(new THREE.SpriteMaterial({ map: taiAnh(opts.taiSan.giot), transparent: true, depthWrite: false, toneMapped: false }));
     giot.visible = false;
     ampG.add(giot);
     const gon = new THREE.Mesh(new THREE.RingGeometry(0.92, 1, 64), new THREE.MeshBasicMaterial({ color: 0x5d8fd6, transparent: true, opacity: 0.6, side: THREE.DoubleSide, depthWrite: false }));
@@ -432,23 +434,29 @@ export function taoCanh(
     // 4) Nắp nhỏ giọt (đơn vị cảnh; đáy chai ở y = -CAO/2, miệng chai ở y = -CAO/2 + caoThan)
     if (NAP.nhom && NAP.giot && NAP.gon) {
       const nhac = seg(p, 0.43, 0.455) - seg(p, 0.5, 0.525), lech = seg(p, 0.452, 0.468) - seg(p, 0.495, 0.51);
-      const LIFT = 1.3, LECH = 0.55; // nhấc đủ cao để đầu ống (dài 400px = 1.03) vượt khỏi cổ chai (92px)
+      const LIFT = 1.58, LECH = 0.06; // ống gần như thẳng trên cổ chai để giọt rơi đúng miệng // nhấc đủ cao để đầu ống (dài 400px = 1.03) vượt khỏi cổ chai (92px)
       NAP.nhom.position.set(lech * LECH, nhac * LIFT, 0.01);
-      amp.position.y -= nhac * 0.3; // chai lún nhẹ khi rút nắp để nắp không vượt mép trên màn hình
-      NAP.nhom.rotation.z = -lech * 0.1;
+      amp.position.y -= nhac * 0.5; // chai lún nhẹ khi rút nắp để nắp không vượt mép trên màn hình
+      NAP.nhom.rotation.z = -lech * 0.02;
       const f = seg(p, 0.466, 0.492), tx = lech * LECH, dayChai = -CAO / 2, mieng = dayChai + caoThanAmp, ty = mieng - 0.02 + nhac * LIFT - 1.03; // giọt rơi từ đầu ống (đầu ống cách đáy nắp 400px ≈ 1.03)
       NAP.giot.visible = f > 0 && f < 1 && nhac > 0.5;
       if (NAP.giot.visible) {
-        const taoGiot = kep(f / 0.3), roi = kep((f - 0.3) / 0.7);
-        NAP.giot.scale.setScalar(0.3 + 0.7 * taoGiot);
-        NAP.giot.position.set(tx, ty - 0.08 - roi * roi * (ty - 0.08 - dayChai), 0.05);
+        // 0–0.45: giọt phình ra và kéo dài ở đầu ống; 0.45–1: rơi (gia tốc) vào miệng chai rồi biến mất
+        const tao = muot(kep(f / 0.45)), roi = kep((f - 0.45) / 0.55);
+        const W0 = 0.17, H0 = 0.255;
+        const keo = 1 + 0.35 * tao * (1 - roi); // kéo dài khi còn bám đầu ống
+        NAP.giot.scale.set(W0 * (0.25 + 0.75 * tao) * (1 - 0.12 * roi), H0 * (0.25 + 0.75 * tao) * keo, 1);
+        const yDau = ty - H0 * 0.5 * (0.25 + 0.75 * tao) * keo + 0.02;
+        const yDich = mieng + caoCoChai * 0.5;
+        NAP.giot.position.set(tx, yDau - roi * roi * (yDau - yDich), 0.05);
       }
-      const gg = seg(p, 0.488, 0.508);
+      // Gợn nhỏ trên mặt cổ chai khi giọt chạm
+      const gg = seg(p, 0.488, 0.503);
       NAP.gon.visible = gg > 0 && gg < 1;
       if (NAP.gon.visible) {
-        NAP.gon.position.set(tx, dayChai + 0.012, 0.05);
-        NAP.gon.scale.setScalar(0.04 + gg * 0.6);
-        (NAP.gon.material as THREE.MeshBasicMaterial).opacity = 0.6 * (1 - gg);
+        NAP.gon.position.set(tx, mieng + caoCoChai * 0.95, 0.05);
+        NAP.gon.scale.setScalar(0.03 + gg * 0.22);
+        (NAP.gon.material as THREE.MeshBasicMaterial).opacity = 0.45 * (1 - gg);
       }
     }
 
