@@ -130,7 +130,7 @@ describe("W050 + W041 · Cấu hình trang chủ YAML & kiểm đích", () => {
     }
     expect(tong % 6, "hàng cuối lưới chưa đủ 6 phần").toBe(0);
     // Không ô nào nền tối (CĐT 20/11)
-    for (const o of parsed.luoi_doi) expect(["hong", "hong-nhat", "bac-ha", "bac-ha-nhat", "trang"]).toContain(o.mau_nen);
+    for (const o of parsed.luoi_doi) expect(["kem", "be", "cat", "oliu-nhat", "oliu-vua", "trang"]).toContain(o.mau_nen);
     expect(parsed.truot_combo.the.length).toBeGreaterThanOrEqual(5);
   });
 

@@ -77,12 +77,12 @@ thuong_hieu:
 
 # W055/W056: lưới 6 cột kiểu apple.com. co: vua = 1/2 hàng, rong = 2/3, nho = 1/3.
 # Mỗi hàng cộng đủ 6 phần: vua+vua · vua+vua · rong+nho · nho+nho+nho · nho+rong.
-# Màu nền chỉ dùng bảng màu cửa hàng: hong, hong-nhat, bac-ha, bac-ha-nhat, trang (không nền tối, CĐT 20/11).
+# Màu nền theo bảng màu nội thất (file USQ_LL1_VIVE rev14, Option 1): kem, be, cat, oliu-nhat, oliu-vua, trang (không nền tối, CĐT 20/11).
 # Giá và quà của ô combo tự lấy từ deal_id (data/deals.yaml), không gõ tay. Ảnh sản phẩm: san_pham = mã trong kho media.
 luoi_doi:
   # Hàng 1
   - id: "personal-color"
-    mau_nen: "hong-nhat"
+    mau_nen: "kem"
     tieu_de: "Personal color"
     phu_de_truoc: "Tìm "
     phu_de_nghieng: "tone"
@@ -95,7 +95,7 @@ luoi_doi:
         kieu: "chinh"
 
   - id: "check-in"
-    mau_nen: "bac-ha"
+    mau_nen: "oliu-vua"
     tieu_de: "Thử. Chụp. Nhận quà."
     phu_de_truoc: "Ngay tại "
     co_logo: true
@@ -109,7 +109,7 @@ luoi_doi:
 
   # Hàng 2: combo LOPOE
   - id: "combo-lopoe-bo3"
-    mau_nen: "bac-ha-nhat"
+    mau_nen: "oliu-nhat"
     tieu_de: "Bộ 3 LOPOE"
     deal_id: "LOPOE-COMBO-BO3"
     nhan_thuong_hieu: "Better Balance"
@@ -128,7 +128,7 @@ luoi_doi:
         kieu: "phu"
 
   - id: "combo-lopoe-kem-amp"
-    mau_nen: "hong-nhat"
+    mau_nen: "kem"
     tieu_de: "Kem + Ampoule"
     deal_id: "LOPOE-COMBO-KEM-AMP"
     nhan_thuong_hieu: "LOPOE"
@@ -147,7 +147,7 @@ luoi_doi:
 
   # Hàng 3: 1 ô rộng + 1 ô nhỏ
   - id: "deal-pdrn"
-    mau_nen: "hong"
+    mau_nen: "cat"
     co: "rong"
     tieu_de: "Combo PDRN Pink"
     deal_id: "COMBO-PINK"
@@ -161,7 +161,7 @@ luoi_doi:
         kieu: "chinh"
 
   - id: "repiel"
-    mau_nen: "bac-ha-nhat"
+    mau_nen: "oliu-nhat"
     co: "nho"
     tieu_de: "Rep!el"
     phu_de_truoc: "Serum và toner pad."
@@ -174,7 +174,7 @@ luoi_doi:
 
   # Hàng 4: 3 ô nhỏ
   - id: "tiela"
-    mau_nen: "hong-nhat"
+    mau_nen: "kem"
     co: "nho"
     tieu_de: "Tiela"
     phu_de_truoc: "Dưỡng thể có hương."
@@ -186,7 +186,7 @@ luoi_doi:
         kieu: "chinh"
 
   - id: "combo-vampire-glow"
-    mau_nen: "bac-ha"
+    mau_nen: "oliu-vua"
     co: "nho"
     tieu_de: "Vampire Glow"
     deal_id: "COMBO-VAMPIRE-GLOW"
@@ -199,7 +199,7 @@ luoi_doi:
         kieu: "chinh"
 
   - id: "combo-lopoe-2srm"
-    mau_nen: "hong"
+    mau_nen: "be"
     co: "nho"
     tieu_de: "2 sữa rửa mặt"
     deal_id: "LOPOE-COMBO-2SRM"
@@ -216,7 +216,7 @@ luoi_doi:
 
   # Hàng 5: 1 ô nhỏ + 1 ô rộng
   - id: "deal-mat-na"
-    mau_nen: "bac-ha-nhat"
+    mau_nen: "oliu-nhat"
     co: "nho"
     tieu_de: "Mua 4 tặng 1"
     deal_id: "DC-05"
@@ -229,7 +229,7 @@ luoi_doi:
 
   # 20/11: ô salTherapy tạm thay bằng Lalarecipe vì ảnh salTherapy trong kho media sai sản phẩm (hũ dòng Mỹ, hàng bán là túi vòi). Có ảnh đúng thì đổi lại.
   - id: "lalarecipe"
-    mau_nen: "hong-nhat"
+    mau_nen: "kem"
     co: "rong"
     tieu_de: "Lalarecipe"
     phu_de_truoc: "Bộ Yuzu Vita C."
@@ -261,37 +261,37 @@ truot_combo:
     kieu: "phu"
   the:
     - deal_id: "LOPOE-COMBO-BO3"
-      mau_nen: "bac-ha-nhat"
+      mau_nen: "oliu-nhat"
       nhan: "LOPOE"
       ten: "Bộ 3 Better Balance"
       anh_bo: ["/trang-chu/srm.webp", "/trang-chu/ampoule.webp", "/trang-chu/kem.webp"]
     - deal_id: "LOPOE-COMBO-KEM-AMP"
-      mau_nen: "hong-nhat"
+      mau_nen: "kem"
       nhan: "LOPOE"
       ten: "Kem dưỡng + Ampoule"
       anh_bo: ["/trang-chu/kem.webp", "/trang-chu/ampoule.webp"]
     - deal_id: "LOPOE-COMBO-2SRM"
-      mau_nen: "hong-nhat"
+      mau_nen: "kem"
       nhan: "LOPOE"
       ten: "2 sữa rửa mặt"
       anh_bo: ["/trang-chu/srm.webp", "/trang-chu/srm.webp"]
     - deal_id: "COMBO-PINK"
-      mau_nen: "hong"
+      mau_nen: "be"
       nhan: "Medicube"
       ten: "PDRN Pink"
       anh_bo: ["/trang-chu/medicube-pdrn.webp"]
     - deal_id: "COMBO-VAMPIRE-GLOW"
-      mau_nen: "bac-ha"
+      mau_nen: "oliu-vua"
       nhan: "Medicube"
       ten: "Vampire Glow"
       san_pham: ["8809982769866", "8800256115174"]
     - deal_id: "COMBO-ZOMBIE"
-      mau_nen: "hong"
+      mau_nen: "be"
       nhan: "SKINFOOD"
       ten: "Zombie hồi sinh"
       san_pham: ["8809511276704", "8809511276728"]
     - deal_id: "DC-05"
-      mau_nen: "hong-nhat"
+      mau_nen: "kem"
       nhan: "Uniura"
       ten: "Mặt nạ mua 4 tặng 1"
       so_lon: "4+1"

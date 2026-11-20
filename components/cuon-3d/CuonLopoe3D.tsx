@@ -290,9 +290,12 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
         <div aria-hidden="true" className={`absolute inset-x-0 bottom-[33vh] md:bottom-[18vh] flex items-end justify-center gap-[3vw] md:gap-[6.5vw] transition-opacity duration-700 ${daTai ? "opacity-0" : "opacity-100"}`}>
           {/* eslint-disable @next/next/no-img-element */}
           <img src={cfg.tai_san.sua_rua_mat} alt="" width={366} height={989} loading="lazy" decoding="async" className="h-[33vh] md:h-[47vh] w-auto" />
-          <span className="flex flex-col items-center">
-            <img src={cfg.tai_san.ampoule_nap} alt="" width={294} height={275} loading="lazy" decoding="async" className="h-[9.2vh] md:h-[13vh] w-auto -mb-[0.2vh]" />
-            <img src={cfg.tai_san.ampoule_than} alt="" width={294} height={654} loading="lazy" decoding="async" className="h-[21.8vh] md:h-[31vh] w-auto" />
+          <span className="relative flex flex-col items-center">
+            {/* Ảnh nắp gồm cả ống nhỏ giọt: chỉ lộ phần nắp (365/1227 chiều cao), ống nằm sau thân */}
+            <span className="block overflow-hidden h-[12.2vh] md:h-[17.3vh]">
+              <img src={cfg.tai_san.ampoule_nap} alt="" width={294} height={975} loading="lazy" decoding="async" className="h-[32.5vh] md:h-[46.2vh] w-auto" />
+            </span>
+            <img src={cfg.tai_san.ampoule_than} alt="" width={294} height={654} loading="lazy" decoding="async" className="h-[21.8vh] md:h-[31vh] w-auto -mt-[0.3vh]" />
           </span>
           <img src={cfg.tai_san.kem_duong} alt="" width={368} height={980} loading="lazy" decoding="async" className="h-[33vh] md:h-[47vh] w-auto" />
           {/* eslint-enable @next/next/no-img-element */}
