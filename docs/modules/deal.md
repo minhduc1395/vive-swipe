@@ -1,0 +1,18 @@
+# Module: deal
+
+## Mục đích
+Hiển thị deal và tính giỏ hàng theo luật giá, quà.
+
+## Thư mục và file chính
+- `lib/deals/`: hàm thuần `tinhGio`, deal nào được hiện, quà, mốc gợi ý. Đặc tả bắt buộc: `docs/02-ky-thuat.md` mục 4. Test: `tests/gio-hang.test.ts`, `deal-*.test.ts`, `deals-ghi-chu.test.ts`.
+- `components/deal/`: `TheDeal.tsx`, `NganKeoDeal.tsx`.
+- Trang: `app/(khach)/deal`, `app/(khach)/gio`.
+- Dữ liệu: `data/deals.yaml` và bảng Supabase `deal` (dùng chung, chỉ WEB sửa theo doc của SALE).
+
+## Quy ước riêng
+- Từ 20/11 chỉ 3 ưu đãi (QD-SALE-012): LOPOE −25% khi mua kèm; quà theo mốc 800K và 1,2 triệu (chỉ mốc cao nhất); hóa đơn từ 300K quay 1 lượt. Vòng quay được chạy (QD-DIR-018).
+- Combo giá cố định là mã giá trên POS.
+- Mọi đổi về luật deal phải có test.
+
+## Lịch sử ngắn
+- 2026-11-20 W062 (QA-003): deal web theo 3 ưu đãi (PR #50).
