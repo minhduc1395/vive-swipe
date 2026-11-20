@@ -1,14 +1,14 @@
 # VIVE: danh sách deal cho web quẹt sản phẩm
 # Nguồn: project Claude "VIVE pop up"
-#   - claude/VIVE-LOPOE-chuong-trinh-da-chot.md (chốt 13/11/2026)
-#   - claude/VIVE-khuyen-mai-tong-hop.md (cập nhật 14/11/2026)
+#   - claude/VIVE-LOPOE-chuong-trinh-da-chot.md (bản rút gọn 3 ưu đãi, 20/11/2026, QD-SALE-012)
+#   - claude/VIVE-khuyen-mai-tong-hop.md (cập nhật 20/11/2026)
 #   - claude/VIVE-popup-huong-dan-chung.md mục 6
 # Soạn: Claude, 15/11/2026. Chỉ Claude hoặc chủ dự án sửa file này (đổi luật thì tạo handoff thay-doi-luat).
 #
 # QUY TẮC HIỂN THỊ (bắt buộc, có unit test):
 #   Web chỉ hiện deal khi: trang_thai in [DANG_CHAY, DA_DUYET]
 #                          AND hien_thi == true
-#                          AND (may_rui == false OR da_dang_ky == true)
+#                          AND (may_rui == false OR da_dang_ky == true)   # da_dang_ky = được phép chạy (đã đăng ký, hoặc BOD quyết không cần đăng ký: QD-DIR-018)
 #                          AND hôm nay nằm trong [bat_dau, ket_thuc]
 #   Deal ĐỀ XUẤT không có trong file này (KM-01, KM-06, bậc hóa đơn 200K/300K/400K, CB-01 đến CB-06).
 #
@@ -117,9 +117,9 @@ deals:
     ten_en: Buy LOPOE get full-size gift
     loai: qua_khi_mua
     nhom_qua: hoa_don
-    trang_thai: DA_DUYET
+    trang_thai: HUY   # QD-SALE-012: dừng từ 20/11 (gộp còn 3 ưu đãi)
     may_rui: false
-    hien_thi: true
+    hien_thi: false
     <<: *popup
     dieu_kien: Mua lẻ 1 món LOPOE. Quà theo giá khách trả cho món LOPOE
     dieu_kien_en: Purchase any single LOPOE item. Gift tier based on amount paid for LOPOE
@@ -139,9 +139,9 @@ deals:
     ten_en: Buy 2 SKINFOOD masks get free LOPOE Cleansing Foam
     loai: qua_khi_mua
     nhom_qua: hoa_don
-    trang_thai: DA_DUYET
+    trang_thai: HUY   # QD-SALE-012: dừng từ 20/11
     may_rui: false
-    hien_thi: true
+    hien_thi: false
     <<: *popup
     dieu_kien: Mua combo Mask Party (2 Food Mask SKINFOOD, POS CB06 đến CB20)
     dieu_kien_en: Buy Mask Party combo (2 SKINFOOD Food Masks, POS CB06 to CB20)
@@ -159,9 +159,9 @@ deals:
     ten_en: Buy Medicube, Celimax, SKINFOOD get LOPOE gift
     loai: qua_theo_nguong_nhan
     nhom_qua: hoa_don
-    trang_thai: DA_DUYET
+    trang_thai: HUY   # QD-SALE-012: dừng từ 20/11
     may_rui: false
-    hien_thi: true
+    hien_thi: false
     <<: *popup
     nhan_tinh: [Medicube, Celimax, SKINFOOD]   # cộng chung tiền 3 nhãn trong 1 hóa đơn
     anh_san_pham: [LOPOE-CF, LOPOE-AMP, LOPOE-CR]   # ảnh hiện trên thẻ deal: quà LOPOE theo mốc
@@ -186,7 +186,7 @@ deals:
       - {id: G-14, ten: "SKINFOOD Acorn Pad, Potato Pad và Egg White Mask", san_pham: ["8809032673662", "8809032676359", "8809032673778"], gia: 1471000, moc: 1300000}
     # G-04 (2 Mask Party 898K) và G-05 (Combo Toner Pad SKINFOOD) chưa đưa vào: lệch giá Mask Party và chưa rõ thành phần CB22 đến CB24
 
-  - id: BAC-HOA-DON
+  - id: BAC-HOA-DON   # Ưu đãi 2 trong 3 ưu đãi BOD chốt 20/11 (QD-SALE-012)
     ten: Quà theo hóa đơn từ 800K
     ten_en: Gift with purchase from 800K
     loai: qua_theo_nguong_don
@@ -195,18 +195,22 @@ deals:
     may_rui: false
     hien_thi: true
     <<: *popup
+    dieu_kien: Tính trên tổng hóa đơn sau giảm, mọi nhãn, gồm cả combo. Mỗi hóa đơn nhận quà của mốc cao nhất. Số lượng quà có hạn
+    dieu_kien_en: Based on the order total after discounts, all brands, combos included. Each order gets the gift of the highest tier reached. Limited quantity
     moc:
       - {tu: 800000, qua: 1 sữa rửa mặt LOPOE, gioi_han: 30}
-      - {tu: 1200000, qua: 1 ampoule LOPOE, gioi_han: 15}
+      - {tu: 1200000, qua: 1 ampoule LOPOE và 1 voucher giảm 15% nhà hàng Union Square, gioi_han: 15}
+    hook: Hóa đơn từ 800K tặng sữa rửa mặt LOPOE, từ 1,2 triệu tặng ampoule LOPOE và voucher nhà hàng 15%
+    hook_en: Spend 800K for a free LOPOE cleanser, 1.2M for a free LOPOE ampoule and a 15% restaurant voucher
 
   - id: KM-09
     ten: Voucher 15% nhà hàng Union Square
     ten_en: 15% Union Square restaurant voucher
     loai: qua_theo_nguong_don
     nhom_qua: cong_them
-    trang_thai: DA_DUYET
+    trang_thai: HUY   # QD-SALE-012: gộp vào mốc 1,2 triệu của BAC-HOA-DON
     may_rui: false
-    hien_thi: false   # Chờ Union Square gửi danh sách nhà hàng, hạn dùng, số lượng. Bật khi có đủ để ghi điều kiện
+    hien_thi: false
     <<: *popup
     moc:
       - {tren: 1000000, qua: 1 voucher giảm 15% tại nhà hàng Union Square (cho hóa đơn nhà hàng trên 1 triệu)}
@@ -265,9 +269,9 @@ deals:
     ten: Medicube Age-R Booster Pro tặng 2 hộp Uniura
     ten_en: Medicube Age-R Booster Pro + 2 free Uniura boxes
     loai: qua_khi_mua
-    trang_thai: DANG_CHAY
+    trang_thai: HUY   # INV-005 (20/11): máy Medicube đã trả lại nhãn, không còn bán
     may_rui: false
-    hien_thi: true
+    hien_thi: false
     <<: *popup
     ap_dung_cho: ["8800289468759", "8800289468674"]
     qua: 2 hộp mặt nạ Uniura (8 miếng, trị giá 792.000)
@@ -284,7 +288,20 @@ deals:
     dieu_kien_en: Follow Facebook, Instagram, TikTok and show screen to staff, choose 1 sample
 
   # ---------- Khuyến mại may rủi: KHÔNG hiển thị cho đến khi đã đăng ký Sở Công Thương ----------
-  - {id: DC-02, ten: Vòng quay may mắn 10 ô, ten_en: Lucky Wheel 10 slots, loai: may_rui, trang_thai: DANG_CHAY, may_rui: true, da_dang_ky: false, hien_thi: false}
+  # Ưu đãi 3 (QD-SALE-012). QD-DIR-018: BOD quyết không đăng ký Sở Công Thương và cho chạy → da_dang_ky = true nghĩa là "được phép chạy".
+  - id: DC-02
+    ten: Vòng quay may mắn
+    ten_en: Lucky wheel
+    loai: may_rui
+    trang_thai: DANG_CHAY
+    may_rui: true
+    da_dang_ky: true
+    hien_thi: true
+    <<: *popup
+    dieu_kien: Hóa đơn từ 300K được quay 1 lượt. Từ 27/11, giữ hàng trên web rồi nhận tại booth được thêm 1 lượt
+    dieu_kien_en: Orders from 300K get 1 spin. From 27/11, reserve on the web and pick up at the booth for 1 extra spin
+    hook: Hóa đơn từ 300K, quay 1 lượt. Giữ hàng trên web, thêm 1 lượt
+    hook_en: Spend 300K, get 1 spin. Reserve on the web for an extra spin
   - {id: DC-04, ten: Lá thăm trong sample, ten_en: Lucky draw inside sample, loai: may_rui, trang_thai: DANG_CHAY, may_rui: true, da_dang_ky: false, hien_thi: false}
-  - {id: KM-12, ten: Vòng quay LOPOE, ten_en: LOPOE Lucky Wheel, loai: may_rui, trang_thai: DA_DUYET, may_rui: true, da_dang_ky: false, hien_thi: false}
+  - {id: KM-12, ten: Vòng quay LOPOE, ten_en: LOPOE Lucky Wheel, loai: may_rui, trang_thai: HUY, may_rui: true, da_dang_ky: false, hien_thi: false}
   - {id: KM-12b, ten: Bốc thăm máy uốn mi Beaund, ten_en: Beaund Lashcurl Lucky Draw, loai: may_rui, trang_thai: DA_DUYET, may_rui: true, da_dang_ky: false, hien_thi: false}

@@ -87,6 +87,7 @@ export const OTrongLuoiSchema = z.object({
 export type OTrongLuoi = z.infer<typeof OTrongLuoiSchema>;
 
 export const QuaLopoeKhoiSchema = z.object({
+  phu_de: z.string().optional(),
   deal_id: z.string().min(1),
   tien_to_tieu_de: z.string().min(1),
   hau_to_tieu_de: z.string().min(1),

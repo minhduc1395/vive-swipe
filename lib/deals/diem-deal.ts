@@ -71,6 +71,11 @@ export function giaTriDeal(
     return 99_000 / 396_000;
   }
 
+  if (deal.loai === "may_rui") {
+    // Vòng quay: chi phí quà trung bình 18.500 / mốc 300.000 (doc LOPOE đã chốt 20/11 mục 4)
+    return 18_500 / 300_000;
+  }
+
   if (deal.id === "DC-05") {
     // Uniura mua 4 tặng 1 (99.000 / 495.000)
     return 99_000 / 495_000;

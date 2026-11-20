@@ -101,7 +101,7 @@ export function TrangChuClient({
   const tieuDeQuaLopoe = `${cauHinh.qua_lopoe.tien_to_tieu_de}${mocDauKm08}${cauHinh.qua_lopoe.hau_to_tieu_de}`;
   const nhanTinhKm08 = km08?.nhan_tinh?.length
     ? `${km08.nhan_tinh.join(". ")}.`
-    : "";
+    : cauHinh.qua_lopoe.phu_de ?? "";
 
   const gioHienThi = dinhDangGioV3(gioMoCua);
 

@@ -35,7 +35,7 @@ export function NganKeoDeal({
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" /></svg>
       </button>
       <span className="text-[12px] text-xam pr-12">
-        {deal.loai === "mua_x_tang_y" ? "Mua nhiều" : TEN_NHOM[nhomCuaDeal(deal)]}
+        {deal.loai === "mua_x_tang_y" ? "Mua nhiều" : deal.loai === "may_rui" ? "May mắn" : TEN_NHOM[nhomCuaDeal(deal)]}
         {han ? ` · ${han}` : ""}
       </span>
       <h2 className="m-0 text-[22px] font-bold leading-[1.25] pr-10">{deal.ten}</h2>

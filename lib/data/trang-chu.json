@@ -1,10 +1,10 @@
 {
   "dai_thong_bao": {
-    "deal_id": "KM-13",
-    "mac_dinh_chu": "Mua LOPOE, tặng sản phẩm fullsize",
+    "deal_id": "BAC-HOA-DON",
+    "mac_dinh_chu": "Hóa đơn từ 800K tặng sữa rửa mặt LOPOE",
     "nut": {
       "chu": "Xem ›",
-      "den": "/deal?id=KM-13",
+      "den": "/deal?id=BAC-HOA-DON",
       "kieu": "chinh"
     }
   },
@@ -341,7 +341,8 @@
     }
   ],
   "qua_lopoe": {
-    "deal_id": "KM-08",
+    "phu_de": "Mọi nhãn hàng. Gồm cả combo. Từ 1,2 triệu tặng ampoule và voucher nhà hàng 15%.",
+    "deal_id": "BAC-HOA-DON",
     "tien_to_tieu_de": "Từ ",
     "hau_to_tieu_de": ", tặng LOPOE",
     "anh": "/trang-chu/srm.webp",
@@ -349,7 +350,7 @@
     "nut": [
       {
         "chu": "Xem deal",
-        "den": "/deal?id=KM-08",
+        "den": "/deal?id=BAC-HOA-DON",
         "kieu": "chinh"
       }
     ]

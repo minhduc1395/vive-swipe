@@ -63,9 +63,9 @@ describe("W014 · Xử lý giữ hàng tại booth (Server Action & Nghiệp v�
 
     expect(ketQua.ok).toBe(true);
     expect(ketQua.ma).toMatch(/^VIVE-\d{4}$/);
-    // Giá SRM LOPOE theo data/deals.yaml là 249.000đ và quà KM-13 muối tắm
+    // Giá SRM LOPOE theo data/deals.yaml là 249.000đ; KM-13 đã dừng từ 20/11 nên không có quà
     expect(ketQua.tongUocTinh).toBe(249000);
-    expect(ketQua.quaDuKien).toBe("1 muối tắm salTherapy");
+    expect(ketQua.quaDuKien).toBeNull();
 
     // Đọc lại từ database kho
     const donDaLuu = await layDonGiuHangTheoMa(ketQua.ma!);

@@ -191,7 +191,7 @@ export function TheDeal({ deal, sanPhamMap, onMo, onThemCombo, onThemBo, noiBat 
     >
       <div className="flex items-center justify-between gap-2 text-[12px] text-xam">
         <span className={`inline-flex items-center h-6 px-2.5 rounded-full font-semibold text-den ${nenNhan}`}>
-          {deal.loai === "mua_x_tang_y" ? "Mua nhiều" : TEN_NHOM[nhom]}
+          {deal.loai === "mua_x_tang_y" ? "Mua nhiều" : deal.loai === "may_rui" ? "May mắn" : TEN_NHOM[nhom]}
         </span>
         {han && (
           <span className="inline-flex items-center gap-1.5">
