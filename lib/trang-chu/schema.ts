@@ -74,7 +74,7 @@ export const OTrongLuoiSchema = z.object({
   anh: z.string().min(1).optional(),
   anh_sp: z.boolean().optional(),
   /** W055: nhiều ảnh sản phẩm đứng cạnh nhau (combo), ảnh nền trong suốt */
-  anh_bo: z.array(z.string().min(1)).min(2).optional(),
+  anh_bo: z.array(z.string().min(1)).min(1).optional(),
   /** W056: ảnh sản phẩm từ kho media theo mã (bảng san_pham), 1–3 mã */
   san_pham: z.array(z.string().min(1)).min(1).max(3).optional(),
   mo_ta_anh: z.string().optional(),

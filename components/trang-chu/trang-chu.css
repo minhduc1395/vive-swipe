@@ -553,6 +553,12 @@
   width: 320px;
 }
 
+/* Ô rộng chỉ 1 sản phẩm: ảnh to hơn */
+.tc-v3 .co-rong .hinh.bo.kho.bo-1 img {
+  height: 380px;
+  width: 380px;
+}
+
 /* Hàng combo trượt ngang (hàng cuối phần combo) */
 .tc-v3 .hang-combo {
   background: var(--kem);
@@ -705,8 +711,12 @@
   height: 124px;
 }
 
-.tc-v3 .the-combo .hinh-the img.rong {
+.tc-v3 .the-combo .hinh-the img.rong,
+.tc-v3 .the-combo .hinh-the img[src*="medicube"] {
   height: 176px;
+  width: 176px;
+  object-fit: contain;
+  margin: 0 -18px;
 }
 
 .tc-v3 .the-combo .hinh-the img.kho {

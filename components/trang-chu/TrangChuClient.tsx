@@ -471,7 +471,11 @@ export function TrangChuClient({
             const dealCuaO = o.deal_id ? dealsMap.get(o.deal_id) : undefined;
             const { gia: giaNgan, qua: dongQua } = giaVaQua(dealCuaO);
             const lop = `o nen-${o.mau_nen} co-${o.co}`;
-            const anhSanPham = (o.san_pham ?? []).map((ma) => anhKhoMediaTheoMa(ma)).filter((u): u is string => Boolean(u));
+            // Ảnh sản phẩm đứng cạnh nhau: ảnh trong repo (anh_bo) rồi ảnh kho media theo mã (san_pham), gộp chung một hàng
+            const anhSanPham = [
+              ...(o.anh_bo ?? []),
+              ...(o.san_pham ?? []).map((ma) => anhKhoMediaTheoMa(ma)).filter((u): u is string => Boolean(u)),
+            ];
 
             return (
               <section key={o.id} className={lop} id={o.id}>
@@ -516,7 +520,7 @@ export function TrangChuClient({
                   </div>
                 </div>
 
-                {anhSanPham.length > 0 ? (
+                {anhSanPham.length > 0 && !o.anh_bo?.some((a) => a.includes("/srm") || a.includes("/kem") || a.includes("/ampoule")) ? (
                   <div
                     className={`hinh bo kho bo-${anhSanPham.length}`}
                     role="img"
@@ -531,6 +535,7 @@ export function TrangChuClient({
                         height={1000}
                         loading="lazy"
                         decoding="async"
+                        className={a.includes("ampoule") ? "nho" : undefined}
                       />
                     ))}
                   </div>
@@ -717,12 +722,9 @@ function HangCombo({
               {qua && <span className="qua">{qua}</span>}
               <span className="hinh-the" aria-hidden="true">
                 {t.san_pham ? (
-                  t.san_pham
-                    .map((ma) => anhKhoMediaTheoMa(ma))
-                    .filter((u): u is string => Boolean(u))
-                    .map((a, i) => (
-                      <img key={`${a}-${i}`} src={daTaiAnh ? a : ANH_TRONG_SUOT} alt="" width={1000} height={1000} loading="lazy" decoding="async" className="kho" />
-                    ))
+                  [...(t.anh_bo ?? []), ...t.san_pham.map((ma) => anhKhoMediaTheoMa(ma)).filter((u): u is string => Boolean(u))].map((a, i) => (
+                    <img key={`${a}-${i}`} src={daTaiAnh ? a : ANH_TRONG_SUOT} alt="" width={1000} height={1000} loading="lazy" decoding="async" className="kho" />
+                  ))
                 ) : t.anh_bo ? (
                   t.anh_bo.map((a, i) => (
                     <img
