@@ -12,7 +12,7 @@ Trang chủ và landing: khối mở đầu, khối LOPOE cuộn 3D, lưới com
 
 ## Quy ước riêng
 - Nền theo màu cửa hàng Option 2; nút, chip, logo giữ màu thương hiệu (docs/03).
-- Claim giải thưởng chỉ gắn sản phẩm có bằng chứng (sữa rửa mặt và ampoule LOPOE có huy hiệu Hwahae, QD-BOD-023).
+- Claim giải thưởng chỉ gắn sản phẩm có bằng chứng: hiện chỉ ampoule LOPOE có huy hiệu Hwahae Awards 2025 (WEB-001); sữa rửa mặt chưa có bằng chứng nên không ghi giải.
 - Điện thoại không được giật khi đứng yên ở khối 3D (đã sửa W057, giữ nguyên cách làm).
 
 ## Bẫy đã gặp
@@ -20,4 +20,8 @@ Trang chủ và landing: khối mở đầu, khối LOPOE cuộn 3D, lưới com
 - Ô 2 món tràn mép ở màn ≤ 420px (đã sửa PR #44).
 
 ## Lịch sử ngắn
-- 2026-11-20 W055–W060b: trang chủ mới, LOPOE 3D, ống nhỏ giọt thật (PR #37–#46).
+- 2026-11-20 W055–W062: trang chủ mới, LOPOE 3D (ảnh thật, ống nhỏ giọt và cổ chai cắt từ ảnh, giọt sprite), ảnh combo cắt lại, dải thông báo theo 3 ưu đãi (PR #37–#50).
+
+## Việc đang mở (không giao job trùng)
+- DIR-037: điện thoại còn giật 1–2 giây sau khi thả tay ở khối 3D (WEB đang xem).
+- DIR-040: áp chữ mới cho ô lớn (chờ BOD duyệt DIR-039), chỉ đổi front end.
