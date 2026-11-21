@@ -48,10 +48,12 @@ describe("W044 deal: chữ theo ngôn ngữ", () => {
 
   it("trường *_en: dùng khi có, thiếu thì hiện bản vi", () => {
     const co = { ...dealCombo, ten_en: "Trio" } as typeof dealCombo;
+    const thieuEn = { ...dealCombo, ten_en: undefined, dieu_kien_en: undefined } as typeof dealCombo;
+    expect(tenDeal(dealCombo, "en")).toBe("LOPOE Better Balance Trio");
     expect(tenDeal(co, "en")).toBe("Trio");
     expect(tenDeal(co, "vi")).toBe(dealCombo.ten);
-    expect(tenDeal(dealCombo, "en")).toBe(dealCombo.ten);
-    expect(dieuKienDeal(dealCombo, "en")).toBe(dealCombo.dieu_kien);
+    expect(tenDeal(thieuEn, "en")).toBe(dealCombo.ten);
+    expect(dieuKienDeal(thieuEn, "en")).toBe(dealCombo.dieu_kien);
   });
 
   it("ghi chú deal và nhãn giải thích đổi theo t", () => {

@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import type { SanPham } from "@/lib/data/types";
 import { duongDanAnh } from "@/lib/anh";
 import { useDichQuet } from "./dung-dich";
-import { dichDuLieu, taoNhan, tenSanPham, tienKhongDon } from "./ngon-ngu-quet";
+import { dichDuLieu, taoNhan, tenSanPham, thieuBanEn, tienKhongDon } from "./ngon-ngu-quet";
 
 interface TheSanPhamProps {
   sanPham: SanPham;
@@ -319,7 +319,10 @@ export function TheSanPham({
         <span className="text-[12px] font-semibold tracking-[1.4px] text-xam uppercase">
           {sanPham.thuong_hieu}
         </span>
-        <h2 className="m-0 text-[18px] sm:text-[19px] leading-[1.3] font-semibold text-den line-clamp-2">
+        <h2
+          data-thieu-en={thieuBanEn(sanPham, ngonNgu)}
+          className="m-0 text-[18px] sm:text-[19px] leading-[1.3] font-semibold text-den line-clamp-2"
+        >
           {tenSp}
         </h2>
         <span className="text-[13px] text-xam">

@@ -7,6 +7,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useDuLieu } from "@/lib/du-lieu-context";
 import { dinhDangGia } from "@/lib/dinh-dang";
 import { dieuKienDeal, tenDeal } from "@/lib/deals/ngon-ngu";
+import { tenSanPham, thieuBanEn } from "@/components/deck/ngon-ngu-quet";
 import { duongDanAnh } from "@/lib/anh";
 import { chuanHoaNgay } from "@/lib/deals/hien-thi";
 import {
@@ -318,7 +319,7 @@ export default function TrangGio() {
                                   /* eslint-disable-next-line @next/next/no-img-element */
                                   <img
                                     src={anhGoiY}
-                                    alt={spGoiY.ten_hien_thi}
+                                    alt={tenSanPham(spGoiY, nn)}
                                     className="w-10 h-10 object-contain"
                                   />
                                 ) : (
@@ -329,8 +330,11 @@ export default function TrangGio() {
                                 <span className="text-xam text-[11px]">
                                   {spGoiY.thuong_hieu}
                                 </span>
-                                <strong className="font-semibold text-den truncate">
-                                  {spGoiY.ten_hien_thi} · {g(spGoiY.gia_ban)}
+                                <strong
+                                  data-thieu-en={thieuBanEn(spGoiY, nn)}
+                                  className="font-semibold text-den truncate"
+                                >
+                                  {tenSanPham(spGoiY, nn)} · {g(spGoiY.gia_ban)}
                                 </strong>
                               </div>
                               <button
@@ -401,7 +405,18 @@ export default function TrangGio() {
                     : "bg-kem";
 
                 const anhSrc = duongDanAnh(sp?.anh, "nho");
-                const tenDong = dong.loai === "combo" ? tenCombo(dong.id, dong.ten) : dong.ten;
+                const tenDong =
+                  dong.loai === "combo"
+                    ? tenCombo(dong.id, dong.ten)
+                    : sp
+                      ? tenSanPham(sp, nn)
+                      : dong.ten;
+                const thieuEnDong =
+                  dong.loai === "san_pham" && sp
+                    ? thieuBanEn(sp, nn)
+                    : nn === "en" && dong.loai === "san_pham"
+                      ? ""
+                      : undefined;
 
                 return (
                   <article
@@ -438,7 +453,10 @@ export default function TrangGio() {
                       <span className="text-[11px] font-semibold tracking-[1.2px] text-xam uppercase truncate">
                         {dong.thuong_hieu}
                       </span>
-                      <strong className="text-[15px] font-semibold text-den leading-[1.3] line-clamp-2">
+                      <strong
+                        data-thieu-en={thieuEnDong}
+                        className="text-[15px] font-semibold text-den leading-[1.3] line-clamp-2"
+                      >
                         {tenDong}
                       </strong>
 

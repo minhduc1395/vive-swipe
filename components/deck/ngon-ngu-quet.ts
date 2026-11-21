@@ -41,6 +41,21 @@ export function moTaSanPham(sp: SanPham, ngonNgu: string): string | null {
   return truongTheoNgonNgu(sp, "mo_ta", ngonNgu) ?? null;
 }
 
+/** Trả về "" khi đang xem EN nhưng sản phẩm chưa có ten_en (để test gắn nhãn data-thieu-en). */
+export function thieuBanEn(sp: SanPham, ngonNgu: string): "" | undefined {
+  if (ngonNgu !== "en") return undefined;
+  const en = (sp as unknown as Record<string, unknown>).ten_en;
+  return typeof en === "string" && en.trim() !== "" ? undefined : "";
+}
+
+/** Trả về "" khi sản phẩm có mo_ta nhưng chưa có mo_ta_en ở bản EN. */
+export function moTaThieuEn(sp: SanPham, ngonNgu: string): "" | undefined {
+  if (ngonNgu !== "en") return undefined;
+  if (!sp.mo_ta || !sp.mo_ta.trim()) return undefined;
+  const en = (sp as unknown as Record<string, unknown>).mo_ta_en;
+  return typeof en === "string" && en.trim() !== "" ? undefined : "";
+}
+
 /** Số tiền trên thẻ/lưới: vi giữ dạng 349.000, en là 349,000 VND. */
 export function tienKhongDon(soTien: number, ngonNgu: string): string {
   return ngonNgu === "en" ? dinhDangGia(soTien, "en") : dinhDangTien(soTien);

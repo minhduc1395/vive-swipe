@@ -62,6 +62,7 @@ deals:
     thanh_phan: [{id: LOPOE-CF, so_luong: 2}]
     gia_combo: 349000
     qua: Túi sample và 1 kem chống nắng hoặc kem mềm da   # tên, giá món quà chưa chốt
+    qua_en: Sample pouch and 1 sunscreen or skin softening cream
     gioi_han_qua: 15
     hook: Sữa rửa mặt LOPOE combo 2 chai 349K
     hook_en: "LOPOE Cleansing Foam combo: 2 bottles for 349K"
@@ -78,6 +79,7 @@ deals:
     thanh_phan: [{id: LOPOE-CR, so_luong: 1}, {id: LOPOE-AMP, so_luong: 1}]
     gia_combo: 725000
     qua: 1 ampoule LOPOE
+    qua_en: 1 LOPOE ampoule
     gioi_han_qua: 13
     khi_het_qua: {gia_combo: 699000, qua: null}
 
@@ -92,6 +94,7 @@ deals:
     thanh_phan: [{id: LOPOE-CF, so_luong: 1}, {id: LOPOE-AMP, so_luong: 1}, {id: LOPOE-CR, so_luong: 1}]
     gia_combo: 911000
     qua: 1 kem dưỡng LOPOE
+    qua_en: 1 LOPOE moisture cream
     gioi_han_qua: 10
     khi_het_qua: {gia_combo: 889000, qua: null}
     hook: Mua bộ 3 LOPOE, tặng thêm kem dưỡng
@@ -198,8 +201,8 @@ deals:
     dieu_kien: Tính trên tổng hóa đơn sau giảm, mọi nhãn, gồm cả combo. Mỗi hóa đơn nhận quà của mốc cao nhất. Số lượng quà có hạn
     dieu_kien_en: Based on the order total after discounts, all brands, combos included. Each order gets the gift of the highest tier reached. Limited quantity
     moc:
-      - {tu: 800000, qua: 1 sữa rửa mặt LOPOE, gioi_han: 30}
-      - {tu: 1200000, qua: 1 ampoule LOPOE và 1 voucher giảm 15% nhà hàng Union Square, gioi_han: 15}
+      - {tu: 800000, qua: 1 sữa rửa mặt LOPOE, qua_en: 1 LOPOE cleansing foam, gioi_han: 30}
+      - {tu: 1200000, qua: 1 ampoule LOPOE và 1 voucher giảm 15% nhà hàng Union Square, qua_en: 1 LOPOE ampoule and 1 15% off Union Square restaurant voucher, gioi_han: 15}
     hook: Hóa đơn từ 800K tặng sữa rửa mặt LOPOE, từ 1,2 triệu tặng ampoule LOPOE và voucher nhà hàng 15%
     hook_en: Spend 800K for a free LOPOE cleanser, 1.2M for a free LOPOE ampoule and a 15% restaurant voucher
 
@@ -301,7 +304,7 @@ deals:
     hien_thi: true
     <<: *popup
     moc:
-      - {tu: 300000, qua: 1 lượt quay vòng quay may mắn}
+      - {tu: 300000, qua: 1 lượt quay vòng quay may mắn, qua_en: 1 lucky-wheel spin}
     # Thưởng thêm khi giữ hàng trên web rồi nhận tại booth (SALE 21/11). Web đọc trường này, không gõ chữ cứng.
     thuong_giu_hang: {tu_ngay: "2026-11-27", qua: Thêm 1 lượt quay vòng quay may mắn, qua_en: 1 extra lucky-wheel spin}
     dieu_kien: Hóa đơn từ 300K được quay 1 lượt. Từ 27/11, giữ hàng trên web rồi nhận tại booth được thêm 1 lượt

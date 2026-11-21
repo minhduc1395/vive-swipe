@@ -20,6 +20,7 @@ import {
   nhanHamDich,
   taoNhan,
   tenSanPham,
+  thieuBanEn,
   tienKhongDon,
 } from "@/components/deck/ngon-ngu-quet";
 import {
@@ -580,7 +581,10 @@ function DanhMucNoiDung() {
                         </span>
 
                         {/* Tên */}
-                        <span className="text-[14px] leading-[1.35] font-medium text-den h-[38px] overflow-hidden line-clamp-2">
+                        <span
+                          data-thieu-en={thieuBanEn(sp, ngonNgu)}
+                          className="text-[14px] leading-[1.35] font-medium text-den h-[38px] overflow-hidden line-clamp-2"
+                        >
                           {tenSp}
                         </span>
 
