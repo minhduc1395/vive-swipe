@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 export const SU_KIEN_TOAST = "vive_toast";
 
@@ -8,7 +9,7 @@ export const SU_KIEN_TOAST = "vive_toast";
  * Kích hoạt hiển thị toast toàn cục.
  * Mặc định: "Tính năng sắp ra mắt" (hoặc "Coming soon").
  */
-export function hienToast(tinNhan: string = "Tính năng sắp ra mắt") {
+export function hienToast(tinNhan?: string) {
   if (typeof window !== "undefined") {
     window.dispatchEvent(
       new CustomEvent(SU_KIEN_TOAST, {
@@ -23,14 +24,16 @@ export function hienToast(tinNhan: string = "Tính năng sắp ra mắt") {
  * Vị trí: giữa dưới màn hình, không chặn cuộn, tự tắt sau ~2,5 giây, role="status".
  */
 export function Toast() {
+  const t = useTranslations("chung.thanh");
   const [thongBao, setThongBao] = useState<string | null>(null);
+  const chuMacDinh = t("sapRaMat");
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
     const xuLySuKien = (e: Event) => {
       const ce = e as CustomEvent<{ thongBao?: string }>;
-      setThongBao(ce.detail?.thongBao || "Tính năng sắp ra mắt");
+      setThongBao(ce.detail?.thongBao || chuMacDinh);
       clearTimeout(timer);
       timer = setTimeout(() => {
         setThongBao(null);
@@ -42,7 +45,7 @@ export function Toast() {
       window.removeEventListener(SU_KIEN_TOAST, xuLySuKien);
       clearTimeout(timer);
     };
-  }, []);
+  }, [chuMacDinh]);
 
   if (!thongBao) return null;
 

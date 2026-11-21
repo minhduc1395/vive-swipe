@@ -1,1 +1,46 @@
-{}
+{
+  "chung": {
+    "quayLai": "Quay lại",
+    "taiKhoan": "Tài khoản",
+    "dangTai": "Đang tải…"
+  },
+  "dangNhap": {
+    "tieuDe": "Đăng nhập VIVE",
+    "choMoTa": "Tính năng đăng nhập tài khoản khách hàng để đồng bộ lịch sử và nhận ưu đãi riêng đang được chuẩn bị (W030). Hiện tại bạn có thể quẹt và giữ hàng tại booth hoàn toàn miễn phí mà không cần đăng nhập.",
+    "tiepTucQuet": "Tiếp tục quẹt sản phẩm"
+  },
+  "form": {
+    "bieuMau": "Biểu mẫu đăng nhập",
+    "moTaBuoc1": "Nhập email để nhận mã 6 số. Đã thích, giỏ và đơn giữ hàng của bạn được giữ lại khi đổi máy.",
+    "email": "Email",
+    "emailGoiY": "ban@email.com",
+    "moTaBuoc2": "VIVE đã gửi mã 6 số tới email của bạn. Mã có thể nằm trong mục Quảng cáo hoặc Spam.",
+    "ma": "Mã 6 số",
+    "dangGui": "Đang gửi…",
+    "guiMa": "Gửi mã",
+    "dangKiemTra": "Đang kiểm tra…",
+    "dangNhap": "Đăng nhập",
+    "guiLaiCoDem": "Gửi lại mã ({giay}s)",
+    "guiLai": "Gửi lại mã",
+    "doiEmail": "Đổi email",
+    "deSau": "Để sau"
+  },
+  "thongTin": {
+    "dangNhapBangEmail": "Đăng nhập bằng email",
+    "cuaBan": "Của bạn",
+    "daThich": "Đã thích",
+    "gioHang": "Giỏ hàng",
+    "donGiuHang": "Đơn giữ hàng",
+    "dangXuat": "Đăng xuất",
+    "dangDangXuat": "Đang đăng xuất…"
+  },
+  "loi": {
+    "emailSai": "Email chưa đúng. Kiểm tra lại giúp VIVE nhé.",
+    "maSai": "Mã chưa đúng. Kiểm tra lại 6 số trong email.",
+    "maHetHan": "Mã đã hết hạn. Bấm “Gửi lại mã” để nhận mã mới.",
+    "quaNhieu": "Bạn gửi mã quá nhiều lần. Đợi vài phút rồi thử lại.",
+    "matMang": "Mất kết nối mạng. Kiểm tra mạng rồi thử lại.",
+    "chuaCoTaiKhoan": "Email này chưa có tài khoản. Thử lại để tạo mới.",
+    "chung": "Có lỗi xảy ra. Thử lại sau ít phút."
+  }
+}

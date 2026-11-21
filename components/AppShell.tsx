@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { NutNgonNgu } from "@/components/NutNgonNgu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { LogoVive } from "./LogoVive";
 import { ThanhTrenDesktop } from "./ThanhTrenDesktop";
 import { ThanhDocTablet } from "./ThanhDocTablet";
@@ -54,6 +55,7 @@ export function AppShell({
   khoaChieuCao = false,
 }: AppShellProps) {
   const pathname = usePathname();
+  const t = useTranslations("chung.thanh");
   const laTrangNoiBo =
     pathname.startsWith("/nhan-vien") || pathname.startsWith("/quan-tri");
   const coHienDieuHuong = !laTrangNoiBo;
@@ -108,7 +110,7 @@ export function AppShell({
           <Link
             href="/"
             prefetch={false}
-            aria-label="Trang chủ VIVE"
+            aria-label={t("trangChu")}
             className="inline-flex items-center min-h-[44px] focus-visible:outline-2 focus-visible:outline-den rounded"
           >
             <LogoVive rong={46} />
@@ -132,13 +134,13 @@ export function AppShell({
               href="/dang-nhap"
               onClick={(e) => {
                 e.preventDefault();
-                hienToast("Tính năng sắp ra mắt");
+                hienToast(t("sapRaMat"));
               }}
               data-sap-co="true"
-              aria-label="Đăng nhập"
+              aria-label={t("dangNhap")}
               className="min-h-[44px] px-2.5 inline-flex items-center text-[13px] font-medium text-den/82 hover:text-den transition-colors cursor-pointer"
             >
-              <span>Đăng nhập</span>
+              <span>{t("dangNhap")}</span>
             </a>
             </LinkTaiKhoan>
           </div>

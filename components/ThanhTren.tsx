@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { LogoVive } from "@/components/LogoVive";
 
 interface ThanhTrenProps {
@@ -9,11 +10,12 @@ interface ThanhTrenProps {
  * Thanh trên cho màn Deck quẹt: logo VIVE gốc bên trái, giỏ hàng bên phải.
  */
 export function ThanhTren({ soLuongGio = 0 }: ThanhTrenProps) {
+  const t = useTranslations("chung.thanh");
   return (
     <header className="h-[60px] shrink-0 px-5 pr-3 pt-3 flex items-center justify-between">
       <Link
         href="/"
-        aria-label="Trang chủ VIVE"
+        aria-label={t("trangChu")}
         className="inline-flex items-center min-h-[44px]"
       >
         <LogoVive rong={58} />
@@ -22,7 +24,7 @@ export function ThanhTren({ soLuongGio = 0 }: ThanhTrenProps) {
       <Link
         href="/gio"
         aria-label={
-          soLuongGio > 0 ? `Giỏ hàng (${soLuongGio} món)` : "Giỏ hàng"
+          soLuongGio > 0 ? t("gioHangCoMon", { so: soLuongGio }) : t("gioHang")
         }
         className="relative w-11 h-11 flex items-center justify-center rounded-full text-den focus-visible:outline-2 focus-visible:outline-den"
       >

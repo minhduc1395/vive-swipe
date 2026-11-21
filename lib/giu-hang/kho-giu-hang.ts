@@ -1,6 +1,10 @@
 import { layAdmin, choPhepKhoTam } from "@/lib/supabase/admin";
 import type { DonGiuHangChiTiet } from "./types";
 
+/** Select chi tiết đơn giữ hàng trên Supabase (cột tên deal nằm trong JSON du_lieu). */
+export const SELECT_GIU_HANG_CHI_TIET =
+  "*, giu_hang_dong(*, san_pham(ten_hien_thi, thuong_hieu), deal(ten:du_lieu->>ten))";
+
 declare global {
   var __VIVE_DON_GIU_HANG_DEV__: DonGiuHangChiTiet[] | undefined;
 }
@@ -285,15 +289,17 @@ export async function layDonGiuHangTheoMa(
       try {
         const { data: gh, error } = await admin
           .from("giu_hang")
-          .select(
-            "*, giu_hang_dong(*, san_pham(ten_hien_thi, thuong_hieu), deal(ten))",
-          )
+          .select(SELECT_GIU_HANG_CHI_TIET)
           .eq("ma", ma.toUpperCase())
           .order("tao_luc", { ascending: false })
           .limit(1)
           .maybeSingle();
 
-        if (!error && gh) {
+        if (error) {
+          console.error("[GiuHang] Lỗi đọc mã", ma, error.message);
+          return null;
+        }
+        if (gh) {
           return {
             id: gh.id,
             ma: gh.ma,
@@ -376,13 +382,14 @@ export async function layDanhSachDonGiuHangHomNay(): Promise<
     .slice(0, 10);
   const { data, error } = await admin
     .from("giu_hang")
-    .select(
-      "*, giu_hang_dong(*, san_pham(ten_hien_thi, thuong_hieu), deal(ten))",
-    )
+    .select(SELECT_GIU_HANG_CHI_TIET)
     .gte("ngay_den", homQua)
     .order("tao_luc", { ascending: false })
     .limit(300);
-  if (error) throw new LoiKhoGiuHang(error.message, error.code);
+  if (error) {
+    console.error("[GiuHang] Lỗi tải danh sách giữ hàng:", error.message);
+    throw new LoiKhoGiuHang(error.message, error.code);
+  }
   return (data ?? []).map((gh) => ({
     id: gh.id,
     ma: gh.ma,

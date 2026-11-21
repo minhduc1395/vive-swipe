@@ -70,7 +70,7 @@ export function ThanhTrenDesktop({
                 <span>{muc.nhan[ngonNgu]}</span>
                 {soDem > 0 && (
                   <span
-                    aria-label={`${soDem} món`}
+                    aria-label={t("soMon", { so: soDem })}
                     className="min-w-[16px] h-4 px-1 rounded-full bg-hong text-den text-[10px] font-bold inline-flex items-center justify-center leading-none"
                   >
                     {soDem > 99 ? "99+" : soDem}
@@ -144,13 +144,13 @@ export function ThanhTrenDesktop({
             href="/dang-nhap"
             onClick={(e) => {
               e.preventDefault();
-              hienToast("Tính năng sắp ra mắt");
+              hienToast(t("sapRaMat"));
             }}
             data-sap-co="true"
-            aria-label="Đăng nhập"
+            aria-label={t("dangNhap")}
             className="text-[13px] font-medium text-den/82 hover:text-den transition-colors focus-visible:outline-2 focus-visible:outline-den cursor-pointer"
           >
-            <span>Đăng nhập</span>
+            <span>{t("dangNhap")}</span>
           </a>
           </LinkTaiKhoan>
         </div>

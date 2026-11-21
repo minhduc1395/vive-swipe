@@ -149,14 +149,14 @@ export function ThanhDocTablet({
 
   return (
     <nav
-      aria-label="Điều hướng máy tính bảng"
+      aria-label={t("dieuHuongMayTinhBang")}
       className="hidden md:flex lg:hidden w-[96px] shrink-0 border-r border-[rgba(43,43,42,0.06)] bg-[rgba(255,255,255,0.85)] backdrop-blur-md h-dvh sticky top-0 flex-col items-center gap-1.5 py-5 z-20"
     >
       {/* Logo VIVE -> về / */}
       <Link
         href="/"
         prefetch={false}
-        aria-label="Trang chủ VIVE"
+        aria-label={t("trangChu")}
         className="flex items-center justify-center min-w-[44px] min-h-[44px] mb-3 focus-visible:outline-2 focus-visible:outline-den rounded"
       >
         <LogoVive rong={52} />
@@ -186,7 +186,7 @@ export function ThanhDocTablet({
                 href={tab.href}
                 onClick={(e) => {
                   e.preventDefault();
-                  hienToast("Tính năng sắp ra mắt");
+                  hienToast(t("sapRaMat"));
                 }}
                 data-sap-co="true"
                 aria-label={tab.nhan[ngonNgu]}

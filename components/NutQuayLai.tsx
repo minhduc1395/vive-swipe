@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 export const KHOA_LICH_SU_NOI_BO = "vive_lich_su_noi_bo";
 
@@ -21,12 +22,14 @@ export interface NutQuayLaiProps {
  */
 export function NutQuayLai({
   fallback = "/",
-  nhan = "Quay lại",
+  nhan,
   ariaLabel,
   onClick,
   className = "",
 }: NutQuayLaiProps) {
   const router = useRouter();
+  const t = useTranslations("chung.thanh");
+  const chuNut = nhan ?? t("quayLai");
 
   const xuLyQuayLai = () => {
     if (onClick) {
@@ -69,7 +72,7 @@ export function NutQuayLai({
     <button
       type="button"
       onClick={xuLyQuayLai}
-      aria-label={ariaLabel || nhan}
+      aria-label={ariaLabel || chuNut}
       className={`inline-flex items-center gap-1.5 min-h-[44px] min-w-[44px] px-2 -ml-2 lg:min-h-[36px] lg:min-w-0 lg:px-0 lg:ml-0 rounded-full lg:rounded-md text-[14px] font-medium text-den hover:bg-hong-nhat/70 lg:hover:bg-transparent lg:text-xam lg:hover:text-den transition-colors cursor-pointer whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-den ${className}`}
     >
       <svg
@@ -85,7 +88,7 @@ export function NutQuayLai({
       >
         <path d="M15 18l-6-6 6-6" />
       </svg>
-      <span>{nhan}</span>
+      <span>{chuNut}</span>
     </button>
   );
 }

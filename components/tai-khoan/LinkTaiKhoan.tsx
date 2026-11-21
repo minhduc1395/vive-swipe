@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import { useTaiKhoan } from "@/lib/tai-khoan/use-tai-khoan";
 import { dangNhapEmailBat } from "@/lib/tai-khoan/co";
 
@@ -13,11 +14,12 @@ interface LinkTaiKhoanProps {
 }
 
 function LinkKhiBatCo({ className, children }: LinkTaiKhoanProps) {
+  const t = useTranslations("tai-khoan.chung");
   const { daDangNhap } = useTaiKhoan();
   if (!daDangNhap) return <>{children}</>;
   return (
-    <Link href="/tai-khoan" prefetch={false} aria-label="Tài khoản" className={className}>
-      <span>Tài khoản</span>
+    <Link href="/tai-khoan" prefetch={false} aria-label={t("taiKhoan")} className={className}>
+      <span>{t("taiKhoan")}</span>
     </Link>
   );
 }
