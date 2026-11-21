@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState, useTransition } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   cheDoThu,
   dangNhapNhanVien,
@@ -583,6 +584,12 @@ export function QuanTriClient() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
+          <Link
+            href="/quan-tri/san-pham"
+            className="min-h-[44px] px-4 rounded-full bg-hong text-den text-[13px] font-semibold inline-flex items-center no-underline hover:brightness-95 transition-all"
+          >
+            Kho sản phẩm song ngữ
+          </Link>
           <button
             type="button"
             onClick={() => void napDuLieuQuanTri()}

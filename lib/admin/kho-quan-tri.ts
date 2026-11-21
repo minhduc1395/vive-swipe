@@ -15,6 +15,14 @@ import {
   parseKiotVietCsv,
   type KiotVietImportResult,
 } from "./kiotviet";
+import {
+  chuanHoaSanPhamKho,
+  thucThiSuaSanPhamRpc,
+  type LichSuSanPhamItem,
+  type NguonTruongLoai,
+  type SanPhamKho,
+  type ThayDoiSanPhamInput,
+} from "./san-pham-kho";
 
 export interface ThongKeQuanTri {
   tongKhach: number;
@@ -50,6 +58,8 @@ export interface DuLieuQuanTri {
 
 interface KhoQuanTriDev {
   sanPham: SanPham[];
+  sanPhamKho: SanPhamKho[];
+  lichSuSanPham: LichSuSanPhamItem[];
   deals: Deal[];
   lichSu: LichSuQuanTri[];
   danhSachEmail: KhachEmailItem[];
@@ -60,10 +70,74 @@ declare global {
   var __VIVE_QUAN_TRI_DEV__: KhoQuanTriDev | undefined;
 }
 
+const MA_MAU_AI_DEV: Record<
+  string,
+  { ten_en?: string; mo_ta_en?: string; url?: string }
+> = {
+  "LOPOE-CF": {
+    ten_en: "LOPOE Better Balance Cleansing Foam 160ml",
+    url: "https://lopoe.kr/products/cleansing-foam",
+  },
+  "LOPOE-AMP": {
+    ten_en: "LOPOE Better Balance Ampoule 50ml",
+    url: "https://lopoe.kr/products/ampoule",
+  },
+  "LOPOE-CR": {
+    ten_en: "LOPOE Better Balance Moisture Cream 80ml",
+    url: "https://lopoe.kr/products/moisture-cream",
+  },
+};
+
+function taoDanhSachSanPhamKhoBanDau(): SanPhamKho[] {
+  return SAN_PHAM_TINH.map((sp) => {
+    const mauAi = MA_MAU_AI_DEV[sp.id];
+    const nguonTruong: SanPhamKho["nguon_truong"] = {
+      ten_hien_thi: { nguon: "dong_bo", luc: "2026-11-18T00:00:00.000Z" },
+    };
+    if (mauAi?.ten_en) {
+      nguonTruong.ten_en = {
+        nguon: "ai",
+        boi: "AI dịch (W047)",
+        luc: "2026-11-19T09:00:00.000Z",
+        ...(mauAi.url ? { url: mauAi.url } : {}),
+      };
+    }
+    return {
+      ...sp,
+      ten_en: mauAi?.ten_en ?? null,
+      mo_ta_en: mauAi?.mo_ta_en ?? null,
+      nguon_truong: nguonTruong,
+    };
+  });
+}
+
+function dongBoKhoSanPhamCoBanTuKho(kho: KhoQuanTriDev): void {
+  kho.sanPham = kho.sanPhamKho.map((sp) => ({ ...sp }));
+}
+
+function dongBoKhoSanPhamKhoTuCoBan(kho: KhoQuanTriDev): void {
+  const byId = new Map(kho.sanPham.map((sp) => [sp.id, sp]));
+  kho.sanPhamKho = kho.sanPhamKho.map((spKho) => {
+    const sp = byId.get(spKho.id);
+    if (!sp) return spKho;
+    return {
+      ...spKho,
+      gia_goc: sp.gia_goc,
+      gia_ban: sp.gia_ban,
+      ton: sp.ton,
+      con_hang: sp.con_hang,
+      hien_thi: sp.hien_thi,
+    };
+  });
+}
+
 function layKhoDev(): KhoQuanTriDev {
   if (!globalThis.__VIVE_QUAN_TRI_DEV__) {
+    const sanPhamKho = taoDanhSachSanPhamKhoBanDau();
     globalThis.__VIVE_QUAN_TRI_DEV__ = {
-      sanPham: SAN_PHAM_TINH.map((sp) => ({ ...sp })),
+      sanPham: sanPhamKho.map((sp) => ({ ...sp })),
+      sanPhamKho,
+      lichSuSanPham: [],
       deals: DEALS_TINH.map((d) => ({ ...d })),
       lichSu: [],
       danhSachEmail: [
@@ -368,6 +442,7 @@ export async function capNhatSanPhamServer(input: {
       con_hang: conHangMoi,
     };
     kho.sanPham[idx] = spMoi;
+    dongBoKhoSanPhamKhoTuCoBan(kho);
     kho.daChinhSua = true;
     kho.lichSu.unshift({
       id: `dev-${Date.now()}`,
@@ -458,6 +533,7 @@ export async function xacNhanNhapTonKiotVietServer(
     }
     const kho = layKhoDev();
     kho.sanPham = apDungCapNhatTon(kho.sanPham, ketQua.thayDoi);
+    dongBoKhoSanPhamKhoTuCoBan(kho);
     kho.daChinhSua = true;
     kho.lichSu.unshift({
       id: `dev-${Date.now()}`,
@@ -565,4 +641,154 @@ export async function ghiNhanGuiEmailQuanTriServer(input: {
       ? `Đã lưu chiến dịch email "${input.tieuDe}" (sẵn sàng phát qua Resend/SMTP đã cấu hình).`
       : `Đã ghi nhận bản gửi thử tới ${input.emailNhan}.`,
   };
+}
+
+export async function layDanhSachSanPhamKhoServer(): Promise<{
+  sanPham: SanPhamKho[];
+  lichSu: LichSuSanPhamItem[];
+  cheDoDatabase: "supabase" | "dev_memory";
+}> {
+  const admin = layAdmin();
+  if (!admin) {
+    if (!choPhepKhoTam()) {
+      throw new Error("Chưa cấu hình khóa dịch vụ Supabase (layAdmin)");
+    }
+    const kho = layKhoDev();
+    return {
+      sanPham: kho.sanPhamKho,
+      lichSu: kho.lichSuSanPham,
+      cheDoDatabase: "dev_memory",
+    };
+  }
+
+  const [spRes, lsRes] = await Promise.all([
+    admin.from("san_pham").select("*").order("id"),
+    admin
+      .from("lich_su_san_pham")
+      .select("id, san_pham_id, truong, gia_tri_cu, gia_tri_moi, nguon, boi, luc")
+      .order("luc", { ascending: false })
+      .limit(200),
+  ]);
+
+  if (spRes.error) {
+    throw new Error(`Lỗi đọc bảng san_pham: ${spRes.error.message}`);
+  }
+  if (lsRes.error) {
+    throw new Error(`Lỗi đọc bảng lich_su_san_pham: ${lsRes.error.message}`);
+  }
+
+  const sanPham: SanPhamKho[] = [];
+  for (const row of spRes.data || []) {
+    const sp = chuanHoaSanPhamKho(row as Record<string, unknown>);
+    if (sp) sanPham.push(sp);
+  }
+
+  const lichSu: LichSuSanPhamItem[] = (lsRes.data || []).map((r) => ({
+    id: Number(r.id),
+    san_pham_id: String(r.san_pham_id),
+    truong: String(r.truong),
+    gia_tri_cu: r.gia_tri_cu,
+    gia_tri_moi: r.gia_tri_moi,
+    nguon: (r.nguon as NguonTruongLoai) || "dong_bo",
+    boi: r.boi ? String(r.boi) : null,
+    luc: String(r.luc || new Date().toISOString()),
+  }));
+
+  return { sanPham, lichSu, cheDoDatabase: "supabase" };
+}
+
+export async function layLichSuSanPhamServer(
+  sanPhamId: string,
+): Promise<LichSuSanPhamItem[]> {
+  const admin = layAdmin();
+  if (!admin) {
+    if (!choPhepKhoTam()) {
+      throw new Error("Chưa cấu hình khóa dịch vụ Supabase (layAdmin)");
+    }
+    return layKhoDev().lichSuSanPham.filter((ls) => ls.san_pham_id === sanPhamId);
+  }
+
+  const { data, error } = await admin
+    .from("lich_su_san_pham")
+    .select("id, san_pham_id, truong, gia_tri_cu, gia_tri_moi, nguon, boi, luc")
+    .eq("san_pham_id", sanPhamId)
+    .order("luc", { ascending: false })
+    .limit(100);
+
+  if (error) {
+    throw new Error(`Lỗi đọc lịch sử sản phẩm ${sanPhamId}: ${error.message}`);
+  }
+
+  return (data || []).map((r) => ({
+    id: Number(r.id),
+    san_pham_id: String(r.san_pham_id),
+    truong: String(r.truong),
+    gia_tri_cu: r.gia_tri_cu,
+    gia_tri_moi: r.gia_tri_moi,
+    nguon: (r.nguon as NguonTruongLoai) || "dong_bo",
+    boi: r.boi ? String(r.boi) : null,
+    luc: String(r.luc || new Date().toISOString()),
+  }));
+}
+
+export async function suaSanPhamKhoServer(params: {
+  id: string;
+  thayDoi: ThayDoiSanPhamInput;
+  nguon: NguonTruongLoai;
+  boi: string;
+  vaiTro: "kho" | "quan_tri";
+}): Promise<{
+  sanPham: SanPhamKho;
+  lichSu: LichSuSanPhamItem[];
+}> {
+  const admin = layAdmin();
+  if (!admin) {
+    if (!choPhepKhoTam()) {
+      throw new Error("Chưa cấu hình khóa dịch vụ Supabase (layAdmin)");
+    }
+    const kho = layKhoDev();
+    const kq = thucThiSuaSanPhamRpc(kho.sanPhamKho, kho.lichSuSanPham, {
+      id: params.id,
+      thayDoi: params.thayDoi,
+      nguon: params.nguon,
+      boi: params.boi,
+      vaiTro: params.vaiTro,
+    });
+    kho.sanPhamKho = kq.danhSachMoi;
+    kho.lichSuSanPham = kq.lichSuMoi;
+    dongBoKhoSanPhamCoBanTuKho(kho);
+    kho.daChinhSua = true;
+    kho.lichSu.unshift({
+      id: `dev-kho-${Date.now()}`,
+      ten: "quan_tri_sua_san_pham_kho",
+      moTa: `${params.boi} (${params.vaiTro}): cập nhật thông tin ${kq.sanPham.id}`,
+      taoLuc: new Date().toISOString(),
+    });
+    return {
+      sanPham: kq.sanPham,
+      lichSu: kq.lichSuMoi.filter((ls) => ls.san_pham_id === kq.sanPham.id),
+    };
+  }
+
+  const { data, error } = await admin.rpc("sua_san_pham", {
+    p_id: params.id,
+    p_thay_doi: {
+      ...params.thayDoi,
+      _vai_tro: params.vaiTro,
+    },
+    p_nguon: params.nguon,
+    p_boi: params.boi,
+  });
+
+  if (error) {
+    throw new Error(`Lỗi RPC sua_san_pham: ${error.message}`);
+  }
+
+  const spMoi = chuanHoaSanPhamKho(data as Record<string, unknown>);
+  if (!spMoi) {
+    throw new Error(`Dữ liệu trả về từ sua_san_pham không hợp lệ cho mã ${params.id}`);
+  }
+
+  const lichSu = await layLichSuSanPhamServer(params.id);
+  return { sanPham: spMoi, lichSu };
 }

@@ -155,7 +155,7 @@ export function BangNhanVien({ phien, onDangXuat }: Props) {
       case "huy":
       case "het_han":
       default:
-        return "bg-trang text-xam border border-[#E8D2CC]";
+        return "bg-trang text-xam border border-hong";
     }
   };
 
@@ -168,17 +168,17 @@ export function BangNhanVien({ phien, onDangXuat }: Props) {
   ];
 
   return (
-    <div className="w-full max-w-[1280px] min-h-[768px] mx-auto bg-trang text-den flex flex-col border border-[#F7EEEB] rounded-[24px] shadow-sm overflow-hidden my-4">
+    <div className="w-full max-w-[1280px] min-h-[768px] mx-auto bg-trang text-den flex flex-col border border-vien rounded-[24px] shadow-sm overflow-hidden my-4">
       {loiTai && (
         <p
           role="alert"
-          className="m-0 px-6 py-3 bg-[#F7EEEB] text-[14px] font-medium"
+          className="m-0 px-6 py-3 bg-kem text-[14px] font-medium"
         >
           {loiTai}
         </p>
       )}
       {/* Header thanh trên */}
-      <header className="h-[72px] px-6 border-b border-[#F7EEEB] flex items-center gap-4 bg-trang shrink-0">
+      <header className="h-[72px] px-6 border-b border-vien flex items-center gap-4 bg-trang shrink-0">
         <Image
           src="/brand/vive-logo-chu.png"
           alt="VIVE"
@@ -193,16 +193,17 @@ export function BangNhanVien({ phien, onDangXuat }: Props) {
         {/* Ô tìm kiếm */}
         <label
           htmlFor="tim"
-          className="ml-auto h-[44px] w-[320px] rounded-[12px] border-[1.5px] border-[#E8D2CC] flex items-center gap-2 px-3 focus-within:border-den transition-colors bg-trang"
+          className="ml-auto h-[44px] w-[320px] rounded-[12px] border-[1.5px] border-hong flex items-center gap-2 px-3 focus-within:border-den transition-colors bg-trang"
         >
           <svg
             width="18"
             height="18"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="#737373"
+            stroke="currentColor"
             strokeWidth="2"
             strokeLinecap="round"
+            className="text-xam shrink-0"
             aria-hidden="true"
           >
             <circle cx="11" cy="11" r="8" />
@@ -246,7 +247,7 @@ export function BangNhanVien({ phien, onDangXuat }: Props) {
         {/* Cột trái: Danh sách giữ hàng */}
         <section
           aria-label="Danh sách giữ hàng"
-          className="w-full md:w-[612px] p-5 flex flex-col gap-3.5 border-r border-[#F7EEEB] shrink-0"
+          className="w-full md:w-[612px] p-5 flex flex-col gap-3.5 border-r border-vien shrink-0"
         >
           {/* Nhóm tab trạng thái */}
           <div
@@ -268,7 +269,7 @@ export function BangNhanVien({ phien, onDangXuat }: Props) {
                   className={`h-[40px] px-3.5 rounded-full text-[14px] font-medium transition-colors border cursor-pointer ${
                     active
                       ? "bg-den text-trang border-den"
-                      : "bg-trang text-den border-[#E8D2CC] hover:bg-hong-nhat/50"
+                      : "bg-trang text-den border-hong hover:bg-kem"
                   }`}
                 >
                   {t.label}
@@ -299,8 +300,8 @@ export function BangNhanVien({ phien, onDangXuat }: Props) {
                   onClick={() => setMaDangChon(r.ma)}
                   className={`grid grid-cols-[116px_1fr_88px_104px_92px] gap-2 items-center min-h-[60px] p-2.5 px-3.5 rounded-[14px] transition-colors text-left cursor-pointer border ${
                     dangChon
-                      ? "bg-[#F7EEEB] border-[1.5px] border-den"
-                      : "bg-trang border-[#F7EEEB] hover:bg-hong-nhat/30"
+                      ? "bg-kem border-[1.5px] border-den"
+                      : "bg-trang border-vien hover:bg-kem"
                   }`}
                 >
                   <strong className="text-[15px] font-bold tracking-tight text-den">
@@ -347,7 +348,7 @@ export function BangNhanVien({ phien, onDangXuat }: Props) {
         {donDangChon ? (
           <section
             aria-label="Chi tiết mã giữ hàng"
-            className="flex-1 p-5 md:p-6 flex flex-col gap-3.5 bg-hong-nhat"
+            className="flex-1 p-5 md:p-6 flex flex-col gap-3.5 bg-kem"
           >
             {/* Mã & Trạng thái */}
             <div className="flex items-center justify-between">
@@ -365,13 +366,13 @@ export function BangNhanVien({ phien, onDangXuat }: Props) {
 
             {/* 2 thẻ: Khách và Hạn giữ */}
             <div className="grid grid-cols-2 gap-2 text-[13px]">
-              <div className="bg-trang rounded-[12px] p-2.5 px-3 flex flex-col gap-0.5 border border-[#F7EEEB]">
+              <div className="bg-trang rounded-[12px] p-2.5 px-3 flex flex-col gap-0.5 border border-vien">
                 <span className="text-xam">Khách</span>
                 <strong className="font-semibold text-den">
                   {donDangChon.ten} · {donDangChon.sdt}
                 </strong>
               </div>
-              <div className="bg-trang rounded-[12px] p-2.5 px-3 flex flex-col gap-0.5 border border-[#F7EEEB]">
+              <div className="bg-trang rounded-[12px] p-2.5 px-3 flex flex-col gap-0.5 border border-vien">
                 <span className="text-xam">Hạn giữ</span>
                 <strong className="font-semibold text-den">
                   21:00 {donDangChon.ngayDen}
@@ -380,7 +381,7 @@ export function BangNhanVien({ phien, onDangXuat }: Props) {
             </div>
 
             {/* Thẻ danh sách món */}
-            <div className="bg-trang rounded-[16px] p-3.5 px-4 flex flex-col gap-2 text-[14px] border border-[#F7EEEB]">
+            <div className="bg-trang rounded-[16px] p-3.5 px-4 flex flex-col gap-2 text-[14px] border border-vien">
               <div className="flex flex-col gap-2 max-h-[220px] overflow-y-auto">
                 {donDangChon.cacDong.map((i, idx) => (
                   <div
@@ -397,13 +398,13 @@ export function BangNhanVien({ phien, onDangXuat }: Props) {
                 ))}
               </div>
 
-              <div className="h-[1px] bg-[#F7EEEB] my-1" />
+              <div className="h-[1px] bg-vien my-1" />
 
               <div className="flex justify-between font-bold text-[15px] text-den">
                 <span>Tổng ước tính</span>
                 <span>{dinhDangTienGio(donDangChon.tongUocTinh)}</span>
               </div>
-              <div className="flex justify-between text-[#5C5C5B] text-[13px]">
+              <div className="flex justify-between text-xam-dam text-[13px]">
                 <span>Quà dự kiến</span>
                 <span className="font-semibold text-den">
                   {donDangChon.quaDuKien || "Không có"}
@@ -411,7 +412,7 @@ export function BangNhanVien({ phien, onDangXuat }: Props) {
               </div>
             </div>
 
-            <p className="m-0 text-[12px] leading-relaxed text-[#5C5C5B]">
+            <p className="m-0 text-[12px] leading-relaxed text-xam-dam">
               Tính tiền trên POS KiotViet như bình thường. Giá và quà trên đây
               là ước tính từ web.
             </p>
@@ -438,21 +439,21 @@ export function BangNhanVien({ phien, onDangXuat }: Props) {
                 type="button"
                 disabled={isPending || donDangChon.trangThai === "huy"}
                 onClick={() => handleDoiTrangThai("huy")}
-                className="h-[52px] rounded-[14px] border-[1.5px] border-[#E8D2CC] bg-trang text-den font-semibold text-[15px] hover:bg-hong-nhat/50 disabled:opacity-50 transition-opacity cursor-pointer"
+                className="h-[52px] rounded-[14px] border-[1.5px] border-hong bg-trang text-den font-semibold text-[15px] hover:bg-kem disabled:opacity-50 transition-opacity cursor-pointer"
               >
                 Hủy
               </button>
             </div>
 
             {/* Lịch sử cập nhật */}
-            <span className="text-[12px] text-[#5C5C5B]">
+            <span className="text-[12px] text-xam-dam">
               {donDangChon.ghiChu || `Tạo lúc ${donDangChon.taoLuc}`}
             </span>
           </section>
         ) : (
           <section
             aria-label="Chi tiết mã giữ hàng"
-            className="flex-1 p-6 flex items-center justify-center bg-hong-nhat text-xam text-[14px]"
+            className="flex-1 p-6 flex items-center justify-center bg-kem text-xam text-[14px]"
           >
             Chọn một đơn giữ hàng từ danh sách bên trái để xem chi tiết.
           </section>
