@@ -4,14 +4,17 @@
 dai_thong_bao:   # QA-003 (20/11): 3 ưu đãi theo QD-SALE-012, KM-13 đã dừng
   deal_id: "BAC-HOA-DON"
   mac_dinh_chu: "Hóa đơn từ 800K tặng sữa rửa mặt LOPOE"
+  mac_dinh_chu_en: "Spend 800K, get a free LOPOE cleanser"
   nut:
     chu: "Xem ›"
+    chu_en: "View ›"
     den: "/deal?id=BAC-HOA-DON"
     kieu: "chinh"
 
 cua_hang:
   phu_de: "K-Beauty Experience"
   mo_ta_anh: "Mặt tiền VIVE với nhiều phương án trang trí"
+  mo_ta_anh_en: "VIVE storefront with several decoration options"
   cot: 6
   hang: 4
   anh_mat_tien:
@@ -23,9 +26,11 @@ cua_hang:
     - "/trang-chu/mt/5.webp"
   nut:
     - chu: "Ghé cửa hàng"
+      chu_en: "Visit the store"
       den: "#ghe-vive"
       kieu: "chinh"
     - chu: "Xem sản phẩm"
+      chu_en: "Shop products"
       den: "/danh-muc"
       kieu: "phu"
 
@@ -33,8 +38,11 @@ cua_hang:
 
 thuong_hieu:
   tieu_de: "Người Hàn chọn kỹ."
+  tieu_de_en: "Picked by Koreans."
   dong_logo_hau: "mang về."
+  dong_logo_hau_en: "brought home."
   nhan_aria: "Thương hiệu đang có tại VIVE"
+  nhan_aria_en: "Brands available at VIVE"
   danh_sach:
     - ten: "Medicube"
       den: "/danh-muc?thuong-hieu=Medicube"
@@ -85,24 +93,33 @@ luoi_doi:
     mau_nen: "kem"
     tieu_de: "Personal color"
     phu_de_truoc: "Tìm "
+    phu_de_truoc_en: "Find your own "
     phu_de_nghieng: "tone"
+    phu_de_nghieng_en: "tone"
     phu_de_sau: " của riêng bạn."
+    phu_de_sau_en: "."
     anh: "/trang-chu/vive-personal-color.webp"
     mo_ta_anh: "Góc personal color tại VIVE"
+    mo_ta_anh_en: "The personal color corner at VIVE"
     nut:
       - chu: "Tìm hiểu thêm"
+        chu_en: "Learn more"
         den: "/personal-color"
         kieu: "chinh"
 
   - id: "check-in"
     mau_nen: "oliu-vua"
     tieu_de: "Thử. Chụp. Nhận quà."
+    tieu_de_en: "Try. Snap. Get a gift."
     phu_de_truoc: "Ngay tại "
+    phu_de_truoc_en: "Right at "
     co_logo: true
     anh: "/trang-chu/vive-checkin.webp"
     mo_ta_anh: "Khu check-in tại VIVE"
+    mo_ta_anh_en: "The check-in area at VIVE"
     nut:
       - chu: "Xem quà"
+        chu_en: "See gifts"
         den: null
         sap_co: true
         kieu: "chinh"
@@ -111,8 +128,11 @@ luoi_doi:
   - id: "combo-lopoe-bo3"
     mau_nen: "oliu-nhat"
     tieu_de: "Bộ 3 LOPOE"
+    tieu_de_en: "LOPOE Trio"
     phu_de_truoc: "Làm sạch, làm dịu, khóa ẩm."
+    phu_de_truoc_en: "Cleanse, soothe, lock in moisture."
     phu_de_them: "Phù hợp mọi loại da."
+    phu_de_them_en: "Suits every skin type."
     deal_id: "LOPOE-COMBO-BO3"
     nhan_thuong_hieu: "Better Balance"
     anh_bo:
@@ -120,29 +140,37 @@ luoi_doi:
       - "/trang-chu/ampoule.webp"
       - "/trang-chu/kem.webp"
     mo_ta_anh: "Sữa rửa mặt, ampoule và kem dưỡng LOPOE Better Balance"
+    mo_ta_anh_en: "LOPOE Better Balance cleanser, ampoule and moisturizing cream"
     nut:
       - chu: "Xem deal"
+        chu_en: "View deal"
         den: "/deal?id=LOPOE-COMBO-BO3"
         kieu: "chinh"
       - chu: "Mua"
+        chu_en: "Shop"
         den: "/danh-muc?thuong-hieu=LOPOE"
         kieu: "phu"
 
   - id: "combo-lopoe-kem-amp"
     mau_nen: "kem"
     tieu_de: "Kem + Ampoule"
+    tieu_de_en: "Cream + Ampoule"
     phu_de_truoc: "Dưỡng ẩm chuyên sâu cho làn da khô."
+    phu_de_truoc_en: "Deep hydration for dry skin."
     deal_id: "LOPOE-COMBO-KEM-AMP"
     nhan_thuong_hieu: "LOPOE"
     anh_bo:
       - "/trang-chu/kem.webp"
       - "/trang-chu/ampoule.webp"
     mo_ta_anh: "Kem dưỡng và ampoule LOPOE Better Balance"
+    mo_ta_anh_en: "LOPOE Better Balance moisturizing cream and ampoule"
     nut:
       - chu: "Xem deal"
+        chu_en: "View deal"
         den: "/deal?id=LOPOE-COMBO-KEM-AMP"
         kieu: "chinh"
       - chu: "Mua"
+        chu_en: "Shop"
         den: "/danh-muc?thuong-hieu=LOPOE"
         kieu: "phu"
 
@@ -152,13 +180,17 @@ luoi_doi:
     mau_nen: "cat"
     co: "rong"
     tieu_de: "Combo PDRN Pink"
+    tieu_de_en: "PDRN Pink Combo"
     phu_de_truoc: "PDRN + Collagen cho da căng mướt."
+    phu_de_truoc_en: "PDRN + collagen for plump, glowing skin."
     deal_id: "COMBO-PINK"
     nhan_thuong_hieu: "Medicube"
     anh_bo: ["/trang-chu/medicube-pdrn-serum.webp"]
     mo_ta_anh: "Tinh chất PDRN Pink Peptide Serum của Medicube"
+    mo_ta_anh_en: "Medicube PDRN Pink Peptide Serum"
     nut:
       - chu: "Xem deal"
+        chu_en: "View deal"
         den: "/deal?id=COMBO-PINK"
         kieu: "chinh"
 
@@ -167,10 +199,13 @@ luoi_doi:
     co: "nho"
     tieu_de: "Rep!el"
     phu_de_truoc: "Làm dịu da nhạy cảm."
+    phu_de_truoc_en: "Calms sensitive skin."
     san_pham: ["8809198846238?v=2", "8809198846252"]
     mo_ta_anh: "Serum CICA-Niacin và toner pad Vita-Toning của Rep!el"
+    mo_ta_anh_en: "Rep!el CICA-Niacin serum and Vita-Toning toner pads"
     nut:
       - chu: "Xem sản phẩm"
+        chu_en: "Shop products"
         den: "/danh-muc?thuong-hieu=Rep%21el"
         kieu: "chinh"
 
@@ -180,10 +215,13 @@ luoi_doi:
     co: "nho"
     tieu_de: "Tiela"
     phu_de_truoc: "Dưỡng thể nước hoa Tiela."
+    phu_de_truoc_en: "Perfumed body care by Tiela."
     san_pham: ["8800282110150", "8800282110174"]
     mo_ta_anh: "Kem dưỡng thể và tẩy da chết toàn thân Tiela"
+    mo_ta_anh_en: "Tiela body lotion and body scrub"
     nut:
       - chu: "Xem sản phẩm"
+        chu_en: "Shop products"
         den: "/danh-muc?thuong-hieu=Tiela"
         kieu: "chinh"
 
@@ -192,13 +230,16 @@ luoi_doi:
     co: "nho"
     tieu_de: "Glow Vitamin C"
     phu_de_truoc: "Vit C + Glutathione: da sáng bừng."
+    phu_de_truoc_en: "Vitamin C + glutathione for bright skin."
     deal_id: "COMBO-VAMPIRE-GLOW"
     nhan_thuong_hieu: "Medicube"
     # Hũ Deep Vita C đóng nắp (cắt từ ảnh chính hãng themedicube.co.kr, 20/11) thay ảnh hũ mở nắp
     anh_bo: ["/trang-chu/medicube-vitac-dong.webp", "/trang-chu/medicube-glutathione.webp"]
     mo_ta_anh: "Kem Deep Vita C (hũ đóng nắp) và serum Glutathione Glow của Medicube"
+    mo_ta_anh_en: "Medicube Deep Vita C cream (closed jar) and Glutathione Glow serum"
     nut:
       - chu: "Xem deal"
+        chu_en: "View deal"
         den: "/deal?id=COMBO-VAMPIRE-GLOW"
         kieu: "chinh"
 
@@ -206,15 +247,19 @@ luoi_doi:
     mau_nen: "be"
     co: "nho"
     tieu_de: "2 sữa rửa mặt"
+    tieu_de_en: "2 cleansers"
     phu_de_truoc: "Sạch sâu mà da vẫn mềm mượt."
+    phu_de_truoc_en: "Deep clean, soft skin."
     deal_id: "LOPOE-COMBO-2SRM"
     nhan_thuong_hieu: "LOPOE"
     anh_bo:
       - "/trang-chu/srm.webp"
       - "/trang-chu/srm.webp"
     mo_ta_anh: "Hai sữa rửa mặt LOPOE Better Balance"
+    mo_ta_anh_en: "Two LOPOE Better Balance cleansers"
     nut:
       - chu: "Xem deal"
+        chu_en: "View deal"
         den: "/deal?id=LOPOE-COMBO-2SRM"
         kieu: "chinh"
 
@@ -223,12 +268,16 @@ luoi_doi:
     mau_nen: "oliu-nhat"
     co: "nho"
     tieu_de: "Mua 4 tặng 1"
+    tieu_de_en: "Buy 4, get 1"
     phu_de_truoc: "Mặt nạ thạch cấp ẩm nhanh"
+    phu_de_truoc_en: "Jelly masks for quick hydration"
     deal_id: "DC-05"
     nhan_thuong_hieu: "Mặt nạ Uniura"
+    nhan_thuong_hieu_en: "Uniura masks"
     so_lon: "4+1"
     nut:
       - chu: "Xem deal"
+        chu_en: "View deal"
         den: "/deal?id=DC-05"
         kieu: "chinh"
 
@@ -238,23 +287,31 @@ luoi_doi:
     co: "rong"
     tieu_de: "Lalarecipe"
     phu_de_truoc: "Combo sáng da Vita C."
+    phu_de_truoc_en: "Brightening Vita C combo."
     # 20/11 (W061): ảnh kho media của 3 mã này là ảnh đời sống (trái cây, tay) cắt lỗi → dùng ảnh cắt sạch trong repo (nguồn ảnh bán lẻ, nền trắng). Media có ảnh chuẩn thì đổi lại san_pham.
     anh_bo: ["/trang-chu/lalarecipe-yuzu-pad.webp", "/trang-chu/lalarecipe-yuzu-ampoule.webp", "/trang-chu/lalarecipe-yuzu-cream.webp"]
     mo_ta_anh: "Toner pad, ampoule và kem dưỡng Yuzu Vita C của Lalarecipe"
+    mo_ta_anh_en: "Lalarecipe Yuzu Vita C toner pad, ampoule and cream"
     nut:
       - chu: "Xem sản phẩm"
+        chu_en: "Shop products"
         den: "/danh-muc?thuong-hieu=Lalarecipe"
         kieu: "chinh"
 
 qua_lopoe:   # QA-003 (20/11): KM-08 đã dừng, dùng mốc hóa đơn 800K / 1,2 triệu
   deal_id: "BAC-HOA-DON"
   phu_de: "Mọi nhãn hàng. Gồm cả combo. Từ 1,2 triệu tặng ampoule và voucher nhà hàng 15%."
+  phu_de_en: "All brands, combos included. Spend 1.2M and get an ampoule plus a 15% restaurant voucher."
   tien_to_tieu_de: "Từ "
+  tien_to_tieu_de_en: "Over "
   hau_to_tieu_de: ", tặng LOPOE"
+  hau_to_tieu_de_en: ", get LOPOE free"
   anh: "/trang-chu/srm.webp"
   mo_ta_anh: "Sữa rửa mặt LOPOE"
+  mo_ta_anh_en: "LOPOE cleanser"
   nut:
     - chu: "Xem deal"
+      chu_en: "View deal"
       den: "/deal?id=BAC-HOA-DON"
       kieu: "chinh"
 
@@ -262,9 +319,12 @@ qua_lopoe:   # QA-003 (20/11): KM-08 đã dừng, dùng mốc hóa đơn 800K / 
 # Nền hàng trượt là kem: thẻ không dùng "kem", 2 thẻ kề nhau khác màu (CĐT 21/11: ô trùng màu nền bị hòa vào).
 truot_combo:
   tieu_de: "Thêm combo."
+  tieu_de_en: "More combos."
   phu_de: "Giá combo tại VIVE. Quà số lượng có hạn."
+  phu_de_en: "Combo prices at VIVE. Gifts while supplies last."
   nut:
     chu: "Xem tất cả deal"
+    chu_en: "View all deals"
     den: "/deal"
     kieu: "phu"
   the:
@@ -272,16 +332,22 @@ truot_combo:
       mau_nen: "oliu-nhat"
       nhan: "LOPOE"
       ten: "Bộ 3 Better Balance"
+      ten_en: "Better Balance Trio"
+      qua_en: "1 LOPOE moisturizing cream"
       anh_bo: ["/trang-chu/srm.webp", "/trang-chu/ampoule.webp", "/trang-chu/kem.webp"]
     - deal_id: "LOPOE-COMBO-KEM-AMP"
       mau_nen: "trang"
       nhan: "LOPOE"
       ten: "Kem dưỡng + Ampoule"
+      ten_en: "Cream + Ampoule"
+      qua_en: "1 LOPOE ampoule"
       anh_bo: ["/trang-chu/kem.webp", "/trang-chu/ampoule.webp"]
     - deal_id: "LOPOE-COMBO-2SRM"
       mau_nen: "be"
       nhan: "LOPOE"
       ten: "2 sữa rửa mặt"
+      ten_en: "2 cleansers"
+      qua_en: "a sample pouch and 1 sunscreen or softening cream"
       anh_bo: ["/trang-chu/srm.webp", "/trang-chu/srm.webp"]
     - deal_id: "COMBO-PINK"
       mau_nen: "cat"
@@ -297,23 +363,28 @@ truot_combo:
       mau_nen: "trang"
       nhan: "SKINFOOD"
       ten: "Keo Ong Dưỡng Ẩm"
+      ten_en: "Propolis Hydration"
       san_pham: ["8809511276704", "8809511276728"]
     - deal_id: "DC-05"
       mau_nen: "oliu-nhat"
       nhan: "Uniura"
       ten: "Mặt nạ mua 4 tặng 1"
+      ten_en: "Masks: buy 4, get 1"
       so_lon: "4+1"
 
 ghe_vive:
   tien_to_tieu_de: "Ghé "
+  tien_to_tieu_de_en: "Visit "
   dia_diem_ngan: "Union Square"
   chu_lon: "LL2"
   nut:
     - chu: "Chỉ đường"
+      chu_en: "Directions"
       den: null
       nguon_den: "doanh_nghiep.ban_do"
       mo_tab_moi: true
       kieu: "chinh"
     - chu: "Giữ hàng"
+      chu_en: "Reserve"
       den: "/gio"
       kieu: "phu"

@@ -4,6 +4,7 @@ import { z } from "zod";
 export const NutTrangChuSchema = z
   .object({
     chu: z.string().min(1, "Nút trang chủ phải có chữ hiển thị"),
+    chu_en: z.string().optional(),
     den: z.string().nullable().optional(),
     sap_co: z.boolean().optional(),
     nguon_den: z.enum(["doanh_nghiep.ban_do"]).optional(),
@@ -26,12 +27,15 @@ export type NutTrangChu = z.infer<typeof NutTrangChuSchema>;
 export const DaiThongBaoSchema = z.object({
   deal_id: z.string().min(1),
   mac_dinh_chu: z.string().min(1),
+  mac_dinh_chu_en: z.string().optional(),
   nut: NutTrangChuSchema,
 });
 
 export const CuaHangKhoiSchema = z.object({
   phu_de: z.string().min(1),
+  phu_de_en: z.string().optional(),
   mo_ta_anh: z.string().min(1),
+  mo_ta_anh_en: z.string().optional(),
   cot: z.number().int().positive().default(6),
   hang: z.number().int().positive().default(4),
   anh_mat_tien: z.array(z.string().min(1)).min(1),
@@ -49,8 +53,11 @@ export type ThuongHieuLogo = z.infer<typeof ThuongHieuLogoSchema>;
 
 export const ThuongHieuKhoiSchema = z.object({
   tieu_de: z.string().min(1),
+  tieu_de_en: z.string().optional(),
   dong_logo_hau: z.string().min(1),
+  dong_logo_hau_en: z.string().optional(),
   nhan_aria: z.string().min(1),
+  nhan_aria_en: z.string().optional(),
   danh_sach: z.array(ThuongHieuLogoSchema).min(1),
 });
 
@@ -65,14 +72,20 @@ export const OTrongLuoiSchema = z.object({
   /** W056: cỡ ô trong lưới 6 cột: vua = 1/2, rong = 2/3, nho = 1/3 */
   co: z.enum(["vua", "rong", "nho"]).default("vua"),
   tieu_de: z.string().min(1),
+  tieu_de_en: z.string().optional(),
   phu_de_truoc: z.string().optional(),
+  phu_de_truoc_en: z.string().optional(),
   /** DIR-040: dòng mô tả thứ 2 (xuống dòng), chỉ dùng cùng phu_de_truoc */
   phu_de_them: z.string().optional(),
+  phu_de_them_en: z.string().optional(),
   phu_de_nghieng: z.string().optional(),
+  phu_de_nghieng_en: z.string().optional(),
   phu_de_sau: z.string().optional(),
+  phu_de_sau_en: z.string().optional(),
   co_logo: z.boolean().optional(),
   deal_id: z.string().optional(),
   nhan_thuong_hieu: z.string().optional(),
+  nhan_thuong_hieu_en: z.string().optional(),
   anh: z.string().min(1).optional(),
   anh_sp: z.boolean().optional(),
   /** W055: nhiều ảnh sản phẩm đứng cạnh nhau (combo), ảnh nền trong suốt */
@@ -80,6 +93,7 @@ export const OTrongLuoiSchema = z.object({
   /** W056: ảnh sản phẩm từ kho media theo mã (bảng san_pham), 1–3 mã */
   san_pham: z.array(z.string().min(1)).min(1).max(3).optional(),
   mo_ta_anh: z.string().optional(),
+  mo_ta_anh_en: z.string().optional(),
   so_lon: z.string().optional(),
   /** W055: dòng nhỏ dưới phụ đề, lấy quà của deal_id ("Tặng ... Số lượng có hạn.") */
   hien_qua: z.boolean().optional(),
@@ -90,11 +104,15 @@ export type OTrongLuoi = z.infer<typeof OTrongLuoiSchema>;
 
 export const QuaLopoeKhoiSchema = z.object({
   phu_de: z.string().optional(),
+  phu_de_en: z.string().optional(),
   deal_id: z.string().min(1),
   tien_to_tieu_de: z.string().min(1),
+  tien_to_tieu_de_en: z.string().optional(),
   hau_to_tieu_de: z.string().min(1),
+  hau_to_tieu_de_en: z.string().optional(),
   anh: z.string().min(1),
   mo_ta_anh: z.string().min(1),
+  mo_ta_anh_en: z.string().optional(),
   nut: z.array(NutTrangChuSchema).min(1),
 });
 
@@ -103,7 +121,11 @@ export const TheComboSchema = z.object({
   deal_id: z.string().min(1),
   mau_nen: z.enum(["kem", "be", "cat", "oliu-nhat", "oliu-vua", "trang"]),
   nhan: z.string().min(1),
+  nhan_en: z.string().optional(),
   ten: z.string().min(1),
+  ten_en: z.string().optional(),
+  /** Quà ghi tay cho bản en khi deal chưa có qua_en (dùng thay deal.qua ở ngôn ngữ en) */
+  qua_en: z.string().optional(),
   anh_bo: z.array(z.string().min(1)).optional(),
   san_pham: z.array(z.string().min(1)).min(1).max(3).optional(),
   so_lon: z.string().optional(),
@@ -113,14 +135,18 @@ export type TheCombo = z.infer<typeof TheComboSchema>;
 
 export const TruotComboSchema = z.object({
   tieu_de: z.string().min(1),
+  tieu_de_en: z.string().optional(),
   phu_de: z.string().optional(),
+  phu_de_en: z.string().optional(),
   nut: NutTrangChuSchema,
   the: z.array(TheComboSchema).min(3),
 });
 
 export const GheViveKhoiSchema = z.object({
   tien_to_tieu_de: z.string().min(1),
+  tien_to_tieu_de_en: z.string().optional(),
   dia_diem_ngan: z.string().min(1),
+  dia_diem_ngan_en: z.string().optional(),
   chu_lon: z.string().min(1),
   nut: z.array(NutTrangChuSchema).min(1),
 });

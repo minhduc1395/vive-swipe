@@ -1,6 +1,8 @@
 "use client";
 
 import { useMemo, useSyncExternalStore } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { chonBanNgonNgu } from "@/lib/trang-chu/ngon-ngu";
 import type { ChienDich } from "@/lib/chien-dich/types";
 import { LandingStage3D, type CanhStage3D } from "./LandingStage3D";
 import { KhoiHero } from "./khoi/KhoiHero";
@@ -19,21 +21,22 @@ import { lopNut } from "@/components/ui/Nut";
 import type { CauHinhLopoe3D } from "@/lib/thu-nghiem/lopoe-3d";
 
 /** Nút khối mở đầu: "Tìm hiểu thêm" ở trang chủ dẫn về /new-arrival, ở đây dẫn xuống phần combo */
-const veNutLanding: VeNut3D = (n, i) => {
+function NutLanding({ n, i }: { n: { chu: string; den: string | null }; i: number }) {
+  const t = useTranslations("trang-chu.landing");
   const veChinhTrang = n.den === "/new-arrival";
   // Neo combo của trang chủ (#combo-lopoe-…) không có ở đây: dẫn xuống khối "Đủ bộ, đỡ tốn."
   const neoCombo = veChinhTrang || (n.den ?? "").startsWith("#combo-");
   return (
     <Link
-      key={n.chu}
       href={neoCombo ? "#ke-ra-mat" : n.den || "/danh-muc"}
       prefetch={false}
       className={i === 0 ? lopNut("chinh", "vua") : lopNut("chu", "vua")}
     >
-      {veChinhTrang ? "Xem combo" : n.chu}
+      {veChinhTrang ? t("veNut.xemCombo") : n.chu}
     </Link>
   );
-};
+}
+const veNutLanding: VeNut3D = (n, i) => <NutLanding key={n.chu} n={n} i={i} />;
 
 interface LandingClientProps {
   chienDich: ChienDich;
@@ -42,9 +45,14 @@ interface LandingClientProps {
 }
 
 export function LandingClient({
-  chienDich,
-  lopoe3D,
+  chienDich: chienDichGoc,
+  lopoe3D: lopoe3DGoc,
 }: LandingClientProps) {
+  const ngonNgu = useLocale();
+  const t = useTranslations("trang-chu.landing");
+  // W044: bản en của yaml (trường *_en) chọn theo ngôn ngữ hiện tại
+  const chienDich = useMemo(() => chonBanNgonNgu(chienDichGoc, ngonNgu), [chienDichGoc, ngonNgu]);
+  const lopoe3D = useMemo(() => (lopoe3DGoc ? chonBanNgonNgu(lopoe3DGoc, ngonNgu) : undefined), [lopoe3DGoc, ngonNgu]);
   // Dấu cho test e2e biết trang đã chạy JS (sân khấu 3D cũ tự gắn dấu này; khối cuộn LOPOE thì không)
   const daChay = useSyncExternalStore(
     () => () => {},
@@ -127,7 +135,7 @@ export function LandingClient({
       {lopoe3D ? (
         <main id="trang-landing" className="relative z-10">
           <span hidden data-hydrated={daChay ? "true" : "false"} />
-          <h1 className="sr-only">{chienDich.ten} · VIVE New Arrival</h1>
+          <h1 className="sr-only">{t("tieuDeTrang", { ten: chienDich.ten })}</h1>
           <CuonLopoe3D cfg={lopoe3D} id="lopoe" veNut={veNutLanding} />
           {raMatBlock?.loai === "ra-mat" && <KhoiRaMat khoi={raMatBlock} phang />}
         </main>

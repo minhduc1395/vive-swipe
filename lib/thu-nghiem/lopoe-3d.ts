@@ -3,7 +3,7 @@ import path from "node:path";
 import yaml from "js-yaml";
 import { z } from "zod";
 
-const NutSchema = z.object({ chu: z.string().min(1), den: z.string().min(1).nullable() });
+const NutSchema = z.object({ chu: z.string().min(1), chu_en: z.string().optional(), den: z.string().min(1).nullable() });
 export const KhoiChu3DSchema = z.object({
   id: z.string().min(1),
   a: z.number().min(0).max(1),
@@ -11,33 +11,41 @@ export const KhoiChu3DSchema = z.object({
   vi_tri: z.enum(["phai", "trai", "tren-trai", "cot", "duoi-giua", "trai-duoi", "tren-giua"]),
   tu: z.enum(["phai", "trai", "tren", "duoi"]),
   ten_nho: z.string().optional(),
+  ten_nho_en: z.string().optional(),
   tu_khoa: z.string().optional(),
+  tu_khoa_en: z.string().optional(),
   nhan_tu: z.number().int().nonnegative().optional(),
   nhan_dau: z.number().int().nonnegative().optional(),
   co: z.enum(["lon", "vua"]).default("vua"),
   lon_nghieng: z.string().optional(),
+  lon_nghieng_en: z.string().optional(),
   cau: z.string().optional(),
+  cau_en: z.string().optional(),
   cau_lon: z.boolean().optional(),
   chips: z.array(z.string()).default([]),
+  chips_en: z.array(z.string()).optional(),
   /** Huy hiệu gốc của nhãn (bằng chứng cho câu cho_duyet). Chỉ gắn vào đúng sản phẩm được trao. */
-  huy_hieu: z.object({ anh: z.string().min(1), mo_ta: z.string().min(1) }).optional(),
+  huy_hieu: z.object({ anh: z.string().min(1), mo_ta: z.string().min(1), mo_ta_en: z.string().optional() }).optional(),
   nut: z.array(NutSchema).default([]),
   cho_duyet: z.boolean().default(false),
 });
 const ThanhPhanSchema = z.object({
   loai: z.enum(["thua", "sen", "phan-tu", "rau-ma", "xoan"]),
   ten: z.string().min(1),
+  ten_en: z.string().optional(),
   loi: z.string().min(1),
+  loi_en: z.string().optional(),
 });
 export const CauHinhLopoe3DSchema = z.object({
   hien_cho_duyet: z.boolean().default(false),
   tai_san: z.object({ ampoule_than: z.string(), ampoule_nap: z.string(), ampoule_co: z.string(), giot: z.string(), sua_rua_mat: z.string(), kem_duong: z.string() }),
-  mo_dau: z.object({ nho: z.string(), tieu_de: z.string(), cau: z.string(), nut: z.array(NutSchema).default([]) }),
+  mo_dau: z.object({ nho: z.string(), nho_en: z.string().optional(), tieu_de: z.string(), tieu_de_en: z.string().optional(), cau: z.string(), cau_en: z.string().optional(), nut: z.array(NutSchema).default([]) }),
   khoi: z.array(KhoiChu3DSchema).min(1),
   thanh_phan: z.object({ sua_rua_mat: z.array(ThanhPhanSchema).length(4), ampoule: z.array(ThanhPhanSchema).length(4) }),
   /** DES-004: ảnh thành phần thật (BOD duyệt QD-DES-001) thay biểu tượng 3D trừu tượng; loại không có ảnh giữ 3D. */
   anh_thanh_phan: z.object({ thua: z.string(), sen: z.string(), "phan-tu": z.string(), "rau-ma": z.string() }).partial().default({}),
   so_1: z.string().default("No.1"),
+  so_1_en: z.string().optional(),
   /** W063: điện thoại dùng chuỗi ảnh dựng sẵn thay three.js (mượt, không nóng máy). Ảnh chỉ có sản phẩm + nền; chữ và nhãn vẫn là DOM. */
   khung_dien_thoai: z.object({
     thu_muc: z.string(), so: z.number().int().min(2), rong: z.number(), cao: z.number(),

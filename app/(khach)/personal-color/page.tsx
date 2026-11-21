@@ -1,68 +1,27 @@
 import { lopNut } from "@/components/ui/Nut";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
 import { NutQuayLai } from "@/components/NutQuayLai";
+import { dinhDangGia } from "@/lib/dinh-dang";
 
-export const metadata: Metadata = {
-  title: "Personal Color cùng Pawlette (bản tạm) · VIVE",
-  description:
-    "Trải nghiệm đo tông Personal Color cùng Pawlette tại booth VIVE — tìm nhóm màu phù hợp làn da và chọn sản phẩm đúng tông.",
-};
-
-interface NhomMau {
-  ten: string;
-  moTa: string;
-  mau: string[];
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("trang-chu.personalColor");
+  return { title: t("tieuDeTrang"), description: t("moTaTrang") };
 }
 
-const BON_NHOM_MAU: NhomMau[] = [
-  {
-    ten: "Xuân ấm",
-    moTa: "Tông ấm, sáng, trong.",
-    mau: ["#F6C9A9", "#F3A683", "#F9E0A8", "#BFD8A5"],
-  },
-  {
-    ten: "Hạ mát",
-    moTa: "Tông lạnh, nhạt, dịu.",
-    mau: ["#C9D6EA", "#E7C6D9", "#B8C9D9", "#D9D2E6"],
-  },
-  {
-    ten: "Thu ấm",
-    moTa: "Tông ấm, trầm, đậm.",
-    mau: ["#C98B5E", "#A6683F", "#D6B46A", "#7D7A45"],
-  },
-  {
-    ten: "Đông lạnh",
-    moTa: "Tông lạnh, rõ, tương phản cao.",
-    mau: ["#2F3A66", "#B3264B", "#E9E6F0", "#1F1F1F"],
-  },
+const BON_NHOM_MAU: { ma: "xuan" | "ha" | "thu" | "dong"; mau: string[] }[] = [
+  { ma: "xuan", mau: ["#F6C9A9", "#F3A683", "#F9E0A8", "#BFD8A5"] },
+  { ma: "ha", mau: ["#C9D6EA", "#E7C6D9", "#B8C9D9", "#D9D2E6"] },
+  { ma: "thu", mau: ["#C98B5E", "#A6683F", "#D6B46A", "#7D7A45"] },
+  { ma: "dong", mau: ["#2F3A66", "#B3264B", "#E9E6F0", "#1F1F1F"] },
 ];
 
-interface BuocTraiNghiem {
-  so: string;
-  tieuDe: string;
-  moTa: string;
-}
+const BA_BUOC_BOOTH = ["1", "2", "3"] as const;
 
-const BA_BUOC_BOOTH: BuocTraiNghiem[] = [
-  {
-    so: "01",
-    tieuDe: "Đo tông",
-    moTa: "Chuyên viên Pawlette đặt các dải vải màu sát mặt để xem tông nào làm da sáng hơn.",
-  },
-  {
-    so: "02",
-    tieuDe: "Nhận bảng màu",
-    moTa: "Bạn biết mình thuộc nhóm nào và những màu nên chọn. [Nội dung gói do Pawlette xác nhận]",
-  },
-  {
-    so: "03",
-    tieuDe: "Thử ngay lớp nền",
-    moTa: "Sang tủ trang điểm bên cạnh thử lớp lót và tông nền hợp nhóm màu của bạn.",
-  },
-];
-
-export default function TrangPersonalColor() {
+export default async function TrangPersonalColor() {
+  const t = await getTranslations("trang-chu.personalColor");
+  const ngonNgu = await getLocale();
   return (
     <div className="bg-trang text-den w-full flex-1">
         {/* Khối quay lại */}
@@ -77,7 +36,7 @@ export default function TrangPersonalColor() {
         >
           <div className="flex-1 basis-[300px] md:basis-[440px] flex flex-col gap-5">
             <span className="self-start px-3.5 py-1.5 rounded-full bg-bac-ha-nhat text-den text-[12px] md:text-[13px] font-bold tracking-[1px]">
-              PAWLETTE × VIVE · BẢN TẠM
+              {t("nhan")}
             </span>
 
             <h1
@@ -95,7 +54,7 @@ export default function TrangPersonalColor() {
             </h1>
 
             <p className="m-0 text-[17px] md:text-[19px] leading-[1.6] text-xam-dam max-w-[460px]">
-              Tìm tông màu hợp làn da, rồi chọn son, phấn, lớp nền đúng tông.
+              {t("gioiThieu")}
             </p>
 
             <div className="flex flex-wrap items-center gap-4 pt-1">
@@ -103,7 +62,7 @@ export default function TrangPersonalColor() {
                 href="/#ghe-vive"
                 className={lopNut("chinh","lon")}
               >
-                <span>Đặt lịch tại booth</span>
+                <span>{t("datLich")}</span>
                 <svg
                   width="20"
                   height="20"
@@ -120,9 +79,9 @@ export default function TrangPersonalColor() {
               </Link>
 
               <div className="flex flex-col">
-                <span className="text-[13px] text-xam">Gói trải nghiệm</span>
+                <span className="text-[13px] text-xam">{t("goi")}</span>
                 <span className="text-[24px] md:text-[26px] font-bold text-den leading-tight">
-                  378.000đ
+                  {dinhDangGia(378000, ngonNgu)}
                 </span>
               </div>
             </div>
@@ -143,7 +102,7 @@ export default function TrangPersonalColor() {
             />
             <div className="absolute w-[148px] h-[148px] sm:w-[186px] sm:h-[186px] md:w-[210px] md:h-[210px] rounded-full bg-trang flex flex-col items-center justify-center gap-1 shadow-xs">
               <span className="text-[12px] md:text-[13px] font-semibold text-xam">
-                Bạn là
+                {t("banLa")}
               </span>
               <span className="text-[26px] md:text-[30px] font-bold text-den leading-none">
                 ?
@@ -159,13 +118,13 @@ export default function TrangPersonalColor() {
               id="bon-nhom-mau-heading"
               className="m-0 text-[32px] md:text-[48px] font-bold tracking-[-0.03em] text-den"
             >
-              4 nhóm màu
+              {t("bonNhom")}
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {BON_NHOM_MAU.map((nhom) => (
                 <article
-                  key={nhom.ten}
+                  key={nhom.ma}
                   className="hien-dan rounded-[26px] bg-trang p-[18px] flex flex-col gap-3 shadow-[0_10px_26px_rgba(43,43,42,0.06)]"
                 >
                   <div className="flex gap-1.5 h-[110px]" aria-hidden="true">
@@ -178,10 +137,10 @@ export default function TrangPersonalColor() {
                     ))}
                   </div>
                   <h3 className="m-0 text-[20px] font-bold text-den">
-                    {nhom.ten}
+                    {t(`nhom.${nhom.ma}.ten`)}
                   </h3>
                   <p className="m-0 text-[14px] leading-[1.5] text-xam-dam">
-                    {nhom.moTa}
+                    {t(`nhom.${nhom.ma}.moTa`)}
                   </p>
                 </article>
               ))}
@@ -198,13 +157,13 @@ export default function TrangPersonalColor() {
             id="trai-nghiem-booth-heading"
             className="m-0 text-[32px] md:text-[48px] font-bold tracking-[-0.03em] text-den"
           >
-            Trải nghiệm tại booth
+            {t("traiNghiem")}
           </h2>
 
           <ol className="m-0 p-0 list-none grid grid-cols-1 md:grid-cols-3 gap-5">
             {BA_BUOC_BOOTH.map((buoc) => (
               <li
-                key={buoc.so}
+                key={buoc}
                 className="rounded-[26px] bg-hong-nhat p-[26px] flex flex-col gap-2.5"
               >
                 <span
@@ -212,20 +171,20 @@ export default function TrangPersonalColor() {
                   className="text-[44px] font-bold leading-none text-transparent"
                   style={{ WebkitTextStroke: "1.5px #2B2B2A" }}
                 >
-                  {buoc.so}
+                  {`0${buoc}`}
                 </span>
                 <h3 className="m-0 text-[20px] font-bold text-den">
-                  {buoc.tieuDe}
+                  {t(`buoc.${buoc}.tieuDe`)}
                 </h3>
                 <p className="m-0 text-[15px] leading-[1.55] text-xam-dam">
-                  {buoc.moTa}
+                  {t(`buoc.${buoc}.moTa`)}
                 </p>
               </li>
             ))}
           </ol>
 
           <p className="m-0 text-[14px] text-xam">
-            Thời lượng, số khách mỗi khung giờ, nội dung gói: chờ Pawlette cung cấp.
+            {t("ghiChu")}
           </p>
         </section>
       </div>

@@ -3,9 +3,11 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import type { Deal, DoanhNghiep } from "@/lib/data/types";
 import { dinhDangGioV3, dinhDangNgan } from "@/lib/trang-chu/dinh-dang";
 import type { TheCombo, TrangChuConfig } from "@/lib/trang-chu/schema";
+import { chonBanNgonNgu, chuTheoNgonNgu } from "@/lib/trang-chu/ngon-ngu";
 import type { CauHinhLopoe3D } from "@/lib/thu-nghiem/lopoe-3d";
 import { CuonLopoe3D, type VeNut3D } from "@/components/cuon-3d/CuonLopoe3D";
 import { hienToast } from "@/components/ui/Toast";
@@ -31,23 +33,38 @@ const HUONG_CLIP = [
   "inset(0 0 100% 0)",
 ] as const;
 
-/** Giá và quà combo đọc từ deal (hết quà thì dùng giá, quà khi_het_qua). */
-function giaVaQua(deal: Deal | undefined): { gia: string; qua: string } {
+/**
+ * Giá và quà combo đọc từ deal (hết quà thì dùng giá, quà khi_het_qua).
+ * `quaEn`: quà ghi tay bản en (thẻ trượt) khi deal chưa có `qua_en`.
+ */
+function giaVaQua(
+  deal: Deal | undefined,
+  ngonNgu: string,
+  dungQua: (qua: string) => string,
+  quaEn?: string
+): { gia: string; qua: string } {
   if (!deal) return { gia: "", qua: "" };
   const hetQua = deal.het_qua && deal.khi_het_qua;
   const giaSo = hetQua ? deal.khi_het_qua?.gia_combo ?? deal.gia_combo : deal.gia_combo;
-  const quaGoc = hetQua ? deal.khi_het_qua?.qua ?? null : deal.qua ?? null;
-  const qua = quaGoc ? `Tặng ${quaGoc.charAt(0).toLowerCase()}${quaGoc.slice(1)}. Số lượng có hạn.` : "";
-  return { gia: giaSo ? dinhDangNgan(giaSo) : "", qua };
+  const quaViOrEn = hetQua ? deal.khi_het_qua?.qua ?? null : chuTheoNgonNgu(deal, "qua", ngonNgu) ?? null;
+  const quaGoc = hetQua ? quaViOrEn : ngonNgu === "en" && quaEn && !(deal as { qua_en?: string }).qua_en ? quaEn : quaViOrEn;
+  // vi: "Tặng sữa rửa mặt…" (hạ chữ đầu); en giữ nguyên chữ hoa/thường của dữ liệu
+  const dang = quaGoc && ngonNgu !== "en" ? `${quaGoc.charAt(0).toLowerCase()}${quaGoc.slice(1)}` : quaGoc;
+  return { gia: giaSo ? dinhDangNgan(giaSo) : "", qua: dang ? dungQua(dang) : "" };
 }
 
 export function TrangChuClient({
-  cauHinh,
-  lopoe3D,
+  cauHinh: cauHinhGoc,
+  lopoe3D: lopoe3DGoc,
   deals,
   doanhNghiep,
   gioMoCua,
 }: TrangChuClientProps) {
+  const ngonNgu = useLocale();
+  const t = useTranslations("trang-chu.chung");
+  // W044: bản en của yaml (trường *_en) chọn theo ngôn ngữ hiện tại
+  const cauHinh = useMemo(() => chonBanNgonNgu(cauHinhGoc, ngonNgu), [cauHinhGoc, ngonNgu]);
+  const lopoe3D = useMemo(() => chonBanNgonNgu(lopoe3DGoc, ngonNgu), [lopoe3DGoc, ngonNgu]);
   const rootRef = useRef<HTMLDivElement>(null);
   const ghepRef = useRef<HTMLDivElement>(null);
   const luoiAnhRef = useRef<HTMLDivElement>(null);
@@ -94,14 +111,21 @@ export function TrangChuClient({
 
   // Chữ và số liệu lấy trực tiếp từ data/ (không gõ tay)
   const km13 = dealsMap.get(cauHinh.dai_thong_bao.deal_id);
-  const chuDaiKhuyenMai = km13?.hook || cauHinh.dai_thong_bao.mac_dinh_chu;
+  // en: dùng hook_en của deal nếu dữ liệu có, không thì câu mặc định bản en trong yaml (không hiện hook tiếng Việt)
+  const chuDaiKhuyenMai =
+    ngonNgu === "en"
+      ? (km13 as { hook_en?: string } | undefined)?.hook_en || cauHinh.dai_thong_bao.mac_dinh_chu
+      : km13?.hook || cauHinh.dai_thong_bao.mac_dinh_chu;
 
   const km08 = dealsMap.get(cauHinh.qua_lopoe.deal_id);
   const mocDauKm08 = km08?.moc?.[0]?.tu ? dinhDangNgan(km08.moc[0].tu) : "";
   const tieuDeQuaLopoe = `${cauHinh.qua_lopoe.tien_to_tieu_de}${mocDauKm08}${cauHinh.qua_lopoe.hau_to_tieu_de}`;
-  const nhanTinhKm08 = km08?.nhan_tinh?.length
-    ? `${km08.nhan_tinh.join(". ")}.`
-    : cauHinh.qua_lopoe.phu_de ?? "";
+  const nhanTinhEn = (km08 as { nhan_tinh_en?: string[] } | undefined)?.nhan_tinh_en;
+  const nhanTinhKm08 = ngonNgu === "en" && !nhanTinhEn?.length
+    ? cauHinh.qua_lopoe.phu_de ?? ""
+    : (ngonNgu === "en" ? nhanTinhEn : km08?.nhan_tinh)?.length
+      ? `${(ngonNgu === "en" ? nhanTinhEn : km08?.nhan_tinh)!.join(". ")}.`
+      : cauHinh.qua_lopoe.phu_de ?? "";
 
   const gioHienThi = dinhDangGioV3(gioMoCua);
 
@@ -322,7 +346,7 @@ export function TrangChuClient({
           <button
             type="button"
             data-sap-co="true"
-            onClick={() => hienToast("Tính năng sắp ra mắt")}
+            onClick={() => hienToast(t("sapRaMat"))}
             className="cursor-pointer border-0 bg-transparent font-[inherit]"
           >
             {cauHinh.dai_thong_bao.nut.chu}
@@ -469,7 +493,7 @@ export function TrangChuClient({
         <div className="luoi">
           {cauHinh.luoi_doi.map((o) => {
             const dealCuaO = o.deal_id ? dealsMap.get(o.deal_id) : undefined;
-            const { gia: giaNgan, qua: dongQua } = giaVaQua(dealCuaO);
+            const { gia: giaNgan, qua: dongQua } = giaVaQua(dealCuaO, ngonNgu, (q) => t("quaTang", { qua: q }));
             const lop = `o nen-${o.mau_nen} co-${o.co}`;
             // Ảnh sản phẩm đứng cạnh nhau: ảnh trong repo (anh_bo) rồi ảnh kho media theo mã (san_pham), gộp chung một hàng
             const anhSanPham = [
@@ -612,6 +636,7 @@ export function TrangChuClient({
         <HangCombo
           cauHinh={cauHinh.truot_combo}
           dealsMap={dealsMap}
+          ngonNgu={ngonNgu}
           daTaiAnh={daTaiAnhDuoi}
           banDoUrl={doanhNghiep.ban_do}
         />
@@ -655,14 +680,17 @@ export function TrangChuClient({
 function HangCombo({
   cauHinh,
   dealsMap,
+  ngonNgu,
   daTaiAnh,
   banDoUrl,
 }: {
   cauHinh: TrangChuConfig["truot_combo"];
   dealsMap: Map<string, Deal>;
+  ngonNgu: string;
   daTaiAnh: boolean;
   banDoUrl?: string;
 }) {
+  const t = useTranslations("trang-chu.chung");
   const hangRef = useRef<HTMLDivElement>(null);
   const [dau, setDau] = useState(true);
   const [cuoi, setCuoi] = useState(false);
@@ -691,8 +719,8 @@ function HangCombo({
     el.scrollBy({ left: huong * buoc * 2, behavior: "smooth" });
   };
 
-  const theHienThi = cauHinh.the.filter((t: TheCombo) => {
-    const d = dealsMap.get(t.deal_id);
+  const theHienThi = cauHinh.the.filter((the: TheCombo) => {
+    const d = dealsMap.get(the.deal_id);
     return d && d.hien_thi && !d.may_rui;
   });
 
@@ -705,36 +733,36 @@ function HangCombo({
         </div>
         <div className="dieu-khien">
           <NutTrangChu nut={cauHinh.nut} banDoUrl={banDoUrl} />
-          <button type="button" className="mui" aria-label="Combo trước" disabled={dau} onClick={() => truot(-1)}>
+          <button type="button" className="mui" aria-label={t("combo.truoc")} disabled={dau} onClick={() => truot(-1)}>
             <span aria-hidden="true">‹</span>
           </button>
-          <button type="button" className="mui" aria-label="Combo tiếp theo" disabled={cuoi} onClick={() => truot(1)}>
+          <button type="button" className="mui" aria-label={t("combo.tiepTheo")} disabled={cuoi} onClick={() => truot(1)}>
             <span aria-hidden="true">›</span>
           </button>
         </div>
       </div>
-      <div ref={hangRef} className="truot" tabIndex={0} aria-label="Danh sách combo, trượt ngang">
-        {theHienThi.map((t) => {
-          const d = dealsMap.get(t.deal_id)!;
-          const { gia, qua } = giaVaQua(d);
+      <div ref={hangRef} className="truot" tabIndex={0} aria-label={t("combo.danhSach")}>
+        {theHienThi.map((th) => {
+          const d = dealsMap.get(th.deal_id)!;
+          const { gia, qua } = giaVaQua(d, ngonNgu, (q) => t("quaTang", { qua: q }), th.qua_en);
           return (
             <Link
-              key={t.deal_id}
-              href={`/deal?id=${encodeURIComponent(t.deal_id)}`}
+              key={th.deal_id}
+              href={`/deal?id=${encodeURIComponent(th.deal_id)}`}
               prefetch={false}
-              className={`the-combo nen-${t.mau_nen}`}
+              className={`the-combo nen-${th.mau_nen}`}
             >
-              <span className="nhan">{t.nhan}</span>
-              <span className="ten">{t.ten}</span>
+              <span className="nhan">{th.nhan}</span>
+              <span className="ten">{th.ten}</span>
               {gia && <span className="gia">{gia}</span>}
               {qua && <span className="qua">{qua}</span>}
               <span className="hinh-the" aria-hidden="true">
-                {t.san_pham ? (
-                  [...(t.anh_bo ?? []), ...t.san_pham.map((ma) => anhKhoMediaTheoMa(ma)).filter((u): u is string => Boolean(u))].map((a, i) => (
+                {th.san_pham ? (
+                  [...(th.anh_bo ?? []), ...th.san_pham.map((ma) => anhKhoMediaTheoMa(ma)).filter((u): u is string => Boolean(u))].map((a, i) => (
                     <img key={`${a}-${i}`} src={daTaiAnh ? a : ANH_TRONG_SUOT} alt="" width={1000} height={1000} loading="lazy" decoding="async" className="kho" />
                   ))
-                ) : t.anh_bo ? (
-                  t.anh_bo.map((a, i) => (
+                ) : th.anh_bo ? (
+                  th.anh_bo.map((a, i) => (
                     <img
                       key={`${a}-${i}`}
                       src={daTaiAnh ? a : ANH_TRONG_SUOT}
@@ -744,11 +772,11 @@ function HangCombo({
                       className={a.includes("ampoule") ? "nho" : a.includes("medicube") ? "rong" : undefined}
                     />
                   ))
-                ) : t.so_lon ? (
-                  <span className="so-the">{t.so_lon}</span>
+                ) : th.so_lon ? (
+                  <span className="so-the">{th.so_lon}</span>
                 ) : null}
               </span>
-              <span className="xem">Xem deal ›</span>
+              <span className="xem">{t("xemDeal")}</span>
             </Link>
           );
         })}
