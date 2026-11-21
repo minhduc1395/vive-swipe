@@ -1,20 +1,33 @@
 {
   "tieuDe": "Chính sách bảo mật & giữ hàng",
-  "moTaTrang": "Quy định bảo mật dữ liệu cá nhân, giữ hàng miễn phí tại {diaDiem} và thông tin {congTy}.",
+  "moTaTrang": "Quy định bảo mật dữ liệu cá nhân, giữ hàng miễn phí tại {diaDiem}, điều khoản sử dụng và thông tin {congTy}.",
   "gioiThieu": "Áp dụng cho web trải nghiệm sản phẩm VIVE và quầy giữ hàng tại {diaDiem}.",
   "baoMat": {
     "tieuDe": "1. Bảo mật dữ liệu cá nhân",
-    "thuThap": {
-      "nhan": "Thu thập tối thiểu:",
-      "noiDung": "VIVE chỉ thu thập họ tên, số điện thoại để tạo và đối chiếu mã giữ hàng tại quầy; cùng câu trả lời khảo sát da và lượt quẹt để sắp xếp gợi ý phù hợp hơn."
+    "donVi": {
+      "nhan": "Bên chịu trách nhiệm dữ liệu:",
+      "noiDung": "Công ty CP Giải pháp Quốc tế Việt Hàn."
     },
-    "email": {
-      "nhan": "Email ưu đãi theo lựa chọn riêng:",
-      "noiDung": "Việc đồng ý nhận thông báo deal được tách riêng bằng ô chọn không đánh dấu sẵn. Bạn có thể hủy nhận email bất cứ lúc nào chỉ với 1 chạm qua liên kết cuối mỗi thư."
+    "mucDich": {
+      "nhan": "Mục đích sử dụng:",
+      "noiDung": "Họ tên, SĐT và email được dùng để giữ hàng và báo mã tại quầy; câu trả lời khảo sát da và lượt quẹt được dùng để gợi ý sản phẩm phù hợp hơn. Email ưu đãi chỉ gửi khi khách tự chọn ở ô đồng ý riêng (không đánh dấu sẵn) và có thể hủy nhận chỉ với 1 chạm cuối mỗi thư."
     },
-    "quyenXoa": {
-      "nhan": "Quyền xóa & kiểm tra dữ liệu:",
-      "noiDung": "Khách hàng có quyền yêu cầu xem hoặc xóa lịch sử cá nhân thông qua nhân viên tại booth hoặc email"
+    "thoiGianLuu": {
+      "nhan": "Thời gian lưu trữ:",
+      "noiDung": "Đơn giữ hàng được xóa hoặc ẩn danh sau 12 tháng; lịch sử quẹt được ẩn danh sau 12 tháng; email nhận deal được lưu tới khi khách hủy đăng ký."
+    },
+    "benXuLy": {
+      "nhan": "Bên xử lý thay:",
+      "noiDung": "Supabase và Google Cloud; dữ liệu có thể được lưu ở máy chủ ngoài Việt Nam (Nhật Bản)."
+    },
+    "quyen": {
+      "nhan": "Quyền của khách hàng:",
+      "noiDung": "Bạn có quyền xem, sửa, xóa hoặc rút lại đồng ý qua nhân viên tại booth hoặc email liên hệ",
+      "hauTo": "; VIVE trả lời trong 72 giờ làm việc."
+    },
+    "cookie": {
+      "nhan": "Cookie & bộ nhớ trình duyệt:",
+      "noiDung": "Chỉ dùng để nhớ ngôn ngữ, giỏ hàng và danh sách đã thích; không dùng cho mục đích quảng cáo."
     }
   },
   "giuHang": {
@@ -40,11 +53,11 @@
     },
     "nhanPhu": {
       "nhan": "Nhãn phụ tiếng Việt:",
-      "noiDung": "Sản phẩm mỹ phẩm nội địa Hàn nhập khẩu và quà tặng kèm được gắn đầy đủ nhãn phụ tiếng Việt tại quầy trước khi bàn giao cho khách."
+      "noiDung": "Sản phẩm bán tại quầy có nhãn phụ tiếng Việt theo quy định."
     },
     "khuyenMai": {
       "nhan": "Khuyến mại minh bạch:",
-      "noiDung": "Chương trình khuyến mại chỉ áp dụng khi đang trong thời gian hiệu lực và đủ điều kiện; khuyến mại may rủi chỉ công khai sau khi hoàn tất đăng ký với Sở Công Thương."
+      "noiDung": "Chương trình khuyến mại áp dụng theo thời gian và điều kiện công bố tại quầy và trên web; nhân viên xác nhận khi thanh toán."
     }
   },
   "doanhNghiep": {
@@ -56,5 +69,28 @@
     "soDienThoai": "Số điện thoại",
     "cuaHangPopup": "Cửa hàng pop-up",
     "kenhChinhThuc": "Kênh chính thức"
+  },
+  "dieuKhoan": {
+    "tieuDe": "5. Điều khoản sử dụng",
+    "gia": {
+      "nhan": "Giá bán:",
+      "noiDung": "Giá trên web có thể thay đổi; giá tại quầy khi thanh toán là giá cuối."
+    },
+    "hinhAnh": {
+      "nhan": "Hình ảnh:",
+      "noiDung": "Ảnh sản phẩm trên web mang tính minh họa."
+    },
+    "gioiHanDon": {
+      "nhan": "Giới hạn đơn giữ:",
+      "noiDung": "Mỗi SĐT được giữ tối đa 3 đơn đang mở."
+    },
+    "lamDung": {
+      "nhan": "Hủy đơn lạm dụng:",
+      "noiDung": "VIVE có quyền hủy mã giữ hàng có dấu hiệu lạm dụng."
+    },
+    "luatApDung": {
+      "nhan": "Luật áp dụng:",
+      "noiDung": "Các điều khoản này áp dụng theo luật Việt Nam."
+    }
   }
 }
