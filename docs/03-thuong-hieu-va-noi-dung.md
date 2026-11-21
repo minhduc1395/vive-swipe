@@ -37,7 +37,7 @@ Không thêm màu ngoài bảng này (kể cả đỏ cho giảm giá). Nhãn gi
 - Personal color: viết **"tone"** (từ quen với khách), không viết "tông". Tiêu đề khối Pawlette: "Tone bạn màu nào?" (chủ dự án chốt 18/11).
 - Viết tiếng Việt, câu ngắn, ít chữ, sản phẩm là trung tâm. Hạn chế tiếng Anh, trừ từ quen hoặc chuyên ngành (PDRN, Cica, serum, toner pad, K-pop, check-in) và tên sản phẩm gốc.
 - Viết "nội địa Hàn", không viết "local".
-- Thông điệp: trải nghiệm mua sắm độc đáo; thương hiệu nội địa Hàn bán ngay tại Việt Nam; chất lượng và phù hợp làn da châu Á.
+- Thông điệp: trải nghiệm mua sắm độc đáo; thương hiệu Hàn Quốc bán ngay tại Việt Nam (không dùng chữ "nội địa Hàn", LEG-003); chất lượng và phù hợp làn da châu Á.
 - Không nhắc tới cửa hàng chính sẽ mở sau này.
 - Tên thương hiệu công khai: Rep!el (không viết Repiel). Các tên khác theo cột `thuong_hieu`.
 - Tài khoản: Facebook **VIVE** (https://www.facebook.com/1530922283427509, BOD đổi page 22/11) · Instagram **@vive.vers** · TikTok **@viveuniverse** (có chữ "e" cuối). Threads theo tài khoản Instagram.
