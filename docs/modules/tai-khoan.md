@@ -23,3 +23,4 @@ Khách đăng nhập để giữ lịch sử quẹt, đã thích, giỏ hàng v�
 
 ## Lịch sử ngắn
 - 2026-11-21 WEB tạo module, job A (đăng nhập email OTP), job B (đồng bộ đã thích + giỏ) chờ migration.
+- 2026-11-21 WEB: bảng `yeu_thich`, `gio_hang_luu` + RLS chủ sở hữu (`supabase/migrations/20261121120000_yeu_thich_gio_hang_luu.sql`, đã chạy trên Supabase) cho job #66.
