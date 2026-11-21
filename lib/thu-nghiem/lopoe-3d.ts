@@ -36,6 +36,11 @@ export const CauHinhLopoe3DSchema = z.object({
   khoi: z.array(KhoiChu3DSchema).min(1),
   thanh_phan: z.object({ sua_rua_mat: z.array(ThanhPhanSchema).length(4), ampoule: z.array(ThanhPhanSchema).length(4) }),
   so_1: z.string().default("No.1"),
+  /** W063: điện thoại dùng chuỗi ảnh dựng sẵn thay three.js (mượt, không nóng máy). Ảnh chỉ có sản phẩm + nền; chữ và nhãn vẫn là DOM. */
+  khung_dien_thoai: z.object({
+    thu_muc: z.string(), so: z.number().int().min(2), rong: z.number(), cao: z.number(),
+    vp_rong: z.number(), vp_cao: z.number(), nhan: z.string(),
+  }).optional(),
 });
 export type KhoiChu3D = z.infer<typeof KhoiChu3DSchema>;
 export type CauHinhLopoe3D = z.infer<typeof CauHinhLopoe3DSchema>;
