@@ -92,7 +92,7 @@ export interface Canh {
 
 export function taoCanh(
   canvas: HTMLCanvasElement,
-  opts: { taiSan: TaiSan; hatSrm: LoaiHat[]; hatAmp: LoaiHat[]; so1: string; hienSo1?: boolean; giamChuyenDong: boolean; onSanSang?: () => void },
+  opts: { taiSan: TaiSan; hatSrm: LoaiHat[]; hatAmp: LoaiHat[]; anhHat?: Partial<Record<LoaiHat, string>>; so1: string; hienSo1?: boolean; giamChuyenDong: boolean; onSanSang?: () => void },
 ): Canh {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   const dt0 = window.innerWidth < 768;
@@ -223,10 +223,19 @@ export function taoCanh(
 
   // Hạt thành phần: biểu tượng 3D trừu tượng (W053 sẽ thay bằng ảnh thật / phân tử đúng cấu trúc)
   const vatLieu = (c: number) => new THREE.MeshPhysicalMaterial({ color: c, roughness: 0.35, clearcoat: 0.6, envMapIntensity: 1.2 });
+  const anhHatDaTai: Partial<Record<LoaiHat, THREE.Texture>> = {};
   const hat = (loai: LoaiHat) => {
     const g = new THREE.Group(), ben = new THREE.Group();
     g.add(ben);
-    if (loai === "thua") {
+    const urlAnh = opts.anhHat?.[loai];
+    if (urlAnh) {
+      // DES-004: ảnh thành phần thật trong bong bóng (sprite luôn quay mặt về máy quay)
+      let tx = anhHatDaTai[loai];
+      if (!tx) { tx = tai.load(urlAnh); tx.colorSpace = THREE.SRGBColorSpace; anhHatDaTai[loai] = tx; }
+      const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tx, transparent: true, depthWrite: false }));
+      sp.scale.set(0.5, 0.5, 1);
+      ben.add(sp);
+    } else if (loai === "thua") {
       for (let i = 0; i < 9; i++) {
         const l = new THREE.Mesh(new THREE.ConeGeometry(0.045, 0.36, 10), vatLieu(0x7fae8a));
         const a = (i / 9) * Math.PI * 2;
