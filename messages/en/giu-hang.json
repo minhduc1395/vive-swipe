@@ -1,1 +1,86 @@
-{}
+{
+  "chung": {
+    "quayLai": "Back"
+  },
+  "trang": {
+    "tieuDe": "Reserve at the booth"
+  },
+  "trong": {
+    "tieuDe": "Your cart is empty",
+    "moTa": "Add the products you like to your cart before reserving them at the booth.",
+    "quayLaiQuet": "Back to swiping products"
+  },
+  "form": {
+    "hoTen": "Full name",
+    "hoTenGoiY": "Name our staff will call you by",
+    "sdt": "Phone number",
+    "email": "Email",
+    "emailGhiChu": "(optional, to receive confirmation)",
+    "ngayDen": "Pickup day",
+    "homNay": "Today",
+    "ngayMai": "Tomorrow",
+    "giuDenHomNay": "Held until 9:00 PM today",
+    "giuDenNgayMai": "Held until 9:00 PM tomorrow",
+    "nhanDealEmail": "Get deals by email",
+    "dongYTruoc": "I agree to the",
+    "chinhSach": "privacy and reservation policy",
+    "xacNhan": "Confirm reservation",
+    "dangXuLy": "Processing...",
+    "toiDa3Ma": "Each phone number can hold up to 3 codes at a time"
+  },
+  "loi": {
+    "ten": "Please enter your full name.",
+    "sdt": "Invalid phone number (10 digits, starting with 03, 05, 07, 08 or 09).",
+    "email": "Invalid email address. Please check it again.",
+    "chinhSach": "Please agree to the VIVE privacy and reservation policy.",
+    "khongTao": "Could not create the reservation. Please try again.",
+    "ketNoi": "Connection error. Please try again in a few seconds.",
+    "may": {
+      "chinh_sach": "Please agree to the VIVE privacy and reservation policy.",
+      "ten": "Please enter your full name so our staff can reach you.",
+      "sdt": "Invalid Vietnamese mobile number (10 digits, e.g. 09xx xxx xxx).",
+      "email": "Invalid email address. Please check it or leave it blank.",
+      "gio_trong": "Your cart is empty. Please add products before reserving.",
+      "gioi_han": "Each phone number can hold up to 3 codes at the booth at a time. Please pick up your earlier reservations or wait for them to expire.",
+      "khong_hop_le": "There are no valid products in your cart.",
+      "he_thong": "We could not complete your reservation due to a system error. Please try again in a few minutes or come to the booth for help."
+    }
+  },
+  "tomTat": {
+    "nhan": "Reservation summary",
+    "quaDuKien": "Expected gift",
+    "khong": "None",
+    "donGiu": "Your reservation ({so, plural, one {# item} other {# items}})",
+    "tongUocTinh": "{so, plural, one {# item} other {# items}} · estimated total",
+    "quaDuKienDong": "Expected gift:",
+    "luuY": "Prices and gifts are estimates. Staff confirm them at checkout at the booth."
+  },
+  "thuong": {
+    "daTuNgay": "Pick up at the booth: {qua}",
+    "tuNgay": "Pick up at the booth from {ngay}: {qua}"
+  },
+  "ma": {
+    "veTrangQuet": "Back to swiping →",
+    "daGiu": "Reserved",
+    "duaMa": "Show this code to VIVE staff at the counter.",
+    "nhanMa": "Reservation code",
+    "nhanMonDaGiu": "Reserved items",
+    "giuDenHomNay": "Held until 9:00 PM today",
+    "giuDenNgayMai": "Held until 9:00 PM tomorrow",
+    "tongUocTinh": "Estimated total",
+    "quaDuKien": "Expected gift",
+    "diaChi": "Level LL2, Union Square, 171 Dong Khoi",
+    "daGuiEmail": "Confirmation sent to",
+    "dangLuuAnh": "Opening the save / print dialog...",
+    "luuAnh": "Save screenshot",
+    "themLich": "Add to calendar",
+    "khongThay": "Code {ma} not found",
+    "khongThayMoTa": "The code may have expired or been mistyped. Check your confirmation email or ask staff at the booth.",
+    "veGio": "Back to cart"
+  },
+  "lich": {
+    "tieuDe": "Pick up reservation {ma} at VIVE Pop-up",
+    "moTa": "Reservation code: {ma}\\nEstimated total: {tong}\\nAddress: LL2 Union Square, 171 Dong Khoi",
+    "diaDiem": "VIVE | K-Beauty Experience, Level LL2, Union Square, 171 Dong Khoi"
+  }
+}

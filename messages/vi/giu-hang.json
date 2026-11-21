@@ -1,1 +1,86 @@
-{}
+{
+  "chung": {
+    "quayLai": "Quay lại"
+  },
+  "trang": {
+    "tieuDe": "Giữ hàng tại booth"
+  },
+  "trong": {
+    "tieuDe": "Giỏ hàng đang trống",
+    "moTa": "Vui lòng thêm sản phẩm bạn thích vào giỏ trước khi tiến hành giữ hàng tại booth.",
+    "quayLaiQuet": "Quay lại quẹt sản phẩm"
+  },
+  "form": {
+    "hoTen": "Họ và tên",
+    "hoTenGoiY": "Tên để nhân viên gọi",
+    "sdt": "Số điện thoại",
+    "email": "Email",
+    "emailGhiChu": "(không bắt buộc, để nhận xác nhận)",
+    "ngayDen": "Ngày đến lấy",
+    "homNay": "Hôm nay",
+    "ngayMai": "Ngày mai",
+    "giuDenHomNay": "Giữ đến 21:00 hôm nay",
+    "giuDenNgayMai": "Giữ đến 21:00 ngày mai",
+    "nhanDealEmail": "Nhận deal qua email",
+    "dongYTruoc": "Tôi đồng ý với",
+    "chinhSach": "chính sách bảo mật và giữ hàng",
+    "xacNhan": "Xác nhận giữ hàng",
+    "dangXuLy": "Đang xử lý...",
+    "toiDa3Ma": "Mỗi số điện thoại giữ tối đa 3 mã cùng lúc"
+  },
+  "loi": {
+    "ten": "Vui lòng nhập họ và tên của bạn.",
+    "sdt": "Số điện thoại không đúng định dạng (cần 10 chữ số, bắt đầu bằng 03, 05, 07, 08, 09).",
+    "email": "Địa chỉ email không hợp lệ. Vui lòng kiểm tra lại.",
+    "chinhSach": "Vui lòng đồng ý với chính sách bảo mật và giữ hàng của VIVE.",
+    "khongTao": "Không thể tạo đơn giữ hàng. Vui lòng thử lại.",
+    "ketNoi": "Lỗi kết nối. Vui lòng thử lại sau vài giây.",
+    "may": {
+      "chinh_sach": "Vui lòng đồng ý với chính sách bảo mật và giữ hàng của VIVE.",
+      "ten": "Vui lòng nhập họ và tên để nhân viên liên hệ.",
+      "sdt": "Số điện thoại không đúng định dạng di động Việt Nam (cần 10 chữ số, ví dụ: 09xx xxx xxx).",
+      "email": "Địa chỉ email không hợp lệ. Vui lòng kiểm tra lại hoặc để trống.",
+      "gio_trong": "Giỏ hàng đang trống. Vui lòng thêm sản phẩm trước khi giữ hàng.",
+      "gioi_han": "Mỗi số điện thoại giữ tối đa 3 mã cùng lúc tại booth. Vui lòng lấy các món đã giữ trước đó hoặc chờ đơn hết hạn.",
+      "khong_hop_le": "Không có sản phẩm hợp lệ trong giỏ hàng.",
+      "he_thong": "Chưa giữ hàng được do lỗi hệ thống. Bạn thử lại sau ít phút hoặc đến thẳng booth để nhân viên hỗ trợ."
+    }
+  },
+  "tomTat": {
+    "nhan": "Tóm tắt giỏ giữ hàng",
+    "quaDuKien": "Quà dự kiến",
+    "khong": "Không có",
+    "donGiu": "Đơn giữ ({so} món)",
+    "tongUocTinh": "{so} món · tổng ước tính",
+    "quaDuKienDong": "Quà dự kiến:",
+    "luuY": "Giá và quà là ước tính. Nhân viên xác nhận khi thanh toán tại booth."
+  },
+  "thuong": {
+    "daTuNgay": "Nhận tại booth: {qua}",
+    "tuNgay": "Nhận tại booth từ {ngay}: {qua}"
+  },
+  "ma": {
+    "veTrangQuet": "Về trang quẹt →",
+    "daGiu": "Đã giữ hàng",
+    "duaMa": "Đưa mã này cho nhân viên VIVE tại quầy.",
+    "nhanMa": "Mã giữ hàng",
+    "nhanMonDaGiu": "Món đã giữ",
+    "giuDenHomNay": "Giữ đến 21:00 hôm nay",
+    "giuDenNgayMai": "Giữ đến 21:00 ngày mai",
+    "tongUocTinh": "Tổng ước tính",
+    "quaDuKien": "Quà dự kiến",
+    "diaChi": "tầng LL2 Union Square, 171 Đồng Khởi",
+    "daGuiEmail": "Đã gửi xác nhận tới email",
+    "dangLuuAnh": "Đang mở hộp thoại lưu ảnh / in màn hình...",
+    "luuAnh": "Lưu ảnh màn hình",
+    "themLich": "Thêm vào lịch",
+    "khongThay": "Không tìm thấy mã {ma}",
+    "khongThayMoTa": "Mã có thể đã hết hạn hoặc gõ sai. Bạn kiểm tra lại email xác nhận hoặc hỏi nhân viên tại booth.",
+    "veGio": "Về giỏ hàng"
+  },
+  "lich": {
+    "tieuDe": "Lấy đơn giữ hàng {ma} tại VIVE Pop-up",
+    "moTa": "Mã giữ hàng: {ma}\\nTổng ước tính: {tong}\\nĐịa chỉ: LL2 Union Square, 171 Đồng Khởi",
+    "diaDiem": "VIVE | K-Beauty Experience, tầng LL2 Union Square, 171 Đồng Khởi"
+  }
+}
