@@ -15,3 +15,4 @@ Trải nghiệm quẹt sản phẩm kiểu Tinder, danh mục, sản phẩm đã
 
 ## Lịch sử ngắn
 - 2026-11-20 W057: chạm thẻ mở chi tiết, khóa cuộn nền.
+- 2026-11-21 W064: `/new-arrival` mở đầu bằng khối cuộn LOPOE như trang chủ; màu toàn site theo bảng nội thất (xem `_chung.md`).

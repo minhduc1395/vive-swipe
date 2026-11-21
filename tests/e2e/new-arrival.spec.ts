@@ -21,21 +21,20 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
     await expect(header.getByRole("link", { name: /Giỏ/ })).toBeVisible();
     await expect(header.getByRole("link", { name: "Đăng nhập" })).toBeVisible();
 
-    await expect(page.getByText("MỚI TẠI VIVE · NỘI ĐỊA HÀN")).toBeVisible();
-    await expect(page.getByRole("heading", { name: /LOPOE/i, level: 1 })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Xem bộ sản phẩm" })).toBeVisible();
-    await expect(
-      page
-        .getByRole("region", { name: "Phần đầu chiến dịch" })
-        .getByRole("link", { name: "Giữ hàng tại booth" })
-    ).toBeVisible();
+    await expect(page.getByRole("heading", { name: /LOPOE/i, level: 1 })).toBeAttached();
+    const moDau = page.locator("#lopoe [data-mo-dau]");
+    await expect(moDau.getByRole("heading", { name: "LOPOE Better Balance" })).toBeVisible();
+    await expect(moDau.getByRole("link", { name: "Mua" })).toHaveAttribute("href", "/danh-muc?thuong-hieu=LOPOE");
+    // Trang chủ "Tìm hiểu thêm" về /new-arrival; ở đây đổi thành "Xem combo" xuống khối combo
+    await expect(moDau.getByRole("link", { name: "Xem combo" })).toHaveAttribute("href", "#ke-ra-mat");
 
     await expect(page.getByText(/BETTER BALANCE · NỘI ĐỊA HÀN/).first()).toBeVisible();
 
     await expect(page.getByRole("heading", { name: "Đủ bộ, đỡ tốn." })).toBeVisible();
-    await expect(page.getByText("Combo 2 sữa rửa mặt LOPOE")).toBeVisible();
-    await expect(page.getByText("Combo kem dưỡng và ampoule LOPOE")).toBeVisible();
-    await expect(page.getByText("Bộ 3 LOPOE")).toBeVisible();
+    const keRaMat = page.locator("#ke-ra-mat");
+    await expect(keRaMat.getByText("Combo 2 sữa rửa mặt LOPOE")).toBeVisible();
+    await expect(keRaMat.getByText("Combo kem dưỡng và ampoule LOPOE")).toBeVisible();
+    await expect(keRaMat.getByText("Bộ 3 LOPOE")).toBeVisible();
 
     await expect(page.getByRole("heading", { name: /Đang có tại|Đang chạy tại booth/ })).toBeVisible();
     await expect(page.getByText("COMBO PINK Medicube PDRN")).toBeVisible();
@@ -62,110 +61,41 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
     ).toBeVisible();
   });
 
-  test("co giãn 9 cỡ màn hình ở deviceScaleFactor 2–3: #canh khớp khung nhìn, hộp bao trong vùng, không đè chữ, không tràn quạt 430px", async ({
+  test("W064: phần đầu là khối cuộn LOPOE như trang chủ, không tràn ngang ở 360–1920px, không lỗi", async ({
     browser,
   }) => {
     test.setTimeout(90000);
     const co = [
       [360, 780],
       [390, 844],
-      [430, 932],
-      [768, 1024],
       [820, 1180],
-      [1180, 820],
-      [1280, 800],
       [1440, 900],
       [1920, 1080],
     ];
-
     for (const [w, h] of co) {
       const ctx = await browser.newContext({
         viewport: { width: w, height: h },
         hasTouch: w < 1024,
         isMobile: w < 760,
-        deviceScaleFactor: w < 760 ? 3 : 2,
+        deviceScaleFactor: 2,
         reducedMotion: "reduce",
       });
       const pg = await ctx.newPage();
       await caiDatMockSupabase(pg);
       const pageErrors: string[] = [];
       pg.on("pageerror", (e) => pageErrors.push(e.message));
-
       try {
         await pg.goto("/new-arrival");
         await pg.locator('[data-hydrated="true"]').waitFor({ state: "attached" });
-
-        // 1. Màn retina: #canh phải đúng bằng innerWidth x innerHeight
-        const cv = await pg.evaluate(() => {
-          const c = document.getElementById("canh");
-          return c ? [c.clientWidth - innerWidth, c.clientHeight - innerHeight] : [-1, -1];
-        });
-        expect(cv, `${w}x${h} #canh lệch cỡ`).toEqual([0, 0]);
-
-        // 2. Cuộn qua 3 khối đầu kiểm tra hộp bao window.__viveBo và cột chữ .cot
-        for (let k = 0; k < 3; k++) {
-          await pg.evaluate((idx) => {
-            const s = document.querySelectorAll("section[data-k]")[idx] as HTMLElement;
-            window.scrollTo({ top: s.offsetTop, behavior: "instant" });
-          }, k);
-          await expect(pg.locator(`#canh[data-stage="${k}"]`)).toBeAttached();
-
-          const loi = await pg.evaluate((idx) => {
-            const b = (window as unknown as {
-              __viveBo?: Record<string, { hop: [number, number, number, number]; an: number }>;
-            }).__viveBo;
-            const sec = document.querySelectorAll("section[data-k]")[idx];
-            const cot = sec?.querySelector(".cot")?.getBoundingClientRect();
-            const hdEl = Array.from(
-              document.querySelectorAll<HTMLElement>("header, [role='banner']")
-            ).find(
-              (el) =>
-                getComputedStyle(el).display !== "none" &&
-                el.getBoundingClientRect().height > 0
-            );
-            const hd = hdEl ? hdEl.getBoundingClientRect().bottom : 0;
-            const out: string[] = [];
-            if (!b || !cot) return ["Thiếu __viveBo hoặc .cot"];
-
-            for (const t of ["A", "S", "K"]) {
-              const o = b[t];
-              if (!o || o.an > 0.5) continue;
-              const [x0, y0, x1, y1] = o.hop;
-              if (x0 < -1 || y0 < hd - 1 || x1 > window.innerWidth + 1 || y1 > window.innerHeight + 1) {
-                out.push(`${t} tràn khung ${o.hop.map(Math.round).join(",")}`);
-              }
-              const cham = !(x1 <= cot.left + 1 || x0 >= cot.right - 1 || y1 <= cot.top + 1 || y0 >= cot.bottom - 1);
-              if (cham) out.push(`${t} đè chữ (${o.hop.map(Math.round).join(",")} vs ${Math.round(cot.left)},${Math.round(cot.top)})`);
-            }
-
-            sec?.querySelectorAll(".cot > *").forEach((el) => {
-              if (
-                el.scrollWidth > cot.width + 2 ||
-                el.getBoundingClientRect().right > cot.right + 2
-              ) {
-                out.push(`chữ tràn khỏi .cot: ${el.tagName}`);
-              }
-            });
-            return out;
-          }, k);
-
-          expect(loi, `Lỗi ở ${w}x${h} khối ${k + 1}`).toEqual([]);
+        await expect(pg.locator("#trang-landing #lopoe")).toBeAttached();
+        await expect(pg.locator("#ke-ra-mat")).toBeAttached();
+        // Sân khấu 3D cũ không còn
+        await expect(pg.locator("#canh")).toHaveCount(0);
+        for (const y of [0, 0.5, 1]) {
+          await pg.evaluate((t) => window.scrollTo(0, (document.body.scrollHeight - innerHeight) * t), y);
+          const tran = await pg.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+          expect(tran, `${w}x${h} tràn ngang ở ${y}`).toBeLessThanOrEqual(0);
         }
-
-        // 3. Không cuộn ngang ở đầu và cuối trang (gồm quạt Personal Color 430px)
-        const ngangTop = await pg.evaluate(
-          () => document.documentElement.scrollWidth - window.innerWidth
-        );
-        expect(ngangTop, `${w}x${h} cuộn ngang đầu trang`).toBeLessThanOrEqual(0);
-
-        await pg.evaluate(() =>
-          window.scrollTo({ top: document.body.scrollHeight, behavior: "instant" })
-        );
-        await pg.waitForTimeout(150);
-        const ngangBottom = await pg.evaluate(
-          () => document.documentElement.scrollWidth - window.innerWidth
-        );
-        expect(ngangBottom, `${w}x${h} cuộn ngang cuối trang`).toBeLessThanOrEqual(0);
         expect(pageErrors).toEqual([]);
       } finally {
         await ctx.close();
@@ -173,7 +103,7 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
     }
   });
 
-  test("thanh trên điện thoại 390px gọn gàng và nút hero đạt tối thiểu 44px", async ({
+  test("thanh trên điện thoại 390px gọn gàng và nút mở đầu đạt tối thiểu 44px", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 390, height: 844 });
@@ -182,7 +112,7 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
     const logoBox = await page.locator("header img[alt='VIVE']").boundingBox();
     expect(logoBox?.width).toBeLessThanOrEqual(58);
 
-    const btnXem = page.getByRole("link", { name: "Xem bộ sản phẩm" });
+    const btnXem = page.locator("#lopoe [data-mo-dau]").getByRole("link", { name: "Mua" });
     await expect(btnXem).toBeVisible();
     const box = await btnXem.boundingBox();
     expect(box?.height).toBeGreaterThanOrEqual(44);
@@ -195,28 +125,23 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
     expect(boxDN?.height).toBeGreaterThanOrEqual(44);
   });
 
-  test("tôn trọng prefers-reduced-motion, dùng dữ liệu thật không bịa mô tả, ẩn 2 ống bên ở cảnh 1", async ({
+  test("tôn trọng prefers-reduced-motion (bản tĩnh, không canvas), dùng dữ liệu thật không bịa mô tả", async ({
     page,
   }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/new-arrival");
-    await expect(page.locator('[data-reduced-motion="true"]')).toBeAttached();
+    await expect(page.locator("#lopoe canvas")).toHaveCount(0);
+    await expect(page.locator("#lopoe")).toContainText("pH 5.5");
 
     const bodyText = await page.locator("body").innerText();
     expect(bodyText).not.toContain(
       "Cấp ẩm sâu, phục hồi hàng rào bảo vệ da với kết cấu mỏng nhẹ, thấm nhanh."
     );
-    await expect(page.getByText("314.000đ")).toBeVisible();
-    await expect(page.getByText("419.000đ")).toBeVisible();
+    // Giá combo lấy từ data/deals.yaml
+    await expect(page.locator("#ke-ra-mat").getByText("349.000đ")).toBeVisible();
+    await expect(page.locator("#ke-ra-mat").getByText("911.000đ")).toBeVisible();
 
-    await page.evaluate(() => {
-      const s = document.querySelectorAll("section[data-k]")[1] as HTMLElement;
-      window.scrollTo({ top: s.offsetTop, behavior: "instant" });
-    });
-    await expect(page.locator('#canh[data-stage="1"]')).toBeAttached();
-    await expect(page.locator('[data-object-id="srm"]')).toHaveCSS("opacity", "0");
-    await expect(page.locator('[data-object-id="kem"]')).toHaveCSS("opacity", "0");
   });
 
   test("không có câu nào nhắc tới quẹt trong nội dung giới thiệu sản phẩm của landing", async ({
@@ -238,11 +163,10 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
     await expect(page.getByText("Vòng quay LOPOE")).not.toBeVisible();
   });
 
-  test("chụp ảnh 3 khối đầu tại 360px, 390px, 820px, 1440px vào test-results/screenshots/new-arrival/", async ({
+  test("chụp ảnh đầu trang và khối combo tại 360px, 390px, 820px, 1440px vào test-results/screenshots/new-arrival/", async ({
     page,
     browserName,
   }) => {
-    // Bài này chỉ để chụp ảnh gửi PR; WebKit trên CI đổi cỡ khung liên tục làm IntersectionObserver không kịp đổi khối.
     test.skip(browserName === "webkit", "chụp ảnh chỉ chạy trên Chromium");
     test.setTimeout(90000);
     const screens = [
@@ -251,25 +175,18 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
       { label: "820", width: 820, height: 1180 },
       { label: "1440", width: 1440, height: 900 },
     ];
-
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/new-arrival");
     await expect(page.locator('[data-hydrated="true"]')).toBeAttached();
-
     for (const sc of screens) {
       await page.setViewportSize({ width: sc.width, height: sc.height });
-      await expect(
-        page.locator(`#canh[data-viewport="${sc.width}x${sc.height}"]`)
-      ).toBeAttached();
-
-      for (let k = 0; k < 3; k++) {
-        await page.evaluate((idx) => {
-          const s = document.querySelectorAll("section[data-k]")[idx] as HTMLElement;
-          window.scrollTo({ top: s.offsetTop, behavior: "instant" });
-        }, k);
-        await expect(page.locator(`#canh[data-stage="${k}"]`)).toBeAttached();
+      for (const [ten, sel] of [["dau", "#lopoe"], ["combo", "#ke-ra-mat"]] as const) {
+        await page.evaluate((s) => {
+          const el = document.querySelector(s) as HTMLElement;
+          window.scrollTo({ top: el.offsetTop, behavior: "instant" });
+        }, sel);
         await page.screenshot({
-          path: `test-results/screenshots/new-arrival/${sc.label}_k${k + 1}.png`,
+          path: `test-results/screenshots/new-arrival/${sc.label}_${ten}.png`,
           fullPage: false,
         });
       }

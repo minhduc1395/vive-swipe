@@ -6,8 +6,9 @@
     "bat_dau": "2026-11-14",
     "ket_thuc": "2026-11-29",
     "uu_tien": 10,
+    "cuon_3d": "lopoe",
     "mau": {
-      "nen": "#F7EEEB",
+      "nen": "#F7F5EF",
       "nhan": "#E8D2CC",
       "chu": "#2B2B2A"
     },
@@ -382,7 +383,7 @@
     "ket_thuc": "2026-12-31",
     "uu_tien": 1,
     "mau": {
-      "nen": "#F7EEEB",
+      "nen": "#F7F5EF",
       "nhan": "#E8D2CC",
       "chu": "#2B2B2A"
     },
@@ -518,7 +519,7 @@
         "loai": "bang-chu",
         "chu": "K-BEAUTY EXPERIENCE · NỘI ĐỊA HÀN · MỚI TẠI VIVE · LL2 UNION SQUARE · ",
         "chu_en": "K-BEAUTY EXPERIENCE · KOREAN BRANDS · NEW AT VIVE · LL2 UNION SQUARE · ",
-        "mau_nen": "#CFE3D5"
+        "mau_nen": "#DBE5D3"
       },
       {
         "loai": "chuong-trinh",

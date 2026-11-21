@@ -25,3 +25,4 @@ Trang chủ và landing: khối mở đầu, khối LOPOE cuộn 3D, lưới com
 ## Việc đang mở (không giao job trùng)
 - DIR-037: điện thoại còn giật 1–2 giây sau khi thả tay ở khối 3D (WEB đang xem).
 - DIR-040: áp chữ mới cho ô lớn (chờ BOD duyệt DIR-039), chỉ đổi front end.
+- 2026-11-21 W064: bật chuỗi ảnh LOPOE trên điện thoại ở trang chủ (CĐT giữ cách này). Landing `/new-arrival` dùng `CuonLopoe3D` khi chiến dịch có `cuon_3d: lopoe`; khối "Đủ bộ, đỡ tốn." chạy kiểu phẳng (`phang`).

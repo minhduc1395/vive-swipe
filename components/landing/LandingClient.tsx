@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useSyncExternalStore } from "react";
 import type { ChienDich } from "@/lib/chien-dich/types";
 import { LandingStage3D, type CanhStage3D } from "./LandingStage3D";
 import { KhoiHero } from "./khoi/KhoiHero";
@@ -13,14 +13,44 @@ import { KhoiDoiTac } from "./khoi/KhoiDoiTac";
 import { KhoiVideo } from "./khoi/KhoiVideo";
 import { KhoiBooth } from "./khoi/KhoiBooth";
 import { LandingFooter } from "./LandingFooter";
+import Link from "next/link";
+import { CuonLopoe3D, type VeNut3D } from "@/components/cuon-3d/CuonLopoe3D";
+import { lopNut } from "@/components/ui/Nut";
+import type { CauHinhLopoe3D } from "@/lib/thu-nghiem/lopoe-3d";
+
+/** Nút khối mở đầu: "Tìm hiểu thêm" ở trang chủ dẫn về /new-arrival, ở đây dẫn xuống phần combo */
+const veNutLanding: VeNut3D = (n, i) => {
+  const veChinhTrang = n.den === "/new-arrival";
+  // Neo combo của trang chủ (#combo-lopoe-…) không có ở đây: dẫn xuống khối "Đủ bộ, đỡ tốn."
+  const neoCombo = veChinhTrang || (n.den ?? "").startsWith("#combo-");
+  return (
+    <Link
+      key={n.chu}
+      href={neoCombo ? "#ke-ra-mat" : n.den || "/danh-muc"}
+      prefetch={false}
+      className={i === 0 ? lopNut("chinh", "vua") : lopNut("chu", "vua")}
+    >
+      {veChinhTrang ? "Xem combo" : n.chu}
+    </Link>
+  );
+};
 
 interface LandingClientProps {
   chienDich: ChienDich;
+  /** W064: có cấu hình thì phần đầu là khối cuộn LOPOE như trang chủ */
+  lopoe3D?: CauHinhLopoe3D;
 }
 
 export function LandingClient({
   chienDich,
+  lopoe3D,
 }: LandingClientProps) {
+  // Dấu cho test e2e biết trang đã chạy JS (sân khấu 3D cũ tự gắn dấu này; khối cuộn LOPOE thì không)
+  const daChay = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
   const heroBlock = chienDich.khoi.find((k) => k.loai === "hero");
   const tieuDiemBlock = chienDich.khoi.find((k) => k.loai === "tieu-diem");
   const marqueeBlock = chienDich.khoi.find((k) => k.loai === "bang-chu");
@@ -94,13 +124,23 @@ export function LandingClient({
         }
       `}</style>
 
-      <LandingStage3D cacCanh={cacCanh} />
-
-      <main id="trang-landing" className="relative z-10">
-        {heroBlock && <KhoiHero khoi={heroBlock} />}
-        {tieuDiemBlock && <KhoiTieuDiem khoi={tieuDiemBlock} />}
-        {raMatBlock && <KhoiRaMat khoi={raMatBlock} />}
-      </main>
+      {lopoe3D ? (
+        <main id="trang-landing" className="relative z-10">
+          <span hidden data-hydrated={daChay ? "true" : "false"} />
+          <h1 className="sr-only">{chienDich.ten} · VIVE New Arrival</h1>
+          <CuonLopoe3D cfg={lopoe3D} id="lopoe" veNut={veNutLanding} />
+          {raMatBlock?.loai === "ra-mat" && <KhoiRaMat khoi={raMatBlock} phang />}
+        </main>
+      ) : (
+        <>
+          <LandingStage3D cacCanh={cacCanh} />
+          <main id="trang-landing" className="relative z-10">
+            {heroBlock && <KhoiHero khoi={heroBlock} />}
+            {tieuDiemBlock && <KhoiTieuDiem khoi={tieuDiemBlock} />}
+            {raMatBlock && <KhoiRaMat khoi={raMatBlock} />}
+          </main>
+        </>
+      )}
 
       {marqueeBlock && <KhoiBangChu khoi={marqueeBlock} />}
 

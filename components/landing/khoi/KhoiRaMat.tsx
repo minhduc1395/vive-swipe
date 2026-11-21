@@ -10,9 +10,11 @@ import { themComboVaoGio } from "@/lib/kho-luu-tru";
 
 interface KhoiRaMatProps {
   khoi: KhoiRaMatType;
+  /** W064: khối đứng riêng (không có sân khấu 3D phía sau), căn giữa */
+  phang?: boolean;
 }
 
-export function KhoiRaMat({ khoi }: KhoiRaMatProps) {
+export function KhoiRaMat({ khoi, phang = false }: KhoiRaMatProps) {
   const { tieu_de, mo_ta, deal: dealIds = [] } = khoi;
 
   const resolvedDeals = dealIds
@@ -25,11 +27,11 @@ export function KhoiRaMat({ khoi }: KhoiRaMatProps) {
   return (
     <section
       id="ke-ra-mat"
-      data-k="2"
+      data-k={phang ? undefined : "2"}
       aria-label="Kệ ra mắt"
-      className="vq-k trai relative z-10"
+      className={phang ? "relative z-10 px-5 md:px-16 py-20 md:py-28 flex justify-center" : "vq-k trai relative z-10"}
     >
-      <div className="cot flex flex-col gap-3.5 md:gap-4">
+      <div className={phang ? "w-full max-w-[640px] flex flex-col gap-3.5 md:gap-4" : "cot flex flex-col gap-3.5 md:gap-4"}>
         <h2 className="m-0 font-bold text-[clamp(34px,9.5vw,56px)] lg:text-[clamp(44px,5.6vw,76px)] leading-[0.95] tracking-[-0.04em] text-den">
           {tieu_de}
         </h2>
@@ -49,9 +51,9 @@ export function KhoiRaMat({ khoi }: KhoiRaMatProps) {
             return (
               <div
                 key={d.id}
-                className="rounded-[20px] lg:rounded-[24px] bg-white px-4 py-3.5 lg:px-5 lg:py-4 shadow-[0_10px_24px_rgba(43,43,42,0.06)] flex items-center justify-between gap-3"
+                className="rounded-[20px] lg:rounded-[24px] bg-white px-4 py-3.5 lg:px-5 lg:py-4 shadow-[0_10px_24px_rgba(43,43,42,0.06)] flex flex-wrap items-center justify-between gap-x-3 gap-y-2.5"
               >
-                <div className="min-w-0 flex flex-col gap-0.5">
+                <div className="min-w-0 flex-1 basis-[200px] flex flex-col gap-0.5">
                   <Link href={dichDeal(d.id)} className="text-[15px] lg:text-[16px] font-semibold text-den leading-snug no-underline hover:underline underline-offset-4">
                     {d.ten}
                   </Link>
@@ -62,7 +64,7 @@ export function KhoiRaMat({ khoi }: KhoiRaMatProps) {
                   )}
                 </div>
 
-                <div className="shrink-0 flex items-center gap-2.5">
+                <div className="shrink-0 ml-auto flex items-center gap-2.5">
                   <div className="text-right flex flex-col">
                     <b className="text-[18px] lg:text-[20px] font-bold text-den leading-none">
                       {dinhDangTienGio(giaBan)}

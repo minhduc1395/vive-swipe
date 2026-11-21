@@ -147,5 +147,7 @@ export const ChienDichSchema = z.object({
     nhan: z.string(),
     chu: z.string(),
   }),
+  /** W064: phần đầu landing dùng khối cuộn 3D như trang chủ (ẩn hero/tiêu điểm/ra mắt cũ) */
+  cuon_3d: z.enum(["lopoe"]).optional(),
   khoi: z.array(KhoiLandingSchema),
 });

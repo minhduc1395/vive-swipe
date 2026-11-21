@@ -11,6 +11,7 @@ Mỗi job thuộc đúng 1 module. Một module chỉ 1 job đang làm cùng lú
 | deal | `components/deal/`, `lib/deals/`, `app/(khach)/deal/`, `app/(khach)/gio/` | be | [deal.md](deal.md) |
 | giu-hang | `lib/giu-hang/`, `lib/email/`, `app/(khach)/giu-hang/`, `app/api/` (trừ cron), `lib/qr.ts` | be | [giu-hang.md](giu-hang.md) |
 | noi-bo | `app/nhan-vien/`, `app/quan-tri/`, `lib/nhan-vien/`, `lib/admin/`, `app/api/cron/` | be | [noi-bo.md](noi-bo.md) |
+| tai-khoan | `app/(khach)/dang-nhap/`, `app/(khach)/tai-khoan/`, `components/tai-khoan/`, `lib/tai-khoan/` | be | [tai-khoan.md](tai-khoan.md) |
 | shared | `package.json`, `package-lock.json`, `next.config.ts`, `tsconfig.json`, `eslint.config.mjs`, `vitest.config.ts`, `playwright.config.ts`, `app/layout.tsx`, `app/globals.css`, `components/` gốc (AppShell, ThanhTren…), `lib/supabase/`, `supabase/migrations/`, `data/`, `docs/`, `design/`, `public/brand/`, `.github/`, `cloudbuild.yaml`, `Dockerfile`, `CLAUDE.md`, `AGENTS.md` | WEB | (không có gói) |
 
 `tests/`: mỗi job được thêm hoặc sửa file test của chính module mình (tên file theo module), không sửa test của module khác.
