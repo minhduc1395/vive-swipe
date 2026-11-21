@@ -8,6 +8,8 @@ import type { DonGiuHangChiTiet, TrangThaiGiuHang } from "@/lib/giu-hang/types";
 import type { PhienNhanVien } from "@/lib/nhan-vien/auth";
 import { actionCapNhatTrangThai, actionLayDanhSachDon } from "./actions";
 import { layTokenNhanVien } from "@/lib/nhan-vien/auth";
+import { useDuLieu } from "@/lib/du-lieu-context";
+import { tinhThuongNhanDon } from "@/lib/nhan-vien/thuong-giu-hang";
 
 interface Props {
   phien: PhienNhanVien;
@@ -28,11 +30,16 @@ export function BangNhanVien({ phien, onDangXuat }: Props) {
   const searchParams = useSearchParams();
   const maTuUrl = searchParams.get("ma")?.toUpperCase();
 
+  const { deals } = useDuLieu();
   const [danhSach, setDanhSach] = useState<DonGiuHangChiTiet[]>([]);
   const [loiTai, setLoiTai] = useState<string | null>(null);
   const [tuKhoa, setTuKhoa] = useState(maTuUrl || "");
   const [tabHienTai, setTabHienTai] = useState<TabTrangThai>("moi");
   const [maDangChon, setMaDangChon] = useState<string>(maTuUrl || "");
+  const [ngayHienTai, setNgayHienTai] = useState<string>("");
+  const [thoiDiemNhanMoi, setThoiDiemNhanMoi] = useState<Record<string, string>>(
+    {},
+  );
 
   const [isPending, startTransition] = useTransition();
 
@@ -42,6 +49,7 @@ export function BangNhanVien({ phien, onDangXuat }: Props) {
       try {
         const moi = await actionLayDanhSachDon(await layTokenNhanVien());
         setDanhSach(moi);
+        setNgayHienTai(new Date().toISOString());
         setLoiTai(null);
       } catch {
         setLoiTai(
@@ -107,6 +115,13 @@ export function BangNhanVien({ phien, onDangXuat }: Props) {
     );
   }, [danhSach, danhSachHienThi, maDangChon]);
 
+  const ngayNhanDon =
+    (donDangChon ? thoiDiemNhanMoi[donDangChon.ma] : undefined) || ngayHienTai;
+  const dongThuongNhan =
+    donDangChon?.trangThai === "da_lay" && ngayNhanDon
+      ? tinhThuongNhanDon(deals, ngayNhanDon)
+      : null;
+
   // Đổi trạng thái đơn hàng (Đã soạn / Đã lấy / Hủy)
   const handleDoiTrangThai = (trangThaiMoi: TrangThaiGiuHang) => {
     if (!donDangChon) return;
@@ -121,6 +136,12 @@ export function BangNhanVien({ phien, onDangXuat }: Props) {
       } catch {
         setLoiTai("Chưa lưu được trạng thái. Thử lại hoặc đăng nhập lại.");
         return;
+      }
+      if (trangThaiMoi === "da_lay") {
+        setThoiDiemNhanMoi((prev) => ({
+          ...prev,
+          [donDangChon.ma]: new Date().toISOString(),
+        }));
       }
       // Cập nhật state lạc quan
       setDanhSach((truoc) =>
@@ -417,8 +438,18 @@ export function BangNhanVien({ phien, onDangXuat }: Props) {
               là ước tính từ web.
             </p>
 
-            {/* 3 nút chuyển trạng thái */}
-            <div className="mt-auto pt-2 grid grid-cols-3 gap-2">
+            {/* 3 nút chuyển trạng thái và nhắc thưởng thêm */}
+            <div className="mt-auto pt-2 flex flex-col gap-2">
+              {dongThuongNhan && (
+                <div
+                  role="status"
+                  data-testid="thuong-giu-hang-nhan-vien"
+                  className="rounded-[14px] bg-vang-nhat border-[1.5px] border-den px-3.5 py-2.5 text-[14px] font-semibold text-den"
+                >
+                  {dongThuongNhan}
+                </div>
+              )}
+              <div className="grid grid-cols-3 gap-2">
               <button
                 type="button"
                 disabled={isPending || donDangChon.trangThai === "da_soan"}
@@ -443,6 +474,7 @@ export function BangNhanVien({ phien, onDangXuat }: Props) {
               >
                 Hủy
               </button>
+              </div>
             </div>
 
             {/* Lịch sử cập nhật */}
