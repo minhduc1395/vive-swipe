@@ -20,6 +20,7 @@ Repo code của web quẹt sản phẩm VIVE (kiểu Tinder). Claude = Lead (k�
   `git worktree add ../vive-swipe-media main`, rồi mở thư mục `vive-swipe-media` trong chat Media. Chép `.env.local` sang.
 - Chỉ sửa `scripts/media/`, `scripts/du_lieu/`, `media/`, task W035–W037, W047 và handoff của mình. Không sửa `app/`, `components/`, `lib/`, `data/`, `docs/`.
 - QA ảnh/video (BOD 21/11): Claude chỉ duyệt KỸ THUẬT: nét hay mờ, đúng tỷ lệ và kích thước, viền tách nền sạch, nền trong thật, đúng định dạng và dung lượng cho web (ảnh webp/avif, video H.264, tải nhanh trên điện thoại), chữ trong vùng an toàn, đúng mã sản phẩm. Nội dung và hình thức (bố cục, màu, chữ, cảm giác thương hiệu) do team Marketing duyệt, Claude không Fail vì lý do này.
+- Quy trình lên web (BOD 21/11, 2 bước): Media tải lên luôn để `cho_duyet` (KHÔNG tự đặt `duyet`, kể cả khi đạt hết tiêu chí tự duyệt cũ docs/06 mục 5) → Claude duyệt kỹ thuật, đạt thì `cho_mkt` và thêm dòng vào tab "Duyệt media web" của Team Hub → MKT chọn Duyệt/Sửa → Claude chỉ đặt `duyet` (lên web) cho dòng MKT đã Duyệt. Dòng MKT ghi Sửa: Claude chuyển ghi chú cho Media.
 - Quy trình, nguồn ảnh được phép, quy chuẩn: `docs/06-anh-va-video.md`.
 
 ## Lộ trình
