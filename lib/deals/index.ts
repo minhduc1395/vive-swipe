@@ -4,3 +4,4 @@ export * from "./goi-y-moc";
 export * from "./qua";
 export * from "./ghi-chu";
 export * from "./diem-deal";
+export * from "./ngon-ngu";

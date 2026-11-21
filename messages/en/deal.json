@@ -1,1 +1,132 @@
-{}
+{
+  "trang": {
+    "tieuDe": "Deals",
+    "tieuDeNhan": "for you",
+    "viBanThich": "Because you like",
+    "locDeal": "Filter deals",
+    "tatCa": "All",
+    "chuaCoDeal": "No deals are running today. Please check back later!",
+    "chiTietDeal": "Deal details: {ten}",
+    "chiTietDealChung": "Deal details"
+  },
+  "toast": {
+    "daThemCombo": "{ten} added to your cart!",
+    "daThemBo": "Set \"{ten}\" added to your cart!",
+    "emailKhongHopLe": "Please enter a valid email address!",
+    "daLuuEmail": "Your deal email has been saved!"
+  },
+  "email": {
+    "nhan": "Sign up for deals",
+    "tieuDe": "Get an email when something you like has a great deal",
+    "daDangKy": "Deals will be sent to:",
+    "doi": "Change",
+    "nhanO": "Email address for deals",
+    "goiY": "Enter your email...",
+    "dangKy": "Sign up",
+    "luuY": "We only write when there is a really good offer on products you care about. No spam."
+  },
+  "nhom": {
+    "qua": "Gift with purchase",
+    "combo": "Combo",
+    "giam": "Discount",
+    "muaNhieu": "Buy more",
+    "mayMan": "Lucky"
+  },
+  "nhanGiaiThich": {
+    "hot": "Hot deals",
+    "combo": "Combo savings"
+  },
+  "vanDe": {
+    "mun": "Acne",
+    "lo-chan-long": "Pores",
+    "sang-da": "Brightening",
+    "cap-am": "Hydration",
+    "lam-diu": "Soothing",
+    "chong-lao-hoa": "Anti-aging",
+    "chong-nang": "Sun care"
+  },
+  "tien": {
+    "nghin": "{so}K",
+    "trieu": "{so}M"
+  },
+  "tuKhoaSp": {
+    "suaRuaMat": "Cleanser",
+    "ampoule": "Ampoule",
+    "kemDuong": "Moisturizer",
+    "kem": "Cream"
+  },
+  "the": {
+    "gioiHanSoLuong": "Limited quantity",
+    "gioiHanQua": "Limited gifts",
+    "cacMocQua": "Gift tiers",
+    "tren": "Over",
+    "boGoiY": "{so} suggested sets for this tier",
+    "xemDieuKien": "See terms",
+    "themBo": "Add {ten}",
+    "themBoGoiY": "Add suggested set",
+    "xemGio": "View cart",
+    "tang": "Free {qua}",
+    "quaCo": "Gift: {qua}",
+    "themVaoGio": "Add to cart",
+    "xemSanPham": "View products"
+  },
+  "nganKeo": {
+    "dong": "Close deal details",
+    "chonMoc": "Choose a tier",
+    "moc": "Tier {tien}",
+    "chuaCoBo": "No suggested sets for this tier yet.",
+    "datMoc": "reaches the gift tier",
+    "themBo": "Add set",
+    "khiConQua": " (while gifts last)",
+    "hetQua": "Gifts gone: combo {gia}, no gift.",
+    "dieuKien": "Terms",
+    "khongCongVoi": "Cannot be combined with: {ds}.",
+    "apDungBooth": "Valid at the booth. Staff confirm at checkout.",
+    "xemSanPhamApDung": "View eligible products"
+  },
+  "ghiChu": {
+    "muaKem": "With purchase: now {gia}",
+    "coTrongGia": "In {ten} {gia}",
+    "coTrong": "In {ten}"
+  },
+  "gio": {
+    "tieuDe": "Cart",
+    "soMon": "{so} items",
+    "trong": "Your cart is empty. Swipe up to add quickly.",
+    "trongMoTa": "Swipe a card up while browsing, or tap the add button on the Catalog page.",
+    "batDauQuet": "Start swiping",
+    "xemDanhMuc": "View catalog",
+    "quaTheoHoaDon": "Gift with purchase",
+    "quaDuKienDai": "Expected gift: {qua}",
+    "moiHoaDon": "Each order gets 1 gift, the one with the highest value",
+    "them": "Plus: {qua}",
+    "mocTiep": "Add <b>{tien}</b> more to get <b>{qua}</b>",
+    "mocTiepNhan": "Add <b>{tien}</b> more of {nhan} to get <b>{qua}</b>",
+    "tienDo": "{hienTai} of the {muc} tier",
+    "dangCo": "You have {tien}",
+    "mocMucTieu": "Tier {tien}",
+    "goiYDaThich": "Suggested from your Liked list:",
+    "anhSanPham": "Product image",
+    "themNhanh": "+ Add",
+    "goiYDoiCombo": "Combo swap suggestion",
+    "goiYComboTieuDe": "Combo savings tip",
+    "doiSang": "Switch to {ten}",
+    "tietKiemThem": "Save {tiet} more (price {gia})",
+    "doiCombo": "Switch to combo",
+    "sanPhamTrongGio": "Items in cart",
+    "anhMucGio": "Cart item image",
+    "nhanCombo": "COMBO",
+    "giam25": "25% off with another item",
+    "giamSoLuong": "Decrease quantity",
+    "tangSoLuong": "Increase quantity",
+    "tomTat": "Order summary",
+    "tongTien": "Totals",
+    "tamTinh": "Subtotal at list price",
+    "banTietKiem": "You save",
+    "quaDuKien": "Expected gift",
+    "tongUocTinh": "Estimated total",
+    "luuY": "Prices and gifts are estimates. Staff confirm at checkout at the booth. Gifts are limited.",
+    "giuHang": "Reserve at booth",
+    "diaChiBooth": "Pay and pick up at VIVE, floor LL2, Union Square"
+  }
+}

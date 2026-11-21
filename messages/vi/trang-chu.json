@@ -1,1 +1,131 @@
-{}
+{
+  "chung": {
+    "sapRaMat": "Tính năng sắp ra mắt",
+    "xemDeal": "Xem deal ›",
+    "combo": {
+      "truoc": "Combo trước",
+      "tiepTheo": "Combo tiếp theo",
+      "danhSach": "Danh sách combo, trượt ngang"
+    },
+    "quaTang": "Tặng {qua}. Số lượng có hạn."
+  },
+  "trangChu": {
+    "tieuDe": "VIVE · K-Beauty Experience",
+    "moTa": "Mỹ phẩm nội địa Hàn tại VIVE Tầng LL2 Union Square, 171 Đồng Khởi, Phường Sài Gòn.",
+    "moTaMangXaHoi": "Mỹ phẩm nội địa Hàn tại VIVE Tầng LL2 Union Square, TP Hồ Chí Minh."
+  },
+  "lopoe": {
+    "tienTrinh": {
+      "suaRuaMat": "Sữa rửa mặt",
+      "ampoule": "Ampoule",
+      "kemDuong": "Kem dưỡng"
+    }
+  },
+  "landing": {
+    "tieuDeTrang": "{ten} · VIVE New Arrival",
+    "veNut": {
+      "xemCombo": "Xem combo"
+    },
+    "header": {
+      "veDauTrang": "VIVE New Arrival, về đầu trang",
+      "dieuHuong": "Điều hướng đầu trang",
+      "newArrival": "New Arrival",
+      "home": "Home",
+      "quet": "Quẹt",
+      "sanPham": "Sản phẩm",
+      "gio": "Giỏ",
+      "dangNhap": "Đăng nhập"
+    },
+    "hero": {
+      "aria": "Phần đầu chiến dịch"
+    },
+    "tieuDiem": {
+      "aria": "Tiêu điểm sản phẩm",
+      "khiMuaKem": "khi mua kèm"
+    },
+    "raMat": {
+      "aria": "Kệ ra mắt",
+      "khiConQua": "(khi còn quà)",
+      "themVaoGio": "Thêm vào giỏ",
+      "themVaoGioTen": "Thêm vào giỏ {ten}"
+    },
+    "chuongTrinh": {
+      "combo": "Combo",
+      "uuDaiSoLuong": "Ưu đãi số lượng",
+      "quaTang": "Quà tặng"
+    },
+    "demNguoc": {
+      "aria": "Đếm ngược",
+      "tieuDe": "Đếm ngược kết thúc",
+      "ngay": "Ngày",
+      "gio": "Giờ",
+      "phut": "Phút",
+      "giay": "Giây"
+    },
+    "doiTac": {
+      "aria": "Đối tác Pawlette",
+      "nhan": "TRẢI NGHIỆM TẠI BOOTH · PAWLETTE",
+      "tieuDe": "Tone bạn màu nào?",
+      "moTa": "Đo personal color cùng Pawlette, rồi thử lớp nền đúng tone ngay tại booth.",
+      "goi": "Gói trải nghiệm",
+      "nut": "Tìm hiểu Personal Color"
+    },
+    "video": {
+      "aria": "Video chiến dịch",
+      "dangCapNhat": "Video review đang được cập nhật",
+      "khongHoTro": "Trình duyệt của bạn không hỗ trợ video HTML5."
+    },
+    "booth": {
+      "aria": "Thông tin booth",
+      "gheBooth": "GHÉ BOOTH",
+      "chiDuong": "Chỉ đường",
+      "giuHang": "Giữ hàng trước khi đến",
+      "ngayCuoi": "đến 29/11"
+    },
+    "chuaCoChienDich": "Chưa có chiến dịch nào được cấu hình."
+  },
+  "personalColor": {
+    "tieuDeTrang": "Personal Color cùng Pawlette (bản tạm) · VIVE",
+    "moTaTrang": "Trải nghiệm đo tông Personal Color cùng Pawlette tại booth VIVE — tìm nhóm màu phù hợp làn da và chọn sản phẩm đúng tông.",
+    "nhan": "PAWLETTE × VIVE · BẢN TẠM",
+    "gioiThieu": "Tìm tông màu hợp làn da, rồi chọn son, phấn, lớp nền đúng tông.",
+    "datLich": "Đặt lịch tại booth",
+    "goi": "Gói trải nghiệm",
+    "banLa": "Bạn là",
+    "bonNhom": "4 nhóm màu",
+    "nhom": {
+      "xuan": {
+        "ten": "Xuân ấm",
+        "moTa": "Tông ấm, sáng, trong."
+      },
+      "ha": {
+        "ten": "Hạ mát",
+        "moTa": "Tông lạnh, nhạt, dịu."
+      },
+      "thu": {
+        "ten": "Thu ấm",
+        "moTa": "Tông ấm, trầm, đậm."
+      },
+      "dong": {
+        "ten": "Đông lạnh",
+        "moTa": "Tông lạnh, rõ, tương phản cao."
+      }
+    },
+    "traiNghiem": "Trải nghiệm tại booth",
+    "buoc": {
+      "1": {
+        "tieuDe": "Đo tông",
+        "moTa": "Chuyên viên Pawlette đặt các dải vải màu sát mặt để xem tông nào làm da sáng hơn."
+      },
+      "2": {
+        "tieuDe": "Nhận bảng màu",
+        "moTa": "Bạn biết mình thuộc nhóm nào và những màu nên chọn. [Nội dung gói do Pawlette xác nhận]"
+      },
+      "3": {
+        "tieuDe": "Thử ngay lớp nền",
+        "moTa": "Sang tủ trang điểm bên cạnh thử lớp lót và tông nền hợp nhóm màu của bạn."
+      }
+    },
+    "ghiChu": "Thời lượng, số khách mỗi khung giờ, nội dung gói: chờ Pawlette cung cấp."
+  }
+}

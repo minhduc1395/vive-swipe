@@ -2,10 +2,12 @@
 import { lopNut } from "@/components/ui/Nut";
 
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import { dichDeal } from "@/lib/chien-dich/dich-den";
 import type { KhoiRaMat as KhoiRaMatType } from "@/lib/chien-dich/types";
 import { timDealTheoId, timSanPhamTheoId } from "@/lib/data";
-import { dinhDangTienGio } from "@/lib/dinh-dang";
+import { dinhDangGia } from "@/lib/dinh-dang";
+import { chuTheoNgonNgu } from "@/lib/trang-chu/ngon-ngu";
 import { themComboVaoGio } from "@/lib/kho-luu-tru";
 
 interface KhoiRaMatProps {
@@ -16,6 +18,8 @@ interface KhoiRaMatProps {
 
 export function KhoiRaMat({ khoi, phang = false }: KhoiRaMatProps) {
   const { tieu_de, mo_ta, deal: dealIds = [] } = khoi;
+  const t = useTranslations("trang-chu.landing.raMat");
+  const ngonNgu = useLocale();
 
   const resolvedDeals = dealIds
     .map((id) => timDealTheoId(id))
@@ -28,7 +32,7 @@ export function KhoiRaMat({ khoi, phang = false }: KhoiRaMatProps) {
     <section
       id="ke-ra-mat"
       data-k={phang ? undefined : "2"}
-      aria-label="Kệ ra mắt"
+      aria-label={t("aria")}
       className={phang ? "relative z-10 px-5 md:px-16 py-20 md:py-28 flex justify-center" : "vq-k trai relative z-10"}
     >
       <div className={phang ? "w-full max-w-[640px] flex flex-col gap-3.5 md:gap-4" : "cot flex flex-col gap-3.5 md:gap-4"}>
@@ -55,11 +59,11 @@ export function KhoiRaMat({ khoi, phang = false }: KhoiRaMatProps) {
               >
                 <div className="min-w-0 flex-1 basis-[200px] flex flex-col gap-0.5">
                   <Link href={dichDeal(d.id)} className="text-[15px] lg:text-[16px] font-semibold text-den leading-snug no-underline hover:underline underline-offset-4">
-                    {d.ten}
+                    {chuTheoNgonNgu(d, "ten", ngonNgu)}
                   </Link>
                   {d.qua && (
                     <span className="text-[12px] text-xam leading-snug">
-                      {d.qua} (khi còn quà)
+                      {chuTheoNgonNgu(d, "qua", ngonNgu)} {t("khiConQua")}
                     </span>
                   )}
                 </div>
@@ -67,11 +71,11 @@ export function KhoiRaMat({ khoi, phang = false }: KhoiRaMatProps) {
                 <div className="shrink-0 ml-auto flex items-center gap-2.5">
                   <div className="text-right flex flex-col">
                     <b className="text-[18px] lg:text-[20px] font-bold text-den leading-none">
-                      {dinhDangTienGio(giaBan)}
+                      {dinhDangGia(giaBan, ngonNgu)}
                     </b>
                     {giaGoc > giaBan && (
                       <s className="text-[12px] text-xam mt-0.5">
-                        {dinhDangTienGio(giaGoc)}
+                        {dinhDangGia(giaGoc, ngonNgu)}
                       </s>
                     )}
                   </div>
@@ -79,10 +83,10 @@ export function KhoiRaMat({ khoi, phang = false }: KhoiRaMatProps) {
                   <Link
                     href="/gio"
                     onClick={() => themComboVaoGio(d.id, 1)}
-                    aria-label={`Thêm vào giỏ ${d.ten}`}
+                    aria-label={t("themVaoGioTen", { ten: chuTheoNgonNgu(d, "ten", ngonNgu) ?? d.ten })}
                     className={lopNut("chinh","nho")}
                   >
-                    Thêm vào giỏ
+                    {t("themVaoGio")}
                   </Link>
                 </div>
               </div>

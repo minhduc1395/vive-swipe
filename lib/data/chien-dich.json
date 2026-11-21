@@ -33,10 +33,12 @@
         "nut": [
           {
             "chu": "Xem bộ sản phẩm",
+            "chu_en": "View the set",
             "den": "/danh-muc?thuong-hieu=LOPOE"
           },
           {
             "chu": "Giữ hàng tại booth",
+            "chu_en": "Reserve at the booth",
             "den": "/gio"
           }
         ],
@@ -138,6 +140,7 @@
           "~Ampoule"
         ],
         "mo_ta": "Tinh chất Better Balance Ampoule 50ml thuộc bộ ba LOPOE Better Balance (da khô · cấp ẩm).",
+        "mo_ta_en": "Better Balance Ampoule 50ml, part of the LOPOE Better Balance trio (dry skin · hydration).",
         "san_pham_id": "LOPOE-AMP",
         "deal_id": "LOPOE-25",
         "cta_chinh": {
@@ -233,12 +236,15 @@
       {
         "loai": "bang-chu",
         "chu": "BETTER BALANCE · NỘI ĐỊA HÀN · MỚI TẠI VIVE · LL2 UNION SQUARE · ",
+        "chu_en": "BETTER BALANCE · KOREAN BRANDS · NEW AT VIVE · LL2 UNION SQUARE · ",
         "mau_nen": "#E8D2CC"
       },
       {
         "loai": "ra-mat",
         "tieu_de": "Đủ bộ, đỡ tốn.",
+        "tieu_de_en": "The full set, for less.",
         "mo_ta": "Giá combo cố định, không cộng thêm giảm 25%. Hết quà thì combo về giá không quà.",
+        "mo_ta_en": "Fixed combo prices, not stackable with the 25% discount. When gifts run out, the combo reverts to its no-gift price.",
         "deal": [
           "LOPOE-COMBO-2SRM",
           "LOPOE-COMBO-KEM-AMP",
@@ -408,10 +414,12 @@
         "nut": [
           {
             "chu": "Khám phá sản phẩm",
+            "chu_en": "Discover products",
             "den": "/danh-muc"
           },
           {
             "chu": "Xem giỏ hàng",
+            "chu_en": "View cart",
             "den": "/gio"
           }
         ],
@@ -468,6 +476,7 @@
           "~Ampoule"
         ],
         "mo_ta": "Tinh chất Better Balance Ampoule 50ml tại booth VIVE Tầng LL2 Union Square.",
+        "mo_ta_en": "Better Balance Ampoule 50ml at the VIVE booth, Level LL2, Union Square.",
         "san_pham_id": "LOPOE-AMP",
         "deal_id": "LOPOE-25",
         "cta_chinh": {

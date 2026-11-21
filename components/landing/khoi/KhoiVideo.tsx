@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import type { KhoiVideo } from "@/lib/chien-dich/types";
 
 interface KhoiVideoProps {
@@ -5,13 +6,14 @@ interface KhoiVideoProps {
 }
 
 export function KhoiVideo({ khoi }: KhoiVideoProps) {
+  const t = useTranslations("trang-chu.landing.video");
   const { tieu_de, mp4, webm, anh_bia, dinh_dang = "ngang" } = khoi;
 
   const isDoc = dinh_dang === "doc";
 
   return (
     <section
-      aria-label="Video chiến dịch"
+      aria-label={t("aria")}
       className="relative z-10 bg-white py-16 px-5 sm:px-8 md:px-16"
     >
       <div className="max-w-[1100px] mx-auto flex flex-col items-center gap-6 text-center">
@@ -36,7 +38,7 @@ export function KhoiVideo({ khoi }: KhoiVideoProps) {
             >
               {mp4 && <source src={mp4} type="video/mp4" />}
               {webm && <source src={webm} type="video/webm" />}
-              Trình duyệt của bạn không hỗ trợ video HTML5.
+              {t("khongHoTro")}
             </video>
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center bg-linear-to-b from-hong-nhat to-bac-ha-nhat text-xam p-6">
@@ -51,7 +53,7 @@ export function KhoiVideo({ khoi }: KhoiVideoProps) {
                   <path d="M8 5v14l11-7z" />
                 </svg>
               </span>
-              <p className="m-0 text-[14px]">Video review đang được cập nhật</p>
+              <p className="m-0 text-[14px]">{t("dangCapNhat")}</p>
             </div>
           )}
         </div>

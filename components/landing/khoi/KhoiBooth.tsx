@@ -1,5 +1,6 @@
 import { lopNut } from "@/components/ui/Nut";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import type { KhoiBooth } from "@/lib/chien-dich/types";
 import { CAU_HINH_BOOTH } from "@/lib/cau-hinh";
 import { DOANH_NGHIEP } from "@/lib/data";
@@ -9,23 +10,24 @@ interface KhoiBoothProps {
 }
 
 export function KhoiBooth({ khoi }: KhoiBoothProps) {
+  const t = useTranslations("trang-chu.landing.booth");
   const {
     tieu_de = "VIVE | K-Beauty Experience",
     dia_chi = CAU_HINH_BOOTH.diaChiDayDu,
     gio = CAU_HINH_BOOTH.gioMoCua,
-    ngay_cuoi = "đến 29/11",
+    ngay_cuoi = t("ngayCuoi"),
   } = khoi;
 
   return (
     <section
       id="booth"
-      aria-label="Thông tin booth"
+      aria-label={t("aria")}
       className="relative z-10 bg-hong-nhat text-den overflow-hidden py-20 sm:py-24 px-5 sm:px-8 md:px-16"
     >
       <div className="max-w-[1360px] mx-auto flex flex-col md:flex-row md:items-end justify-between gap-10">
         <div className="flex flex-col gap-3 max-w-[640px]">
           <span className="text-[13px] md:text-[14px] font-bold tracking-[1.5px] text-xam uppercase">
-            GHÉ BOOTH
+            {t("gheBooth")}
           </span>
 
           <span
@@ -89,7 +91,7 @@ export function KhoiBooth({ khoi }: KhoiBoothProps) {
             rel="noopener noreferrer"
             className={lopNut("chinh","lon")}
           >
-            Chỉ đường
+            {t("chiDuong")}
             <svg
               width="18"
               height="18"
@@ -110,7 +112,7 @@ export function KhoiBooth({ khoi }: KhoiBoothProps) {
             href="/gio"
             className={lopNut("phu","lon")}
           >
-            Giữ hàng trước khi đến
+            {t("giuHang")}
           </Link>
         </div>
       </div>

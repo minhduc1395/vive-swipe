@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
 import type { CauHinhLopoe3D, KhoiChu3D } from "@/lib/thu-nghiem/lopoe-3d";
 import { lopNut } from "@/components/ui/Nut";
@@ -10,12 +11,16 @@ type Nut3D = { chu: string; den: string | null };
 /** Cách vẽ nút: trang chủ truyền NutTrangChu để giữ đúng kiểu nút landing; mặc định dùng nút chung (W040). */
 export type VeNut3D = (n: Nut3D, thuTu: number) => ReactNode;
 
-const veNutMacDinh: VeNut3D = (n, i) =>
-  n.den ? (
-    <Link key={n.chu} href={n.den} prefetch={false} className={i === 0 ? lopNut("chinh", "vua") : lopNut("chu", "vua")}>{n.chu}</Link>
+function NutMacDinh({ n, i }: { n: Nut3D; i: number }) {
+  const t = useTranslations("trang-chu.chung");
+  const lop = i === 0 ? lopNut("chinh", "vua") : lopNut("chu", "vua");
+  return n.den ? (
+    <Link href={n.den} prefetch={false} className={lop}>{n.chu}</Link>
   ) : (
-    <button key={n.chu} type="button" data-sap-co="true" onClick={() => hienToast("Tính năng sắp ra mắt")} className={i === 0 ? lopNut("chinh", "vua") : lopNut("chu", "vua")}>{n.chu}</button>
+    <button type="button" data-sap-co="true" onClick={() => hienToast(t("sapRaMat"))} className={lop}>{n.chu}</button>
   );
+}
+const veNutMacDinh: VeNut3D = (n, i) => <NutMacDinh key={n.chu} n={n} i={i} />;
 import type { Canh, LoaiHat } from "./canh";
 
 const kep = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
@@ -130,6 +135,7 @@ function BanTinh({ cfg, id }: { cfg: CauHinhLopoe3D; id?: string }) {
 }
 
 export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLopoe3D; id?: string; veNut?: VeNut3D }) {
+  const tTienTrinh = useTranslations("trang-chu.lopoe.tienTrinh");
   const doan = useRef<HTMLElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const lop = useRef<HTMLDivElement>(null);
@@ -434,7 +440,7 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
           <div data-nhom-nhan="srm">{cfg.thanh_phan.sua_rua_mat.map((t) => <NhanThanhPhan key={t.ten} ten={t.ten} loi={t.loi} giua />)}</div>
           <div data-nhom-nhan="amp">{cfg.thanh_phan.ampoule.map((t) => <NhanThanhPhan key={t.ten} ten={t.ten} loi={t.loi} giua={false} />)}</div>
           <div data-tien-trinh aria-hidden="true" className="hidden md:grid absolute right-7 top-1/2 -translate-y-1/2 gap-3.5 opacity-0">
-            {["Sữa rửa mặt", "Ampoule", "Kem dưỡng"].map((t) => (
+            {[tTienTrinh("suaRuaMat"), tTienTrinh("ampoule"), tTienTrinh("kemDuong")].map((t) => (
               <div key={t} data-dong className="flex items-center justify-end gap-2.5 text-[11px] tracking-[0.06em] text-xam">
                 {t}
                 <i className="relative w-[3px] h-[34px] rounded-sm bg-den/15 overflow-hidden"><span data-vach className="absolute inset-0 bg-den origin-top scale-y-0" /></i>

@@ -4,7 +4,11 @@
 
 Đọc `AGENTS.md`, `docs/00-ke-hoach.md` và `docs/05-lo-trinh-hoan-thien.md` trước khi làm. Vai trò của Claude: giữ kế hoạch, `docs/`, `data/`, Task Board; tạo và cấu hình Supabase (MCP); QA và merge PR của Antigravity; đồng bộ luật giá và deal từ project Claude "VIVE pop up" (doc khuyến mãi, bảng giá, chương trình LOPOE) sang `data/`.
 
-Vai trò (BOD 21/11): Claude là trưởng nhóm, KHÔNG phải người làm chính. Mặc định chia việc thành job cho đội coder (GitHub Issue) và task W cho Antigravity / Antigravity Media; Claude chỉ lập kế hoạch, viết đặc tả, duyệt (QA, migration, bảo mật), gộp PR, giữ dữ liệu `data/` và file dùng chung, và gỡ vướng. Tự code chỉ khi: việc dùng chung nhỏ chặn cả nhóm, sửa khẩn trên web thật, hoặc cần máy/công cụ mà nhóm không có. Trước khi tự làm một việc lớn hơn ~30 phút, hỏi: giao được cho ai không?
+Vai trò (BOD 21/11): Claude là trưởng nhóm, KHÔNG phải người làm chính. Mặc định chia việc thành job cho đội coder (GitHub Issue) và task W cho Antigravity / Antigravity Media; Claude chỉ lập kế hoạch, viết đặc tả, duyệt (QA, migration, bảo mật), gộp PR, giữ dữ liệu `data/` và file dùng chung, và gỡ vướng. Tự code chỉ khi: không còn ai làm được, BOD báo cần ngay, hoặc cần máy/công cụ mà nhóm không có. Trước khi tự làm một việc lớn hơn ~30 phút, hỏi: giao được cho ai không?
+
+Cách nhận việc từ BOD (BOD 22/11, luật cứng): BOD nói "làm đi", "sửa lại", "xử lý" nghĩa là CHO TEAM LÀM, không phải Claude làm. Luôn chia việc trước (Antigravity trước, đội coder sau), rồi Claude quản lý, duyệt và merge. Claude chỉ tự làm khi không còn ai làm được, hoặc khi BOD báo rõ là cần ngay ("cần liền"). QA: có thời gian thì để lịch QA của team làm; Claude chỉ tự QA khi gấp hoặc khi team QA đang bận QA việc khác.
+
+Ưu tiên giao việc (BOD 22/11): Antigravity tự chạy mỗi 2 tiếng, nên giao Antigravity trước (task W, nhất là việc khẩn và việc lõi), đội coder nhận phần còn lại hoặc việc chạy song song ở module khác. Không giao cùng một file cho cả hai bên cùng lúc.
 
 Thứ tự giao việc (QD-BOD-061, 22/11): BOD giao việc gì thì WEB giao lại ngay, **ưu tiên Antigravity** (task W + handoff giao-viec), rồi tới **đội coder** (job GitHub Issue). Chỉ tự làm khi không đội nào rảnh, hoặc đã giao mà **quá 3 tiếng chưa ai nhận** (task W chưa sang Doing / chưa có handoff nhan-viec; job chưa có CLAIM). Tự làm thì ghi rõ lý do trong Nhật ký Team Hub.
 

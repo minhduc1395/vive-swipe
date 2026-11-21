@@ -2,12 +2,14 @@
 
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import type { SanPham, Deal } from "@/lib/data";
 import { KhungChiTiet } from "@/components/ui/KhungChiTiet";
 import { lopChip } from "@/components/ui/Nhan";
-import { TheDeal, TEN_NHOM, nhomCuaDeal, type NhomDeal } from "@/components/deal/TheDeal";
+import { TheDeal, tenNhom, nhomCuaDeal, type NhomDeal } from "@/components/deal/TheDeal";
 import { NganKeoDeal } from "@/components/deal/NganKeoDeal";
 import { useDuLieu } from "@/lib/du-lieu-context";
+import { tenDeal } from "@/lib/deals/ngon-ngu";
 import {
   layDanhSachDealChoBan,
   trichXuatNhanGiaiThich,
@@ -24,6 +26,8 @@ import {
 const KHOA_EMAIL_DEAL = "vive_email_deal";
 
 function NoiDungDeal() {
+  const t = useTranslations("deal");
+  const nn = useLocale();
   const { sanPham, deals } = useDuLieu();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -83,9 +87,9 @@ function NoiDungDeal() {
   }, [daSanSang, hoSo, sanPhamMap, daThich, gioHang, deals]);
 
   const nhanGiaiThich = useMemo(() => {
-    if (!daSanSang) return ["Ưu đãi hot", "Cấp ẩm", "Combo tiết kiệm"];
-    return trichXuatNhanGiaiThich(hoSo, daThich, sanPhamMap);
-  }, [daSanSang, hoSo, daThich, sanPhamMap]);
+    if (!daSanSang) return [t("nhanGiaiThich.hot"), t("vanDe.cap-am"), t("nhanGiaiThich.combo")];
+    return trichXuatNhanGiaiThich(hoSo, daThich, sanPhamMap, t);
+  }, [daSanSang, hoSo, daThich, sanPhamMap, t]);
 
   const hienToast = (noiDung: string) => {
     setThongBaoToast(noiDung);
@@ -96,7 +100,7 @@ function NoiDungDeal() {
 
   const handleThemCombo = (deal: Deal) => {
     themComboVaoGio(deal.id, 1);
-    hienToast(`Đã thêm ${deal.ten} vào giỏ!`);
+    hienToast(t("toast.daThemCombo", { ten: tenDeal(deal, nn) }));
   };
 
   const handleThemBoGoiY = (
@@ -106,7 +110,7 @@ function NoiDungDeal() {
     for (const id of danhSachId) {
       themVaoGio(id, 1);
     }
-    hienToast(`Đã thêm bộ "${tenBo}" vào giỏ!`);
+    hienToast(t("toast.daThemBo", { ten: tenBo }));
   };
 
   // Bộ lọc + ?id= (W041): mở ngăn kéo chi tiết, cuộn tới thẻ; đóng hoặc Back thì bỏ id
@@ -135,7 +139,7 @@ function NoiDungDeal() {
     if (e) e.preventDefault();
     const emailSach = emailInput.trim();
     if (!emailSach || !emailSach.includes("@")) {
-      hienToast("Vui lòng nhập địa chỉ email hợp lệ!");
+      hienToast(t("toast.emailKhongHopLe"));
       return;
     }
     try {
@@ -145,7 +149,7 @@ function NoiDungDeal() {
     }
     setEmailDaDangKy(emailSach);
     setEmailInput("");
-    hienToast("Đã lưu email nhận deal của bạn!");
+    hienToast(t("toast.daLuuEmail"));
   };
 
   return (
@@ -164,13 +168,13 @@ function NoiDungDeal() {
         {/* Tiêu đề & Tags giải thích theo hồ sơ */}
         <header className="px-5 md:px-8 pt-7 pb-2 flex flex-col gap-2.5">
           <h1 className="tieu-de-trang">
-            Deal{" "}
+            {t("trang.tieuDe")}{" "}
             <span className="bg-oliu-nhat px-1 py-0.5 rounded-md">
-              cho bạn
+              {t("trang.tieuDeNhan")}
             </span>
           </h1>
           <div className="flex flex-wrap items-center gap-1.5 text-[13px]">
-            <span className="text-xam">Vì bạn thích</span>
+            <span className="text-xam">{t("trang.viBanThich")}</span>
             {nhanGiaiThich.map((nhan) => (
               <span
                 key={nhan}
@@ -183,14 +187,14 @@ function NoiDungDeal() {
         </header>
 
         {/* Bộ lọc theo nhóm */}
-        <div className="px-5 md:px-8 pt-2 pb-1 flex gap-2 overflow-x-auto [scrollbar-width:none]" role="group" aria-label="Lọc deal">
+        <div className="px-5 md:px-8 pt-2 pb-1 flex gap-2 overflow-x-auto [scrollbar-width:none]" role="group" aria-label={t("trang.locDeal")}>
           {(["", "qua", "combo", "giam"] as const).map((n) => {
             const on = nhomUrl === n;
             const dem = n ? dealsChoBan.filter((d) => nhomCuaDeal(d) === n).length : dealsChoBan.length;
             if (n && dem === 0) return null;
             return (
               <button key={n || "tat-ca"} type="button" aria-pressed={on} onClick={() => doiUrl({ nhom: n }, true)} className={lopChip(on)}>
-                {n ? TEN_NHOM[n] : "Tất cả"} · {dem}
+                {n ? tenNhom(n, t) : t("trang.tatCa")} · {dem}
               </button>
             );
           })}
@@ -200,7 +204,7 @@ function NoiDungDeal() {
         <div className="px-4 md:px-8 pt-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 items-stretch">
           {dealsHienThi.length === 0 ? (
             <div className="md:col-span-2 xl:col-span-3 rounded-[20px] bg-kem p-6 text-center text-xam">
-              Hiện chưa có deal nào đang chạy hôm nay. Vui lòng quay lại sau!
+              {t("trang.chuaCoDeal")}
             </div>
           ) : (
             dealsHienThi.map((deal) => (
@@ -218,7 +222,7 @@ function NoiDungDeal() {
 
           {/* Ô đăng ký email */}
           <section
-            aria-label="Đăng ký nhận deal"
+            aria-label={t("email.nhan")}
             className="md:col-span-2 xl:col-span-3 rounded-[22px] bg-kem p-5 flex flex-col gap-2.5 mt-2"
           >
             <div className="flex items-center gap-2">
@@ -238,21 +242,21 @@ function NoiDungDeal() {
                 <polyline points="22,6 12,13 2,6" />
               </svg>
               <h2 className="m-0 text-[15px] font-semibold text-den">
-                Nhận email khi món bạn thích có deal tốt
+                {t("email.tieuDe")}
               </h2>
             </div>
 
             {emailDaDangKy ? (
               <div className="rounded-xl bg-trang p-3 text-[13px] text-den flex items-center justify-between gap-2 border border-vien">
                 <span>
-                  Đã đăng ký nhận deal tới: <strong>{emailDaDangKy}</strong>
+                  {t("email.daDangKy")} <strong>{emailDaDangKy}</strong>
                 </span>
                 <button
                   type="button"
                   onClick={() => setEmailDaDangKy(null)}
                   className="text-[12px] text-xam underline hover:text-den cursor-pointer bg-transparent border-none p-0"
                 >
-                  Đổi
+                  {t("email.doi")}
                 </button>
               </div>
             ) : (
@@ -261,14 +265,14 @@ function NoiDungDeal() {
                 className="flex items-center gap-2"
               >
                 <label htmlFor="input-email-deal" className="sr-only">
-                  Địa chỉ email nhận deal
+                  {t("email.nhanO")}
                 </label>
                 <input
                   id="input-email-deal"
                   type="email"
                   value={emailInput}
                   onChange={(e) => setEmailInput(e.target.value)}
-                  placeholder="Nhập email của bạn..."
+                  placeholder={t("email.goiY")}
                   required
                   className="flex-1 min-w-0 h-11 px-3.5 rounded-xl border border-transparent bg-trang text-[14px] text-den focus:outline-none focus:border-hong"
                 />
@@ -277,17 +281,17 @@ function NoiDungDeal() {
                   onClick={handleDangKyEmail}
                   className="h-11 px-4 rounded-xl bg-be text-den font-semibold text-[14px] cursor-pointer hover:opacity-95 shrink-0 border-none transition-opacity"
                 >
-                  Đăng ký
+                  {t("email.dangKy")}
                 </button>
               </form>
             )}
             <p className="m-0 text-[11px] text-xam">
-              Chỉ gửi khi có ưu đãi thật sự tốt cho sản phẩm bạn quan tâm. Không spam.
+              {t("email.luuY")}
             </p>
           </section>
         </div>
 
-        <KhungChiTiet mo={dealDangMo !== null} onDong={dongDeal} nhan={dealDangMo ? `Chi tiết deal ${dealDangMo.ten}` : "Chi tiết deal"}>
+        <KhungChiTiet mo={dealDangMo !== null} onDong={dongDeal} nhan={dealDangMo ? t("trang.chiTietDeal", { ten: tenDeal(dealDangMo, nn) }) : t("trang.chiTietDealChung")}>
           {dealDangMo && (
             <NganKeoDeal deal={dealDangMo} sanPhamMap={sanPhamMap} onDong={dongDeal} onThemCombo={handleThemCombo} onThemBo={handleThemBoGoiY} />
           )}

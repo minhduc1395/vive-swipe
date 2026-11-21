@@ -3,17 +3,21 @@ import { lopNut } from "@/components/ui/Nut";
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import type { KhoiDoiTac } from "@/lib/chien-dich/types";
-import { dinhDangTien } from "@/lib/dinh-dang";
+import { dinhDangGiaLanding } from "@/lib/trang-chu/dinh-dang";
 
 interface KhoiDoiTacProps {
   khoi: KhoiDoiTac;
 }
 
 export function KhoiDoiTac({ khoi }: KhoiDoiTacProps) {
+  const t = useTranslations("trang-chu.landing.doiTac");
+  const tMau = useTranslations("trang-chu.personalColor.nhom");
+  const ngonNgu = useLocale();
   const {
-    tieu_de = "Tone bạn màu nào?",
-    mo_ta = "Đo personal color cùng Pawlette, rồi thử lớp nền đúng tone ngay tại booth.",
+    tieu_de = t("tieuDe"),
+    mo_ta = t("moTa"),
     gia_goi = 378000,
     link = "/personal-color",
   } = khoi;
@@ -42,7 +46,7 @@ export function KhoiDoiTac({ khoi }: KhoiDoiTacProps) {
     <section
       ref={sectionRef}
       id="personal-color"
-      aria-label="Đối tác Pawlette"
+      aria-label={t("aria")}
       className="relative z-10 bg-white overflow-x-clip py-20 sm:py-24 px-5 sm:px-8 md:px-16"
     >
       <div className="max-w-[1360px] mx-auto flex flex-col md:flex-row items-center justify-between gap-8 md:gap-16">
@@ -61,7 +65,7 @@ export function KhoiDoiTac({ khoi }: KhoiDoiTacProps) {
             <span className="flex-2 rounded-xl bg-[#F6C9A9]" />
             <span className="flex-1 rounded-xl bg-[#F9E0A8]" />
             <span className="text-[12px] font-bold text-center text-den mt-1">
-              Xuân ấm
+              {tMau("xuan.ten")}
             </span>
           </div>
 
@@ -75,7 +79,7 @@ export function KhoiDoiTac({ khoi }: KhoiDoiTacProps) {
             <span className="flex-2 rounded-xl bg-[#C9D6EA]" />
             <span className="flex-1 rounded-xl bg-[#E7C6D9]" />
             <span className="text-[12px] font-bold text-center text-den mt-1">
-              Hạ mát
+              {tMau("ha.ten")}
             </span>
           </div>
 
@@ -89,7 +93,7 @@ export function KhoiDoiTac({ khoi }: KhoiDoiTacProps) {
             <span className="flex-2 rounded-xl bg-[#C98B5E]" />
             <span className="flex-1 rounded-xl bg-[#D6B46A]" />
             <span className="text-[12px] font-bold text-center text-den mt-1">
-              Thu ấm
+              {tMau("thu.ten")}
             </span>
           </div>
 
@@ -103,7 +107,7 @@ export function KhoiDoiTac({ khoi }: KhoiDoiTacProps) {
             <span className="flex-2 rounded-xl bg-[#2F3A66]" />
             <span className="flex-1 rounded-xl bg-[#B3264B]" />
             <span className="text-[12px] font-bold text-center text-den mt-1">
-              Đông lạnh
+              {tMau("dong.ten")}
             </span>
           </div>
         </div>
@@ -111,7 +115,7 @@ export function KhoiDoiTac({ khoi }: KhoiDoiTacProps) {
         {/* Text and Info */}
         <div className="flex-1 max-w-[540px] flex flex-col gap-5">
           <span className="text-[13px] md:text-[14px] font-bold tracking-[1.5px] text-xam uppercase">
-            TRẢI NGHIỆM TẠI BOOTH · PAWLETTE
+            {t("nhan")}
           </span>
           <h2 className="m-0 font-bold text-[40px] sm:text-[54px] md:text-[68px] leading-[0.95] tracking-[-0.04em] text-den">
             {tieu_de}
@@ -122,9 +126,9 @@ export function KhoiDoiTac({ khoi }: KhoiDoiTacProps) {
 
           {gia_goi > 0 && (
             <div className="flex items-baseline gap-2.5">
-              <span className="text-[15px] text-xam">Gói trải nghiệm</span>
+              <span className="text-[15px] text-xam">{t("goi")}</span>
               <span className="text-[28px] sm:text-[32px] font-bold text-den">
-                {dinhDangTien(gia_goi)}
+                {dinhDangGiaLanding(gia_goi, ngonNgu)}
               </span>
             </div>
           )}
@@ -133,7 +137,7 @@ export function KhoiDoiTac({ khoi }: KhoiDoiTacProps) {
             href={link}
             className={lopNut("chinh","lon") + " self-start"}
           >
-            Tìm hiểu Personal Color
+            {t("nut")}
             <svg
               width="20"
               height="20"

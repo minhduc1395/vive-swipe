@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { layGioHang } from "@/lib/kho-luu-tru";
 import { LogoVive } from "@/components/LogoVive";
@@ -12,6 +13,7 @@ interface LandingHeaderProps {
 export function LandingHeader({
   scrolled: initialScrolled = false,
 }: LandingHeaderProps) {
+  const t = useTranslations("trang-chu.landing.header");
   const [scrolled, setScrolled] = useState(initialScrolled);
   const [soMonGio, setSoMonGio] = useState(0);
 
@@ -46,14 +48,14 @@ export function LandingHeader({
       <Link
         href="/"
         className="flex items-center h-10 shrink-0"
-        aria-label="VIVE New Arrival, về đầu trang"
+        aria-label={t("veDauTrang")}
       >
         <LogoVive rong={52} />
       </Link>
 
       {/* Thanh gọn điện thoại (< 768px) */}
       <nav
-        aria-label="Điều hướng đầu trang"
+        aria-label={t("dieuHuong")}
         className="ml-auto flex items-center gap-0.5 flex-wrap"
       >
         <Link
@@ -61,25 +63,25 @@ export function LandingHeader({
           aria-current="page"
           className="h-10 px-2.5 rounded-full flex items-center text-[13px] font-bold text-den bg-transparent underline decoration-2 underline-offset-[6px] decoration-hong"
         >
-          New Arrival
+          {t("newArrival")}
         </Link>
         <Link
           href="/"
           className="hidden md:flex h-11 px-3.5 rounded-full items-center text-[15px] font-medium text-den hover:bg-white/60 transition-colors"
         >
-          Home
+          {t("home")}
         </Link>
         <Link
           href="/quet"
           className="hidden md:flex h-11 px-3.5 rounded-full items-center text-[15px] font-medium text-den hover:bg-white/60 transition-colors"
         >
-          Quẹt
+          {t("quet")}
         </Link>
         <Link
           href="/danh-muc"
           className="hidden md:flex h-11 px-3.5 rounded-full items-center text-[15px] font-medium text-den hover:bg-white/60 transition-colors"
         >
-          Sản phẩm
+          {t("sanPham")}
         </Link>
         <Link
           href="/gio"
@@ -99,13 +101,13 @@ export function LandingHeader({
             <line x1="3" y1="6" x2="21" y2="6" />
             <path d="M16 10a4 4 0 0 1-8 0" />
           </svg>
-          Giỏ {soMonGio > 0 && `· ${soMonGio}`}
+          {t("gio")} {soMonGio > 0 && `· ${soMonGio}`}
         </Link>
         <Link
           href="/dang-nhap"
           className="relative h-8 md:h-11 px-3 md:px-5 ml-1 rounded-full bg-hong-nhat text-den border border-transparent flex items-center text-[13px] md:text-[14px] font-semibold hover:opacity-90 transition-colors after:content-[''] after:absolute after:-inset-y-[6px] after:-inset-x-[2px] md:after:hidden"
         >
-          Đăng nhập
+          {t("dangNhap")}
         </Link>
       </nav>
     </header>

@@ -1,8 +1,10 @@
 import { lopNut } from "@/components/ui/Nut";
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import type { KhoiTieuDiem as KhoiTieuDiemType } from "@/lib/chien-dich/types";
 import { timDealTheoId, timSanPhamTheoId } from "@/lib/data";
-import { dinhDangTienGio } from "@/lib/dinh-dang";
+import { dinhDangGia } from "@/lib/dinh-dang";
+import { chuTheoNgonNgu } from "@/lib/trang-chu/ngon-ngu";
 
 interface KhoiTieuDiemProps {
   khoi: KhoiTieuDiemType;
@@ -10,6 +12,8 @@ interface KhoiTieuDiemProps {
 
 export function KhoiTieuDiem({ khoi }: KhoiTieuDiemProps) {
   const { nhan_phu, tieu_de, mo_ta, san_pham_id, deal_id, cta_chinh } = khoi;
+  const t = useTranslations("trang-chu.landing.tieuDiem");
+  const ngonNgu = useLocale();
 
   const sp = san_pham_id ? timSanPhamTheoId(san_pham_id) : undefined;
   const deal = deal_id ? timDealTheoId(deal_id) : undefined;
@@ -24,13 +28,17 @@ export function KhoiTieuDiem({ khoi }: KhoiTieuDiemProps) {
       ? dealHopLe.gia_uu_dai[sp.id]
       : null;
 
-  const moTaHienThi = sp?.mo_ta || mo_ta || dealHopLe?.hook || null;
+  // en: mô tả của khối yaml (đã có bản en) trước; sản phẩm/deal chỉ dùng bản en khi dữ liệu có
+  const moTaHienThi =
+    (ngonNgu === "en" ? chuTheoNgonNgu(sp, "mo_ta", ngonNgu) || mo_ta : sp?.mo_ta || mo_ta) ||
+    chuTheoNgonNgu(dealHopLe, "hook", ngonNgu) ||
+    null;
 
   return (
     <section
       id={khoi.id || "tieu-diem"}
       data-k="1"
-      aria-label="Tiêu điểm sản phẩm"
+      aria-label={t("aria")}
       className="vq-k phai relative z-10"
     >
       <div className="cot flex flex-col gap-3 md:gap-4 text-left">
@@ -71,23 +79,23 @@ export function KhoiTieuDiem({ khoi }: KhoiTieuDiemProps) {
             {giaUuDai !== null ? (
               <>
                 <span className="text-[28px] lg:text-[34px] font-bold text-den">
-                  {dinhDangTienGio(giaUuDai)}
+                  {dinhDangGia(giaUuDai, ngonNgu)}
                 </span>
                 {giaNiemYet !== null && giaNiemYet > giaUuDai && (
                   <span className="text-[15px] lg:text-[16px] text-xam line-through">
-                    {dinhDangTienGio(giaNiemYet)}
+                    {dinhDangGia(giaNiemYet, ngonNgu)}
                   </span>
                 )}
                 {dealHopLe?.dieu_kien && (
                   <span className="text-[13px] lg:text-[14px] text-xam">
-                    khi mua kèm
+                    {t("khiMuaKem")}
                   </span>
                 )}
               </>
             ) : (
               giaNiemYet !== null && (
                 <span className="text-[28px] lg:text-[34px] font-bold text-den">
-                  {dinhDangTienGio(giaNiemYet)}
+                  {dinhDangGia(giaNiemYet, ngonNgu)}
                 </span>
               )
             )}

@@ -2,6 +2,7 @@ export type KieuHero = "san-pham-3d" | "video" | "anh-lon" | "cuon-ke";
 
 export interface NutBam {
   chu: string;
+  chu_en?: string;
   den: string;
 }
 
@@ -39,8 +40,11 @@ export interface KhoiHero {
   loai: "hero";
   kieu: KieuHero;
   nhan_tren?: string;
+  nhan_tren_en?: string;
   tieu_de: string[];
+  tieu_de_en?: string[];
   mo_ta?: string;
+  mo_ta_en?: string;
   san_pham?: string[];
   nut?: NutBam[];
   video?: VideoMedia | null;
@@ -55,8 +59,11 @@ export interface KhoiTieuDiem {
   loai: "tieu-diem";
   id?: string;
   nhan_phu?: string;
+  nhan_phu_en?: string;
   tieu_de: string[];
+  tieu_de_en?: string[];
   mo_ta?: string;
+  mo_ta_en?: string;
   san_pham_id?: string;
   deal_id?: string;
   cta_chinh?: NutBam;
@@ -67,13 +74,16 @@ export interface KhoiTieuDiem {
 export interface KhoiBangChu {
   loai: "bang-chu";
   chu: string;
+  chu_en?: string;
   mau_nen?: string;
 }
 
 export interface KhoiRaMat {
   loai: "ra-mat";
   tieu_de: string;
+  tieu_de_en?: string;
   mo_ta?: string;
+  mo_ta_en?: string;
   deal?: string[];
   san_pham?: string[];
   anh_san_pham?: Record<string, string>;
@@ -93,15 +103,19 @@ export interface KhoiChuongTrinh {
 export interface KhoiDemNguoc {
   loai: "dem-nguoc";
   tieu_de?: string;
+  tieu_de_en?: string;
   thoi_gian_chot: string;
   cau_chu?: string;
+  cau_chu_en?: string;
 }
 
 export interface KhoiDoiTac {
   loai: "doi-tac";
   doi_tac: string;
   tieu_de?: string;
+  tieu_de_en?: string;
   mo_ta?: string;
+  mo_ta_en?: string;
   gia_goi?: number;
   link?: string;
 }
@@ -109,6 +123,7 @@ export interface KhoiDoiTac {
 export interface KhoiVideo {
   loai: "video";
   tieu_de?: string;
+  tieu_de_en?: string;
   mp4?: string;
   webm?: string;
   anh_bia?: string;
@@ -118,9 +133,13 @@ export interface KhoiVideo {
 export interface KhoiBooth {
   loai: "booth";
   tieu_de?: string;
+  tieu_de_en?: string;
   dia_chi?: string;
+  dia_chi_en?: string;
   gio?: string;
+  gio_en?: string;
   ngay_cuoi?: string;
+  ngay_cuoi_en?: string;
 }
 
 export type KhoiLanding =

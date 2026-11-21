@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import type { NutTrangChu as NutTrangChuType } from "@/lib/trang-chu/schema";
 import { hienToast } from "@/components/ui/Toast";
 
@@ -12,13 +13,14 @@ interface NutTrangChuProps {
 
 /**
  * Nút chuẩn trên trang chủ `/` (W050).
- * Đọc đích từ cấu hình YAML; nút có `sap_co: true` hoặc `den: null` không điều hướng mà hiện toast "Tính năng sắp ra mắt".
+ * Đọc đích từ cấu hình YAML; nút có `sap_co: true` hoặc `den: null` không điều hướng mà hiện toast "sắp ra mắt" (khóa `chung.sapRaMat`).
  */
 export function NutTrangChu({
   nut,
   banDoUrl,
   className = "",
 }: NutTrangChuProps) {
+  const t = useTranslations("trang-chu.chung");
   const lopCoBan = `tc-btn ${nut.kieu === "phu" ? "phu" : "chinh"} ${className}`.trim();
 
   const dichThucTe =
@@ -29,7 +31,7 @@ export function NutTrangChu({
       <button
         type="button"
         data-sap-co="true"
-        onClick={() => hienToast("Tính năng sắp ra mắt")}
+        onClick={() => hienToast(t("sapRaMat"))}
         className={`${lopCoBan} cursor-pointer border-0 font-[inherit]`}
       >
         {nut.chu}

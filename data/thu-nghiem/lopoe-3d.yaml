@@ -27,11 +27,13 @@ khung_dien_thoai:
   nhan: /thu-nghiem/lopoe-khung/nhan.json
 mo_dau:
   nho: "Mới tại VIVE"
+  nho_en: "New at VIVE"
   tieu_de: "LOPOE Better Balance"
   cau: "Bọt dày. Cấp ẩm. *Làm dịu.*"
+  cau_en: "Rich foam. Deep hydration. *Soothing.*"
   nut:
-    - { chu: "Mua", den: "/danh-muc?thuong-hieu=LOPOE" }
-    - { chu: "Tìm hiểu thêm", den: "/new-arrival" }
+    - { chu: "Mua", chu_en: "Shop", den: "/danh-muc?thuong-hieu=LOPOE" }
+    - { chu: "Tìm hiểu thêm", chu_en: "Learn more", den: "/new-arrival" }
 khoi:
   - id: srm-cong-dung
     a: 0.075
@@ -39,19 +41,25 @@ khoi:
     vi_tri: phai
     tu: phai
     ten_nho: "Sữa rửa mặt"
+    ten_nho_en: "Cleanser"
     tu_khoa: "pH 5.5"
     nhan_tu: 1
     co: lon
     cau: "Sạch sâu. *Không căng rít.*"
+    cau_en: "Deep clean. *Never tight.*"
     chips: ["Bọt đệm siêu mịn", "Êm cho da nhạy cảm"]
+    chips_en: ["Ultra-fine cushiony foam", "Gentle on sensitive skin"]
   - id: srm-thanh-phan
     a: 0.185
     b: 0.27
     vi_tri: tren-trai
     tu: tren
     ten_nho: "Sữa rửa mặt"
+    ten_nho_en: "Cleanser"
     tu_khoa: "4 thành phần|xanh"
+    tu_khoa_en: "4 green|ingredients"
     cau: "Cấp ẩm & *phục hồi.*"
+    cau_en: "Hydrates & *restores.*"
   # 19/11 chỗ này là "Winner · Hwahae Beauty Awards 2025" + vòng lá. 20/11 CĐT bỏ vòng lá.
   # Huy hiệu Hwahae CĐT gửi là của Ampoule (đặt ở amp-giai-thuong), chưa có bằng chứng giải cho sữa rửa mặt.
   - id: srm-diu-nhe
@@ -60,9 +68,12 @@ khoi:
     vi_tri: trai
     tu: trai
     ten_nho: "Sữa rửa mặt"
+    ten_nho_en: "Cleanser"
     tu_khoa: "Sạch|không khô"
+    tu_khoa_en: "Clean|not dry"
     co: lon
     cau: "*Rửa xong vẫn mềm.*"
+    cau_en: "*Soft after every wash.*"
     cau_lon: true
   - id: amp-cong-dung
     a: 0.42
@@ -71,7 +82,9 @@ khoi:
     tu: duoi
     ten_nho: "Ampoule"
     tu_khoa: "Cấp ẩm|cân bằng"
+    tu_khoa_en: "Hydrates|balances"
     cau: "*Dịu da tức thì.*"
+    cau_en: "*Instantly calms skin.*"
     cau_lon: true
   - id: amp-thanh-phan
     a: 0.53
@@ -80,8 +93,10 @@ khoi:
     tu: phai
     ten_nho: "Ampoule"
     tu_khoa: "4 hoạt chất"
+    tu_khoa_en: "4 actives"
     nhan_tu: 1
     cau: "Phục hồi & *khóa ẩm.*"
+    cau_en: "Repairs & *locks in moisture.*"
   # Bằng chứng: huy hiệu "2025 상반기 hwahae awards · 라이징 트렌드 | 진정 · 1위 · 에센스/앰플/세럼" (CĐT gửi 20/11)
   - id: amp-giai-thuong
     a: 0.65
@@ -91,9 +106,11 @@ khoi:
     huy_hieu:
       anh: /chien-dich/lopoe-better-balance/hwahae-awards-2025-h1.webp
       mo_ta: "Huy hiệu Hwahae Awards nửa đầu 2025, hạng 1 Xu hướng nổi bật, nhóm Làm dịu, Essence/Ampoule/Serum"
+      mo_ta_en: "Hwahae Awards badge, first half of 2025: No. 1 Rising Trend, Soothing, Essence/Ampoule/Serum"
     tu_khoa: "Hwahae Awards 2025"
     nhan_dau: 1
     cau: "Hạng 1 *Ampoule làm dịu*"
+    cau_en: "No. 1 *soothing ampoule*"
     cho_duyet: true
   - id: kem-cong-dung
     a: 0.78
@@ -101,7 +118,9 @@ khoi:
     vi_tri: trai-duoi
     tu: trai
     ten_nho: "Kem dưỡng"
+    ten_nho_en: "Moisturizing cream"
     tu_khoa: "Sẵn sàng|trang điểm"
+    tu_khoa_en: "Ready for|makeup"
     cau: "*Ready for makeup.*"
     cau_lon: true
   # Kết: bộ 3 đứng lại, mời xem combo rồi nhả sang khối sau
@@ -111,22 +130,23 @@ khoi:
     vi_tri: tren-giua
     tu: duoi
     ten_nho: "Bộ 3 LOPOE"
+    ten_nho_en: "LOPOE Trio"
     tu_khoa: "Better Balance"
     nhan_tu: 1
     nut:
-      - { chu: "Xem combo", den: "#combo-lopoe-bo3" }
-      - { chu: "Mua", den: "/danh-muc?thuong-hieu=LOPOE" }
+      - { chu: "Xem combo", chu_en: "View combo", den: "#combo-lopoe-bo3" }
+      - { chu: "Mua", chu_en: "Shop", den: "/danh-muc?thuong-hieu=LOPOE" }
 thanh_phan:
   sua_rua_mat:
-    - { loai: thua, ten: "Thùa xanh", loi: "Ngậm nước" }
-    - { loai: sen, ten: "Sen xanh", loi: "Dịu đỏ" }
-    - { loai: phan-tu, ten: "Vitamin B5", loi: "Phục hồi" }
-    - { loai: rau-ma, ten: "Rau má", loi: "Làm dịu" }
+    - { loai: thua, ten: "Thùa xanh", loi: "Ngậm nước", ten_en: "Blue agave", loi_en: "Hydrating" }
+    - { loai: sen, ten: "Sen xanh", loi: "Dịu đỏ", ten_en: "Blue lotus", loi_en: "Calms redness" }
+    - { loai: phan-tu, ten: "Vitamin B5", loi: "Phục hồi", loi_en: "Restoring" }
+    - { loai: rau-ma, ten: "Rau má", loi: "Làm dịu", ten_en: "Centella", loi_en: "Soothing" }
   ampoule:
-    - { loai: thua, ten: "Lá thùa", loi: "Ngậm nước sâu" }
-    - { loai: sen, ten: "Sen xanh", loi: "Thanh lọc, dịu đỏ" }
-    - { loai: xoan, ten: "Hyaluronic Acid", loi: "Ẩm đa tầng" }
-    - { loai: phan-tu, ten: "Panthenol + Niacinamide", loi: "Khóa ẩm, củng cố hàng rào da" }
+    - { loai: thua, ten: "Lá thùa", loi: "Ngậm nước sâu", ten_en: "Agave leaf", loi_en: "Deep hydration" }
+    - { loai: sen, ten: "Sen xanh", loi: "Thanh lọc, dịu đỏ", ten_en: "Blue lotus", loi_en: "Purifies, calms redness" }
+    - { loai: xoan, ten: "Hyaluronic Acid", loi: "Ẩm đa tầng", loi_en: "Multi-layer moisture" }
+    - { loai: phan-tu, ten: "Panthenol + Niacinamide", loi: "Khóa ẩm, củng cố hàng rào da", loi_en: "Locks in moisture, strengthens the skin barrier" }
 # DES-004 (QD-DES-001): ảnh thành phần DES dựng, nền trong; Hyaluronic Acid (xoan) chưa có ảnh nên giữ 3D
 anh_thanh_phan:
   thua: /thanh-phan/thanh-phan-cay-thua-xanh.webp

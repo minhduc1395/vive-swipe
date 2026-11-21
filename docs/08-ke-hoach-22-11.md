@@ -21,6 +21,7 @@ Quy tắc chung
 | P9 | QA PR của WEB/Antigravity ở trạng thái Review | QA (1:13, 12:13, 17:13) | Theo lịch | — |
 | P10 | BOD duyệt 19 ảnh/video ở dashboard, mục Duyệt bài | BOD | 22/11 | Chờ BOD |
 | P11 | W066: trang nhân viên hiện 'Tặng thêm 1 lượt quay' khi nhận đơn giữ hàng web từ 27/11 | Antigravity | Phiên tới | Xong 22/11 (PR #90, QA Pass) |
+| P12 | KHẨN #95: đặt giữ hàng báo "Không tìm thấy mã", trang nhân viên không thấy đơn web (select `deal(ten)` sai cột, sửa thành `deal(ten:du_lieu->>ten)`). Antigravity làm W067 (BOD 22/11 ưu tiên Anti); merge khi QA Pass, rồi mở `/giu-hang/VIVE-8247` trên web thật phải thấy 3 dòng | Antigravity (W067) | 22/11 | Todo; Anti tự chạy mỗi 2 tiếng, không trả lại coder; #95 để draft |
 
 ## Cách làm từng mục khi WEB không có mặt
 

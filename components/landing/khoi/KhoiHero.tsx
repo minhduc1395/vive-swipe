@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import type { KhoiHero as KhoiHeroType } from "@/lib/chien-dich/types";
 
 interface KhoiHeroProps {
@@ -8,13 +9,14 @@ interface KhoiHeroProps {
 }
 
 export function KhoiHero({ khoi }: KhoiHeroProps) {
+  const t = useTranslations("trang-chu.landing.hero");
   const { nhan_tren, tieu_de, mo_ta, nut = [] } = khoi;
 
   return (
     <section
       id="hero-chien-dich"
       data-k="0"
-      aria-label="Phần đầu chiến dịch"
+      aria-label={t("aria")}
       className="vq-k trai relative z-10"
     >
       <div className="cot flex flex-col gap-2.5 sm:gap-3.5 md:gap-5">
@@ -65,11 +67,7 @@ export function KhoiHero({ khoi }: KhoiHeroProps) {
           <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-1">
             {nut.map((n, i) => {
               const isChinh = i === 0;
-              const dichDen =
-                n.den === "/bat-dau" ||
-                n.chu.toLowerCase().includes("bắt đầu quẹt")
-                  ? "/chao"
-                  : n.den;
+              const dichDen = n.den === "/bat-dau" ? "/chao" : n.den;
               return (
                 <Link
                   key={i}

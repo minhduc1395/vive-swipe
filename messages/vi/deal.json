@@ -1,1 +1,132 @@
-{}
+{
+  "trang": {
+    "tieuDe": "Deal",
+    "tieuDeNhan": "cho bạn",
+    "viBanThich": "Vì bạn thích",
+    "locDeal": "Lọc deal",
+    "tatCa": "Tất cả",
+    "chuaCoDeal": "Hiện chưa có deal nào đang chạy hôm nay. Vui lòng quay lại sau!",
+    "chiTietDeal": "Chi tiết deal {ten}",
+    "chiTietDealChung": "Chi tiết deal"
+  },
+  "toast": {
+    "daThemCombo": "Đã thêm {ten} vào giỏ!",
+    "daThemBo": "Đã thêm bộ \"{ten}\" vào giỏ!",
+    "emailKhongHopLe": "Vui lòng nhập địa chỉ email hợp lệ!",
+    "daLuuEmail": "Đã lưu email nhận deal của bạn!"
+  },
+  "email": {
+    "nhan": "Đăng ký nhận deal",
+    "tieuDe": "Nhận email khi món bạn thích có deal tốt",
+    "daDangKy": "Đã đăng ký nhận deal tới:",
+    "doi": "Đổi",
+    "nhanO": "Địa chỉ email nhận deal",
+    "goiY": "Nhập email của bạn...",
+    "dangKy": "Đăng ký",
+    "luuY": "Chỉ gửi khi có ưu đãi thật sự tốt cho sản phẩm bạn quan tâm. Không spam."
+  },
+  "nhom": {
+    "qua": "Quà theo hóa đơn",
+    "combo": "Combo",
+    "giam": "Giảm giá",
+    "muaNhieu": "Mua nhiều",
+    "mayMan": "May mắn"
+  },
+  "nhanGiaiThich": {
+    "hot": "Ưu đãi hot",
+    "combo": "Combo tiết kiệm"
+  },
+  "vanDe": {
+    "mun": "Mụn",
+    "lo-chan-long": "Lỗ chân lông",
+    "sang-da": "Sáng da",
+    "cap-am": "Cấp ẩm",
+    "lam-diu": "Làm dịu",
+    "chong-lao-hoa": "Chống lão hóa",
+    "chong-nang": "Chống nắng"
+  },
+  "tien": {
+    "nghin": "{so}K",
+    "trieu": "{so} triệu"
+  },
+  "tuKhoaSp": {
+    "suaRuaMat": "Sữa rửa mặt",
+    "ampoule": "Ampoule",
+    "kemDuong": "Kem dưỡng",
+    "kem": "Kem"
+  },
+  "the": {
+    "gioiHanSoLuong": "Số lượng có hạn",
+    "gioiHanQua": "Quà có hạn",
+    "cacMocQua": "Các mốc quà",
+    "tren": "Trên",
+    "boGoiY": "{so} bộ gợi ý vừa mốc",
+    "xemDieuKien": "Xem điều kiện",
+    "themBo": "Thêm {ten}",
+    "themBoGoiY": "Thêm bộ gợi ý",
+    "xemGio": "Xem giỏ",
+    "tang": "Tặng {qua}",
+    "quaCo": "Quà: {qua}",
+    "themVaoGio": "Thêm vào giỏ",
+    "xemSanPham": "Xem sản phẩm"
+  },
+  "nganKeo": {
+    "dong": "Đóng chi tiết deal",
+    "chonMoc": "Chọn mốc",
+    "moc": "Mốc {tien}",
+    "chuaCoBo": "Chưa có bộ gợi ý cho mốc này.",
+    "datMoc": "đạt mốc tặng quà",
+    "themBo": "Thêm bộ",
+    "khiConQua": " (khi còn quà)",
+    "hetQua": "Hết quà: combo {gia}, không quà.",
+    "dieuKien": "Điều kiện",
+    "khongCongVoi": "Không cộng với: {ds}.",
+    "apDungBooth": "Áp dụng tại booth. Nhân viên xác nhận khi thanh toán.",
+    "xemSanPhamApDung": "Xem sản phẩm áp dụng"
+  },
+  "ghiChu": {
+    "muaKem": "Mua kèm: còn {gia}",
+    "coTrongGia": "Có trong {ten} {gia}",
+    "coTrong": "Có trong {ten}"
+  },
+  "gio": {
+    "tieuDe": "Giỏ hàng",
+    "soMon": "{so} món",
+    "trong": "Giỏ đang trống. Quẹt lên để thêm nhanh.",
+    "trongMoTa": "Bạn có thể vuốt thẻ lên trong khi quẹt hoặc bấm nút thêm giỏ ở trang Danh mục.",
+    "batDauQuet": "Bắt đầu quẹt",
+    "xemDanhMuc": "Xem danh mục",
+    "quaTheoHoaDon": "Quà theo hóa đơn",
+    "quaDuKienDai": "Quà dự kiến: {qua}",
+    "moiHoaDon": "Mỗi hóa đơn nhận 1 quà có giá trị cao nhất",
+    "them": "Thêm: {qua}",
+    "mocTiep": "Thêm <b>{tien}</b> để nhận <b>{qua}</b>",
+    "mocTiepNhan": "Thêm <b>{tien}</b> sản phẩm {nhan} để nhận <b>{qua}</b>",
+    "tienDo": "Đã có {hienTai} trên mốc {muc}",
+    "dangCo": "Đang có {tien}",
+    "mocMucTieu": "Mốc {tien}",
+    "goiYDaThich": "Gợi ý từ danh sách Đã thích:",
+    "anhSanPham": "Ảnh sản phẩm",
+    "themNhanh": "+ Thêm",
+    "goiYDoiCombo": "Gợi ý đổi combo",
+    "goiYComboTieuDe": "Gợi ý combo tiết kiệm",
+    "doiSang": "Đổi sang {ten}",
+    "tietKiemThem": "Tiết kiệm thêm {tiet} (giá {gia})",
+    "doiCombo": "Đổi combo",
+    "sanPhamTrongGio": "Sản phẩm trong giỏ",
+    "anhMucGio": "Ảnh mục giỏ hàng",
+    "nhanCombo": "COMBO",
+    "giam25": "Giảm 25% vì mua kèm",
+    "giamSoLuong": "Giảm số lượng",
+    "tangSoLuong": "Tăng số lượng",
+    "tomTat": "Tóm tắt đơn hàng",
+    "tongTien": "Tổng tiền",
+    "tamTinh": "Tạm tính theo giá lẻ",
+    "banTietKiem": "Bạn tiết kiệm",
+    "quaDuKien": "Quà dự kiến",
+    "tongUocTinh": "Tổng ước tính",
+    "luuY": "Giá và quà là ước tính. Nhân viên xác nhận khi thanh toán tại booth. Quà số lượng có hạn.",
+    "giuHang": "Giữ hàng tại booth",
+    "diaChiBooth": "Trả tiền và nhận hàng tại VIVE, tầng LL2 Union Square"
+  }
+}

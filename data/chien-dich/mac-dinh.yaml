@@ -25,8 +25,10 @@ khoi:
       - "LOPOE-CR"
     nut:
       - chu: "Khám phá sản phẩm"
+        chu_en: "Discover products"
         den: "/danh-muc"
       - chu: "Xem giỏ hàng"
+        chu_en: "View cart"
         den: "/gio"
     hieu_ung: roi-vao-ke
     anh:
@@ -69,6 +71,7 @@ khoi:
       - "Better Balance"
       - "~Ampoule"
     mo_ta: "Tinh chất Better Balance Ampoule 50ml tại booth VIVE Tầng LL2 Union Square."
+    mo_ta_en: "Better Balance Ampoule 50ml at the VIVE booth, Level LL2, Union Square."
     san_pham_id: "LOPOE-AMP"
     deal_id: "LOPOE-25"
     cta_chinh:
