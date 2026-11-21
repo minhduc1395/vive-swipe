@@ -8,6 +8,7 @@ import {
   kiemTraMucDangChon,
 } from "@/lib/dieu-huong";
 import { hienToast } from "@/components/ui/Toast";
+import { LinkTaiKhoan } from "@/components/tai-khoan/LinkTaiKhoan";
 
 interface ThanhTrenDesktopProps {
   soLuongThich?: number;
@@ -130,7 +131,8 @@ export function ThanhTrenDesktop({
             )}
           </Link>
 
-          {/* Đăng nhập (W051: chưa xong W030 nên dùng cơ chế sap_co, click hiện toast) */}
+          {/* Đăng nhập (W051 sap_co, click hiện toast). Đã đăng nhập email: "Tài khoản" → /tai-khoan (#65) */}
+          <LinkTaiKhoan className="text-[13px] font-medium text-den/82 hover:text-den transition-colors focus-visible:outline-2 focus-visible:outline-den">
           <a
             href="/dang-nhap"
             onClick={(e) => {
@@ -143,6 +145,7 @@ export function ThanhTrenDesktop({
           >
             <span>Đăng nhập</span>
           </a>
+          </LinkTaiKhoan>
         </div>
       </div>
     </div>
