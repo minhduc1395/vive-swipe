@@ -25,7 +25,8 @@ function dinhDangGioMoCua(gio: string): string {
 }
 
 function tachDiaChi(diaChi: string): [string, string | null] {
-  const idx = diaChi.indexOf(", Phường ");
+  // Tách trước từ "Ph…" đầu tiên sau dấu phẩy (tên phường trong địa chỉ).
+  const idx = diaChi.search(/, Ph\S+ /);
   if (idx === -1) return [diaChi, null];
   return [diaChi.slice(0, idx + 1), diaChi.slice(idx + 2)];
 }

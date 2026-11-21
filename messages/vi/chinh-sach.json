@@ -1,0 +1,60 @@
+{
+  "tieuDe": "Chính sách bảo mật & giữ hàng",
+  "moTaTrang": "Quy định bảo mật dữ liệu cá nhân, giữ hàng miễn phí tại {diaDiem} và thông tin {congTy}.",
+  "gioiThieu": "Áp dụng cho web trải nghiệm sản phẩm VIVE và quầy giữ hàng tại {diaDiem}.",
+  "baoMat": {
+    "tieuDe": "1. Bảo mật dữ liệu cá nhân",
+    "thuThap": {
+      "nhan": "Thu thập tối thiểu:",
+      "noiDung": "VIVE chỉ thu thập họ tên, số điện thoại để tạo và đối chiếu mã giữ hàng tại quầy; cùng câu trả lời khảo sát da và lượt quẹt để sắp xếp gợi ý phù hợp hơn."
+    },
+    "email": {
+      "nhan": "Email ưu đãi theo lựa chọn riêng:",
+      "noiDung": "Việc đồng ý nhận thông báo deal được tách riêng bằng ô chọn không đánh dấu sẵn. Bạn có thể hủy nhận email bất cứ lúc nào chỉ với 1 chạm qua liên kết cuối mỗi thư."
+    },
+    "quyenXoa": {
+      "nhan": "Quyền xóa & kiểm tra dữ liệu:",
+      "noiDung": "Khách hàng có quyền yêu cầu xem hoặc xóa lịch sử cá nhân thông qua nhân viên tại booth hoặc email"
+    }
+  },
+  "giuHang": {
+    "tieuDe": "2. Quy định giữ hàng tại booth",
+    "thanhToan": {
+      "nhan": "Thanh toán trực tiếp tại quầy:",
+      "noiDung": "Việc giữ hàng trên web là hoàn toàn miễn phí và không thu tiền trước. Khách thanh toán và nhận sản phẩm tại quầy POS KiotViet ở {diaDiem}."
+    },
+    "gia": {
+      "nhan": "Giá & quà ước tính:",
+      "noiDung": "Tổng tiền và quà tặng trên web là ước tính theo chương trình đang chạy tại thời điểm tạo mã và được nhân viên xác nhận lại khi thanh toán thực tế."
+    },
+    "han": {
+      "nhan": "Hạn giữ hàng & hủy tự động:",
+      "noiDung": "Mã giữ hàng có hiệu lực đến {gio} của ngày hẹn lấy. Quá thời hạn này, đơn tự động hết hạn để nhường tồn kho cho khách tại quầy."
+    }
+  },
+  "doiTra": {
+    "tieuDe": "3. Đổi trả, nhãn phụ & khuyến mại",
+    "doiTra": {
+      "nhan": "Đổi trả tại quầy:",
+      "noiDung": "Khách kiểm tra nguyên trạng sản phẩm và tem niêm phong khi nhận hàng; mọi yêu cầu đổi trả được xử lý trực tiếp tại quầy {cuaHang} hoặc qua {email}."
+    },
+    "nhanPhu": {
+      "nhan": "Nhãn phụ tiếng Việt:",
+      "noiDung": "Sản phẩm mỹ phẩm nội địa Hàn nhập khẩu và quà tặng kèm được gắn đầy đủ nhãn phụ tiếng Việt tại quầy trước khi bàn giao cho khách."
+    },
+    "khuyenMai": {
+      "nhan": "Khuyến mại minh bạch:",
+      "noiDung": "Chương trình khuyến mại chỉ áp dụng khi đang trong thời gian hiệu lực và đủ điều kiện; khuyến mại may rủi chỉ công khai sau khi hoàn tất đăng ký với Sở Công Thương."
+    }
+  },
+  "doanhNghiep": {
+    "tieuDe": "4. Thông tin doanh nghiệp",
+    "ten": "Tên doanh nghiệp",
+    "maSoThue": "Mã số thuế",
+    "diaChi": "Địa chỉ doanh nghiệp",
+    "email": "Email liên hệ",
+    "soDienThoai": "Số điện thoại",
+    "cuaHangPopup": "Cửa hàng pop-up",
+    "kenhChinhThuc": "Kênh chính thức"
+  }
+}

@@ -5,7 +5,7 @@ import type { NgonNgu } from "./ngon-ngu";
  * Mỗi module một cặp messages/vi/<ten>.json + messages/en/<ten>.json, khóa gốc = tên module.
  * Thêm module mới: thêm 1 dòng vào CAC_KHOI và tạo 2 file. Khóa thiếu bản en thì hiện bản vi.
  */
-export const CAC_KHOI = ["chung", "trang-chu", "quet", "deal", "giu-hang", "tai-khoan"] as const;
+export const CAC_KHOI = ["chung", "trang-chu", "quet", "deal", "giu-hang", "tai-khoan", "chinh-sach"] as const;
 export type KhoiTuDien = (typeof CAC_KHOI)[number];
 
 type CayChu = { [k: string]: string | CayChu };
