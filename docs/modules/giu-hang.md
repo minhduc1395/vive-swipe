@@ -15,4 +15,4 @@ Khách giữ hàng trên web, nhận mã giữ hàng, trả tiền và nhận t�
 - Không ghi dữ liệu cá nhân của khách vào log.
 
 ## Lịch sử ngắn
-- (chưa có)
+- 2026-11-21 (#64): màu theo bảng nội thất: kem/be/oliu-nhat thay token cũ, ô nhập viền `vien` (chọn: `den`), khung QR `oliu-nhat`; hồng chỉ còn chip đang chọn.
