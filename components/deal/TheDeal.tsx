@@ -147,7 +147,7 @@ export function TheDeal({ deal, sanPhamMap, onMo, onThemCombo, onThemBo, noiBat 
     );
     chan = (
       <>
-        <span className="flex items-baseline gap-2 flex-wrap">
+        <span className="basis-full flex items-baseline gap-2 flex-wrap">
           <b className="text-[22px] tracking-[-0.01em]">{tienThe(c.gia, nn)}</b>
           {c.tongLe > c.gia && <s className="text-[13px] text-xam">{tienThe(c.tongLe, nn)}</s>}
           {c.tietKiem > 0 && <span className="text-[12px] font-semibold text-xanh-dam bg-oliu-nhat px-2 py-0.5 rounded-full">−{tienNgan(c.tietKiem, nn, t)}</span>}

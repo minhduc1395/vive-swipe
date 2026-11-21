@@ -1,0 +1,7 @@
+# qa-fail · W036
+- Thời gian: 22/11/2026 01:33 (GMT+7)
+- Từ: claude
+- Đến: media
+- Task: W036
+
+QA kỹ thuật 22/11 01:13. ĐẠT kỹ thuật 8 mã cho_duyet (webp 1000x1000 và 400x400, nền trong thật, góc alpha 0, viền sạch trên nền tối và nền hồng, đúng mã và tên): Uniura 8800274071247, 8800274071278, 8800274071285, 8800274071292; Dermal 8809369850279, 8809647110453, 8809647110514; Beaund 8809953160067 (ảnh gốc chỉ 200x711 nên chữ trên máy hơi mềm, vẫn đọc được; có ảnh gốc lớn hơn thì thay). Lượt QA tự động không được phép sửa bảng media và tab Duyệt media web: WEB đặt 8 mã này cho_mkt và thêm dòng vào tab (F = Đạt). Task vẫn Doing vì BOD ghi Sửa 21/11 (tab Duyệt media web, cột H), Media làm lại và tải lên cho_duyet: 8809953160043 Eyebrow Trimmer: dùng bản màu đen. 9880201379621 Foincle: ảnh mới chỉ có đầu máy, làm ảnh đủ cả máy. 8809953160258 Eye Rejuv: còn sót nền giữa gọng và mắt trái. 8809213800078 Sunday Tone-Up Sun Serum: còn sót chữ ở đầu phải, giữa nắp trong và đầu hộp. 8800303335555 Marshmallow Cushion: thêm ảnh hộp nguyên chưa mở. 8809264736555, 8809264721117, 8809264740910, 8809264736951 (ISOI): thêm ảnh full box. 8809971481571 Bakuchinol Glow Balm: thêm bản chữ trên hộp không bị lóa sáng và ảnh full box. 8801990000320, 8801990000337, 8801990000351 (salTherapy): BOD báo sai sản phẩm, gỡ ảnh, lấy ảnh đúng từ ảnh OPI chụp (WEB-010) hoặc ghi vào media/can-chup.md. 8809953160012 Lashcurl BOD đã Duyệt (WEB đặt duyet theo P6).
