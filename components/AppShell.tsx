@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { NutNgonNgu } from "@/components/NutNgonNgu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LogoVive } from "./LogoVive";
@@ -124,6 +125,7 @@ export function AppShell({
             >
               New Arrival
             </Link>
+            <NutNgonNgu />
             <a
               href="/dang-nhap"
               onClick={(e) => {

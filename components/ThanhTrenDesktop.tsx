@@ -8,6 +8,9 @@ import {
   kiemTraMucDangChon,
 } from "@/lib/dieu-huong";
 import { hienToast } from "@/components/ui/Toast";
+import { useLocale, useTranslations } from "next-intl";
+import { NutNgonNgu } from "@/components/NutNgonNgu";
+import type { NgonNgu } from "@/i18n/ngon-ngu";
 
 interface ThanhTrenDesktopProps {
   soLuongThich?: number;
@@ -23,6 +26,8 @@ export function ThanhTrenDesktop({
   soLuongGio = 0,
 }: ThanhTrenDesktopProps) {
   const pathname = usePathname();
+  const ngonNgu = useLocale() as NgonNgu;
+  const t = useTranslations("chung.thanh");
 
   return (
     <div
@@ -34,7 +39,7 @@ export function ThanhTrenDesktop({
         <Link
           href="/"
           prefetch={false}
-          aria-label="Trang chủ VIVE"
+          aria-label={t("trangChu")}
           className="flex items-center shrink-0 focus-visible:outline-2 focus-visible:outline-den rounded"
         >
           <LogoVive rong={46} />
@@ -42,7 +47,7 @@ export function ThanhTrenDesktop({
 
         {/* Giữa: Menu chính (New Arrival, Quẹt, Sản phẩm, Deal, Đã thích) */}
         <nav
-          aria-label="Điều hướng máy tính"
+          aria-label={t("dieuHuongMayTinh")}
           className="flex items-center gap-[30px]"
         >
           {CAC_MUC_MENU_DESKTOP.map((muc) => {
@@ -61,7 +66,7 @@ export function ThanhTrenDesktop({
                     : "text-den/82 hover:text-den font-medium"
                 }`}
               >
-                <span>{muc.nhan.vi}</span>
+                <span>{muc.nhan[ngonNgu]}</span>
                 {soDem > 0 && (
                   <span
                     aria-label={`${soDem} món`}
@@ -81,7 +86,7 @@ export function ThanhTrenDesktop({
           <Link
             href="/danh-muc"
             prefetch={false}
-            aria-label="Tìm kiếm"
+            aria-label={t("timKiem")}
             className="text-den/82 hover:text-den transition-colors focus-visible:outline-2 focus-visible:outline-den p-1"
           >
             <svg
@@ -103,7 +108,7 @@ export function ThanhTrenDesktop({
             href="/gio"
             prefetch={false}
             aria-label={
-              soLuongGio > 0 ? `Giỏ hàng (${soLuongGio} món)` : "Giỏ hàng"
+              soLuongGio > 0 ? t("gioHangCoMon", { so: soLuongGio }) : t("gioHang")
             }
             className="flex items-center gap-1.5 text-[13px] font-medium text-den/82 hover:text-den transition-colors focus-visible:outline-2 focus-visible:outline-den"
           >
@@ -119,16 +124,18 @@ export function ThanhTrenDesktop({
               <path d="M5 8h14l-1 12H6L5 8Z" />
               <path d="M9 8V6.5a3 3 0 0 1 6 0V8" />
             </svg>
-            <span>Giỏ</span>
+            <span>{t("gio")}</span>
             {soLuongGio > 0 && (
               <span
-                aria-label={`${soLuongGio} món`}
+                aria-label={t("soMon", { so: soLuongGio })}
                 className="min-w-[16px] h-4 px-1 rounded-full bg-hong text-den text-[10px] font-bold inline-flex items-center justify-center leading-none"
               >
                 {soLuongGio > 99 ? "99+" : soLuongGio}
               </span>
             )}
           </Link>
+
+          <NutNgonNgu />
 
           {/* Đăng nhập (W051: chưa xong W030 nên dùng cơ chế sap_co, click hiện toast) */}
           <a

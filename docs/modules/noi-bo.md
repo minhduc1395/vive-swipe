@@ -17,4 +17,4 @@ Trang nhân viên (tra mã giữ hàng tại booth) và trang quản trị; cron
 - (chưa có)
 
 ## Đang khóa
-- 21/11: Antigravity làm W045 rồi W046 trong module này. Không giao job đội coder vào noi-bo cho tới khi W046 Done.
+- 21/11: W045, W046 Done. Antigravity làm W066 (thưởng giữ hàng ở trang nhân viên). Không giao job đội coder vào noi-bo cho tới khi W066 Done.

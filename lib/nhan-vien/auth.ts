@@ -2,10 +2,12 @@ import { laySupabase } from "@/lib/supabase/client";
 
 export const KHOA_NHAN_VIEN_SESSION = "vive_nhan_vien_session";
 
+export type VaiTroNhanVien = "nhan_vien" | "kho" | "quan_tri";
+
 export interface PhienNhanVien {
   email: string;
   ten: string;
-  vaiTro: "nhan_vien" | "quan_tri";
+  vaiTro: VaiTroNhanVien;
   dangNhapLuc: string;
 }
 
@@ -58,6 +60,7 @@ export async function layTokenNhanVien(): Promise<string | null> {
  * Đăng nhập nhân viên/quản trị bằng Supabase Auth (email + mật khẩu có dòng trong bảng nhan_vien).
  * Chế độ thử (dev/e2e):
  * - booth@vive.vn (mật khẩu >= 4 ký tự) -> vai trò nhan_vien
+ * - kho@vive.vn (mật khẩu >= 4 ký tự) -> vai trò kho
  * - admin@vive.vn (mật khẩu >= 4 ký tự) -> vai trò quan_tri
  */
 export async function dangNhapNhanVien(
@@ -76,6 +79,16 @@ export async function dangNhapNhanVien(
         email: emailChuanHoa,
         ten: "Quầy VIVE",
         vaiTro: "nhan_vien",
+        dangNhapLuc: new Date().toISOString(),
+      };
+      luuPhienNhanVienLocal(phien);
+      return { ok: true, phien };
+    }
+    if (matKhau.length >= 4 && emailChuanHoa === "kho@vive.vn") {
+      const phien: PhienNhanVien = {
+        email: emailChuanHoa,
+        ten: "Kho VIVE",
+        vaiTro: "kho",
         dangNhapLuc: new Date().toISOString(),
       };
       luuPhienNhanVienLocal(phien);

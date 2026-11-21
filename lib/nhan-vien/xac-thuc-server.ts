@@ -1,9 +1,10 @@
 import { layAdmin, choPhepKhoTam } from "@/lib/supabase/admin";
+import type { VaiTroNhanVien } from "./auth";
 
 export interface NhanVienDaXacThuc {
   id: string;
   ten: string;
-  vaiTro: "nhan_vien" | "quan_tri";
+  vaiTro: VaiTroNhanVien;
 }
 
 /**
@@ -18,6 +19,9 @@ export async function xacThucNhanVien(
     if (choPhepKhoTam()) {
       if (token === "thu:nhan_vien") {
         return { id: "dev-nv", ten: "Quầy VIVE (thử)", vaiTro: "nhan_vien" };
+      }
+      if (token === "thu:kho") {
+        return { id: "dev-kho", ten: "Kho VIVE (thử)", vaiTro: "kho" };
       }
       if (!token || token === "thu" || token === "thu:quan_tri") {
         return { id: "dev", ten: "Quản trị VIVE (thử)", vaiTro: "quan_tri" };
@@ -35,12 +39,12 @@ export async function xacThucNhanVien(
     .eq("id", data.user.id)
     .maybeSingle();
   if (!nv) throw new Error("Tài khoản không có quyền nhân viên");
-  return { id: data.user.id, ten: nv.ten, vaiTro: nv.vai_tro };
+  return { id: data.user.id, ten: nv.ten, vaiTro: nv.vai_tro as VaiTroNhanVien };
 }
 
 /**
  * Kiểm tra người gọi Server Action có vai trò quản trị (`quan_tri`) hay không.
- * Chặn cả khách chưa đăng nhập lẫn tài khoản nhân viên thường (`nhan_vien`).
+ * Chặn cả khách chưa đăng nhập lẫn tài khoản nhân viên thường (`nhan_vien`) và `kho`.
  */
 export async function xacThucQuanTri(
   token: string | null | undefined,
@@ -49,6 +53,21 @@ export async function xacThucQuanTri(
   const nv = await xacThucNhanVien(token);
   if (nv.vaiTro !== "quan_tri") {
     throw new Error("Chỉ tài khoản quản trị mới có quyền thực hiện thao tác này");
+  }
+  return nv;
+}
+
+/**
+ * Kiểm tra người gọi Server Action có vai trò kho (`kho`) hoặc quản trị (`quan_tri`) hay không.
+ * Chặn khách chưa đăng nhập và nhân viên quầy (`nhan_vien`).
+ */
+export async function xacThucKhoHoacQuanTri(
+  token: string | null | undefined,
+): Promise<NhanVienDaXacThuc> {
+  if (!token) throw new Error("Chưa đăng nhập kho hoặc quản trị");
+  const nv = await xacThucNhanVien(token);
+  if (nv.vaiTro !== "kho" && nv.vaiTro !== "quan_tri") {
+    throw new Error("Chỉ tài khoản kho hoặc quản trị mới có quyền sửa thông tin sản phẩm");
   }
   return nv;
 }
