@@ -19,6 +19,7 @@ Repo code của web quẹt sản phẩm VIVE (kiểu Tinder). Claude = Lead (k�
 - Làm trong **worktree riêng** để không đụng thư mục của Antigravity code:
   `git worktree add ../vive-swipe-media main`, rồi mở thư mục `vive-swipe-media` trong chat Media. Chép `.env.local` sang.
 - Chỉ sửa `scripts/media/`, `scripts/du_lieu/`, `media/`, task W035–W037, W047 và handoff của mình. Không sửa `app/`, `components/`, `lib/`, `data/`, `docs/`.
+- QA ảnh/video (BOD 21/11): Claude chỉ duyệt KỸ THUẬT: nét hay mờ, đúng tỷ lệ và kích thước, viền tách nền sạch, nền trong thật, đúng định dạng và dung lượng cho web (ảnh webp/avif, video H.264, tải nhanh trên điện thoại), chữ trong vùng an toàn, đúng mã sản phẩm. Nội dung và hình thức (bố cục, màu, chữ, cảm giác thương hiệu) do team Marketing duyệt, Claude không Fail vì lý do này.
 - Quy trình, nguồn ảnh được phép, quy chuẩn: `docs/06-anh-va-video.md`.
 
 ## Lộ trình
