@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { CAU_HINH_BOOTH } from "@/lib/cau-hinh";
 import doanhNghiepJson from "@/lib/data/doanh-nghiep.json";
 import type { DoanhNghiep } from "@/lib/data/types";
@@ -12,27 +13,6 @@ interface ChanTrangProps {
   className?: string;
 }
 
-/**
- * Toàn bộ nhãn hiển thị trong chân trang (tách riêng để W044 dễ chuyển sang messages/*.json).
- */
-const CHU_CHAN_TRANG = {
-  moTa: "Mỹ phẩm nội địa Hàn, thử và mua tại booth.",
-  tieuDeGheBooth: "Ghé booth",
-  moCuaPrefix: "Mở cửa",
-  chiDuong: "Chỉ đường",
-  tieuDeHoTro: "Hỗ trợ",
-  lienKetHoTro: [
-    { nhan: "Giữ hàng tại booth", den: "/chinh-sach#muc-giu-hang" },
-    { nhan: "Đổi trả", den: "/chinh-sach#muc-doi-tra" },
-    { nhan: "Bảo mật dữ liệu", den: "/chinh-sach#muc-bao-mat" },
-  ],
-  tieuDeDonViVanHanh: "Đơn vị vận hành",
-  mstPrefix: "MST",
-  sdtPrefix: "SĐT:",
-  banQuyen: "© 2026 VIVE",
-  nhanFooter: "Thông tin VIVE",
-  nhanMangXaHoi: "Mạng xã hội",
-} as const;
 
 const ICON_MXH_PATH: Record<string, string> = {
   facebook: "/icons/mxh/facebook.svg",
@@ -55,6 +35,26 @@ function tachDiaChi(diaChi: string): [string, string | null] {
  * Đọc toàn bộ thông tin doanh nghiệp, địa chỉ booth, bản đồ và mạng xã hội từ data/doanh-nghiep.yaml.
  */
 export function ChanTrang({ className = "" }: ChanTrangProps) {
+  // W044: chữ chân trang lấy từ messages/<ngôn ngữ>/chung.json
+  const t = useTranslations("chung.chanTrang");
+  const CHU_CHAN_TRANG = {
+    moTa: t("moTa"),
+    tieuDeGheBooth: t("tieuDeGheBooth"),
+    moCuaPrefix: t("moCuaPrefix"),
+    chiDuong: t("chiDuong"),
+    tieuDeHoTro: t("tieuDeHoTro"),
+    lienKetHoTro: [
+      { nhan: t("hoTroGiuHang"), den: "/chinh-sach#muc-giu-hang" },
+      { nhan: t("hoTroDoiTra"), den: "/chinh-sach#muc-doi-tra" },
+      { nhan: t("hoTroBaoMat"), den: "/chinh-sach#muc-bao-mat" },
+    ],
+    tieuDeDonViVanHanh: t("tieuDeDonViVanHanh"),
+    mstPrefix: t("mstPrefix"),
+    sdtPrefix: t("sdtPrefix"),
+    banQuyen: t("banQuyen"),
+    nhanFooter: t("nhanFooter"),
+    nhanMangXaHoi: t("nhanMangXaHoi"),
+  };
   const gioHienThi = dinhDangGioMoCua(CAU_HINH_BOOTH.gioMoCua);
   const diaChiBooth =
     DOANH_NGHIEP.dia_chi_booth || DOANH_NGHIEP.dia_diem_booth;

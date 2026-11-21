@@ -1,0 +1,32 @@
+{
+  "chanTrang": {
+    "moTa": "Korean domestic cosmetics, try and buy at our booth.",
+    "tieuDeGheBooth": "Visit the booth",
+    "moCuaPrefix": "Open",
+    "chiDuong": "Directions",
+    "tieuDeHoTro": "Support",
+    "hoTroGiuHang": "Reserve at the booth",
+    "hoTroDoiTra": "Returns",
+    "hoTroBaoMat": "Data privacy",
+    "tieuDeDonViVanHanh": "Operated by",
+    "mstPrefix": "Tax ID",
+    "sdtPrefix": "Phone:",
+    "banQuyen": "© 2026 VIVE",
+    "nhanFooter": "About VIVE",
+    "nhanMangXaHoi": "Social media"
+  },
+  "thanh": {
+    "trangChu": "VIVE home",
+    "gioHang": "Cart",
+    "gioHangCoMon": "Cart ({so} items)",
+    "gio": "Cart",
+    "soMon": "{so} items",
+    "dangNhap": "Sign in",
+    "timKiem": "Search",
+    "dieuHuongMayTinh": "Desktop navigation",
+    "dieuHuongChinh": "Main navigation",
+    "ngonNgu": "Language",
+    "doiSangEn": "Switch to English",
+    "doiSangVi": "Switch to Vietnamese"
+  }
+}

@@ -13,11 +13,12 @@ export default defineConfig({
   projects: [
     {
       name: "iphone-13",
-      use: { ...devices["iPhone 13"] },
+      // W044: khách VN mặc định tiếng Việt; test tiếng Anh dùng ?lang=en
+      use: { ...devices["iPhone 13"], locale: "vi-VN" },
     },
     {
       name: "pixel-7",
-      use: { ...devices["Pixel 7"] },
+      use: { ...devices["Pixel 7"], locale: "vi-VN" },
     },
   ],
   webServer: {

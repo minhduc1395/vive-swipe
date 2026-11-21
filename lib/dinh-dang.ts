@@ -28,3 +28,29 @@ export function chuanHoaTimKiem(chuoi: string): string {
     .toLowerCase()
     .trim();
 }
+
+/**
+ * W044: giá theo ngôn ngữ. vi: 349.000đ · en: 349,000 VND.
+ * Component lấy ngôn ngữ bằng useLocale() (client) hoặc getLocale() (server).
+ */
+export function dinhDangGia(soTien: number, ngonNgu: string): string {
+  if (ngonNgu === "en") {
+    const so = Math.round(Number.isFinite(soTien) ? soTien : 0);
+    return `${so.toLocaleString("en-US")} VND`;
+  }
+  return dinhDangTienGio(soTien);
+}
+
+/** W044: ngày ngắn theo ngôn ngữ (giờ Việt Nam). vi: 27/11 · en: Nov 27. */
+export function dinhDangNgayNgan(ngay: Date | string, ngonNgu: string): string {
+  const d = typeof ngay === "string" ? new Date(ngay) : ngay;
+  if (ngonNgu === "en") {
+    return new Intl.DateTimeFormat("en-US", { timeZone: "Asia/Ho_Chi_Minh", month: "short", day: "numeric" }).format(d);
+  }
+  const p = Object.fromEntries(
+    new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Ho_Chi_Minh", day: "2-digit", month: "2-digit" })
+      .formatToParts(d)
+      .map((x) => [x.type, x.value]),
+  );
+  return `${p.day}/${p.month}`;
+}

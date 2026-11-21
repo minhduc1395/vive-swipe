@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
+import type { NgonNgu } from "@/i18n/ngon-ngu";
 import { usePathname } from "next/navigation";
 import { CAC_MUC_TAB_MOBILE, kiemTraMucDangChon } from "@/lib/dieu-huong";
 
@@ -118,10 +120,12 @@ export function ThanhTab({
   soLuongGio = 0,
 }: ThanhTabProps) {
   const pathname = usePathname();
+  const ngonNgu = useLocale() as NgonNgu;
+  const t = useTranslations("chung.thanh");
 
   return (
     <nav
-      aria-label="Điều hướng chính"
+      aria-label={t("dieuHuongChinh")}
       className="mt-auto sticky bottom-0 z-40 shrink-0 min-h-[64px] px-1 pt-1.5 pb-[max(10px,env(safe-area-inset-bottom,0px))] border-t border-[rgba(43,43,42,0.06)] bg-[rgba(255,255,255,0.85)] backdrop-blur-md grid grid-cols-5 md:hidden"
     >
       {CAC_MUC_TAB_MOBILE.map((tab) => {
@@ -153,7 +157,7 @@ export function ThanhTab({
               <BieuTuongTab tabKey={tab.key} dangChon={dangChon} />
               {soDem > 0 && (
                 <span
-                  aria-label={`${soDem} món`}
+                  aria-label={t("soMon", { so: soDem })}
                   className="absolute -top-[5px] -right-[11px] min-w-[17px] h-[17px] px-1 rounded-full bg-hong text-den text-[10px] font-bold leading-none flex items-center justify-center"
                 >
                   {soDem > 99 ? "99+" : soDem}
@@ -161,7 +165,7 @@ export function ThanhTab({
               )}
             </span>
             <span className="text-[11px] leading-[1.2] whitespace-nowrap">
-              {tab.nhan.vi}
+              {tab.nhan[ngonNgu]}
             </span>
           </Link>
         );

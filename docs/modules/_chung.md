@@ -9,3 +9,11 @@
 - Giá, deal, quà chỉ lấy từ `data/` (file dùng chung, WEB sửa). Không gõ số trên giao diện. Giá trong giỏ luôn tính lại ở server.
 - Không commit khóa bí mật, không in biến môi trường ra log.
 - Không thêm thư viện. Cần thư viện thì comment BLOCKED.
+
+## Song ngữ VI | EN (W044, từ 22/11)
+- Chữ hiện cho khách KHÔNG gõ cứng trong JSX: đặt trong `messages/vi/<module>.json` và `messages/en/<module>.json` (khóa gốc = tên module: `trang-chu`, `quet`, `deal`, `giu-hang`, `tai-khoan`; chữ dùng chung thanh trên/chân trang ở `chung`, chỉ WEB sửa).
+- Client component: `const t = useTranslations("quet.danhMuc")`. Server component: `const t = await getTranslations("quet.danhMuc")` (`next-intl/server`). Ngôn ngữ hiện tại: `useLocale()` / `getLocale()`.
+- Giá: `dinhDangGia(soTien, ngonNgu)`; ngày: `dinhDangNgayNgan(ngay, ngonNgu)` trong `lib/dinh-dang.ts`.
+- Dữ liệu sản phẩm/deal/chiến dịch: tiếng Anh dùng trường `*_en` (`ten_en`, `mo_ta_en`, `dieu_kien_en`…), thiếu thì hiện bản vi.
+- Mỗi khóa phải có ở cả vi và en (test `tests/w044-tu-dien.test.ts`). Bản en: câu ngắn, tự nhiên, không dịch tên thương hiệu/sản phẩm.
+- Kiểm: mở trang với `?lang=en` (đặt cookie `vive_lang`), nút VI | EN trên thanh trên.
