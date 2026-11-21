@@ -1,22 +1,36 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { NutQuayLai } from "@/components/NutQuayLai";
 import { CAU_HINH_BOOTH } from "@/lib/cau-hinh";
 import { DOANH_NGHIEP } from "@/lib/data";
 
+function layDiaDiemBooth(ngonNgu: string): string {
+  return ngonNgu === "en" && DOANH_NGHIEP.dia_chi_booth_en
+    ? DOANH_NGHIEP.dia_chi_booth_en
+    : DOANH_NGHIEP.dia_diem_booth;
+}
+
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("chinh-sach");
+  const [ngonNgu, t] = await Promise.all([
+    getLocale(),
+    getTranslations("chinh-sach"),
+  ]);
   return {
     title: `${t("tieuDe")} · ${DOANH_NGHIEP.ten_cua_hang}`,
     description: t("moTaTrang", {
-      diaDiem: DOANH_NGHIEP.dia_diem_booth,
+      diaDiem: layDiaDiemBooth(ngonNgu),
       congTy: DOANH_NGHIEP.ten_cong_ty,
     }),
   };
 }
 
 export default async function TrangChinhSach() {
-  const t = await getTranslations("chinh-sach");
+  const [ngonNgu, t] = await Promise.all([
+    getLocale(),
+    getTranslations("chinh-sach"),
+  ]);
+  const diaDiemBooth = layDiaDiemBooth(ngonNgu);
+  const thieuBanEn = ngonNgu === "en" ? "1" : undefined;
 
   return (
     <div className="max-w-[820px] w-full mx-auto px-5 md:px-8 py-5 md:py-10 flex flex-col gap-6">
@@ -26,7 +40,7 @@ export default async function TrangChinhSach() {
             {t("tieuDe")}
           </h1>
           <p className="m-0 text-[15px] text-xam leading-relaxed">
-            {t("gioiThieu", { diaDiem: DOANH_NGHIEP.dia_diem_booth })}
+            {t("gioiThieu", { diaDiem: diaDiemBooth })}
           </p>
         </header>
 
@@ -43,20 +57,35 @@ export default async function TrangChinhSach() {
             </h2>
             <ul className="m-0 pl-5 flex flex-col gap-2 text-[14px] md:text-[15px] text-xam-dam leading-relaxed">
               <li>
-                <strong>{t("baoMat.thuThap.nhan")}</strong> {t("baoMat.thuThap.noiDung")}
+                <strong>{t("baoMat.donVi.nhan")}</strong>{" "}
+                {t("baoMat.donVi.noiDung")}
               </li>
               <li>
-                <strong>{t("baoMat.email.nhan")}</strong> {t("baoMat.email.noiDung")}
+                <strong>{t("baoMat.mucDich.nhan")}</strong>{" "}
+                {t("baoMat.mucDich.noiDung")}
               </li>
               <li>
-                <strong>{t("baoMat.quyenXoa.nhan")}</strong> {t("baoMat.quyenXoa.noiDung")}{" "}
+                <strong>{t("baoMat.thoiGianLuu.nhan")}</strong>{" "}
+                {t("baoMat.thoiGianLuu.noiDung")}
+              </li>
+              <li>
+                <strong>{t("baoMat.benXuLy.nhan")}</strong>{" "}
+                {t("baoMat.benXuLy.noiDung")}
+              </li>
+              <li>
+                <strong>{t("baoMat.quyen.nhan")}</strong>{" "}
+                {t("baoMat.quyen.noiDung")}{" "}
                 <a
                   href={`mailto:${DOANH_NGHIEP.email}`}
                   className="text-den underline"
                 >
                   {DOANH_NGHIEP.email}
                 </a>
-                .
+                {t("baoMat.quyen.hauTo")}
+              </li>
+              <li>
+                <strong>{t("baoMat.cookie.nhan")}</strong>{" "}
+                {t("baoMat.cookie.noiDung")}
               </li>
             </ul>
           </section>
@@ -74,7 +103,7 @@ export default async function TrangChinhSach() {
             <ul className="m-0 pl-5 flex flex-col gap-2 text-[14px] md:text-[15px] text-xam-dam leading-relaxed">
               <li>
                 <strong>{t("giuHang.thanhToan.nhan")}</strong>{" "}
-                {t("giuHang.thanhToan.noiDung", { diaDiem: DOANH_NGHIEP.dia_diem_booth })}
+                {t("giuHang.thanhToan.noiDung", { diaDiem: diaDiemBooth })}
               </li>
               <li>
                 <strong>{t("giuHang.gia.nhan")}</strong> {t("giuHang.gia.noiDung")}
@@ -125,13 +154,17 @@ export default async function TrangChinhSach() {
             </h2>
             <dl className="m-0 grid grid-cols-1 sm:grid-cols-[200px_1fr] gap-y-2.5 gap-x-4 text-[14px] md:text-[15px] text-xam-dam">
               <dt className="font-semibold text-den">{t("doanhNghiep.ten")}</dt>
-              <dd className="m-0">{DOANH_NGHIEP.ten_cong_ty}</dd>
+              <dd className="m-0" data-thieu-en={thieuBanEn}>
+                {DOANH_NGHIEP.ten_cong_ty}
+              </dd>
 
               <dt className="font-semibold text-den">{t("doanhNghiep.maSoThue")}</dt>
               <dd className="m-0">{DOANH_NGHIEP.ma_so_thue}</dd>
 
               <dt className="font-semibold text-den">{t("doanhNghiep.diaChi")}</dt>
-              <dd className="m-0">{DOANH_NGHIEP.dia_chi}</dd>
+              <dd className="m-0" data-thieu-en={thieuBanEn}>
+                {DOANH_NGHIEP.dia_chi}
+              </dd>
 
               <dt className="font-semibold text-den">{t("doanhNghiep.email")}</dt>
               <dd className="m-0">
@@ -152,7 +185,7 @@ export default async function TrangChinhSach() {
 
               <dt className="font-semibold text-den">{t("doanhNghiep.cuaHangPopup")}</dt>
               <dd className="m-0">
-                {DOANH_NGHIEP.ten_cua_hang} · {DOANH_NGHIEP.dia_diem_booth} (
+                {DOANH_NGHIEP.ten_cua_hang} · {diaDiemBooth} (
                 {CAU_HINH_BOOTH.gioMoCua})
               </dd>
 
@@ -162,6 +195,40 @@ export default async function TrangChinhSach() {
                 · TikTok: @viveuniverse
               </dd>
             </dl>
+          </section>
+
+          <section
+            aria-labelledby="muc-dieu-khoan"
+            className="hien-dan rounded-[24px] bg-trang border border-vien p-5 md:p-6 flex flex-col gap-2.5"
+          >
+            <h2
+              id="muc-dieu-khoan"
+              className="m-0 text-[18px] md:text-[20px] font-bold text-den"
+            >
+              {t("dieuKhoan.tieuDe")}
+            </h2>
+            <ul className="m-0 pl-5 flex flex-col gap-2 text-[14px] md:text-[15px] text-xam-dam leading-relaxed">
+              <li>
+                <strong>{t("dieuKhoan.gia.nhan")}</strong>{" "}
+                {t("dieuKhoan.gia.noiDung")}
+              </li>
+              <li>
+                <strong>{t("dieuKhoan.hinhAnh.nhan")}</strong>{" "}
+                {t("dieuKhoan.hinhAnh.noiDung")}
+              </li>
+              <li>
+                <strong>{t("dieuKhoan.gioiHanDon.nhan")}</strong>{" "}
+                {t("dieuKhoan.gioiHanDon.noiDung")}
+              </li>
+              <li>
+                <strong>{t("dieuKhoan.lamDung.nhan")}</strong>{" "}
+                {t("dieuKhoan.lamDung.noiDung")}
+              </li>
+              <li>
+                <strong>{t("dieuKhoan.luatApDung.nhan")}</strong>{" "}
+                {t("dieuKhoan.luatApDung.noiDung")}
+              </li>
+            </ul>
           </section>
         </main>
       </div>

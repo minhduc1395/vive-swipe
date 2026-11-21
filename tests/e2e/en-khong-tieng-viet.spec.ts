@@ -151,12 +151,46 @@ test.describe("W044 · Kiểm tra 13 trang khách ở ?lang=en không sót tiế
     }
   });
 
-  test.fixme(
-    "/chinh-sach?lang=en và thanh trên / chân trang dùng chung (chờ job #96 gộp)",
-    async ({ page }) => {
-      await page.goto("/chinh-sach?lang=en");
-      const text = await page.evaluate(() => document.body.innerText);
-      expect(text).not.toMatch(CO_DAU_VI);
-    },
-  );
+  test("/chinh-sach?lang=en không còn ký tự tiếng Việt (390px & 1440px)", async ({
+    page,
+  }) => {
+    const dir = path.join(process.cwd(), "test-results", "screenshots", "w068-chinh-sach");
+    fs.mkdirSync(dir, { recursive: true });
+    const loi: string[] = [];
+
+    for (const co of [
+      { ten: "390", width: 390, height: 844 },
+      { ten: "1440", width: 1440, height: 900 },
+    ]) {
+      await page.setViewportSize({ width: co.width, height: co.height });
+
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      await page.goto("/chinh-sach?lang=vi", { waitUntil: "domcontentloaded" });
+      await page.waitForTimeout(300);
+      await page.screenshot({
+        path: path.join(dir, `${co.ten}_vi.png`),
+        fullPage: true,
+      });
+
+      await page.goto("/chinh-sach?lang=en", { waitUntil: "domcontentloaded" });
+      await page.waitForTimeout(300);
+      await page.screenshot({
+        path: path.join(dir, `${co.ten}_en.png`),
+        fullPage: true,
+      });
+
+      const text = await layChuHienThiKhongTinhNgoaiLe(page);
+      const dongCoDau = text
+        .split(/\r?\n/)
+        .map((d) => d.trim())
+        .filter((d) => d.length > 0 && CO_DAU_VI.test(d));
+      if (dongCoDau.length > 0) {
+        loi.push(`[${co.ten}px /chinh-sach?lang=en] -> ${dongCoDau.slice(0, 5).join(" | ")}`);
+      }
+    }
+
+    expect(loi, `Phát hiện chữ tiếng Việt ở /chinh-sach?lang=en:\n${loi.join("\n")}`).toEqual(
+      [],
+    );
+  });
 });
