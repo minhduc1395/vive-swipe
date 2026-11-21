@@ -113,6 +113,8 @@ export const DealSchema = z.object({
   ten: z.string().min(1, "Thiếu tên deal"),
   loai: LoaiDealSchema,
   nhom_qua: z.enum(["hoa_don", "cong_them"]).optional(),
+  /** Thưởng thêm khi khách giữ hàng trên web rồi nhận tại booth, từ ngày tu_ngay (YYYY-MM-DD, giờ VN). */
+  thuong_giu_hang: z.object({ tu_ngay: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), qua: z.string(), qua_en: z.string().optional() }).optional(),
   trang_thai: TrangThaiDealSchema,
   may_rui: z.boolean(),
   da_dang_ky: z.boolean().default(false),

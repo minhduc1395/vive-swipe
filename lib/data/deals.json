@@ -259,7 +259,7 @@
       },
       {
         "id": "G-02",
-        "ten": "COMBO VAMPIRE GLOW",
+        "ten": "Combo Glow Vitamin C",
         "san_pham": [
           "8809982769866",
           "8800256115174"
@@ -321,7 +321,7 @@
       },
       {
         "id": "G-10",
-        "ten": "COMBO ZOMBIE HỒI SINH và Potato Pad",
+        "ten": "Combo Keo Ong Dưỡng Ẩm và Potato Pad",
         "san_pham": [
           "8809511276704",
           "8809511276728",
@@ -343,7 +343,7 @@
       },
       {
         "id": "G-12",
-        "ten": "COMBO VAMPIRE GLOW và Deep Vita C Pad",
+        "ten": "Combo Glow Vitamin C và Deep Vita C Pad",
         "san_pham": [
           "8809982769866",
           "8800256115174",
@@ -449,7 +449,7 @@
   },
   {
     "id": "COMBO-VAMPIRE-GLOW",
-    "ten": "COMBO VAMPIRE GLOW Medicube",
+    "ten": "Combo Glow Vitamin C Medicube",
     "loai": "combo",
     "trang_thai": "DANG_CHAY",
     "may_rui": false,
@@ -472,7 +472,7 @@
   },
   {
     "id": "COMBO-ZOMBIE",
-    "ten": "COMBO ZOMBIE HỒI SINH SKINFOOD",
+    "ten": "Combo Keo Ong Dưỡng Ẩm SKINFOOD",
     "loai": "combo",
     "trang_thai": "DANG_CHAY",
     "may_rui": false,
@@ -549,6 +549,11 @@
     "ten": "Vòng quay may mắn",
     "loai": "may_rui",
     "nhom_qua": "cong_them",
+    "thuong_giu_hang": {
+      "tu_ngay": "2026-11-27",
+      "qua": "Thêm 1 lượt quay vòng quay may mắn",
+      "qua_en": "1 extra lucky-wheel spin"
+    },
     "trang_thai": "DANG_CHAY",
     "may_rui": true,
     "da_dang_ky": true,
