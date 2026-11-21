@@ -35,6 +35,8 @@ export const CauHinhLopoe3DSchema = z.object({
   mo_dau: z.object({ nho: z.string(), tieu_de: z.string(), cau: z.string(), nut: z.array(NutSchema).default([]) }),
   khoi: z.array(KhoiChu3DSchema).min(1),
   thanh_phan: z.object({ sua_rua_mat: z.array(ThanhPhanSchema).length(4), ampoule: z.array(ThanhPhanSchema).length(4) }),
+  /** DES-004: ảnh thành phần thật (BOD duyệt QD-DES-001) thay biểu tượng 3D trừu tượng; loại không có ảnh giữ 3D. */
+  anh_thanh_phan: z.object({ thua: z.string(), sen: z.string(), "phan-tu": z.string(), "rau-ma": z.string() }).partial().default({}),
   so_1: z.string().default("No.1"),
   /** W063: điện thoại dùng chuỗi ảnh dựng sẵn thay three.js (mượt, không nóng máy). Ảnh chỉ có sản phẩm + nền; chữ và nhãn vẫn là DOM. */
   khung_dien_thoai: z.object({

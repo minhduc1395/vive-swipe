@@ -127,4 +127,10 @@ thanh_phan:
     - { loai: sen, ten: "Sen xanh", loi: "Thanh lọc, dịu đỏ" }
     - { loai: xoan, ten: "Hyaluronic Acid", loi: "Ẩm đa tầng" }
     - { loai: phan-tu, ten: "Panthenol + Niacinamide", loi: "Khóa ẩm, củng cố hàng rào da" }
+# DES-004 (QD-DES-001): ảnh thành phần DES dựng, nền trong; Hyaluronic Acid (xoan) chưa có ảnh nên giữ 3D
+anh_thanh_phan:
+  thua: /thanh-phan/thanh-phan-cay-thua-xanh.webp
+  sen: /thanh-phan/thanh-phan-sen-xanh.webp
+  phan-tu: /thanh-phan/thanh-phan-b5-panthenol.webp
+  rau-ma: /thanh-phan/thanh-phan-rau-ma.webp
 so_1: "No.1"   # chữ lớn sau ampoule ở phần giải thưởng, chỉ hiện khi khối amp-giai-thuong hiện

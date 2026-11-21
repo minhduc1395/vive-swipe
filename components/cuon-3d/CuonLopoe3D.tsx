@@ -140,7 +140,9 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
     const giam = matchMedia("(prefers-reduced-motion: reduce)").matches;
     let coWebGL = false;
     try { coWebGL = !!document.createElement("canvas").getContext("webgl2"); } catch { coWebGL = false; }
-    const dungKhung = !!cfg.khung_dien_thoai && innerWidth < 768;
+    // ?ba-chieu=1: ép chạy three.js trên điện thoại (chỉ dùng khi chụp lại chuỗi ảnh khung)
+    const epBaChieu = new URLSearchParams(location.search).has("ba-chieu");
+    const dungKhung = !!cfg.khung_dien_thoai && innerWidth < 768 && !epBaChieu;
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setCheDo(giam ? "tinh" : dungKhung ? "khung" : coWebGL ? "3d" : "tinh");
   }, [cfg.khung_dien_thoai]);
@@ -347,6 +349,7 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
           taiSan: cfg.tai_san,
           hatSrm: cfg.thanh_phan.sua_rua_mat.map((t) => t.loai as LoaiHat),
           hatAmp: cfg.thanh_phan.ampoule.map((t) => t.loai as LoaiHat),
+          anhHat: cfg.anh_thanh_phan,
           so1: cfg.so_1,
           hienSo1: cfg.khoi.some((k) => k.id === "amp-giai-thuong"),
           giamChuyenDong: false,
