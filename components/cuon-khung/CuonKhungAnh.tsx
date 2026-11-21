@@ -96,7 +96,7 @@ export function CuonKhungAnh({ thuMuc, soKhung, rong, cao, chieuCaoVh }: Props) 
   return (
     <section ref={doan} aria-label="LOPOE Better Balance" className="relative" style={{ height: `${chieuCaoVh}vh` }}>
       {/* lvh: chiều cao lớn nhất, không đổi khi thanh địa chỉ ẩn/hiện → không vẽ lại canvas giữa chừng */}
-      <div className="sticky top-0 h-[100lvh] overflow-hidden bg-[#f3ece8]">
+      <div className="sticky top-0 h-[100lvh] overflow-hidden bg-hong-nhat">
         <canvas ref={vas} className="block h-full w-full" />
       </div>
     </section>
