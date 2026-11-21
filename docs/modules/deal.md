@@ -16,3 +16,4 @@ Hiển thị deal và tính giỏ hàng theo luật giá, quà.
 
 ## Lịch sử ngắn
 - 2026-11-20 W062 (QA-003): deal web theo 3 ưu đãi (PR #50).
+- 2026-11-21 #53: bước 6 của tinhGio duyệt mọi deal `nhom_qua: cong_them` (không gõ cứng id); /gio hiện "Thêm: …" (lượt quay DC-02).

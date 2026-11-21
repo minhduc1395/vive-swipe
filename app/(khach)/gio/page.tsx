@@ -77,6 +77,18 @@ export default function TrangGio() {
     });
   }, [gioInput, sanPham, deals, danhSachThich]);
 
+  const dieuKienCongThem = useMemo(() => {
+    if (ketQua.qua_cong_them.length === 0) return null;
+    const deal = deals.find(
+      (d) =>
+        d.nhom_qua === "cong_them" &&
+        d.dieu_kien &&
+        (d.moc?.some((m) => ketQua.qua_cong_them.includes(m.qua)) ||
+          (d.qua != null && ketQua.qua_cong_them.includes(d.qua)))
+    );
+    return deal?.dieu_kien ?? null;
+  }, [ketQua.qua_cong_them, deals]);
+
   const tongSoLuongGio = useMemo(() => {
     return gioHang.reduce((sum, item) => sum + item.soLuong, 0);
   }, [gioHang]);
@@ -164,7 +176,9 @@ export default function TrangGio() {
               {/* Cột trái: Quà theo hóa đơn, Mốc tiếp theo, Đổi combo, và Danh sách sản phẩm */}
               <div className="flex flex-col gap-5 min-w-0">
                 {/* 1. Phần Quà theo hóa đơn & Mốc tiếp theo & Đổi combo */}
-            {(ketQua.qua_du_kien || ketQua.moc_tiep_theo) && (
+            {(ketQua.qua_du_kien ||
+              ketQua.qua_cong_them.length > 0 ||
+              ketQua.moc_tiep_theo) && (
               <section
                 aria-label="Quà theo hóa đơn"
                 className="rounded-[22px] bg-hong-nhat p-4 flex flex-col gap-3"
@@ -202,10 +216,29 @@ export default function TrangGio() {
                   </div>
                 )}
 
+                {/* Quà cộng thêm (lượt quay...), không thay quà theo hóa đơn */}
+                {ketQua.qua_cong_them.length > 0 && (
+                  <div className="flex flex-col gap-0.5">
+                    {ketQua.qua_cong_them.map((qua) => (
+                      <strong
+                        key={qua}
+                        className="text-[15px] font-semibold text-den"
+                      >
+                        Thêm: {qua}
+                      </strong>
+                    ))}
+                    {dieuKienCongThem && (
+                      <span className="text-[13px] text-xam-dam">
+                        {dieuKienCongThem}
+                      </span>
+                    )}
+                  </div>
+                )}
+
                 {/* Thanh tới mốc quà tiếp theo */}
                 {ketQua.moc_tiep_theo && (
                   <>
-                    {ketQua.qua_du_kien && (
+                    {(ketQua.qua_du_kien || ketQua.qua_cong_them.length > 0) && (
                       <div className="h-[1px] bg-hong" />
                     )}
                     <p className="m-0 text-[14px] leading-[1.45] text-den">
