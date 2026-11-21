@@ -156,6 +156,7 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
     const dangGiai = new Set<number>();
     let tamCuaSo = 0, huongCuon = 1;
     let nhanKhung: ({ srm: (number[] | 0)[]; amp: (number[] | 0)[] })[] = [];
+    let pKhung: number[] = []; // tiến trình p của từng khung (khung dày ở đoạn hình đổi nhiều, thưa ở đoạn đứng yên)
     let ctx2d: CanvasRenderingContext2D | null = null, khoaVe = -1;
     let raf = 0, hien = false, huy = false, p = 0, truoc = performance.now(), dangTai = false;
     const elDoan = doan.current, elLop = lop.current, elCanvas = canvas.current;
@@ -213,7 +214,7 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
         // Chế độ khung ảnh: bám cuộn nhanh (≈70ms), chỉ vẽ khi đổi; không có vòng vẽ nặng nên không giật
         const dt = Math.min(0.1, (time - truoc) / 1000);
         truoc = time;
-        p += (dich - p) * (1 - Math.exp(-dt * 14));
+        p += (dich - p) * (1 - Math.exp(-dt * 24)); // ≈40ms: gần như bám tay, chỉ làm êm bước cuộn
         if (Math.abs(dich - p) < 2e-5) p = dich;
         veAnh(p);
         capNhatChu(p);
@@ -249,30 +250,37 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
       const dpr = 2; // canvas đúng cỡ ảnh gốc (780 = 390×2): vẽ không phải co giãn ảnh, rẻ nhất
       elCanvas.width = Math.round(elCanvas.clientWidth * dpr);
       elCanvas.height = Math.round(elCanvas.clientHeight * dpr);
-      khoaVe = -1;
+      khoaVe = -1; anhDaVe = null;
+    };
+    /** Khung có p ≤ pp (tìm nhị phân) */
+    const timKhung = (pp: number) => {
+      let lo = 0, hi = pKhung.length - 1;
+      while (lo < hi) { const m = (lo + hi + 1) >> 1; if (pKhung[m] <= pp) lo = m; else hi = m - 1; }
+      return lo;
     };
     const veAnh = (pp: number) => {
-      if (!kd || !ctx2d) return;
-      const f = pp * (kd.so - 1), i = Math.floor(f), t = f - i;
-      if (i !== tamCuaSo) { huongCuon = i > tamCuaSo ? 1 : -1; tamCuaSo = i; capNhatCuaSo(); }
-      const khoa = Math.round(f * 4); // vẽ lại khi lệch ≥ 1/4 khung (mỗi lần vẽ phải đẩy cả canvas lên GPU)
+      if (!kd || !ctx2d || pKhung.length < 2) return;
+      const i = timKhung(pp), j = Math.min(pKhung.length - 1, i + 1);
+      const t = j > i ? kep((pp - pKhung[i]) / (pKhung[j] - pKhung[i])) : 0;
+      const gan1 = t < 0.5 ? i : j; // khung gần nhất, không hoà trộn (hoà trộn tạo bóng mờ khi dừng giữa 2 khung)
+      if (gan1 !== tamCuaSo) { huongCuon = gan1 > tamCuaSo ? 1 : -1; tamCuaSo = gan1; capNhatCuaSo(); }
+      const khoa = gan1 * 1000 + Math.round(t * 20); // nhãn vẫn nội suy mượt giữa 2 khung
       if (khoa === khoaVe) return;
-      khoaVe = khoa;
-      const W = elCanvas.width, H = elCanvas.height;
-      const s = Math.max(W / kd.rong, H / kd.cao), w = kd.rong * s, h = kd.cao * s, ox = (W - w) / 2, oy = (H - h) / 2;
-      const a = gan(i), b = t > 0.03 ? gan(Math.min(kd.so - 1, i + 1)) : null;
-      if (a) {
-        ctx2d.globalAlpha = 1; ctx2d.drawImage(a, ox, oy, w, h);
-        if (b && b !== a) { ctx2d.globalAlpha = t; ctx2d.drawImage(b, ox, oy, w, h); ctx2d.globalAlpha = 1; }
+      const a = gan(gan1);
+      if (a && a !== anhDaVe) {
+        const W = elCanvas.width, H = elCanvas.height;
+        const s = Math.max(W / kd.rong, H / kd.cao), w = kd.rong * s, h = kd.cao * s;
+        ctx2d.drawImage(a, (W - w) / 2, (H - h) / 2, w, h);
+        anhDaVe = a;
         if (!daVeDau) { daVeDau = true; setDaTai(true); }
       }
-      // Nhãn thành phần: vị trí ghi lại ở khung nhìn vp_rong×vp_cao, nội suy giữa 2 khung rồi co giãn theo ảnh
-      const n0 = nhanKhung[i], n1 = nhanKhung[Math.min(kd.so - 1, i + 1)] ?? n0;
+      khoaVe = khoa;
+      const n0 = nhanKhung[i], n1 = nhanKhung[j] ?? n0;
       if (!n0) return;
       const sc = Math.max(elCanvas.clientWidth / kd.vp_rong, elCanvas.clientHeight / kd.vp_cao);
       const cx = (elCanvas.clientWidth - kd.vp_rong * sc) / 2, cy = (elCanvas.clientHeight - kd.vp_cao * sc) / 2;
-      const noi = (A: (number[] | 0)[], B: (number[] | 0)[]) => A.map((v, j) => {
-        const u = B[j];
+      const noi = (A: (number[] | 0)[], B: (number[] | 0)[]) => A.map((v, k) => {
+        const u = B[k];
         if (!v && !u) return { x: 0, y: 0, o: 0 };
         const va = v || (u as number[]), vb = u || va;
         const o = (v ? (v as number[])[2] : 0) * (1 - t) + (u ? (u as number[])[2] : 0) * t;
@@ -281,6 +289,7 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
       datNhan(nhanSrm, noi(n0.srm, n1.srm), 0, 0, true);
       datNhan(nhanAmp, noi(n0.amp, n1.amp), 0, 0, true);
     };
+    let anhDaVe: ImageBitmap | null = null;
     let daVeDau = false;
     const TRUOC = 14, SAU = 5; // giải mã trước 14 khung theo hướng cuộn, 5 khung phía sau; còn lại bỏ (mỗi khung ~5 MB khi giải mã, giữ ~20 khung ≈ 100 MB)
     const ngoaiCuaSo = (i: number) => (i - tamCuaSo) * huongCuon > TRUOC + 2 || (tamCuaSo - i) * huongCuon > SAU + 2;
@@ -316,8 +325,9 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
       const tai = (i: number) =>
         blobKhung[i] || huy ? Promise.resolve() :
         fetch(url(i)).then((r) => r.blob()).then((bl) => { blobKhung[i] = bl; capNhatCuaSo(); }, () => {});
-      fetch(kd.nhan).then((r) => r.json()).then((j) => { nhanKhung = j; khoaVe = -1; }).catch(() => {});
       (async () => {
+        try { const j = await (await fetch(kd.nhan)).json(); pKhung = j.p; nhanKhung = j.nhan; khoaVe = -1; } catch { return; }
+        tamCuaSo = timKhung(p);
         await tai(0);
         // tải các khung gần vị trí hiện tại trước, sau đó lấp hết (song song 4 luồng)
         const thuTu = Array.from({ length: kd.so }, (_, i) => i).sort((a, b) => Math.abs(a - tamCuaSo) - Math.abs(b - tamCuaSo));
