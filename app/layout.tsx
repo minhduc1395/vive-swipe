@@ -22,7 +22,17 @@ const playfairDisplay = Playfair_Display({
   preload: false,
 });
 
+const DIA_CHI_WEB_MAC_DINH = "https://vive-swipe-5byasgvzsa-an.a.run.app";
+
+// Địa chỉ gốc để Next ghép og:image thành URL tuyệt đối. Không bao giờ ra localhost.
+// NEXT_PUBLIC_SITE_URL được gắn lúc build (Cloud Build), bỏ dấu "/" thừa cuối.
+function diaChiWeb(): string {
+  const dat = (process.env.NEXT_PUBLIC_SITE_URL ?? "").trim().replace(/\/+$/, "");
+  return dat || DIA_CHI_WEB_MAC_DINH;
+}
+
 export const metadata: Metadata = {
+  metadataBase: new URL(diaChiWeb()),
   title: "VIVE Quẹt · K-Beauty Experience",
   description:
     "Quẹt phải món hợp da, khám phá mỹ phẩm nội địa Hàn và nhận deal tại VIVE.",
