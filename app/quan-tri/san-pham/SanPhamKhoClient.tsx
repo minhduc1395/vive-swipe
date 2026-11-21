@@ -712,6 +712,9 @@ export function SanPhamKhoClient() {
           <Nut bien="chinh" onClick={moTaoSanPhamMoi}>
             + Thêm mã mới
           </Nut>
+          <NutLink href="/quan-tri/san-pham/nhap" bien="phu">
+            Nhập / Xuất Excel
+          </NutLink>
           {phien.vaiTro === "quan_tri" && (
             <NutLink href="/quan-tri" bien="phu">
               Bảng quản trị

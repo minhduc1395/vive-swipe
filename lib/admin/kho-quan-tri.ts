@@ -23,6 +23,13 @@ import {
   type SanPhamKho,
   type ThayDoiSanPhamInput,
 } from "./san-pham-kho";
+import {
+  GIOI_HAN_BYTE_EXCEL,
+  phanTichFileExcelSanPham,
+  taoFileExcelMau,
+  xuatFileExcelSanPham,
+  type KetQuaXemTruocExcel,
+} from "./excel-san-pham";
 
 export interface ThongKeQuanTri {
   tongKhach: number;
@@ -56,10 +63,28 @@ export interface DuLieuQuanTri {
   cheDoDatabase: "supabase" | "dev_memory";
 }
 
+export interface LoNhapLieuItem {
+  id: string;
+  ten_file: string;
+  kenh: "excel_web" | "drive_ai" | "tay";
+  trang_thai: "xem_truoc" | "da_ap_dung" | "huy" | "loi";
+  so_dong: number;
+  so_moi: number;
+  so_sua: number;
+  so_loi: number;
+  ket_qua: KetQuaXemTruocExcel;
+  duong_dan_bucket: string | null;
+  boi: string | null;
+  tao_luc: string;
+  ap_dung_luc: string | null;
+}
+
 interface KhoQuanTriDev {
   sanPham: SanPham[];
   sanPhamKho: SanPhamKho[];
   lichSuSanPham: LichSuSanPhamItem[];
+  loNhapLieu: LoNhapLieuItem[];
+  tapTinNhapLieu: Record<string, string>;
   deals: Deal[];
   lichSu: LichSuQuanTri[];
   danhSachEmail: KhachEmailItem[];
@@ -138,6 +163,8 @@ function layKhoDev(): KhoQuanTriDev {
       sanPham: sanPhamKho.map((sp) => ({ ...sp })),
       sanPhamKho,
       lichSuSanPham: [],
+      loNhapLieu: [],
+      tapTinNhapLieu: {},
       deals: DEALS_TINH.map((d) => ({ ...d })),
       lichSu: [],
       danhSachEmail: [
@@ -149,6 +176,12 @@ function layKhoDev(): KhoQuanTriDev {
       ],
       daChinhSua: false,
     };
+  }
+  if (!globalThis.__VIVE_QUAN_TRI_DEV__.loNhapLieu) {
+    globalThis.__VIVE_QUAN_TRI_DEV__.loNhapLieu = [];
+  }
+  if (!globalThis.__VIVE_QUAN_TRI_DEV__.tapTinNhapLieu) {
+    globalThis.__VIVE_QUAN_TRI_DEV__.tapTinNhapLieu = {};
   }
   return globalThis.__VIVE_QUAN_TRI_DEV__;
 }
@@ -791,4 +824,299 @@ export async function suaSanPhamKhoServer(params: {
 
   const lichSu = await layLichSuSanPhamServer(params.id);
   return { sanPham: spMoi, lichSu };
+}
+
+function lamSachTenFileNhapLieu(tenFile: string): string {
+  return tenFile
+    .trim()
+    .replace(/[^a-zA-Z0-9._-]+/g, "_")
+    .replace(/^_+|_+$/g, "") || "nhap-lieu.xlsx";
+}
+
+function chuanHoaDongLoNhapLieu(row: Record<string, unknown>): LoNhapLieuItem {
+  const ketQuaRaw = (row.ket_qua && typeof row.ket_qua === "object"
+    ? row.ket_qua
+    : {}) as Partial<KetQuaXemTruocExcel> & { duong_dan_bucket?: string };
+
+  const tenFile = String(row.ten_file || "nhap-lieu.xlsx");
+  return {
+    id: String(row.id),
+    ten_file: tenFile,
+    kenh: (row.kenh as LoNhapLieuItem["kenh"]) || "excel_web",
+    trang_thai: (row.trang_thai as LoNhapLieuItem["trang_thai"]) || "xem_truoc",
+    so_dong: Number(row.so_dong ?? ketQuaRaw.tongSoDong ?? 0),
+    so_moi: Number(row.so_moi ?? ketQuaRaw.soMaMoi ?? 0),
+    so_sua: Number(row.so_sua ?? ketQuaRaw.soMaSua ?? 0),
+    so_loi: Number(row.so_loi ?? ketQuaRaw.soDongLoi ?? 0),
+    ket_qua: {
+      hopLe: Boolean(ketQuaRaw.hopLe ?? false),
+      loiChung: ketQuaRaw.loiChung ?? null,
+      tenFile: ketQuaRaw.tenFile || tenFile,
+      tongSoDong: Number(ketQuaRaw.tongSoDong ?? row.so_dong ?? 0),
+      soMaMoi: Number(ketQuaRaw.soMaMoi ?? row.so_moi ?? 0),
+      soMaSua: Number(ketQuaRaw.soMaSua ?? row.so_sua ?? 0),
+      soDongKhongDoi: Number(ketQuaRaw.soDongKhongDoi ?? 0),
+      soDongLoi: Number(ketQuaRaw.soDongLoi ?? row.so_loi ?? 0),
+      dongHopLe: Array.isArray(ketQuaRaw.dongHopLe) ? ketQuaRaw.dongHopLe : [],
+      dongLoi: Array.isArray(ketQuaRaw.dongLoi) ? ketQuaRaw.dongLoi : [],
+    },
+    duong_dan_bucket: ketQuaRaw.duong_dan_bucket ?? null,
+    boi: row.boi ? String(row.boi) : null,
+    tao_luc: String(row.tao_luc || new Date().toISOString()),
+    ap_dung_luc: row.ap_dung_luc ? String(row.ap_dung_luc) : null,
+  };
+}
+
+export async function taoBufferFileExcelMauServer(): Promise<Buffer> {
+  return taoFileExcelMau();
+}
+
+export async function xuatBufferFileExcelSanPhamServer(): Promise<{
+  buffer: Buffer;
+  soSanPham: number;
+}> {
+  const { sanPham } = await layDanhSachSanPhamKhoServer();
+  const buffer = await xuatFileExcelSanPham(sanPham);
+  return { buffer, soSanPham: sanPham.length };
+}
+
+export async function layDanhSachLoNhapLieuServer(): Promise<LoNhapLieuItem[]> {
+  const admin = layAdmin();
+  if (!admin) {
+    if (!choPhepKhoTam()) {
+      throw new Error("Chưa cấu hình khóa dịch vụ Supabase (layAdmin)");
+    }
+    return layKhoDev().loNhapLieu.slice(0, 30);
+  }
+
+  const { data, error } = await admin
+    .from("lo_nhap_lieu")
+    .select(
+      "id, ten_file, kenh, trang_thai, so_dong, so_moi, so_sua, so_loi, ket_qua, boi, tao_luc, ap_dung_luc",
+    )
+    .order("tao_luc", { ascending: false })
+    .limit(30);
+
+  if (error) {
+    throw new Error(`Lỗi đọc bảng lo_nhap_lieu: ${error.message}`);
+  }
+  return (data || []).map((r) =>
+    chuanHoaDongLoNhapLieu(r as Record<string, unknown>),
+  );
+}
+
+export async function taoLoXemTruocExcelServer(params: {
+  tenFile: string;
+  buffer: Buffer;
+  boi: string;
+  vaiTro: "kho" | "quan_tri";
+}): Promise<LoNhapLieuItem> {
+  const tenFile = params.tenFile.trim() || "san-pham.xlsx";
+  if (params.buffer.byteLength > GIOI_HAN_BYTE_EXCEL) {
+    throw new Error("Dung lượng file vượt quá giới hạn 5 MB.");
+  }
+  const tenLower = tenFile.toLowerCase();
+  if (!tenLower.endsWith(".xlsx") && !tenLower.endsWith(".csv")) {
+    throw new Error("Chỉ hỗ trợ file định dạng .xlsx hoặc .csv.");
+  }
+
+  const { sanPham } = await layDanhSachSanPhamKhoServer();
+  const ketQua = await phanTichFileExcelSanPham({
+    buffer: params.buffer,
+    tenFile,
+    danhSachHienTai: sanPham,
+    vaiTro: params.vaiTro,
+  });
+
+  const trangThai: LoNhapLieuItem["trang_thai"] =
+    !ketQua.loiChung && ketQua.dongHopLe.length > 0 ? "xem_truoc" : "loi";
+  const now = new Date().toISOString();
+  const duongDanBucket = `excel/${now.slice(0, 7)}/${Date.now()}_${lamSachTenFileNhapLieu(tenFile)}`;
+
+  const admin = layAdmin();
+  if (!admin) {
+    if (!choPhepKhoTam()) {
+      throw new Error("Chưa cấu hình khóa dịch vụ Supabase (layAdmin)");
+    }
+    const kho = layKhoDev();
+    const maLo = `lo-dev-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    kho.tapTinNhapLieu[duongDanBucket] = params.buffer.toString("base64");
+    const loMoi: LoNhapLieuItem = {
+      id: maLo,
+      ten_file: tenFile,
+      kenh: "excel_web",
+      trang_thai: trangThai,
+      so_dong: ketQua.tongSoDong,
+      so_moi: ketQua.soMaMoi,
+      so_sua: ketQua.soMaSua,
+      so_loi: ketQua.soDongLoi,
+      ket_qua: ketQua,
+      duong_dan_bucket: duongDanBucket,
+      boi: params.boi,
+      tao_luc: now,
+      ap_dung_luc: null,
+    };
+    kho.loNhapLieu.unshift(loMoi);
+    return loMoi;
+  }
+
+  const contentType = tenLower.endsWith(".csv")
+    ? "text/csv"
+    : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+  const { error: uploadErr } = await admin.storage
+    .from("nhap-lieu")
+    .upload(duongDanBucket, params.buffer, {
+      contentType,
+      upsert: false,
+    });
+  if (uploadErr) {
+    throw new Error(`Không lưu được file vào bucket nhap-lieu: ${uploadErr.message}`);
+  }
+
+  const { data: loRow, error: insErr } = await admin
+    .from("lo_nhap_lieu")
+    .insert({
+      ten_file: tenFile,
+      kenh: "excel_web",
+      trang_thai: trangThai,
+      so_dong: ketQua.tongSoDong,
+      so_moi: ketQua.soMaMoi,
+      so_sua: ketQua.soMaSua,
+      so_loi: ketQua.soDongLoi,
+      ket_qua: {
+        ...ketQua,
+        duong_dan_bucket: duongDanBucket,
+      },
+      boi: params.boi,
+    })
+    .select(
+      "id, ten_file, kenh, trang_thai, so_dong, so_moi, so_sua, so_loi, ket_qua, boi, tao_luc, ap_dung_luc",
+    )
+    .single();
+
+  if (insErr) {
+    throw new Error(`Không ghi được bản ghi lo_nhap_lieu: ${insErr.message}`);
+  }
+
+  return chuanHoaDongLoNhapLieu(loRow as Record<string, unknown>);
+}
+
+export async function apDungLoExcelServer(params: {
+  maLo: string;
+  boi: string;
+  vaiTro: "kho" | "quan_tri";
+}): Promise<{
+  lo: LoNhapLieuItem;
+  soMaDaGhi: number;
+}> {
+  const maLo = params.maLo.trim();
+  if (!maLo) {
+    throw new Error("Thiếu mã lô nhập liệu.");
+  }
+
+  const admin = layAdmin();
+  if (!admin) {
+    if (!choPhepKhoTam()) {
+      throw new Error("Chưa cấu hình khóa dịch vụ Supabase (layAdmin)");
+    }
+    const kho = layKhoDev();
+    const lo = kho.loNhapLieu.find((item) => item.id === maLo);
+    if (!lo) {
+      throw new Error(`Không tìm thấy lô nhập liệu ${maLo}.`);
+    }
+    if (lo.trang_thai === "da_ap_dung") {
+      throw new Error("Lô nhập liệu này đã được áp dụng trước đó.");
+    }
+    if (lo.ket_qua.loiChung || lo.ket_qua.dongHopLe.length === 0) {
+      throw new Error("Lô nhập liệu không có dòng hợp lệ nào để áp dụng.");
+    }
+
+    // Áp dụng nguyên khối (atomic): lỗi ở bất kỳ dòng nào sẽ giữ nguyên trạng thái kho cũ
+    const now = new Date().toISOString();
+    let dsTam = [...kho.sanPhamKho];
+    let lsTam = [...kho.lichSuSanPham];
+
+    for (const dong of lo.ket_qua.dongHopLe) {
+      const kq = thucThiSuaSanPhamRpc(dsTam, lsTam, {
+        id: dong.id,
+        thayDoi: dong.thayDoi,
+        nguon: "excel",
+        boi: params.boi,
+        vaiTro: params.vaiTro,
+        now,
+      });
+      dsTam = kq.danhSachMoi;
+      lsTam = kq.lichSuMoi;
+    }
+
+    kho.sanPhamKho = dsTam;
+    kho.lichSuSanPham = lsTam;
+    dongBoKhoSanPhamCoBanTuKho(kho);
+    kho.daChinhSua = true;
+    lo.trang_thai = "da_ap_dung";
+    lo.ap_dung_luc = now;
+    kho.lichSu.unshift({
+      id: `dev-excel-${Date.now()}`,
+      ten: "quan_tri_nhap_excel_san_pham",
+      moTa: `${params.boi} (${params.vaiTro}): áp dụng lô Excel ${lo.ten_file} (${lo.ket_qua.dongHopLe.length} mã)`,
+      taoLuc: now,
+    });
+
+    return {
+      lo,
+      soMaDaGhi: lo.ket_qua.dongHopLe.length,
+    };
+  }
+
+  const { data: loRow, error: loErr } = await admin
+    .from("lo_nhap_lieu")
+    .select(
+      "id, ten_file, kenh, trang_thai, so_dong, so_moi, so_sua, so_loi, ket_qua, boi, tao_luc, ap_dung_luc",
+    )
+    .eq("id", maLo)
+    .single();
+
+  if (loErr || !loRow) {
+    throw new Error(`Không tìm thấy lô nhập liệu ${maLo}: ${loErr?.message || ""}`);
+  }
+
+  const lo = chuanHoaDongLoNhapLieu(loRow as Record<string, unknown>);
+  if (lo.trang_thai === "da_ap_dung") {
+    throw new Error("Lô nhập liệu này đã được áp dụng trước đó.");
+  }
+  if (lo.ket_qua.loiChung || lo.ket_qua.dongHopLe.length === 0) {
+    throw new Error("Lô nhập liệu không có dòng hợp lệ nào để áp dụng.");
+  }
+
+  const danhSachRpc = lo.ket_qua.dongHopLe.map((dong) => ({
+    id: dong.id,
+    thay_doi: dong.thayDoi,
+  }));
+
+  const { error: rpcErr } = await admin.rpc("ap_dung_lo_excel", {
+    p_lo_id: maLo,
+    p_danh_sach: danhSachRpc,
+    p_vai_tro: params.vaiTro,
+    p_boi: params.boi,
+  });
+
+  if (rpcErr) {
+    throw new Error(`Lỗi áp dụng lô Excel (rollback toàn bộ): ${rpcErr.message}`);
+  }
+
+  const { data: loSau } = await admin
+    .from("lo_nhap_lieu")
+    .select(
+      "id, ten_file, kenh, trang_thai, so_dong, so_moi, so_sua, so_loi, ket_qua, boi, tao_luc, ap_dung_luc",
+    )
+    .eq("id", maLo)
+    .single();
+
+  return {
+    lo: loSau
+      ? chuanHoaDongLoNhapLieu(loSau as Record<string, unknown>)
+      : { ...lo, trang_thai: "da_ap_dung", ap_dung_luc: new Date().toISOString() },
+    soMaDaGhi: lo.ket_qua.dongHopLe.length,
+  };
 }
