@@ -10,7 +10,7 @@ describe("W049 · Chân trang & DoanhNghiepSchema", () => {
     expect(DOANH_NGHIEP.dia_chi_booth).toContain("Phường Sài Gòn");
     expect(DOANH_NGHIEP.dia_chi_booth_en).toContain("Sai Gon Ward");
     expect(DOANH_NGHIEP.ban_do).toBe(
-      "https://maps.google.com/?q=Union+Square+171+Dong+Khoi+Ho+Chi+Minh"
+      "https://maps.app.goo.gl/JLNcDuKxeuYFT1yA7"
     );
     expect(DOANH_NGHIEP.mang_xa_hoi).toHaveLength(3);
 
