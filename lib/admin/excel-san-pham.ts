@@ -310,7 +310,7 @@ function themSheetHuongDan(workbook: ExcelJS.Workbook): void {
     [
       "Phân quyền kho",
       "Khóa giá & hiển thị",
-      "Vai trò kho không sửa được gia_goc, gia_ban, hien_thi. Mã mới do kho tạo mặc định hien_thi = FALSE.",
+      "Vai trò kho không sửa được gia_goc, gia_ban, hien_thi của mã đã có. Mã mới cần gia_ban và luôn ẩn (hien_thi = FALSE) tới khi quản trị bật.",
     ],
     [
       "Phân cách nhiều nhãn",
@@ -408,7 +408,7 @@ export async function taoFileExcelMau(): Promise<Buffer> {
     quy_cach: "50ml",
     danh_muc: "tinh-chat",
     gia_goc: "",
-    gia_ban: "",
+    gia_ban: "350000",
     mo_ta: "Tinh chất cấp ẩm dịu nhẹ mẫu thử.",
     mo_ta_en: "Soothing hydrating essence sample.",
     van_de: "cap-am, lam-diu",
@@ -929,7 +929,19 @@ export async function phanTichFileExcelSanPham(params: {
         if (spCu) {
           if (rawGiaBan !== String(spCu.gia_ban)) daBoQuaQuyen = true;
         } else {
-          daBoQuaQuyen = true;
+          // Mã mới: kho được nhập giá bán (mã mới luôn ẩn tới khi quản trị bật)
+          const parsed = phanTichSoNguyenDuong(rawGiaBan);
+          if (!parsed.ok) {
+            errorsDong.push(parsed.lyDo);
+          } else {
+            thayDoi.gia_ban = parsed.value;
+            soSanh.push({
+              truong: "gia_ban",
+              nhanTruong: NHAN_TRUONG_SAN_PHAM.gia_ban,
+              giaTriCu: "(trống)",
+              giaTriMoi: String(parsed.value),
+            });
+          }
         }
       }
       if (rawHienThi) {
@@ -955,6 +967,7 @@ export async function phanTichFileExcelSanPham(params: {
       if (!thayDoi.thuong_hieu) thieuMoi.push("thuong_hieu");
       if (!thayDoi.ten_hien_thi && !thayDoi.ten_goc) thieuMoi.push("ten_hien_thi");
       if (!thayDoi.danh_muc) thieuMoi.push("danh_muc");
+      if (!thayDoi.gia_ban) thieuMoi.push("gia_ban");
       if (thieuMoi.length > 0) {
         errorsDong.push(`Mã mới thiếu trường bắt buộc: ${thieuMoi.join(", ")}.`);
       }

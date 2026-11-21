@@ -49,18 +49,21 @@ begin
   perform set_config('vive.nguon', p_nguon, true);
   perform set_config('vive.boi', coalesce(p_boi, ''), true);
 
-  -- Kho và AI không được sửa giá hoặc trạng thái hiển thị
-  if (p_nguon = 'ai' or v_vai_tro = 'kho') and (
-    v_thay_doi ? 'gia_goc' or
-    v_thay_doi ? 'gia_ban' or
-    v_thay_doi ? 'hien_thi'
-  ) then
-    raise exception 'Vai trò kho hoặc AI không có quyền sửa giá và trạng thái hiển thị';
-  end if;
-
   select * into v_cu from public.san_pham where id = p_id for update;
 
   if not found then
+    -- Mã mới phải đủ thương hiệu, tên, danh mục, giá bán; không tự điền giá trị mặc định (Claude 21/11)
+    if nullif(btrim(coalesce(v_thay_doi ->> 'thuong_hieu', '')), '') is null
+       or coalesce(nullif(btrim(coalesce(v_thay_doi ->> 'ten_hien_thi', '')), ''), nullif(btrim(coalesce(v_thay_doi ->> 'ten_goc', '')), '')) is null
+       or nullif(btrim(coalesce(v_thay_doi ->> 'danh_muc', '')), '') is null
+       or coalesce(nullif(v_thay_doi ->> 'gia_ban', '')::integer, 0) <= 0 then
+      raise exception 'Mã mới % cần đủ thương hiệu, tên, danh mục và giá bán', p_id;
+    end if;
+    -- AI không tạo mã mới; kho được nhập giá cho mã mới (mã mới luôn ẩn tới khi quản trị bật)
+    if p_nguon = 'ai' then
+      raise exception 'AI không được tạo mã sản phẩm mới';
+    end if;
+
     -- Tạo mã sản phẩm mới: kho và AI luôn mặc định hien_thi = false
     v_hien_thi := case
       when v_vai_tro = 'quan_tri' and p_nguon <> 'ai'
@@ -91,15 +94,15 @@ begin
     ) values (
       p_id,
       nullif(v_thay_doi ->> 'barcode', ''),
-      coalesce(nullif(v_thay_doi ->> 'thuong_hieu', ''), 'LOPOE'),
+      btrim(v_thay_doi ->> 'thuong_hieu'),
       coalesce(nullif(v_thay_doi ->> 'ten_goc', ''), nullif(v_thay_doi ->> 'ten_hien_thi', ''), p_id),
       coalesce(nullif(v_thay_doi ->> 'ten_hien_thi', ''), nullif(v_thay_doi ->> 'ten_goc', ''), p_id),
       nullif(v_thay_doi ->> 'ten_en', ''),
       nullif(v_thay_doi ->> 'quy_cach', ''),
       case when (v_thay_doi -> 'gia_goc') is null or jsonb_typeof(v_thay_doi -> 'gia_goc') = 'null' then null else (v_thay_doi ->> 'gia_goc')::integer end,
-      coalesce(nullif(v_thay_doi ->> 'gia_ban', '')::integer, 1000),
+      (v_thay_doi ->> 'gia_ban')::integer,
       nullif(v_thay_doi ->> 'giam_tren_tag', ''),
-      coalesce(nullif(v_thay_doi ->> 'danh_muc', ''), 'tinh-chat'),
+      btrim(v_thay_doi ->> 'danh_muc'),
       coalesce(array(select jsonb_array_elements_text(coalesce(v_thay_doi -> 'van_de', '[]'::jsonb))), '{}'::text[]),
       coalesce(array(select jsonb_array_elements_text(coalesce(v_thay_doi -> 'thanh_phan', '[]'::jsonb))), '{}'::text[]),
       coalesce(array(select jsonb_array_elements_text(coalesce(v_thay_doi -> 'loai_da', '[]'::jsonb))), '{}'::text[]),
@@ -124,7 +127,15 @@ begin
     return to_jsonb(v_moi);
   end if;
 
-  -- Cập nhật sản phẩm đã có
+  -- Cập nhật sản phẩm đã có. Kho và AI không được sửa giá hoặc trạng thái hiển thị
+  if (p_nguon = 'ai' or v_vai_tro = 'kho') and (
+    v_thay_doi ? 'gia_goc' or
+    v_thay_doi ? 'gia_ban' or
+    v_thay_doi ? 'hien_thi'
+  ) then
+    raise exception 'Vai trò kho hoặc AI không có quyền sửa giá và trạng thái hiển thị';
+  end if;
+
   v_cu_json := to_jsonb(v_cu);
   v_nguon_truong := coalesce(v_cu.nguon_truong, '{}'::jsonb);
 

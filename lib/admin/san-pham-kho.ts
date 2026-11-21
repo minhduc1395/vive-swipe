@@ -258,6 +258,7 @@ export function thucThiSuaSanPhamRpc(
   const thayDoi = params.thayDoi;
 
   if (
+    danhSachHienTai.some((sp) => sp.id === id) &&
     (nguon === "ai" || vaiTro === "kho") &&
     (thayDoi.gia_goc !== undefined ||
       thayDoi.gia_ban !== undefined ||
@@ -288,13 +289,24 @@ export function thucThiSuaSanPhamRpc(
       chuanHoaChuoiTuyChon(thayDoi.ten_goc) ??
       id;
     const tenGoc = chuanHoaChuoiTuyChon(thayDoi.ten_goc) ?? tenHienThi;
-    const giaBan = thayDoi.gia_ban ?? 1000;
+    const thuongHieuMoi = chuanHoaChuoiTuyChon(thayDoi.thuong_hieu);
+    const coTen =
+      chuanHoaChuoiTuyChon(thayDoi.ten_hien_thi) ??
+      chuanHoaChuoiTuyChon(thayDoi.ten_goc);
+    if (!thuongHieuMoi || !coTen || !thayDoi.danh_muc || !(Number(thayDoi.gia_ban) > 0)) {
+      throw new Error(`Mã mới ${id} cần đủ thương hiệu, tên, danh mục và giá bán`);
+    }
+    // AI không tạo mã mới; kho được nhập giá cho mã mới (mã mới luôn ẩn tới khi quản trị bật)
+    if (nguon === "ai") {
+      throw new Error("AI không được tạo mã sản phẩm mới");
+    }
+    const giaBan = Number(thayDoi.gia_ban);
     const giaGoc = thayDoi.gia_goc ?? null;
 
     const spMoiTho: Record<string, unknown> = {
       id,
       barcode: chuanHoaChuoiTuyChon(thayDoi.barcode),
-      thuong_hieu: chuanHoaChuoiTuyChon(thayDoi.thuong_hieu) ?? "LOPOE",
+      thuong_hieu: thuongHieuMoi,
       ten_goc: tenGoc,
       ten_hien_thi: tenHienThi,
       ten_en: chuanHoaChuoiTuyChon(thayDoi.ten_en),
@@ -302,7 +314,7 @@ export function thucThiSuaSanPhamRpc(
       gia_goc: giaGoc,
       gia_ban: giaBan,
       giam_tren_tag: null,
-      danh_muc: thayDoi.danh_muc ?? "tinh-chat",
+      danh_muc: thayDoi.danh_muc,
       van_de: Array.isArray(thayDoi.van_de) ? [...thayDoi.van_de] : [],
       thanh_phan: Array.isArray(thayDoi.thanh_phan)
         ? [...thayDoi.thanh_phan]

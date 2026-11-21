@@ -142,9 +142,19 @@ describe("W045 · RPC sua_san_pham, xác thực kho & lọc sản phẩm", () =>
         ten_hien_thi: "Sản phẩm kho mới",
         ten_en: "New Warehouse Product",
         danh_muc: "tinh-chat",
+        gia_ban: 250000,
       },
     });
     expect(taoMoi.sanPham.hien_thi).toBe(false);
+    expect(taoMoi.sanPham.gia_ban).toBe(250000);
+
+    // Mã mới thiếu thương hiệu: báo lỗi, không tự điền "LOPOE" (Claude 21/11)
+    await expect(
+      actionSuaSanPhamKho("thu:kho", {
+        id: "KHO-TEST-NEW-02",
+        thayDoi: { ten_hien_thi: "Thiếu thương hiệu", danh_muc: "tinh-chat" },
+      }),
+    ).rejects.toThrow(/cần đủ thương hiệu/);
   });
 
   it("TIÊU CHÍ XONG: Mỗi trường đổi sinh một dòng lịch sử; Đã xem chuyển AI -> nguoi và đồng bộ web", async () => {

@@ -175,11 +175,11 @@ describe("W046 · Nhập & xuất Excel thông tin sản phẩm", () => {
 
     // Cho thêm cột bắt buộc cho mã mới để tách riêng lỗi trùng mã vạch
     const bufDayDu = await taoBufferXlsxTuMang(
-      ["id", "barcode", "thuong_hieu", "ten_hien_thi", "danh_muc", "ten_en"],
+      ["id", "barcode", "thuong_hieu", "ten_hien_thi", "danh_muc", "ten_en", "gia_ban"],
       [
-        [sp0.id, sp1.barcode!, "", "", "", "Duplicate existing barcode"],
-        ["NEW-A", "8809999000111", "LOPOE", "Sản phẩm mới A", "tinh-chat", "New A"],
-        ["NEW-B", "8809999000111", "LOPOE", "Sản phẩm mới B", "tinh-chat", "New B"],
+        [sp0.id, sp1.barcode!, "", "", "", "Duplicate existing barcode", ""],
+        ["NEW-A", "8809999000111", "LOPOE", "Sản phẩm mới A", "tinh-chat", "New A", "250000"],
+        ["NEW-B", "8809999000111", "LOPOE", "Sản phẩm mới B", "tinh-chat", "New B", "250000"],
       ],
     );
     void buf;
@@ -268,9 +268,9 @@ describe("W046 · Nhập & xuất Excel thông tin sản phẩm", () => {
 
     const targetId = SAN_PHAM[5].id;
     const csvUpload = [
-      "id,thuong_hieu,ten_hien_thi,ten_en,danh_muc,mo_ta_en",
-      `${targetId},,,Updated English Name By CSV,,Updated English Description By CSV`,
-      `W046-UNIT-NEW,LOPOE,Sản phẩm nhập CSV,CSV Imported New Serum,tinh-chat,Imported new serum.`,
+      "id,thuong_hieu,ten_hien_thi,ten_en,danh_muc,mo_ta_en,gia_ban",
+      `${targetId},,,Updated English Name By CSV,,Updated English Description By CSV,`,
+      `W046-UNIT-NEW,LOPOE,Sản phẩm nhập CSV,CSV Imported New Serum,tinh-chat,Imported new serum.,250000`,
     ].join("\n");
 
     const loXemTruoc = await actionTaiLenXemTruocExcel("thu:kho", {
