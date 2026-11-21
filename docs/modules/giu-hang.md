@@ -18,3 +18,4 @@ Khách giữ hàng trên web, nhận mã giữ hàng, trả tiền và nhận t�
 ## Lịch sử ngắn
 - 2026-11-21 (#64): màu theo bảng nội thất: kem/be/oliu-nhat thay token cũ, ô nhập viền `vien` (chọn: `den`), khung QR `oliu-nhat`; hồng chỉ còn chip đang chọn.
 - 2026-11-21 (#75): hiện thưởng thêm lượt quay (DC-02 `thuong_giu_hang`) ở form giữ hàng và trang mã; chữ và ngày lấy từ data, tắt DC-02 thì ẩn.
+- 22/11: Antigravity làm W067 (sửa select deal(ten) trong lib/giu-hang/kho-giu-hang.ts). Đội coder không nhận job chạm file này tới khi W067 Done.
