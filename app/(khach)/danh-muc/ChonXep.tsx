@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { lopNut } from "@/components/ui/Nut";
 
+/** Mã cách xếp; nhãn lấy từ từ điển `quet.danhMuc.xepLuaChon.<mã>` (W044). */
 export const LUA_CHON_XEP = [
-  { id: "goi-y", nhan: "Gợi ý" },
-  { id: "giam", nhan: "Giảm nhiều nhất" },
-  { id: "gia-tang", nhan: "Giá thấp → cao" },
-  { id: "gia-giam", nhan: "Giá cao → thấp" },
+  { id: "goi-y" },
+  { id: "giam" },
+  { id: "gia-tang" },
+  { id: "gia-giam" },
 ] as const;
 
 /**
@@ -15,6 +17,7 @@ export const LUA_CHON_XEP = [
  * Đóng bằng Esc hoặc bấm ra ngoài; điều khiển bằng mũi tên lên/xuống, Enter.
  */
 export function ChonXep({ giaTri, onChon }: { giaTri: string; onChon: (id: string) => void }) {
+  const t = useTranslations("quet.danhMuc");
   const [mo, setMo] = useState(false);
   const [viTri, setViTri] = useState(0);
   const khung = useRef<HTMLDivElement>(null);
@@ -42,7 +45,7 @@ export function ChonXep({ giaTri, onChon }: { giaTri: string; onChon: (id: strin
         onClick={() => { setViTri(LUA_CHON_XEP.findIndex((l) => l.id === hienTai.id)); setMo((m) => !m); }}
         className={lopNut("phu", "vua")}
       >
-        <span className="text-xam font-normal">Xếp:</span> {hienTai.nhan}
+        <span className="text-xam font-normal">{t("xep")}</span> {t(`xepLuaChon.${hienTai.id}`)}
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className={`transition-transform ${mo ? "rotate-180" : ""}`}>
           <path d="M6 9l6 6 6-6" />
         </svg>
@@ -53,7 +56,7 @@ export function ChonXep({ giaTri, onChon }: { giaTri: string; onChon: (id: strin
           <ul
             id={idMenu}
             role="listbox"
-            aria-label="Cách xếp sản phẩm"
+            aria-label={t("xepAria")}
             tabIndex={-1}
             autoFocus
             onKeyDown={(e) => {
@@ -65,7 +68,7 @@ export function ChonXep({ giaTri, onChon }: { giaTri: string; onChon: (id: strin
               fixed left-0 right-0 bottom-0 rounded-t-[24px] pb-[calc(12px+env(safe-area-inset-bottom))]
               md:absolute md:left-auto md:right-0 md:bottom-auto md:top-[calc(100%+6px)] md:w-[220px] md:rounded-[16px] md:pb-2"
           >
-            <li className="md:hidden px-3 pt-2 pb-3 text-[13px] font-semibold text-xam" aria-hidden="true">Xếp theo</li>
+            <li className="md:hidden px-3 pt-2 pb-3 text-[13px] font-semibold text-xam" aria-hidden="true">{t("xepTheo")}</li>
             {LUA_CHON_XEP.map((l, i) => (
               <li
                 key={l.id}
@@ -77,7 +80,7 @@ export function ChonXep({ giaTri, onChon }: { giaTri: string; onChon: (id: strin
                   i === viTri ? "bg-kem" : ""
                 } ${l.id === hienTai.id ? "font-semibold" : ""}`}
               >
-                {l.nhan}
+                {t(`xepLuaChon.${l.id}`)}
                 {l.id === hienTai.id && (
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5" /></svg>
                 )}

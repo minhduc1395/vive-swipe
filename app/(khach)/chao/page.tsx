@@ -1,21 +1,23 @@
 import { lopNut } from "@/components/ui/Nut";
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import Image from "next/image";
 import { NutQuayLai } from "@/components/NutQuayLai";
 import { LogoVive } from "@/components/LogoVive";
 import { CAU_HINH_BOOTH } from "@/lib/cau-hinh";
 
-export const metadata: Metadata = {
-  title: "Chào bạn đến VIVE · Thích thì quẹt phải",
-  description: "Trả lời nhanh 3 câu hỏi để VIVE gợi ý mỹ phẩm nội địa Hàn hợp da bạn nhất.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("quet.chao");
+  return { title: t("tieuDeTrang"), description: t("moTaTrang") };
+}
 
-export default function TrangChao() {
+export default async function TrangChao() {
+  const t = await getTranslations("quet.chao");
   return (
     <div className="max-w-[540px] w-full mx-auto px-4 sm:px-6 pt-2 pb-6 flex-1 flex flex-col">
         <div className="flex items-center justify-between pb-2">
-          <NutQuayLai fallback="/" />
+          <NutQuayLai fallback="/" nhan={t("quayLai")} />
         </div>
 
         <div className="relative h-[400px] sm:h-[460px] shrink-0 bg-kem rounded-[36px] overflow-hidden">
@@ -90,9 +92,9 @@ export default function TrangChao() {
 
         <main className="flex-1 flex flex-col px-3 pt-7 pb-4">
           <h1 className="m-0 text-center font-bold text-[36px] sm:text-[40px] leading-[1.15] tracking-[-1.2px] text-den">
-            Thích thì
+            {t("thichThi")}
             <br />
-            <span className="vet-hong-lon">quẹt phải</span>
+            <span className="vet-hong-lon">{t("quetPhai")}</span>
           </h1>
 
           <div className="mt-auto pt-5 flex flex-col items-center gap-1.5">
@@ -100,7 +102,7 @@ export default function TrangChao() {
               href="/bat-dau"
               className={lopNut("chinh","lon",true)}
             >
-              Bắt đầu quẹt
+              {t("batDauQuet")}
               <svg
                 width="20"
                 height="20"
@@ -135,7 +137,7 @@ export default function TrangChao() {
                 <rect x="3" y="14" width="7" height="7" rx="1.5" />
                 <rect x="14" y="14" width="7" height="7" rx="1.5" />
               </svg>
-              Xem theo danh mục
+              {t("xemDanhMuc")}
             </Link>
 
             <p className="m-0 flex items-center gap-1.5 text-center text-[13px] text-xam">

@@ -3,6 +3,7 @@ import { lopNut } from "@/components/ui/Nut";
 
 import { useState, useEffect, useMemo, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { NutQuayLai } from "@/components/NutQuayLai";
 import { KhungChiTiet } from "@/components/ui/KhungChiTiet";
 import { lopChip } from "@/components/ui/Nhan";
@@ -11,8 +12,16 @@ import { BangChiTiet } from "@/components/deck/BangChiTiet";
 import { laySanPhamHienThi, duongDanAnh } from "@/lib/data";
 import { useDuLieu } from "@/lib/du-lieu-context";
 import type { SanPham } from "@/lib/data/types";
-import { dinhDangTien, chuanHoaTimKiem } from "@/lib/dinh-dang";
-import { layGhiChuDeal } from "@/lib/deals/ghi-chu";
+import { chuanHoaTimKiem } from "@/lib/dinh-dang";
+import { useDichQuet } from "@/components/deck/dung-dich";
+import {
+  dichDuLieu,
+  ghiChuDealTheoNgonNgu,
+  nhanHamDich,
+  taoNhan,
+  tenSanPham,
+  tienKhongDon,
+} from "@/components/deck/ngon-ngu-quet";
 import {
   layDanhSachDaThich,
   themDaThich,
@@ -21,35 +30,40 @@ import {
 } from "@/lib/kho-luu-tru";
 
 const DANH_SACH_LOAI = [
-  { id: "sua-rua-mat", label: "Sữa rửa mặt" },
-  { id: "nuoc-can-bang", label: "Nước cân bằng" },
-  { id: "toner-pad", label: "Toner pad" },
-  { id: "tinh-chat", label: "Tinh chất, serum" },
-  { id: "kem-duong", label: "Kem dưỡng" },
-  { id: "mat-na", label: "Mặt nạ" },
-  { id: "chong-nang", label: "Chống nắng" },
-  { id: "trang-diem", label: "Trang điểm" },
-  { id: "duong-moi", label: "Dưỡng môi" },
-  { id: "mieng-dan", label: "Miếng dán mụn" },
-  { id: "duong-the", label: "Chăm sóc cơ thể" },
-  { id: "thiet-bi", label: "Thiết bị làm đẹp" },
+  "sua-rua-mat",
+  "nuoc-can-bang",
+  "toner-pad",
+  "tinh-chat",
+  "kem-duong",
+  "mat-na",
+  "chong-nang",
+  "trang-diem",
+  "duong-moi",
+  "mieng-dan",
+  "duong-the",
+  "thiet-bi",
 ] as const;
 
 const BUOC_TAI = 24;
 
 const DANH_SACH_VAN_DE = [
-  { id: "mun", label: "Mụn" },
-  { id: "lo-chan-long", label: "Lỗ chân lông" },
-  { id: "sang-da", label: "Thâm, sáng da" },
-  { id: "cap-am", label: "Cấp ẩm" },
-  { id: "lam-diu", label: "Làm dịu" },
-  { id: "chong-lao-hoa", label: "Chống lão hóa" },
+  "mun",
+  "lo-chan-long",
+  "sang-da",
+  "cap-am",
+  "lam-diu",
+  "chong-lao-hoa",
 ] as const;
 
 
 function DanhMucNoiDung() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const ngonNgu = useLocale();
+  const t = useTranslations("quet.danhMuc");
+  const tNhan = useDichQuet("quet.nhan");
+  const nhan = taoNhan(tNhan);
+  const tGhiChu = nhanHamDich(useTranslations("quet.ghiChuDeal"));
 
   // Đọc bộ lọc từ URL
   const loaiUrl = searchParams.get("loai") || "";
@@ -206,7 +220,7 @@ function DanhMucNoiDung() {
     loaiUrl || vanDeUrl || thuongHieuUrl || timUrl.trim() || coDealUrl
   );
   const soLocPhu = (vanDeUrl ? 1 : 0) + (thuongHieuUrl ? 1 : 0) + (coDealUrl ? 1 : 0);
-  const loaiCoHang = DANH_SACH_LOAI.filter((l) => (soLuongTheoLoai[l.id] || 0) > 0);
+  const loaiCoHang = DANH_SACH_LOAI.filter((l) => (soLuongTheoLoai[l] || 0) > 0);
 
   // Gõ là lọc ngay (chờ 300ms, thay URL không thêm lịch sử)
   useEffect(() => {
@@ -232,11 +246,11 @@ function DanhMucNoiDung() {
         return false;
 
       // Chỉ sản phẩm đang có deal
-      if (coDealUrl && !layGhiChuDeal(sp, deals)) return false;
+      if (coDealUrl && !ghiChuDealTheoNgonNgu(tGhiChu, ngonNgu, sp, deals)) return false;
 
       // Lọc theo từ khóa tìm kiếm không dấu
       if (qChuan) {
-        const tenChuan = chuanHoaTimKiem(sp.ten_hien_thi);
+        const tenChuan = chuanHoaTimKiem(tenSanPham(sp, ngonNgu));
         const gocChuan = chuanHoaTimKiem(sp.ten_goc);
         const thChuan = chuanHoaTimKiem(sp.thuong_hieu);
         const tpChuan = sp.thanh_phan?.some((tp) =>
@@ -291,27 +305,27 @@ function DanhMucNoiDung() {
       if (coAnhB !== coAnhA) return coAnhB - coAnhA;
       return (b.pho_bien ?? 0.5) - (a.pho_bien ?? 0.5);
     });
-  }, [tatCaSanPhamHienThi, loaiUrl, vanDeUrl, thuongHieuUrl, timUrl, xepUrl, coDealUrl, deals]);
+  }, [tatCaSanPhamHienThi, loaiUrl, vanDeUrl, thuongHieuUrl, timUrl, xepUrl, coDealUrl, deals, ngonNgu, tGhiChu]);
 
   // Tiêu đề trang
   const tieuDeTrang = useMemo(() => {
     if (loaiUrl) {
-      const timLoai = DANH_SACH_LOAI.find((l) => l.id === loaiUrl);
-      return timLoai ? timLoai.label : "Sản phẩm";
+      const timLoai = DANH_SACH_LOAI.find((l) => l === loaiUrl);
+      return timLoai ? nhan.danhMucLoc(timLoai) : t("sanPham");
     }
     if (vanDeUrl) {
-      const timVd = DANH_SACH_VAN_DE.find((v) => v.id === vanDeUrl);
-      return timVd ? `Da: ${timVd.label}` : "Sản phẩm";
+      const timVd = DANH_SACH_VAN_DE.find((v) => v === vanDeUrl);
+      return timVd ? t("da", { nhan: nhan.vanDe(timVd) }) : t("sanPham");
     }
     if (thuongHieuUrl) {
       return thuongHieuUrl;
     }
     if (timUrl) {
-      return `Tìm "${timUrl}"`;
+      return t("tim", { q: timUrl });
     }
-    if (coDealUrl) return "Đang có deal";
-    return "Sản phẩm";
-  }, [loaiUrl, vanDeUrl, thuongHieuUrl, timUrl, coDealUrl]);
+    if (coDealUrl) return t("dangCoDeal");
+    return t("sanPham");
+  }, [loaiUrl, vanDeUrl, thuongHieuUrl, timUrl, coDealUrl, t, nhan]);
 
   // Xử lý toggle thích
   const toggleThich = (id: string, e: React.MouseEvent) => {
@@ -338,20 +352,20 @@ function DanhMucNoiDung() {
   const boLocPhu = (
     <>
       <section className="flex flex-col gap-2">
-        <h2 className="m-0 text-[12px] font-semibold text-xam tracking-[0.6px] uppercase">Vấn đề da</h2>
+        <h2 className="m-0 text-[12px] font-semibold text-xam tracking-[0.6px] uppercase">{t("vanDeDa")}</h2>
         <div className="flex flex-wrap gap-1.5">
           {DANH_SACH_VAN_DE.map((v) => {
-            const on = vanDeUrl === v.id;
+            const on = vanDeUrl === v;
             return (
-              <button key={v.id} type="button" aria-pressed={on} onClick={() => capNhatBoLoc({ vanDe: on ? "" : v.id })} className={lopChip(on)}>
-                {v.label}
+              <button key={v} type="button" aria-pressed={on} onClick={() => capNhatBoLoc({ vanDe: on ? "" : v })} className={lopChip(on)}>
+                {nhan.vanDe(v)}
               </button>
             );
           })}
         </div>
       </section>
       <section className="flex flex-col gap-2">
-        <h2 className="m-0 text-[12px] font-semibold text-xam tracking-[0.6px] uppercase">Thương hiệu</h2>
+        <h2 className="m-0 text-[12px] font-semibold text-xam tracking-[0.6px] uppercase">{t("thuongHieu")}</h2>
         <div className="flex flex-wrap gap-1.5">
           {danhSachThuongHieu.map((b) => {
             const on = thuongHieuUrl.toLowerCase() === b.ten.toLowerCase();
@@ -364,10 +378,10 @@ function DanhMucNoiDung() {
         </div>
       </section>
       <section className="flex flex-col gap-2">
-        <h2 className="m-0 text-[12px] font-semibold text-xam tracking-[0.6px] uppercase">Ưu đãi</h2>
+        <h2 className="m-0 text-[12px] font-semibold text-xam tracking-[0.6px] uppercase">{t("uuDai")}</h2>
         <div className="flex flex-wrap gap-1.5">
           <button type="button" aria-pressed={coDealUrl} onClick={() => capNhatBoLoc({ coDeal: !coDealUrl })} className={lopChip(coDealUrl)}>
-            Đang có deal
+            {t("dangCoDeal")}
           </button>
         </div>
       </section>
@@ -386,7 +400,7 @@ function DanhMucNoiDung() {
           {/* Đầu trang: tiêu đề + tìm kiếm */}
           <header className="px-5 md:px-8 pt-4 md:pt-6 pb-2 flex flex-col items-start gap-1">
             {dangXemDanhSach && (
-              <NutQuayLai fallback="/danh-muc" onClick={xuLyVeTrangDau} ariaLabel="Quay lại · Về tất cả sản phẩm" />
+              <NutQuayLai fallback="/danh-muc" onClick={xuLyVeTrangDau} nhan={t("quayLai")} ariaLabel={t("quayLaiTatCa")} />
             )}
             <h1 className="tieu-de-trang">{tieuDeTrang}</h1>
           </header>
@@ -404,21 +418,21 @@ function DanhMucNoiDung() {
                 <circle cx="11" cy="11" r="8" />
                 <path d="M21 21l-4.35-4.35" />
               </svg>
-              <label htmlFor="tim-sp" className="sr-only">Tìm sản phẩm</label>
+              <label htmlFor="tim-sp" className="sr-only">{t("timSanPham")}</label>
               <input
                 id="tim-sp"
                 name="tim"
                 type="search"
                 value={timKiemInput}
                 onChange={(e) => setTimKiemInput(e.target.value)}
-                placeholder="Tìm tên, thương hiệu, thành phần"
+                placeholder={t("placeholder")}
                 className="flex-1 min-w-0 border-none outline-none bg-transparent font-sans text-[15px] text-den placeholder:text-xam"
               />
               {timKiemInput && (
                 <button
                   type="button"
                   onClick={() => { setTimKiemInput(""); capNhatBoLoc({ tim: "" }); }}
-                  aria-label="Xóa tìm kiếm"
+                  aria-label={t("xoaTim")}
                   className="w-7 h-7 rounded-full flex items-center justify-center text-xam hover:text-den cursor-pointer"
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
@@ -432,10 +446,10 @@ function DanhMucNoiDung() {
 
           <div className="lg:grid lg:grid-cols-[240px_1fr] lg:gap-8 lg:px-8 lg:items-start">
             {/* Cột lọc trái (máy tính) */}
-            <aside aria-label="Bộ lọc" className="hidden lg:flex flex-col gap-6 sticky top-4 pb-8">
+            <aside aria-label={t("boLoc")} className="hidden lg:flex flex-col gap-6 sticky top-4 pb-8">
               <section className="flex flex-col gap-1">
-                <h2 className="m-0 mb-1 px-3 text-[12px] font-semibold text-xam tracking-[0.6px] uppercase">Loại sản phẩm</h2>
-                {[{ id: "", label: "Tất cả", dem: tatCaSanPhamHienThi.length }, ...loaiCoHang.map((l) => ({ id: l.id, label: l.label, dem: soLuongTheoLoai[l.id] || 0 }))].map((c) => {
+                <h2 className="m-0 mb-1 px-3 text-[12px] font-semibold text-xam tracking-[0.6px] uppercase">{t("loaiSanPham")}</h2>
+                {[{ id: "", label: t("tatCa"), dem: tatCaSanPhamHienThi.length }, ...loaiCoHang.map((l) => ({ id: l, label: nhan.danhMucLoc(l), dem: soLuongTheoLoai[l] || 0 }))].map((c) => {
                   const on = loaiUrl === c.id;
                   return (
                     <button
@@ -456,13 +470,13 @@ function DanhMucNoiDung() {
 
             <div className="min-w-0 flex flex-col">
               {/* Chip loại sản phẩm cuộn ngang (điện thoại, máy tính bảng) */}
-              <div ref={hangChipLoai} className="pl-5 md:pl-8 pt-1 flex gap-2 overflow-x-auto pr-5 lg:hidden [scrollbar-width:none]" role="group" aria-label="Chọn loại sản phẩm">
-                <button type="button" aria-pressed={!loaiUrl} onClick={() => capNhatBoLoc({ loai: "" })} className={lopChip(!loaiUrl)}>Tất cả</button>
+              <div ref={hangChipLoai} className="pl-5 md:pl-8 pt-1 flex gap-2 overflow-x-auto pr-5 lg:hidden [scrollbar-width:none]" role="group" aria-label={t("chonLoai")}>
+                <button type="button" aria-pressed={!loaiUrl} onClick={() => capNhatBoLoc({ loai: "" })} className={lopChip(!loaiUrl)}>{t("tatCa")}</button>
                 {loaiCoHang.map((c) => {
-                  const on = loaiUrl === c.id;
+                  const on = loaiUrl === c;
                   return (
-                    <button key={c.id} type="button" aria-pressed={on} onClick={() => capNhatBoLoc({ loai: c.id })} className={lopChip(on)}>
-                      {c.label}
+                    <button key={c} type="button" aria-pressed={on} onClick={() => capNhatBoLoc({ loai: c })} className={lopChip(on)}>
+                      {nhan.danhMucLoc(c)}
                     </button>
                   );
                 })}
@@ -479,14 +493,14 @@ function DanhMucNoiDung() {
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
                     <path d="M4 6h16M7 12h10M10 18h4" />
                   </svg>
-                  Lọc{soLocPhu > 0 ? ` · ${soLocPhu}` : ""}
+                  {t("loc")}{soLocPhu > 0 ? ` · ${soLocPhu}` : ""}
                 </button>
                 <span className="text-[14px] text-xam whitespace-nowrap" aria-live="polite">
-                  {ketQuaLoc.length} sản phẩm
+                  {t("soSanPham", { so: ketQuaLoc.length })}
                 </span>
                 {dangXemDanhSach && (
                   <button type="button" onClick={xoaLoc} className={lopNut("chu", "vua")}>
-                    Xóa lọc
+                    {t("xoaLoc")}
                   </button>
                 )}
                 <div className="ml-auto">
@@ -503,7 +517,8 @@ function DanhMucNoiDung() {
                       i % 4 === 0 || i % 4 === 3
                         ? "bg-kem"
                         : "bg-oliu-nhat";
-                    const ghiChuDeal = layGhiChuDeal(sp, deals);
+                    const ghiChuDeal = ghiChuDealTheoNgonNgu(tGhiChu, ngonNgu, sp, deals);
+                    const tenSp = tenSanPham(sp, ngonNgu);
                     const anhSrc = duongDanAnh(sp.anh, "the");
 
                     return (
@@ -520,7 +535,7 @@ function DanhMucNoiDung() {
                             /* eslint-disable-next-line @next/next/no-img-element */
                             <img
                               src={anhSrc}
-                              alt={sp.ten_hien_thi}
+                              alt={tenSp}
                               className="w-[126px] h-[126px] object-contain group-hover:scale-105 transition-transform"
                             />
                           ) : (
@@ -532,7 +547,7 @@ function DanhMucNoiDung() {
                           {/* Tag giảm giá */}
                           {sp.giam_tren_tag && (
                             <span className="absolute left-2 top-2 h-6 px-2 rounded-lg bg-hong text-den text-[11px] font-semibold flex items-center">
-                              {sp.giam_tren_tag}
+                              {dichDuLieu(tNhan, "nhanGiam", sp.giam_tren_tag, ngonNgu)}
                             </span>
                           )}
 
@@ -540,7 +555,7 @@ function DanhMucNoiDung() {
                           <button
                             type="button"
                             onClick={(e) => toggleThich(sp.id, e)}
-                            aria-label={liked ? "Bỏ thích" : "Thích"}
+                            aria-label={liked ? t("boThich") : t("thich")}
                             aria-pressed={liked}
                             className="absolute top-1.5 right-1.5 w-[38px] h-[38px] rounded-full border-none bg-trang flex items-center justify-center cursor-pointer shadow-sm hover:scale-110 transition-transform"
                           >
@@ -566,7 +581,7 @@ function DanhMucNoiDung() {
 
                         {/* Tên */}
                         <span className="text-[14px] leading-[1.35] font-medium text-den h-[38px] overflow-hidden line-clamp-2">
-                          {sp.ten_hien_thi}
+                          {tenSp}
                         </span>
 
                         {/* Giá + Nút thêm giỏ */}
@@ -574,11 +589,11 @@ function DanhMucNoiDung() {
                           <div className="flex flex-col min-w-0">
                             <span className="flex items-baseline gap-1.5">
                               <strong className="text-[16px] font-bold text-den">
-                                {dinhDangTien(sp.gia_ban)}
+                                {tienKhongDon(sp.gia_ban, ngonNgu)}
                               </strong>
                               {sp.gia_goc && sp.gia_goc > sp.gia_ban && (
                                 <s className="text-[12px] text-xam">
-                                  {dinhDangTien(sp.gia_goc)}
+                                  {tienKhongDon(sp.gia_goc, ngonNgu)}
                                 </s>
                               )}
                             </span>
@@ -592,7 +607,7 @@ function DanhMucNoiDung() {
                           <button
                             type="button"
                             onClick={(e) => xuLyThemVaoGio(sp, e)}
-                            aria-label={`Thêm ${sp.ten_hien_thi} vào giỏ`}
+                            aria-label={t("themSpGio", { ten: tenSp })}
                             className="w-[38px] h-[38px] shrink-0 rounded-full bg-be flex items-center justify-center text-den hover:opacity-90 cursor-pointer transition-opacity"
                           >
                             <svg
@@ -615,15 +630,15 @@ function DanhMucNoiDung() {
                 </div>
               ) : (
                 <div className="my-10 mx-5 flex flex-col items-center gap-3 text-center">
-                  <p className="m-0 text-[14px] leading-relaxed text-xam">Chưa có sản phẩm hợp bộ lọc này.</p>
-                  <button type="button" onClick={xoaLoc} className={lopNut("phu")}>Xóa lọc</button>
+                  <p className="m-0 text-[14px] leading-relaxed text-xam">{t("chuaCo")}</p>
+                  <button type="button" onClick={xoaLoc} className={lopNut("phu")}>{t("xoaLoc")}</button>
                 </div>
               )}
 
               {conThem > 0 && (
                 <div className="px-5 md:px-8 lg:px-0 pt-6 pb-2 flex justify-center">
                   <button type="button" onClick={() => setGioiHanHienThi((prev) => prev + BUOC_TAI)} className={lopNut("phu", "lon")}>
-                    Xem thêm {Math.min(BUOC_TAI, conThem)} sản phẩm
+                    {t("xemThem", { so: Math.min(BUOC_TAI, conThem) })}
                   </button>
                 </div>
               )}
@@ -634,21 +649,21 @@ function DanhMucNoiDung() {
       </div>
 
       {/* Bộ lọc điện thoại / máy tính bảng */}
-      <KhungChiTiet mo={moLoc} onDong={() => setMoLoc(false)} nhan="Bộ lọc sản phẩm">
+      <KhungChiTiet mo={moLoc} onDong={() => setMoLoc(false)} nhan={t("boLocSp")}>
         <div className="p-5 flex flex-col gap-6">
           <div className="flex items-center justify-between">
-            <h2 className="m-0 text-[22px] font-bold">Lọc</h2>
-            <button type="button" onClick={() => setMoLoc(false)} aria-label="Đóng bộ lọc" className="w-11 h-11 rounded-full bg-nen-phu flex items-center justify-center cursor-pointer border-none">
+            <h2 className="m-0 text-[22px] font-bold">{t("loc")}</h2>
+            <button type="button" onClick={() => setMoLoc(false)} aria-label={t("dongBoLoc")} className="w-11 h-11 rounded-full bg-nen-phu flex items-center justify-center cursor-pointer border-none">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" /></svg>
             </button>
           </div>
           {boLocPhu}
           <div className="flex gap-2 pt-2 sticky bottom-0 bg-trang pb-[env(safe-area-inset-bottom)]">
             {soLocPhu > 0 && (
-              <button type="button" onClick={() => capNhatBoLoc({ vanDe: "", thuongHieu: "", coDeal: false })} className={lopNut("phu", "lon")}>Bỏ chọn</button>
+              <button type="button" onClick={() => capNhatBoLoc({ vanDe: "", thuongHieu: "", coDeal: false })} className={lopNut("phu", "lon")}>{t("boChon")}</button>
             )}
             <button type="button" onClick={() => setMoLoc(false)} className={lopNut("chinh", "lon", true)}>
-              Xem {ketQuaLoc.length} sản phẩm
+              {t("xemKetQua", { so: ketQuaLoc.length })}
             </button>
           </div>
         </div>
