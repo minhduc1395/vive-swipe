@@ -20,7 +20,7 @@ export function FormDangNhap() {
   const router = useRouter();
   const { daTai, daDangNhap } = useTaiKhoan();
   const [buoc, setBuoc] = useState<1 | 2>(1);
-  const [email, setEmail] = useState("");
+  const [emailDaGui, setEmailDaGui] = useState("");
   const [ma, setMa] = useState("");
   const [nhanh, setNhanh] = useState<NhanhDangNhap>("email_change");
   const [guiLuc, setGuiLuc] = useState<number | null>(null);
@@ -28,6 +28,13 @@ export function FormDangNhap() {
   const [loi, setLoi] = useState<string | null>(null);
   const [dangXuLy, setDangXuLy] = useState(false);
   const oMa = useRef<HTMLInputElement>(null);
+  const oEmail = useRef<HTMLInputElement>(null);
+  // Khóa nút gửi tới khi hydrate xong: bấm sớm sẽ submit form gốc và tải lại trang.
+  const [sanSang, setSanSang] = useState(false);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setSanSang(true);
+  }, []);
   const daXong = useRef(false);
 
   // Đã đăng nhập sẵn thì sang trang tài khoản.
@@ -47,6 +54,9 @@ export function FormDangNhap() {
   }, [buoc]);
 
   async function gui() {
+    // Ô email không điều khiển: chữ gõ trước khi hydrate vẫn còn trong DOM.
+    const email = oEmail.current?.value ?? emailDaGui;
+    setEmailDaGui(email);
     if (!laEmailHopLe(email)) {
       setLoi(LOI.emailSai);
       return;
@@ -75,7 +85,7 @@ export function FormDangNhap() {
     setDangXuLy(true);
     setLoi(null);
     const giay = guiLuc ? Math.floor((Date.now() - guiLuc) / 1000) : 0;
-    const kq = await xacNhanMa(email, ma, nhanh, giay);
+    const kq = await xacNhanMa(emailDaGui, ma, nhanh, giay);
     if (!kq.ok) {
       setDangXuLy(false);
       setLoi(kq.loi);
@@ -111,8 +121,8 @@ export function FormDangNhap() {
               inputMode="email"
               autoComplete="email"
               placeholder="ban@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              ref={oEmail}
+              defaultValue={emailDaGui}
               className={LOP_O_NHAP}
             />
           </label>
@@ -147,7 +157,7 @@ export function FormDangNhap() {
         </p>
       )}
 
-      <Nut type="submit" co="lon" rong disabled={dangXuLy}>
+      <Nut type="submit" co="lon" rong disabled={dangXuLy || !sanSang}>
         {buoc === 1
           ? dangXuLy ? "Đang gửi…" : "Gửi mã"
           : dangXuLy ? "Đang kiểm tra…" : "Đăng nhập"}
