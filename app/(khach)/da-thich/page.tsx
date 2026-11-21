@@ -115,7 +115,7 @@ export default function TrangDaThich() {
             className="mx-5 mb-2 px-3.5 py-2 rounded-xl bg-den text-trang text-[13px] font-medium shadow-lg flex items-center justify-between animate-fadeIn z-30"
           >
             <span className="truncate">{thongBao}</span>
-            <Link href="/gio" className="ml-2 text-bac-ha underline shrink-0 font-semibold">
+            <Link href="/gio" className="ml-2 text-oliu underline shrink-0 font-semibold">
               Xem giỏ
             </Link>
           </div>
@@ -139,7 +139,7 @@ export default function TrangDaThich() {
                   className={`h-9 px-3.5 rounded-full text-[14px] font-medium whitespace-nowrap transition-colors cursor-pointer shrink-0 ${
                     dangChon
                       ? "bg-hong text-den border border-transparent font-semibold"
-                      : "bg-nen-phu text-den border border-transparent hover:bg-hong-nhat"
+                      : "bg-nen-phu text-den border border-transparent hover:bg-kem"
                   }`}
                 >
                   {f.label} ({f.count})
@@ -154,7 +154,7 @@ export default function TrangDaThich() {
           <div className="flex-1" />
         ) : sanPhamThich.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
-            <div className="w-16 h-16 rounded-full bg-hong-nhat flex items-center justify-center mb-4 text-den">
+            <div className="w-16 h-16 rounded-full bg-kem flex items-center justify-center mb-4 text-den">
               <svg
                 width="32"
                 height="32"
@@ -206,8 +206,8 @@ export default function TrangDaThich() {
             {sanPhamHienThi.map((sp) => {
               const bgMoi =
                 sp.danh_muc === "mat-na" || sp.danh_muc === "kem-duong"
-                  ? "bg-bac-ha-nhat"
-                  : "bg-hong-nhat";
+                  ? "bg-oliu-nhat"
+                  : "bg-kem";
               const dealNote = layGhiChuDeal(sp, deals);
               const anhSrc = duongDanAnh(sp.anh, "nho");
 
@@ -284,7 +284,7 @@ export default function TrangDaThich() {
                       type="button"
                       aria-label="Thêm vào giỏ"
                       onClick={(e) => handleThemVaoGio(sp, e)}
-                      className="w-10 h-10 shrink-0 rounded-full bg-bac-ha hover:opacity-90 text-den flex items-center justify-center transition-transform active:scale-90 cursor-pointer"
+                      className="w-10 h-10 shrink-0 rounded-full bg-be hover:opacity-90 text-den flex items-center justify-center transition-transform active:scale-90 cursor-pointer"
                     >
                       <svg
                         width="18"

@@ -37,8 +37,8 @@ export function BangChiTiet({
 
   const nenAnh =
     sanPham.danh_muc === "mat-na" || sanPham.danh_muc === "kem-duong"
-      ? "bg-bac-ha-nhat"
-      : "bg-hong-nhat";
+      ? "bg-oliu-nhat"
+      : "bg-kem";
 
   const anhSrc = duongDanAnh(sanPham.anh, "the") || "/brand/vive-logo-black.png";
   const dealsLienQuan = layCacDealCuaSanPham(sanPham, deals);
@@ -76,7 +76,7 @@ export function BangChiTiet({
           type="button"
           onClick={onDong}
           aria-label="Đóng chi tiết"
-          className="absolute top-3 right-3 w-11 h-11 rounded-full flex items-center justify-center text-den hover:bg-hong-nhat transition-colors cursor-pointer z-10"
+          className="absolute top-3 right-3 w-11 h-11 rounded-full flex items-center justify-center text-den hover:bg-kem transition-colors cursor-pointer z-10"
         >
           <svg
             width="22"
@@ -151,7 +151,7 @@ export function BangChiTiet({
                 {sanPham.loai_da?.map((da) => (
                   <span
                     key={da}
-                    className="h-[30px] px-3 rounded-full bg-hong-nhat text-[13px] font-medium flex items-center text-den"
+                    className="h-[30px] px-3 rounded-full bg-kem text-[13px] font-medium flex items-center text-den"
                   >
                     {layNhanLoaiDa(da)}
                   </span>
@@ -159,7 +159,7 @@ export function BangChiTiet({
                 {sanPham.van_de?.map((vd) => (
                   <span
                     key={vd}
-                    className="h-[30px] px-3 rounded-full bg-bac-ha-nhat text-[13px] font-medium flex items-center text-den"
+                    className="h-[30px] px-3 rounded-full bg-oliu-nhat text-[13px] font-medium flex items-center text-den"
                   >
                     {layNhanVanDe(vd)}
                   </span>
@@ -178,7 +178,7 @@ export function BangChiTiet({
                 {dealsLienQuan.map((deal) => (
                   <div
                     key={deal.id}
-                    className="p-3 rounded-2xl bg-hong-nhat border border-vien flex flex-col gap-1"
+                    className="p-3 rounded-2xl bg-kem border border-vien flex flex-col gap-1"
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-semibold text-[14px] text-den">
@@ -231,7 +231,7 @@ export function BangChiTiet({
             className={`h-[52px] px-5 rounded-full flex items-center justify-center gap-2 font-semibold text-[15px] border cursor-pointer transition-colors ${
               daThich
                 ? "bg-hong border-transparent text-den font-semibold"
-                : "bg-nen-phu border-transparent text-den hover:bg-hong-nhat"
+                : "bg-nen-phu border-transparent text-den hover:bg-kem"
             }`}
           >
             <svg

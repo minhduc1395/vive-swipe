@@ -37,7 +37,7 @@ export function TheDealDacBiet({
       >
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
-            <span className="h-[30px] px-3.5 rounded-full bg-bac-ha text-den text-[13px] font-semibold flex items-center gap-1.5">
+            <span className="h-[30px] px-3.5 rounded-full bg-be text-den text-[13px] font-semibold flex items-center gap-1.5">
               <svg
                 width="16"
                 height="16"
@@ -127,7 +127,7 @@ export function TheDealDacBiet({
       className="absolute inset-0 rounded-[28px] bg-den text-trang p-6 box-border flex flex-col justify-between shadow-[0_16px_40px_rgba(43,43,42,0.22)] select-none z-10"
     >
       <div className="flex items-center justify-between">
-        <span className="h-[30px] px-3.5 rounded-full bg-bac-ha text-den text-[13px] font-semibold flex items-center gap-1.5">
+        <span className="h-[30px] px-3.5 rounded-full bg-be text-den text-[13px] font-semibold flex items-center gap-1.5">
           <svg
             width="16"
             height="16"
@@ -147,7 +147,7 @@ export function TheDealDacBiet({
       </div>
 
       <div className="flex flex-col gap-3 my-auto text-center items-center px-2">
-        <div className="w-14 h-14 rounded-full bg-trang/10 flex items-center justify-center text-bac-ha mb-1">
+        <div className="w-14 h-14 rounded-full bg-trang/10 flex items-center justify-center text-oliu-vua mb-1">
           <svg
             width="28"
             height="28"

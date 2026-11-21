@@ -619,7 +619,7 @@ export default function TrangQuet() {
             aria-label="Gu của bạn"
             className="hidden lg:flex flex-col gap-5 shrink-0 pt-2 overflow-y-auto"
           >
-            <section className="rounded-[24px] bg-hong-nhat p-5 flex flex-col gap-3.5 border border-vien">
+            <section className="rounded-[24px] bg-kem p-5 flex flex-col gap-3.5 border border-vien">
               <div className="flex justify-between items-center">
                 <h2 className="m-0 text-[18px] font-bold">Gu của bạn</h2>
                 <Link
@@ -633,7 +633,7 @@ export default function TrangQuet() {
                 {guTags.map((tag) => (
                   <span
                     key={tag}
-                    className="h-[34px] px-3.5 rounded-full bg-bac-ha text-den text-[13px] font-semibold flex items-center"
+                    className="h-[34px] px-3.5 rounded-full bg-be text-den text-[13px] font-semibold flex items-center"
                   >
                     {tag}
                   </span>
@@ -649,31 +649,31 @@ export default function TrangQuet() {
               <ul className="m-0 p-0 list-none flex flex-col gap-2.5 text-[14px]">
                 <li className="flex items-center justify-between">
                   <span>Bỏ qua</span>
-                  <kbd className="min-w-[28px] h-7 px-2 rounded-lg border border-hong bg-hong-nhat/40 font-semibold text-[13px] flex items-center justify-center">
+                  <kbd className="min-w-[28px] h-7 px-2 rounded-lg border border-hong bg-kem/40 font-semibold text-[13px] flex items-center justify-center">
                     ←
                   </kbd>
                 </li>
                 <li className="flex items-center justify-between">
                   <span>Thích</span>
-                  <kbd className="min-w-[28px] h-7 px-2 rounded-lg border border-hong bg-hong-nhat/40 font-semibold text-[13px] flex items-center justify-center">
+                  <kbd className="min-w-[28px] h-7 px-2 rounded-lg border border-hong bg-kem/40 font-semibold text-[13px] flex items-center justify-center">
                     →
                   </kbd>
                 </li>
                 <li className="flex items-center justify-between">
                   <span>Vào giỏ</span>
-                  <kbd className="min-w-[28px] h-7 px-2 rounded-lg border border-hong bg-hong-nhat/40 font-semibold text-[13px] flex items-center justify-center">
+                  <kbd className="min-w-[28px] h-7 px-2 rounded-lg border border-hong bg-kem/40 font-semibold text-[13px] flex items-center justify-center">
                     ↑
                   </kbd>
                 </li>
                 <li className="flex items-center justify-between">
                   <span>Hoàn tác</span>
-                  <kbd className="min-w-[28px] h-7 px-2 rounded-lg border border-hong bg-hong-nhat/40 font-semibold text-[13px] flex items-center justify-center">
+                  <kbd className="min-w-[28px] h-7 px-2 rounded-lg border border-hong bg-kem/40 font-semibold text-[13px] flex items-center justify-center">
                     Z
                   </kbd>
                 </li>
                 <li className="flex items-center justify-between">
                   <span>Xem chi tiết</span>
-                  <kbd className="min-w-[28px] h-7 px-2 rounded-lg border border-hong bg-hong-nhat/40 font-semibold text-[13px] flex items-center justify-center">
+                  <kbd className="min-w-[28px] h-7 px-2 rounded-lg border border-hong bg-kem/40 font-semibold text-[13px] flex items-center justify-center">
                     Space
                   </kbd>
                 </li>
@@ -690,13 +690,13 @@ export default function TrangQuet() {
                 moiQuanTamLabels.map((tag) => (
                   <span
                     key={tag}
-                    className="h-[26px] px-2.5 rounded-full bg-hong-nhat flex items-center font-medium text-den"
+                    className="h-[26px] px-2.5 rounded-full bg-kem flex items-center font-medium text-den"
                   >
                     {tag}
                   </span>
                 ))
               ) : (
-                <span className="h-[26px] px-2.5 rounded-full bg-hong-nhat flex items-center font-medium text-den">
+                <span className="h-[26px] px-2.5 rounded-full bg-kem flex items-center font-medium text-den">
                   Phù hợp nhất
                 </span>
               )}
@@ -723,7 +723,7 @@ export default function TrangQuet() {
               soMonThuongHieu={thongTinThuongHieu.dem}
             />
           ) : !daSanSang ? (
-            <div className="absolute inset-0 rounded-[28px] bg-hong-nhat border border-vien p-8 flex flex-col items-center justify-center gap-3 text-center">
+            <div className="absolute inset-0 rounded-[28px] bg-kem border border-vien p-8 flex flex-col items-center justify-center gap-3 text-center">
               <div className="w-10 h-10 rounded-full border-2 border-primary border-t-transparent animate-spin mb-1" />
               <span className="font-bold text-[16px] tracking-[-0.3px] text-chu">
                 Đang chuẩn bị sản phẩm...
@@ -735,7 +735,7 @@ export default function TrangQuet() {
               {theTiepTheo && (
                 <div
                   aria-hidden="true"
-                  className="absolute inset-x-3.5 top-3 -bottom-2 rounded-[28px] bg-hong-nhat border border-vien scale-[0.96] transition-transform pointer-events-none"
+                  className="absolute inset-x-3.5 top-3 -bottom-2 rounded-[28px] bg-kem border border-vien scale-[0.96] transition-transform pointer-events-none"
                 />
               )}
 
@@ -766,7 +766,7 @@ export default function TrangQuet() {
             </>
           ) : daHetDeck ? (
             /* Khi đã xem hết thẻ (docs/01 mục 2.3) */
-            <div className="absolute inset-0 rounded-[28px] bg-hong-nhat border border-vien p-8 flex flex-col items-center justify-center gap-3 text-center">
+            <div className="absolute inset-0 rounded-[28px] bg-kem border border-vien p-8 flex flex-col items-center justify-center gap-3 text-center">
               <span className="font-bold text-[26px] tracking-[-0.5px]">
                 Bạn đã xem hết sản phẩm hôm nay.
               </span>
@@ -874,7 +874,7 @@ export default function TrangQuet() {
                 onClick={xuLyHoanTac}
                 disabled={lichSu.length === 0 || !!animState}
                 aria-label="Hoàn tác"
-                className="w-[52px] h-[52px] rounded-full border-[1.5px] border-hong bg-trang flex items-center justify-center text-den cursor-pointer hover:bg-hong-nhat disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                className="w-[52px] h-[52px] rounded-full border-[1.5px] border-hong bg-trang flex items-center justify-center text-den cursor-pointer hover:bg-kem disabled:opacity-40 disabled:cursor-not-allowed transition-all"
               >
                 <svg
                   width="22"
@@ -954,7 +954,7 @@ export default function TrangQuet() {
                 style={{
                   transform: `scale(${cartBtnScale})`,
                 }}
-                className="w-[52px] h-[52px] rounded-full border-[1.5px] border-hong bg-bac-ha text-den flex items-center justify-center cursor-pointer hover:opacity-90 transition-transform duration-100 disabled:opacity-40"
+                className="w-[52px] h-[52px] rounded-full border-[1.5px] border-hong bg-be text-den flex items-center justify-center cursor-pointer hover:opacity-90 transition-transform duration-100 disabled:opacity-40"
               >
                 <svg
                   width="22"
@@ -984,7 +984,7 @@ export default function TrangQuet() {
             aria-label="Deal và giỏ"
             className="hidden md:flex [@media(max-width:1023px)_and_(max-height:899px)]:hidden flex-col gap-5 shrink-0 w-[260px] lg:w-[320px] pt-2 overflow-y-auto max-h-full"
           >
-            <section className="rounded-[24px] bg-bac-ha-nhat p-5 flex flex-col gap-3.5 border border-bac-ha/40">
+            <section className="rounded-[24px] bg-oliu-nhat p-5 flex flex-col gap-3.5 border border-be/40">
               <div className="flex justify-between items-center">
                 <h2 className="m-0 text-[18px] font-bold">Deal cho bạn</h2>
                 <Link
@@ -997,7 +997,7 @@ export default function TrangQuet() {
               <ul className="m-0 p-0 list-none flex flex-col gap-3">
                 {topDealsAside.map((d) => (
                   <li key={d.id} className="flex items-center gap-3">
-                    <span className="w-12 h-12 shrink-0 rounded-xl bg-trang border border-bac-ha/30 flex items-center justify-center text-[10px] font-bold text-xam-dam text-center px-1 overflow-hidden">
+                    <span className="w-12 h-12 shrink-0 rounded-xl bg-trang border border-be/30 flex items-center justify-center text-[10px] font-bold text-xam-dam text-center px-1 overflow-hidden">
                       {d.id.split("-")[0]}
                     </span>
                     <div className="flex flex-col gap-0.5 min-w-0">
@@ -1049,7 +1049,7 @@ export default function TrangQuet() {
               )}
 
               {ketQuaGioAside.qua_du_kien && (
-                <div className="rounded-xl bg-hong-nhat px-3 py-2 text-[12px] text-den">
+                <div className="rounded-xl bg-kem px-3 py-2 text-[12px] text-den">
                   Quà dự kiến: {ketQuaGioAside.qua_du_kien}
                 </div>
               )}
