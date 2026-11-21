@@ -20,6 +20,7 @@ Quy tắc chung
 | P8 | W036: tách lại 2 ảnh Beaund (8809953160067, 8809953160081) | Antigravity Media | Khi có phiên | Chờ |
 | P9 | QA PR của WEB/Antigravity ở trạng thái Review | QA (1:13, 12:13, 17:13) | Theo lịch | — |
 | P10 | BOD duyệt 19 ảnh/video ở dashboard, mục Duyệt bài | BOD | 22/11 | Chờ BOD |
+| P11 | W066: trang nhân viên hiện 'Tặng thêm 1 lượt quay' khi nhận đơn giữ hàng web từ 27/11 | Antigravity | Phiên tới | Đã giao (tasks/W066.md) |
 
 ## Cách làm từng mục khi WEB không có mặt
 
@@ -41,5 +42,6 @@ rồi ghi cột I = `Đã lên web <YYYY-MM-DD HH:MM>`. Kiểm: `select anh from
 **Media làm xong ảnh mới (P8):** WEB/TU-DONG-E kiểm kỹ thuật (nét, tỷ lệ, viền tách nền, nền trong, dung lượng; xem AGENTS.md mục Antigravity Media), đạt thì `update media set trang_thai='cho_mkt'` và thêm 1 dòng vào tab "Duyệt media web" (cột F = `Đạt`, I = `Chưa`).
 
 ## Nhật ký chạy
+- 21/11 23:20 WEB: BOD nhắc WEB là trưởng nhóm, giao việc cho đội coder và Antigravity, không tự làm hết. Giao W066 cho Antigravity. Từ giờ WEB chỉ duyệt, gộp, gỡ vướng; P7 đang chụp dở nên WEB làm nốt.
 - 21/11 23:05 WEB: P1, P2 xong. P3 mở PR #79 (đã gộp main). Tạo #80–#84. P7 đang chụp khung.
 - 21/11 22:10 WEB: lập kế hoạch, bắt đầu P1.
