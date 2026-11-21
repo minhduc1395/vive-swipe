@@ -30,6 +30,8 @@ export default defineConfig({
       NEXT_PUBLIC_SUPABASE_URL: "http://supabase.e2e.test",
       NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "mock-publishable-key-for-e2e",
       NEXT_PUBLIC_SUPABASE_ANON_KEY: "mock-anon-key-for-e2e",
+      // #65: bật đăng nhập email cho e2e; chạy NEXT_PUBLIC_DANG_NHAP_EMAIL=0 để kiểm trang chờ khi tắt cờ
+      NEXT_PUBLIC_DANG_NHAP_EMAIL: process.env.NEXT_PUBLIC_DANG_NHAP_EMAIL ?? "1",
     },
   },
 });
