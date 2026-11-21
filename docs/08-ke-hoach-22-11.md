@@ -12,17 +12,19 @@ Quy tắc chung
 |---|---|---|---|---|
 | P1 | Gộp PR #76 (chữ 9 ô trang chủ, job #74) và #77 (thưởng giữ hàng, job #75) | WEB | 21/11 tối | Xong 21/11 22:20 |
 | P2 | W045 + W046 (trang kho, Excel): sửa mặc định mã mới trong migration, mở PR, chạy 2 migration, QA, gộp. WEB làm thay vì Antigravity đã hết phiên | WEB | 21/11 tối | Xong 21/11 23:00 (PR #78, 2 migration đã chạy) |
-| P3 | W044 phần nền song ngữ: next-intl, `messages/<vi|en>/<module>.json`, định dạng giá/ngày, nút VI \| EN trên thanh trên | WEB | 21/11 đêm | PR #79 chờ CI. CI xanh thì gộp (WEB hoặc TU-DONG-E), rồi đổi #80–#83 sang ready |
+| P3 | W044 phần nền song ngữ: next-intl, `messages/<vi|en>/<module>.json`, định dạng giá/ngày, nút VI \| EN trên thanh trên | WEB | 21/11 đêm | Xong 22/11 00:10 (PR #79). #80–#83 đã ready |
 | P4 | W044 chuyển chữ từng module sang từ điển (5 job đội coder: #80 trang-chu, #81 quet, #82 deal, #83 giu-hang, #84 tai-khoan) | Đội coder | Đêm 22/11 sau P3 | Đã tạo issue (draft). #84 chỉ ready sau khi #65 gộp |
 | P5 | #65 đăng nhập xong → gộp → đổi #66 sang `status:ready` | Đội coder, WEB/TU-DONG-E | 22/11 | Đang code |
 | P6 | Ảnh/video BOD duyệt trên dashboard → đưa lên web (cách làm bên dưới) | WEB/TU-DONG-E | Mỗi lượt | Chờ BOD |
-| P7 | DES-004: 4 ảnh thành phần LOPOE vào khối cuộn (cả 3D máy tính và chuỗi ảnh điện thoại) | WEB | 22/11 | Đang làm: nhánh `des-004-thanh-phan`, đang chụp lại 699 khung |
+| P7 | DES-004: 4 ảnh thành phần LOPOE vào khối cuộn (cả 3D máy tính và chuỗi ảnh điện thoại) | WEB | 22/11 | PR #85 chờ CI. WEB đã duyệt: CI xanh thì TU-DONG-E gộp luôn (không cần nhãn QA) |
 | P8 | W036: tách lại 2 ảnh Beaund (8809953160067, 8809953160081) | Antigravity Media | Khi có phiên | Chờ |
 | P9 | QA PR của WEB/Antigravity ở trạng thái Review | QA (1:13, 12:13, 17:13) | Theo lịch | — |
 | P10 | BOD duyệt 19 ảnh/video ở dashboard, mục Duyệt bài | BOD | 22/11 | Chờ BOD |
 | P11 | W066: trang nhân viên hiện 'Tặng thêm 1 lượt quay' khi nhận đơn giữ hàng web từ 27/11 | Antigravity | Phiên tới | Đã giao (tasks/W066.md) |
 
 ## Cách làm từng mục khi WEB không có mặt
+
+**Trả lời BLOCKED của coder:** comment trả lời, gỡ `status:blocked`, gắn `status:ready` (KHÔNG gắn `claimed`, lịch điều phối chỉ nhận `ready`).
 
 **P1, P5 (gộp PR):** PR có nhãn job `status:qa-pass`, 3 kiểm tra `kiem-tra`, `e2e (pixel-7)`, `e2e (iphone-13)` xanh, chỉ sửa file trong phạm vi job → `gh api -X PUT repos/minhduc1395/vive-swipe/pulls/<n>/merge -f merge_method=squash`. Sau 5 phút mở https://vive-swipe-5byasgvzsa-an.a.run.app kiểm trang chính còn chạy; lỗi thì revert PR và ghi Cảnh báo. Gộp #65 xong: bỏ nhãn `status:draft` ở #66, gắn `status:ready`.
 
@@ -42,6 +44,7 @@ rồi ghi cột I = `Đã lên web <YYYY-MM-DD HH:MM>`. Kiểm: `select anh from
 **Media làm xong ảnh mới (P8):** WEB/TU-DONG-E kiểm kỹ thuật (nét, tỷ lệ, viền tách nền, nền trong, dung lượng; xem AGENTS.md mục Antigravity Media), đạt thì `update media set trang_thai='cho_mkt'` và thêm 1 dòng vào tab "Duyệt media web" (cột F = `Đạt`, I = `Chưa`).
 
 ## Nhật ký chạy
+- 22/11 00:15 WEB: P3 gộp (#79), #80–#83 ready; #65 đổi lại ready (bị kẹt vì gắn nhầm claimed). P7 mở PR #85. e2e chạy locale vi-VN.
 - 21/11 23:20 WEB: BOD nhắc WEB là trưởng nhóm, giao việc cho đội coder và Antigravity, không tự làm hết. Giao W066 cho Antigravity. Từ giờ WEB chỉ duyệt, gộp, gỡ vướng; P7 đang chụp dở nên WEB làm nốt.
 - 21/11 23:05 WEB: P1, P2 xong. P3 mở PR #79 (đã gộp main). Tạo #80–#84. P7 đang chụp khung.
 - 21/11 22:10 WEB: lập kế hoạch, bắt đầu P1.
