@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import type { KhoiDemNguoc } from "@/lib/chien-dich/types";
 
 interface KhoiDemNguocProps {
@@ -8,7 +9,8 @@ interface KhoiDemNguocProps {
 }
 
 export function KhoiDemNguoc({ khoi }: KhoiDemNguocProps) {
-  const { tieu_de = "Đếm ngược kết thúc", thoi_gian_chot, cau_chu } = khoi;
+  const t = useTranslations("trang-chu.landing.demNguoc");
+  const { tieu_de = t("tieuDe"), thoi_gian_chot, cau_chu } = khoi;
 
   const [timeLeft, setTimeLeft] = useState({
     ngay: 0,
@@ -40,7 +42,7 @@ export function KhoiDemNguoc({ khoi }: KhoiDemNguocProps) {
 
   return (
     <section
-      aria-label="Đếm ngược"
+      aria-label={t("aria")}
       className="relative z-10 bg-hong-nhat py-16 px-5 sm:px-8 text-center"
     >
       <div className="max-w-[700px] mx-auto flex flex-col items-center gap-5">
@@ -58,7 +60,7 @@ export function KhoiDemNguoc({ khoi }: KhoiDemNguocProps) {
               {pad(timeLeft.ngay)}
             </span>
             <span className="text-[12px] font-medium text-xam mt-1.5 uppercase">
-              Ngày
+              {t("ngay")}
             </span>
           </div>
           <span className="mb-6">:</span>
@@ -67,7 +69,7 @@ export function KhoiDemNguoc({ khoi }: KhoiDemNguocProps) {
               {pad(timeLeft.gio)}
             </span>
             <span className="text-[12px] font-medium text-xam mt-1.5 uppercase">
-              Giờ
+              {t("gio")}
             </span>
           </div>
           <span className="mb-6">:</span>
@@ -76,7 +78,7 @@ export function KhoiDemNguoc({ khoi }: KhoiDemNguocProps) {
               {pad(timeLeft.phut)}
             </span>
             <span className="text-[12px] font-medium text-xam mt-1.5 uppercase">
-              Phút
+              {t("phut")}
             </span>
           </div>
           <span className="mb-6">:</span>
@@ -85,7 +87,7 @@ export function KhoiDemNguoc({ khoi }: KhoiDemNguocProps) {
               {pad(timeLeft.giay)}
             </span>
             <span className="text-[12px] font-medium text-xam mt-1.5 uppercase">
-              Giây
+              {t("giay")}
             </span>
           </div>
         </div>

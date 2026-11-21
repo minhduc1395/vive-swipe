@@ -85,9 +85,11 @@ export function LandingStage3D({ cacCanh }: LandingStage3DProps) {
         el.getBoundingClientRect().height > 0
     );
     const headerBottom = headerEl ? headerEl.getBoundingClientRect().bottom : 0;
-    const tabletRail = document.querySelector<HTMLElement>(
-      'nav[aria-label="Điều hướng máy tính bảng"]'
-    );
+    // Thanh dọc bên trái của máy tính bảng: nhận bằng vị trí (không dựa vào nhãn chữ, nhãn đổi theo ngôn ngữ)
+    const tabletRail = Array.from(document.querySelectorAll<HTMLElement>("nav")).find((n) => {
+      const r = n.getBoundingClientRect();
+      return getComputedStyle(n).display !== "none" && r.left <= 1 && r.width > 0 && r.width < 140 && r.height > vh * 0.5;
+    });
     const railRight =
       tabletRail && getComputedStyle(tabletRail).display !== "none"
         ? tabletRail.getBoundingClientRect().right

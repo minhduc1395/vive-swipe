@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const NutBamSchema = z.object({
   chu: z.string().min(1),
+  chu_en: z.string().optional(),
   den: z.string().min(1),
 });
 
@@ -39,8 +40,11 @@ export const KhoiHeroSchema = z.object({
   loai: z.literal("hero"),
   kieu: z.enum(["san-pham-3d", "video", "anh-lon", "cuon-ke"]),
   nhan_tren: z.string().optional(),
+  nhan_tren_en: z.string().optional(),
   tieu_de: z.array(z.string()).min(1),
+  tieu_de_en: z.array(z.string()).optional(),
   mo_ta: z.string().optional(),
+  mo_ta_en: z.string().optional(),
   san_pham: z.array(z.string()).optional(),
   nut: z.array(NutBamSchema).optional(),
   video: VideoMediaSchema.optional(),
@@ -55,8 +59,11 @@ export const KhoiTieuDiemSchema = z.object({
   loai: z.literal("tieu-diem"),
   id: z.string().optional(),
   nhan_phu: z.string().optional(),
+  nhan_phu_en: z.string().optional(),
   tieu_de: z.array(z.string()).min(1),
+  tieu_de_en: z.array(z.string()).optional(),
   mo_ta: z.string().optional(),
+  mo_ta_en: z.string().optional(),
   san_pham_id: z.string().optional(),
   deal_id: z.string().optional(),
   cta_chinh: NutBamSchema.optional(),
@@ -67,13 +74,16 @@ export const KhoiTieuDiemSchema = z.object({
 export const KhoiBangChuSchema = z.object({
   loai: z.literal("bang-chu"),
   chu: z.string().min(1),
+  chu_en: z.string().optional(),
   mau_nen: z.string().optional(),
 });
 
 export const KhoiRaMatSchema = z.object({
   loai: z.literal("ra-mat"),
   tieu_de: z.string().min(1),
+  tieu_de_en: z.string().optional(),
   mo_ta: z.string().optional(),
+  mo_ta_en: z.string().optional(),
   deal: z.array(z.string()).optional(),
   san_pham: z.array(z.string()).optional(),
   anh_san_pham: z.record(z.string().min(1)).optional(),
@@ -94,15 +104,19 @@ export const KhoiChuongTrinhSchema = z.object({
 export const KhoiDemNguocSchema = z.object({
   loai: z.literal("dem-nguoc"),
   tieu_de: z.string().optional(),
+  tieu_de_en: z.string().optional(),
   thoi_gian_chot: z.string().min(1),
   cau_chu: z.string().optional(),
+  cau_chu_en: z.string().optional(),
 });
 
 export const KhoiDoiTacSchema = z.object({
   loai: z.literal("doi-tac"),
   doi_tac: z.string().min(1),
   tieu_de: z.string().optional(),
+  tieu_de_en: z.string().optional(),
   mo_ta: z.string().optional(),
+  mo_ta_en: z.string().optional(),
   gia_goi: z.number().optional(),
   link: z.string().optional(),
 });
@@ -110,6 +124,7 @@ export const KhoiDoiTacSchema = z.object({
 export const KhoiVideoSchema = z.object({
   loai: z.literal("video"),
   tieu_de: z.string().optional(),
+  tieu_de_en: z.string().optional(),
   mp4: z.string().optional(),
   webm: z.string().optional(),
   anh_bia: z.string().optional(),
@@ -119,9 +134,13 @@ export const KhoiVideoSchema = z.object({
 export const KhoiBoothSchema = z.object({
   loai: z.literal("booth"),
   tieu_de: z.string().optional(),
+  tieu_de_en: z.string().optional(),
   dia_chi: z.string().optional(),
+  dia_chi_en: z.string().optional(),
   gio: z.string().optional(),
+  gio_en: z.string().optional(),
   ngay_cuoi: z.string().optional(),
+  ngay_cuoi_en: z.string().optional(),
 });
 
 export const KhoiLandingSchema = z.discriminatedUnion("loai", [

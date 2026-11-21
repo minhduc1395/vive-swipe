@@ -1,28 +1,30 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { DEALS, DOANH_NGHIEP } from "@/lib/data";
 import { CAU_HINH_BOOTH } from "@/lib/cau-hinh";
 import { TRANG_CHU_CONFIG } from "@/lib/trang-chu";
 import { TrangChuClient } from "@/components/trang-chu/TrangChuClient";
 import { docCauHinhLopoe3D } from "@/lib/thu-nghiem/lopoe-3d";
 
-export const metadata: Metadata = {
-  title: "VIVE · K-Beauty Experience",
-  description:
-    "Mỹ phẩm nội địa Hàn tại VIVE Tầng LL2 Union Square, 171 Đồng Khởi, Phường Sài Gòn.",
-  openGraph: {
-    title: "VIVE · K-Beauty Experience",
-    description:
-      "Mỹ phẩm nội địa Hàn tại VIVE Tầng LL2 Union Square, TP Hồ Chí Minh.",
-    images: [
-      {
-        url: "/brand/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "VIVE · K-Beauty Experience",
-      },
-    ],
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("trang-chu.trangChu");
+  return {
+    title: t("tieuDe"),
+    description: t("moTa"),
+    openGraph: {
+      title: t("tieuDe"),
+      description: t("moTaMangXaHoi"),
+      images: [
+        {
+          url: "/brand/og-image.png",
+          width: 1200,
+          height: 630,
+          alt: t("tieuDe"),
+        },
+      ],
+    },
+  };
+}
 
 export default function TrangChu() {
   const dealIdsCanDung = new Set(

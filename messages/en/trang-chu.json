@@ -1,1 +1,131 @@
-{}
+{
+  "chung": {
+    "sapRaMat": "Coming soon",
+    "xemDeal": "View deal ›",
+    "combo": {
+      "truoc": "Previous combos",
+      "tiepTheo": "Next combos",
+      "danhSach": "Combo list, scroll sideways"
+    },
+    "quaTang": "Free gift: {qua}. While supplies last."
+  },
+  "trangChu": {
+    "tieuDe": "VIVE · K-Beauty Experience",
+    "moTa": "Korean domestic-market beauty at VIVE, Level LL2, Union Square, 171 Dong Khoi, Saigon Ward.",
+    "moTaMangXaHoi": "Korean domestic-market beauty at VIVE, Level LL2, Union Square, Ho Chi Minh City."
+  },
+  "lopoe": {
+    "tienTrinh": {
+      "suaRuaMat": "Cleanser",
+      "ampoule": "Ampoule",
+      "kemDuong": "Moisturizing cream"
+    }
+  },
+  "landing": {
+    "tieuDeTrang": "{ten} · VIVE New Arrival",
+    "veNut": {
+      "xemCombo": "View combo"
+    },
+    "header": {
+      "veDauTrang": "VIVE New Arrival, back to top",
+      "dieuHuong": "Top navigation",
+      "newArrival": "New Arrival",
+      "home": "Home",
+      "quet": "Swipe",
+      "sanPham": "Products",
+      "gio": "Cart",
+      "dangNhap": "Sign in"
+    },
+    "hero": {
+      "aria": "Campaign intro"
+    },
+    "tieuDiem": {
+      "aria": "Product spotlight",
+      "khiMuaKem": "when bought together"
+    },
+    "raMat": {
+      "aria": "New arrivals shelf",
+      "khiConQua": "(while gifts last)",
+      "themVaoGio": "Add to cart",
+      "themVaoGioTen": "Add {ten} to cart"
+    },
+    "chuongTrinh": {
+      "combo": "Combo",
+      "uuDaiSoLuong": "Volume offer",
+      "quaTang": "Free gift"
+    },
+    "demNguoc": {
+      "aria": "Countdown",
+      "tieuDe": "Countdown to the end",
+      "ngay": "Days",
+      "gio": "Hours",
+      "phut": "Minutes",
+      "giay": "Seconds"
+    },
+    "doiTac": {
+      "aria": "Partner Pawlette",
+      "nhan": "AT THE BOOTH · PAWLETTE",
+      "tieuDe": "Which season is your skin tone?",
+      "moTa": "Personal color analysis with Pawlette, then test matching foundation right at the booth.",
+      "goi": "Experience package",
+      "nut": "Discover Personal Color"
+    },
+    "video": {
+      "aria": "Campaign video",
+      "dangCapNhat": "Review video coming soon",
+      "khongHoTro": "Your browser does not support HTML5 video."
+    },
+    "booth": {
+      "aria": "Booth information",
+      "gheBooth": "VISIT THE BOOTH",
+      "chiDuong": "Directions",
+      "giuHang": "Reserve before you visit",
+      "ngayCuoi": "until Nov 29"
+    },
+    "chuaCoChienDich": "No campaign has been set up yet."
+  },
+  "personalColor": {
+    "tieuDeTrang": "Personal Color with Pawlette (preview) · VIVE",
+    "moTaTrang": "Get your Personal Color analysis with Pawlette at the VIVE booth: find the color group that suits your skin and pick products in your tone.",
+    "nhan": "PAWLETTE × VIVE · PREVIEW",
+    "gioiThieu": "Find the tones that suit your skin, then pick lipstick, blush and foundation to match.",
+    "datLich": "Book at the booth",
+    "goi": "Experience package",
+    "banLa": "You are",
+    "bonNhom": "4 color groups",
+    "nhom": {
+      "xuan": {
+        "ten": "Warm Spring",
+        "moTa": "Warm, bright, clear."
+      },
+      "ha": {
+        "ten": "Cool Summer",
+        "moTa": "Cool, light, soft."
+      },
+      "thu": {
+        "ten": "Warm Autumn",
+        "moTa": "Warm, muted, deep."
+      },
+      "dong": {
+        "ten": "Cool Winter",
+        "moTa": "Cool, vivid, high contrast."
+      }
+    },
+    "traiNghiem": "At the booth",
+    "buoc": {
+      "1": {
+        "tieuDe": "Tone analysis",
+        "moTa": "A Pawlette specialist holds colored drapes next to your face to see which tones brighten your skin."
+      },
+      "2": {
+        "tieuDe": "Get your palette",
+        "moTa": "You learn your color group and the shades to pick. [Package contents to be confirmed by Pawlette]"
+      },
+      "3": {
+        "tieuDe": "Try a foundation now",
+        "moTa": "Head to the makeup counter next door to try primer and foundation in your color group."
+      }
+    },
+    "ghiChu": "Duration, guests per time slot and package contents: waiting for Pawlette to confirm."
+  }
+}

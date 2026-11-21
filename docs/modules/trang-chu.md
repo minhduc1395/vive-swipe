@@ -22,6 +22,7 @@ Trang chủ và landing: khối mở đầu, khối LOPOE cuộn 3D, lưới com
 ## Lịch sử ngắn
 - 2026-11-20 W055–W062: trang chủ mới, LOPOE 3D (ảnh thật, ống nhỏ giọt và cổ chai cắt từ ảnh, giọt sprite), ảnh combo cắt lại, dải thông báo theo 3 ưu đãi (PR #37–#50).
 - 2026-11-21 DIR-040 (#74): ô lớn lưới hiện `phu_de_truoc` (+ `phu_de_them` dòng 2) thay dòng nhãn·giá và dòng quà; giá, quà chỉ còn ở hàng trượt. Tên thẻ trượt: Glow Vitamin C, Keo Ong Dưỡng Ẩm.
+- 2026-11-21 W044 (#80): song ngữ VI | EN. Chữ cố định ở `messages/{vi,en}/trang-chu.json`; chữ trong yaml có trường `<tên>_en` cạnh bản vi (schema trong `lib/trang-chu`, `lib/chien-dich`, `lib/thu-nghiem`), client chọn bằng `chonBanNgonNgu(cfg, locale)` (`lib/trang-chu/ngon-ngu.ts`). Chữ deal (tên, hook, quà) đọc `*_en` qua `chuTheoNgonNgu` nhưng schema deal dùng chung chưa có trường này nên landing còn hiện bản vi. Thêm chữ mới: không gõ cứng, test `tests/trang-chu-song-ngu.test.ts` quét.
 
 ## Việc đang mở (không giao job trùng)
 - DIR-037: điện thoại còn giật 1–2 giây sau khi thả tay ở khối 3D (WEB đang xem).

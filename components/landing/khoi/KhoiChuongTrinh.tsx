@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import type { KhoiChuongTrinh } from "@/lib/chien-dich/types";
 import type { Deal } from "@/lib/data/types";
 import { timDealTheoId } from "@/lib/data";
 import { useDuLieu } from "@/lib/du-lieu-context";
-import { dinhDangTien } from "@/lib/dinh-dang";
+import { dinhDangGiaLanding } from "@/lib/trang-chu/dinh-dang";
+import { chuTheoNgonNgu } from "@/lib/trang-chu/ngon-ngu";
 import { duongDanAnh } from "@/lib/anh";
 import { dichDeal } from "@/lib/chien-dich/dich-den";
 
@@ -35,6 +37,8 @@ function AnhSanPham({ src, alt, className, style }: { src: string; alt: string; 
 export function KhoiChuongTrinh({ khoi, anhRieng = {} }: KhoiChuongTrinhProps) {
   const { tieu_de, deal: dealIds = [], o_to, logo_sau_tieu_de } = khoi;
   const { timSanPham } = useDuLieu();
+  const ngonNgu = useLocale();
+  const t = useTranslations("trang-chu.landing.chuongTrinh");
 
   const resolvedDeals = dealIds
     .map((id) => timDealTheoId(id))
@@ -92,12 +96,12 @@ export function KhoiChuongTrinh({ khoi, anhRieng = {} }: KhoiChuongTrinhProps) {
                 <div className={`relative z-10 h-full p-7 md:p-8 flex flex-col justify-between gap-4 ${isBig && anh.length ? "@[560px]:max-w-[52%]" : ""} ${!isBig && anh.length ? "@[360px]:pr-[150px]" : ""}`}>
                   <div className="flex flex-col gap-3">
                     <span className="self-start px-3 py-1 rounded-full bg-white/75 text-[12px] font-bold text-den">
-                      {d.loai === "combo" ? "Combo" : d.loai === "mua_x_tang_y" ? "Ưu đãi số lượng" : "Quà tặng"}
+                      {d.loai === "combo" ? t("combo") : d.loai === "mua_x_tang_y" ? t("uuDaiSoLuong") : t("quaTang")}
                     </span>
                     <strong className={`font-bold tracking-tight text-den leading-[1.15] ${isBig ? "text-[28px] sm:text-[36px]" : "text-[22px] sm:text-[24px]"}`}>
-                      {d.ten}
+                      {chuTheoNgonNgu(d, "ten", ngonNgu)}
                     </strong>
-                    {d.hook && <p className="m-0 text-[14px] sm:text-[15px] text-xam leading-[1.5]">{d.hook}</p>}
+                    {d.hook && <p className="m-0 text-[14px] sm:text-[15px] text-xam leading-[1.5]">{chuTheoNgonNgu(d, "hook", ngonNgu)}</p>}
 
                     {/* Ô nhỏ / điện thoại: hàng ảnh nhỏ dưới mô tả */}
                     {anh.length > 0 && (
@@ -110,8 +114,8 @@ export function KhoiChuongTrinh({ khoi, anhRieng = {} }: KhoiChuongTrinhProps) {
                   </div>
                   {giaBan && (
                     <div className="mt-auto pt-2 flex items-baseline gap-2.5">
-                      <span className={`font-bold text-den ${isBig ? "text-[32px] sm:text-[38px]" : "text-[24px] sm:text-[26px]"}`}>{dinhDangTien(giaBan)}</span>
-                      {giaGoc > giaBan && <span className="text-[15px] text-xam line-through">{dinhDangTien(giaGoc)}</span>}
+                      <span className={`font-bold text-den ${isBig ? "text-[32px] sm:text-[38px]" : "text-[24px] sm:text-[26px]"}`}>{dinhDangGiaLanding(giaBan, ngonNgu)}</span>
+                      {giaGoc > giaBan && <span className="text-[15px] text-xam line-through">{dinhDangGiaLanding(giaGoc, ngonNgu)}</span>}
                     </div>
                   )}
                 </div>
