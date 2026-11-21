@@ -22,6 +22,7 @@ function NutMacDinh({ n, i }: { n: Nut3D; i: number }) {
 }
 const veNutMacDinh: VeNut3D = (n, i) => <NutMacDinh key={n.chu} n={n} i={i} />;
 import type { Canh, LoaiHat } from "./canh";
+import { buocPhat, chonDich, diemDungTuKhoi, khungTuP, pTuKhung, type TrangThaiPhat } from "./phat-khung";
 
 const kep = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const muot = (t: number) => t * t * (3 - 2 * t);
@@ -167,6 +168,9 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
     let pKhung: number[] = []; // tiến trình p của từng khung (khung dày ở đoạn hình đổi nhiều, thưa ở đoạn đứng yên)
     let ctx2d: CanvasRenderingContext2D | null = null, khoaVe = -1;
     let raf = 0, hien = false, huy = false, p = 0, truoc = performance.now(), dangTai = false;
+    let phat: TrangThaiPhat | null = null; // null = nhảy thẳng tới đích ở lần vẽ tới
+    let chonDung = { dich: 0, moc: 0 };
+    const diemDung = diemDungTuKhoi(cfg.khoi);
     const elDoan = doan.current, elLop = lop.current, elCanvas = canvas.current;
 
     const moDau = elLop.querySelector<HTMLElement>("[data-mo-dau]");
@@ -219,11 +223,21 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
       const dich = tienTrinh();
       // Đứng yên (không cuộn): vẽ 1/4 số khung để máy đỡ nóng và không giật
       if (kd) {
-        // Chế độ khung ảnh: bám cuộn nhanh (≈70ms), chỉ vẽ khi đổi; không có vòng vẽ nặng nên không giật
+        // Chế độ khung ảnh: cuộn chỉ chọn cảnh đích (điểm dừng theo khối chữ), ảnh tự chạy tới đó với tốc độ đều
+        // như video (không bám tốc độ ngón tay: thả tay, vuốt mạnh hay nhẹ, kéo chậm đều cùng một tốc độ)
         const dt = Math.min(0.1, (time - truoc) / 1000);
         truoc = time;
-        p += (dich - p) * (1 - Math.exp(-dt * 24)); // ≈40ms: gần như bám tay, chỉ làm êm bước cuộn
-        if (Math.abs(dich - p) < 2e-5) p = dich;
+        if (pKhung.length < 2) p = dich;
+        else if (!phat) {
+          // lần đầu hoặc vừa quay lại khối: hiện đúng chỗ đang cuộn, không chạy
+          phat = { f: khungTuP(pKhung, dich), v: 0 };
+          chonDung = { dich, moc: dich };
+          p = dich;
+        } else {
+          chonDung = chonDich(chonDung, dich, diemDung);
+          phat = buocPhat(phat, khungTuP(pKhung, chonDung.dich), dt);
+          p = pTuKhung(pKhung, phat.f);
+        }
         veAnh(p);
         capNhatChu(p);
         if (hien) raf = requestAnimationFrame(khung);
@@ -380,7 +394,7 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
     const io = new IntersectionObserver(([e]) => {
       const truocDo = hien;
       hien = e.isIntersecting;
-      if (hien && !truocDo) { truoc = performance.now(); raf = requestAnimationFrame(khung); }
+      if (hien && !truocDo) { truoc = performance.now(); phat = null; raf = requestAnimationFrame(khung); }
     });
     io.observe(elDoan);
 
