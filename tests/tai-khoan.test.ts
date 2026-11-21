@@ -12,6 +12,7 @@ import {
 } from "@/lib/tai-khoan/kiem-tra";
 import { LOI, dichLoi } from "@/lib/tai-khoan/loi";
 import { dangXuat, guiMa, laDaDangNhap, xacNhanMa } from "@/lib/tai-khoan/dang-nhap";
+import { dangNhapEmailBat } from "@/lib/tai-khoan/co";
 
 type UserGia = { id: string; is_anonymous: boolean; email?: string };
 
@@ -206,5 +207,15 @@ describe("tai-khoan · chọn nhánh đăng nhập", () => {
     expect(laDaDangNhap({ is_anonymous: true, email: "" })).toBe(false);
     expect(laDaDangNhap({ is_anonymous: false, email: "a@b.vn" })).toBe(true);
     expect(laDaDangNhap(null)).toBe(false);
+  });
+});
+
+describe("cờ NEXT_PUBLIC_DANG_NHAP_EMAIL", () => {
+  it("chỉ bật khi đúng \"1\"", () => {
+    expect(dangNhapEmailBat("1")).toBe(true);
+    expect(dangNhapEmailBat(undefined)).toBe(false);
+    expect(dangNhapEmailBat("")).toBe(false);
+    expect(dangNhapEmailBat("0")).toBe(false);
+    expect(dangNhapEmailBat("true")).toBe(false);
   });
 });

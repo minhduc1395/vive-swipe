@@ -10,6 +10,7 @@ import { ThanhDocTablet } from "./ThanhDocTablet";
 import { ThanhTab } from "./ThanhTab";
 import { ChanTrang } from "./ChanTrang";
 import { Toast, hienToast } from "./ui/Toast";
+import { LinkTaiKhoan } from "./tai-khoan/LinkTaiKhoan";
 
 function docSoLuongLocal(khoa: string, tinhTongSoLuong: boolean): number {
   try {
@@ -126,6 +127,7 @@ export function AppShell({
               New Arrival
             </Link>
             <NutNgonNgu />
+            <LinkTaiKhoan className="min-h-[44px] px-2.5 inline-flex items-center text-[13px] font-medium text-den/82 hover:text-den transition-colors">
             <a
               href="/dang-nhap"
               onClick={(e) => {
@@ -138,6 +140,7 @@ export function AppShell({
             >
               <span>Đăng nhập</span>
             </a>
+            </LinkTaiKhoan>
           </div>
         </header>
       )}

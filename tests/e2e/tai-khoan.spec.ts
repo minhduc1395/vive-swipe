@@ -4,6 +4,8 @@ import type { Page } from "@playwright/test";
 const EMAIL = "minhkhach@gmail.com";
 const EMAIL_CHE = "m***h@gmail.com";
 const MA_DUNG = "123456";
+/** Cờ đăng nhập email: playwright.config.ts bật mặc định; NEXT_PUBLIC_DANG_NHAP_EMAIL=0 để chạy nhóm "tắt cờ". */
+const CO_BAT = (process.env.NEXT_PUBLIC_DANG_NHAP_EMAIL ?? "1") === "1";
 
 /**
  * Mock thêm cho /auth/v1/otp, /verify, /user, /logout (đăng ký sau fixture nên chạy trước).
@@ -49,6 +51,10 @@ async function caiDatAuthEmail(page: Page) {
   );
 }
 
+/** Thanh trên điện thoại (AppShell, < 768px). */
+const thanhDienThoai = (page: Page) =>
+  page.locator("header", { has: page.getByRole("link", { name: "Trang chủ VIVE" }) });
+
 async function khongCuonNgang(page: Page) {
   const tran = await page.evaluate(
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth
@@ -66,6 +72,7 @@ async function kiemNut44(page: Page) {
 }
 
 test.describe("#65 · Đăng nhập email + mã 6 số", () => {
+  test.skip(!CO_BAT, "Cờ NEXT_PUBLIC_DANG_NHAP_EMAIL tắt");
   test.beforeEach(async ({ page }) => {
     await datDaKhaoSat(page);
     await caiDatAuthEmail(page);
@@ -111,6 +118,10 @@ test.describe("#65 · Đăng nhập email + mã 6 số", () => {
     await kiemNut44(page);
     await testInfo.attach("tai-khoan-390", { body: await page.screenshot(), contentType: "image/png" });
 
+    // Thanh trên (điện thoại 390px) đổi thành "Tài khoản"
+    await expect(thanhDienThoai(page).getByRole("link", { name: "Tài khoản" })).toHaveAttribute("href", "/tai-khoan");
+    await expect(thanhDienThoai(page).getByRole("link", { name: "Đăng nhập" })).toHaveCount(0);
+
     // Thanh trên (máy tính) đổi thành "Tài khoản"
     await page.setViewportSize({ width: 1280, height: 900 });
     const banner = page.locator('div[role="banner"]');
@@ -121,6 +132,8 @@ test.describe("#65 · Đăng nhập email + mã 6 số", () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.getByRole("button", { name: "Đăng xuất" }).click();
     await expect(page).toHaveURL(/\/$/);
+    await expect(thanhDienThoai(page).getByRole("link", { name: "Đăng nhập" })).toBeVisible();
+    await expect(thanhDienThoai(page).getByRole("link", { name: "Tài khoản" })).toHaveCount(0);
     await page.setViewportSize({ width: 1280, height: 900 });
     await expect(banner.getByRole("link", { name: "Đăng nhập" })).toBeVisible();
     await expect(banner.getByRole("link", { name: "Tài khoản" })).toHaveCount(0);
@@ -160,5 +173,34 @@ test.describe("#65 · Đăng nhập email + mã 6 số", () => {
     await page.getByRole("button", { name: "Đăng nhập", exact: true }).click();
     await expect(page.getByTestId("email-tai-khoan")).toBeVisible();
     await khongCuonNgang(page);
+  });
+});
+
+test.describe("#65 · Tắt cờ đăng nhập email: giữ trang chờ", () => {
+  test.skip(CO_BAT, "Chạy với NEXT_PUBLIC_DANG_NHAP_EMAIL=0");
+  test.beforeEach(async ({ page }) => {
+    await datDaKhaoSat(page);
+  });
+
+  test("/dang-nhap là trang chờ, không có form email; /tai-khoan về /dang-nhap", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/dang-nhap");
+    await expect(page.getByRole("heading", { name: "Đăng nhập VIVE" })).toBeVisible();
+    await expect(page.getByText(/đang được chuẩn bị/)).toBeVisible();
+    await expect(page.getByRole("link", { name: "Tiếp tục quẹt sản phẩm" })).toBeVisible();
+    await expect(page.getByRole("textbox", { name: "Email" })).toHaveCount(0);
+    await page.goto("/tai-khoan");
+    await expect(page).toHaveURL(/\/dang-nhap$/);
+    await expect(page.getByRole("textbox", { name: "Email" })).toHaveCount(0);
+  });
+
+  test("thanh điện thoại 390px: nút 'Đăng nhập' vẫn hiện toast sắp ra mắt", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/");
+    const nut = thanhDienThoai(page).getByRole("link", { name: "Đăng nhập" });
+    await expect(nut).toHaveAttribute("data-sap-co", "true");
+    await nut.click();
+    await expect(page.getByText("Tính năng sắp ra mắt")).toBeVisible();
+    await expect(page).toHaveURL(/\/$/);
   });
 });
