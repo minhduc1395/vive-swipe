@@ -69,7 +69,7 @@ function KhoiChu({ k, veNut }: { k: KhoiChu3D; veNut: VeNut3D }) {
     <div data-khoi={k.id} className={`absolute opacity-0 invisible max-md:left-5 max-md:right-5 max-md:bottom-[calc(4vh+72px)] ${VI_TRI[k.vi_tri]}`}>
       {k.huy_hieu && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img data-con src={k.huy_hieu.anh} alt={k.huy_hieu.mo_ta} width={211} height={212} loading="lazy" decoding="async" className={`block w-[88px] h-auto mb-3 drop-shadow-[0_10px_24px_rgba(60,90,130,0.22)] ${giua ? "md:mx-auto" : ""} ${k.vi_tri === "duoi-giua" ? "md:absolute md:mb-0 md:w-[150px] md:left-[calc(min(42vw,490px)-45vw)] md:bottom-[calc(100%+14vh)]" : "md:w-[124px]"}`} />
+        <img data-con src={k.huy_hieu.anh} alt={k.huy_hieu.mo_ta} width={211} height={212} loading="lazy" decoding="async" className={`block w-[88px] h-auto mb-3 drop-shadow-[0_10px_24px_rgba(60,90,130,0.22)] ${giua ? "md:mx-auto" : ""} ${k.vi_tri === "duoi-giua" ? "md:absolute md:mb-0 md:w-[150px] md:left-[calc(max(16px,50vw-min(48vh,40vw)-175px)-50vw+min(42vw,490px))] md:bottom-[calc(100%+14vh)]" : "md:w-[124px]"}`} />
       )}
       {k.ten_nho && <p data-con className="m-0 text-[12px] font-semibold tracking-[0.1em] uppercase text-xam">{k.ten_nho}</p>}
       {k.lon_nghieng && <p data-con className="m-0 mt-2.5 font-serif italic font-medium text-[56px] md:text-[clamp(64px,8vw,120px)] leading-[0.95] tracking-[-0.02em]">{k.lon_nghieng}</p>}
