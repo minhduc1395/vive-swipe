@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Be_Vietnam_Pro, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { KhoiTaoSupabase } from "@/components/KhoiTaoSupabase";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale } from "next-intl/server";
 
 const beVietnamPro = Be_Vietnam_Pro({
   subsets: ["vietnamese", "latin"],
@@ -33,18 +35,19 @@ export const viewport: Viewport = {
   themeColor: "#FFFFFF",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const ngonNgu = await getLocale();
   return (
-    <html lang="vi">
+    <html lang={ngonNgu}>
       <body className="font-sans antialiased bg-trang text-den">
         <KhoiTaoSupabase
           fontClasses={[beVietnamPro.variable, playfairDisplay.variable]}
         />
-        {children}
+        <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>
   );

@@ -1,0 +1,32 @@
+{
+  "chanTrang": {
+    "moTa": "Mỹ phẩm nội địa Hàn, thử và mua tại booth.",
+    "tieuDeGheBooth": "Ghé booth",
+    "moCuaPrefix": "Mở cửa",
+    "chiDuong": "Chỉ đường",
+    "tieuDeHoTro": "Hỗ trợ",
+    "hoTroGiuHang": "Giữ hàng tại booth",
+    "hoTroDoiTra": "Đổi trả",
+    "hoTroBaoMat": "Bảo mật dữ liệu",
+    "tieuDeDonViVanHanh": "Đơn vị vận hành",
+    "mstPrefix": "MST",
+    "sdtPrefix": "SĐT:",
+    "banQuyen": "© 2026 VIVE",
+    "nhanFooter": "Thông tin VIVE",
+    "nhanMangXaHoi": "Mạng xã hội"
+  },
+  "thanh": {
+    "trangChu": "Trang chủ VIVE",
+    "gioHang": "Giỏ hàng",
+    "gioHangCoMon": "Giỏ hàng ({so} món)",
+    "gio": "Giỏ",
+    "soMon": "{so} món",
+    "dangNhap": "Đăng nhập",
+    "timKiem": "Tìm kiếm",
+    "dieuHuongMayTinh": "Điều hướng máy tính",
+    "dieuHuongChinh": "Điều hướng chính",
+    "ngonNgu": "Ngôn ngữ",
+    "doiSangEn": "Chuyển sang tiếng Anh",
+    "doiSangVi": "Chuyển sang tiếng Việt"
+  }
+}

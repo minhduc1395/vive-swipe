@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
+import type { NgonNgu } from "@/i18n/ngon-ngu";
 import { usePathname } from "next/navigation";
 import { LogoVive } from "@/components/LogoVive";
 import { CAC_MUC_TABLET, kiemTraMucDangChon } from "@/lib/dieu-huong";
@@ -142,6 +144,8 @@ export function ThanhDocTablet({
   soLuongGio = 0,
 }: ThanhDocTabletProps) {
   const pathname = usePathname();
+  const ngonNgu = useLocale() as NgonNgu;
+  const t = useTranslations("chung.thanh");
 
   return (
     <nav
@@ -185,11 +189,11 @@ export function ThanhDocTablet({
                   hienToast("Tính năng sắp ra mắt");
                 }}
                 data-sap-co="true"
-                aria-label={tab.nhan.vi}
+                aria-label={tab.nhan[ngonNgu]}
                 className={`${lopStyle} cursor-pointer`}
               >
                 <BieuTuongTablet tabKey={tab.key} />
-                <span className="leading-none">{tab.nhan.vi}</span>
+                <span className="leading-none">{tab.nhan[ngonNgu]}</span>
               </a>
             );
           }
@@ -203,10 +207,10 @@ export function ThanhDocTablet({
               className={lopStyle}
             >
               <BieuTuongTablet tabKey={tab.key} />
-              <span className="leading-none">{tab.nhan.vi}</span>
+              <span className="leading-none">{tab.nhan[ngonNgu]}</span>
               {soDem > 0 && (
                 <span
-                  aria-label={`${soDem} món`}
+                  aria-label={t("soMon", { so: soDem })}
                   className="absolute top-1 right-2 min-w-[16px] h-4 px-1 rounded-full bg-hong text-den text-[10px] font-bold flex items-center justify-center leading-none"
                 >
                   {soDem > 99 ? "99+" : soDem}
