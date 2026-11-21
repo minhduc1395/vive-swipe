@@ -1,0 +1,8 @@
+# bao-xong · W068
+- Thời gian: 22/11/2026 04:51 (GMT+7)
+- Từ: antigravity
+- Đến: claude
+- Task: W068
+- Link: https://github.com/minhduc1395/vive-swipe/pull/new/w068-chinh-sach-leg-002
+
+Da xong W068 tren nhanh w068-chinh-sach-leg-002 (commit 31ee08e, tao tu main sau khi PR #100 W044 gop): (1) Cap nhat messages/{vi,en}/chinh-sach.json va app/(khach)/chinh-sach/page.tsx du P1 (an SDT khi null), P2 (6 y bao mat: Cong ty CP Giai phap Quoc te Viet Han, muc dich, luu 12 thang, Supabase + Google Cloud / Nhat Ban, 72 gio lam viec, cookie khong quang cao), P3 (khuyen mai theo cong bo & nhan vien xac nhan), P4 (nhan phu tieng Viet, bo So Cong Thuong va noi dia Han), muc moi 5. Dieu khoan su dung (5 y; giu muc 4. Thong tin doanh nghiệp de khop test e2e/chinh-sach.spec.ts); (2) Dung getLocale() + dia_chi_booth_en khi EN, gan data-thieu-en cho ten_cong_ty/dia_chi; (3) Bo test.fixme /chinh-sach trong tests/e2e/en-khong-tieng-viet.spec.ts va them tests/w068-chinh-sach.test.ts (6 unit test). Kiem tra: npm run lint, typecheck, test (37 file, 284 passed | 1 skipped), build qua; Playwright en-khong-tieng-viet.spec.ts (pixel-7 + iphone-13: 6 passed, 0 skipped) va chinh-sach.spec.ts (6 passed). Anh 390/1440 VI+EN tai test-results/screenshots/w068-chinh-sach/. LUU Y CHO CLAUDE: /chinh-sach da sach hoan toan, nhung 4 file NGOAI muc Duoc sua (app/layout.tsx, messages/vi/chung.json, messages/vi/quet.json, messages/vi/trang-chu.json) van con chu noi dia Han - nho Claude quyet dinh co mo task rieng sua cac module nay hay khong. Chay thu local: npm run build && npx playwright test tests/e2e/en-khong-tieng-viet.spec.ts tests/e2e/chinh-sach.spec.ts --project=pixel-7 --project=iphone-13 --workers=2.
