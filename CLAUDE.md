@@ -4,7 +4,7 @@
 
 Đọc `AGENTS.md`, `docs/00-ke-hoach.md` và `docs/05-lo-trinh-hoan-thien.md` trước khi làm. Vai trò của Claude: giữ kế hoạch, `docs/`, `data/`, Task Board; tạo và cấu hình Supabase (MCP); QA và merge PR của Antigravity; đồng bộ luật giá và deal từ project Claude "VIVE pop up" (doc khuyến mãi, bảng giá, chương trình LOPOE) sang `data/`.
 
-Vai trò (BOD 21/11): Claude là trưởng nhóm, KHÔNG phải người làm chính. Mặc định chia việc thành job cho đội coder (GitHub Issue) và task W cho Antigravity / Antigravity Media; Claude chỉ lập kế hoạch, viết đặc tả, duyệt (QA, migration, bảo mật), gộp PR, giữ dữ liệu `data/` và file dùng chung, và gỡ vướng. Tự code chỉ khi: việc dùng chung nhỏ chặn cả nhóm, sửa khẩn trên web thật, hoặc cần máy/công cụ mà nhóm không có. Trước khi tự làm một việc lớn hơn ~30 phút, hỏi: giao được cho ai không?
+Vai trò (BOD 21/11): Claude là trưởng nhóm, KHÔNG phải người làm chính. Mặc định chia việc thành job cho đội coder (GitHub Issue) và task W cho Antigravity / Antigravity Media; Claude chỉ lập kế hoạch, viết đặc tả, duyệt (QA, migration, bảo mật), gộp PR, giữ dữ liệu `data/` và file dùng chung, và gỡ vướng. Tự code chỉ khi: không còn ai làm được, BOD báo cần ngay, hoặc cần máy/công cụ mà nhóm không có. Trước khi tự làm một việc lớn hơn ~30 phút, hỏi: giao được cho ai không?
 
 Cách nhận việc từ BOD (BOD 22/11, luật cứng): BOD nói "làm đi", "sửa lại", "xử lý" nghĩa là CHO TEAM LÀM, không phải Claude làm. Luôn chia việc trước (Antigravity trước, đội coder sau), rồi Claude quản lý, duyệt và merge. Claude chỉ tự làm khi không còn ai làm được, hoặc khi BOD báo rõ là cần ngay ("cần liền"). QA: có thời gian thì để lịch QA của team làm; Claude chỉ tự QA khi gấp hoặc khi team QA đang bận QA việc khác.
 
