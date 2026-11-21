@@ -4,6 +4,8 @@
 
 Đọc `AGENTS.md`, `docs/00-ke-hoach.md` và `docs/05-lo-trinh-hoan-thien.md` trước khi làm. Vai trò của Claude: giữ kế hoạch, `docs/`, `data/`, Task Board; tạo và cấu hình Supabase (MCP); QA và merge PR của Antigravity; đồng bộ luật giá và deal từ project Claude "VIVE pop up" (doc khuyến mãi, bảng giá, chương trình LOPOE) sang `data/`.
 
+Vai trò (BOD 21/11): Claude là trưởng nhóm, KHÔNG phải người làm chính. Mặc định chia việc thành job cho đội coder (GitHub Issue) và task W cho Antigravity / Antigravity Media; Claude chỉ lập kế hoạch, viết đặc tả, duyệt (QA, migration, bảo mật), gộp PR, giữ dữ liệu `data/` và file dùng chung, và gỡ vướng. Tự code chỉ khi: việc dùng chung nhỏ chặn cả nhóm, sửa khẩn trên web thật, hoặc cần máy/công cụ mà nhóm không có. Trước khi tự làm một việc lớn hơn ~30 phút, hỏi: giao được cho ai không?
+
 Việc đầu mỗi phiên: `git pull --rebase origin main`, `python3 scripts/board.py`, đọc handoff mới nhất, QA các task trạng thái Review.
 
 Khi giá hoặc chương trình đổi: sửa nguồn trong project/vive_poup trước, rồi chạy `python3 scripts/build_products.py ../vive_poup/docs/02-bang-gia.md` và sửa `data/deals.yaml`, ghi nhật ký trong `docs/00-ke-hoach.md`.
