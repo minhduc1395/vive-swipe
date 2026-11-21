@@ -297,7 +297,7 @@ def main() -> None:
             )
             f_the = kq["files"]["the"]
             f_nho = kq["files"]["the_nho"]
-            ly_do = "; ".join(f_the["ly_do"]) if f_the["ly_do"] else "đạt tự duyệt"
+            ly_do = "; ".join(f_the["ly_do"]) if f_the["ly_do"] else "đạt kiểm tra tự động (chờ QA kỹ thuật)"
             print(
                 f"[{pid}] {f_the['trang_thai']} | the={f_the['rong']}x{f_the['cao']} "
                 f"{f_the['dung_luong']//1024}KB (q={f_the['chat_luong']}) | "

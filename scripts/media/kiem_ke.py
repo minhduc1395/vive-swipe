@@ -37,9 +37,9 @@ def tai_du_lieu_local() -> tuple[list[dict], list[dict]]:
 
 
 def phan_loai_trang_thai_anh(dong_media: list[dict]) -> tuple[str, str, str]:
-    """Xác định trạng thái ảnh thẻ của 1 sản phẩm: duyet | cho_duyet | loai | thieu."""
+    """Xác định trạng thái ảnh thẻ của 1 sản phẩm: duyet | cho_mkt | cho_duyet | loai | thieu."""
     the_rows = [m for m in dong_media if m.get("loai") == "the"]
-    for st in ("duyet", "cho_duyet", "loai"):
+    for st in ("duyet", "cho_mkt", "cho_duyet", "loai"):
         for m in the_rows:
             if m.get("trang_thai") == st:
                 return st, m.get("duong_dan") or "", m.get("nguon") or ""
@@ -72,12 +72,14 @@ def chay_kiem_ke(local_only: bool = False) -> tuple[list[dict], dict[str, dict[s
         pid = sp["id"]
         brand = sp.get("thuong_hieu") or ""
         if brand not in thong_ke:
-            thong_ke[brand] = {"tong": 0, "duyet": 0, "cho_duyet": 0, "thieu": 0}
+            thong_ke[brand] = {"tong": 0, "duyet": 0, "cho_mkt": 0, "cho_duyet": 0, "thieu": 0}
         thong_ke[brand]["tong"] += 1
 
         trang_thai, duong_dan, nguon = phan_loai_trang_thai_anh(media_theo_sp.get(pid, []))
         if trang_thai == "duyet":
             thong_ke[brand]["duyet"] += 1
+        elif trang_thai == "cho_mkt":
+            thong_ke[brand]["cho_mkt"] += 1
         elif trang_thai == "cho_duyet":
             thong_ke[brand]["cho_duyet"] += 1
         else:
@@ -130,14 +132,19 @@ def main() -> None:
     ket_qua, thong_ke = chay_kiem_ke(local_only=args.local)
     tong = len(ket_qua)
     duyet = sum(1 for r in ket_qua if r["trang_thai_media"] == "duyet")
+    cho_bod = sum(1 for r in ket_qua if r["trang_thai_media"] == "cho_mkt")
     cho = sum(1 for r in ket_qua if r["trang_thai_media"] == "cho_duyet")
     thieu = sum(1 for r in ket_qua if r["trang_thai_media"] in ("thieu", "loai"))
 
-    print(f"Tổng sản phẩm hien_thi=true: {tong} | Đã duyệt: {duyet} | Chờ duyệt: {cho} | Còn thiếu: {thieu}")
+    print(
+        f"Tổng sản phẩm hien_thi=true: {tong} | Đã duyệt: {duyet} | "
+        f"Chờ BOD: {cho_bod} | Chờ QA kỹ thuật: {cho} | Còn thiếu: {thieu}"
+    )
     print("\nTheo thứ tự ưu tiên thương hiệu:")
     for brand, tk in thong_ke.items():
         print(
-            f"  - {brand:14s}: tổng {tk['tong']:2d} | duyệt {tk['duyet']:2d} | chờ {tk['cho_duyet']:2d} | thiếu {tk['thieu']:2d}"
+            f"  - {brand:14s}: tổng {tk['tong']:2d} | duyệt {tk['duyet']:2d} | "
+            f"chờ BOD {tk['cho_mkt']:2d} | chờ QA {tk['cho_duyet']:2d} | thiếu {tk['thieu']:2d}"
         )
 
     thieu_rows = [r for r in ket_qua if r["trang_thai_media"] in ("thieu", "loai")]

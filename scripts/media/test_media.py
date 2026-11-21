@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -10,7 +11,10 @@ from PIL import Image, ImageDraw
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import common  # noqa: E402
+import kiem_ke  # noqa: E402
 import nhap  # noqa: E402
+import tai_len  # noqa: E402
+import trang_duyet  # noqa: E402
 import video  # noqa: E402
 
 
@@ -59,7 +63,11 @@ class TestTaoUrlCongKhai:
 
 
 class TestQuyetDinhTrangThai:
-    def test_tu_duyet_drive_va_booth(self) -> None:
+    def test_trang_thai_hop_le_co_cho_mkt(self) -> None:
+        assert "cho_mkt" in common.TRANG_THAI_HOP_LE
+        assert {"cho_duyet", "cho_mkt", "duyet", "loai"} <= common.TRANG_THAI_HOP_LE
+
+    def test_luon_cho_duyet_nhung_tra_ly_do_rong_khi_dat_ky_thuat(self) -> None:
         st, ly_do = common.quyet_dinh_trang_thai(
             loai="the",
             nguon="drive",
@@ -69,10 +77,10 @@ class TestQuyetDinhTrangThai:
             ty_le_vien_trong_suot=0.99,
             chu_la=[],
         )
-        assert st == "duyet"
+        assert st == "cho_duyet"
         assert ly_do == []
 
-        st2, _ = common.quyet_dinh_trang_thai(
+        st2, ly_do2 = common.quyet_dinh_trang_thai(
             loai="the_nho",
             nguon="booth",
             kich_thuoc=(400, 400),
@@ -80,9 +88,10 @@ class TestQuyetDinhTrangThai:
             khop_ma=True,
             ty_le_vien_trong_suot=0.98,
         )
-        assert st2 == "duyet"
+        assert st2 == "cho_duyet"
+        assert ly_do2 == []
 
-    def test_nguon_thuong_hieu_theo_luat_moi(self) -> None:
+    def test_nguon_thuong_hieu_luon_cho_duyet_va_ghi_nhan_khop_ma(self) -> None:
         st_cho, ld = common.quyet_dinh_trang_thai(
             loai="the",
             nguon="thuong_hieu",
@@ -104,12 +113,12 @@ class TestQuyetDinhTrangThai:
             ty_le_vien_trong_suot=1.0,
             khop_ma_chac_chan=True,
         )
-        assert st_ok == "duyet"
+        assert st_ok == "cho_duyet"
         assert ld_ok == []
 
     def test_cho_duyet_khi_vi_pham_quy_chuan_hoac_chu_la(self) -> None:
-        # Ai bối cảnh / video luôn cho_duyet
-        st_ai, _ = common.quyet_dinh_trang_thai(
+        # Ai bối cảnh / video luôn cho_duyet và có lý do
+        st_ai, ld_ai = common.quyet_dinh_trang_thai(
             loai="boi_canh",
             nguon="ai_boi_canh",
             kich_thuoc=(1080, 1350),
@@ -118,9 +127,10 @@ class TestQuyetDinhTrangThai:
             ty_le_vien_trong_suot=0.0,
         )
         assert st_ai == "cho_duyet"
+        assert len(ld_ai) >= 1
 
         # Quá dung lượng 150KB
-        st_heavy, _ = common.quyet_dinh_trang_thai(
+        st_heavy, ld_heavy = common.quyet_dinh_trang_thai(
             loai="the",
             nguon="drive",
             kich_thuoc=(1000, 1000),
@@ -129,9 +139,10 @@ class TestQuyetDinhTrangThai:
             ty_le_vien_trong_suot=1.0,
         )
         assert st_heavy == "cho_duyet"
+        assert len(ld_heavy) >= 1
 
         # Viền không trong suốt <= 95%
-        st_bg, _ = common.quyet_dinh_trang_thai(
+        st_bg, ld_bg = common.quyet_dinh_trang_thai(
             loai="the",
             nguon="drive",
             kich_thuoc=(1000, 1000),
@@ -140,11 +151,12 @@ class TestQuyetDinhTrangThai:
             ty_le_vien_trong_suot=0.90,
         )
         assert st_bg == "cho_duyet"
+        assert len(ld_bg) >= 1
 
         # Có chữ sàn bán lẻ / watermark
         chu_la = common.phat_hien_chu_la("san-pham-shopee-official.png")
         assert "shopee" in chu_la
-        st_wm, _ = common.quyet_dinh_trang_thai(
+        st_wm, ld_wm = common.quyet_dinh_trang_thai(
             loai="the",
             nguon="drive",
             kich_thuoc=(1000, 1000),
@@ -154,6 +166,7 @@ class TestQuyetDinhTrangThai:
             chu_la=chu_la,
         )
         assert st_wm == "cho_duyet"
+        assert len(ld_wm) >= 1
 
 
 class TestChuanHoaKichThuoc:
@@ -221,3 +234,136 @@ class TestNhapVaSafeZone:
             assert y0 >= 170
             assert y1 <= 1500
             assert x1 <= 940
+
+
+class TestChoMktVaTaiLenChoDuyet:
+    def test_phan_loai_trang_thai_anh_ho_tro_cho_mkt(self) -> None:
+        st, dd, ng = kiem_ke.phan_loai_trang_thai_anh(
+            [
+                {"loai": "the", "trang_thai": "cho_duyet", "duong_dan": "a/the.webp", "nguon": "drive"},
+                {"loai": "the", "trang_thai": "cho_mkt", "duong_dan": "b/the.webp", "nguon": "thuong_hieu"},
+            ]
+        )
+        assert st == "cho_mkt"
+        assert dd == "b/the.webp"
+        assert ng == "thuong_hieu"
+
+        st_duyet, _, _ = kiem_ke.phan_loai_trang_thai_anh(
+            [
+                {"loai": "the", "trang_thai": "cho_mkt", "duong_dan": "b/the.webp", "nguon": "thuong_hieu"},
+                {"loai": "the", "trang_thai": "duyet", "duong_dan": "c/the.webp", "nguon": "drive"},
+            ]
+        )
+        assert st_duyet == "duyet"
+
+    def test_trang_duyet_render_nhom_cho_mkt(self) -> None:
+        html_out = trang_duyet.tao_html_trang_duyet(
+            [
+                {
+                    "san_pham_id": "SP01",
+                    "loai": "the",
+                    "nguon": "thuong_hieu",
+                    "url": "https://example.com/1.webp",
+                    "rong": 1000,
+                    "cao": 1000,
+                    "dung_luong": 51200,
+                    "trang_thai": "cho_mkt",
+                },
+                {
+                    "san_pham_id": "SP02",
+                    "loai": "the",
+                    "nguon": "drive",
+                    "url": "https://example.com/2.webp",
+                    "rong": 1000,
+                    "cao": 1000,
+                    "dung_luong": 40960,
+                    "trang_thai": "cho_duyet",
+                },
+            ],
+            {
+                "SP01": {"ten_hien_thi": "Kem 1", "thuong_hieu": "LOPOE"},
+                "SP02": {"ten_hien_thi": "Kem 2", "thuong_hieu": "Beaund"},
+            },
+        )
+        assert "Chờ BOD: 1" in html_out
+        assert "Chờ BOD duyệt (1)" in html_out
+        assert "badge-bod" in html_out
+
+    def test_tai_len_luon_ghi_cho_duyet_du_json_cu_la_duyet(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        pid = "SP_TEST"
+        xu_ly_dir = tmp_path / "xu-ly"
+        sp_dir = xu_ly_dir / pid
+        sp_dir.mkdir(parents=True)
+
+        files_meta = {}
+        for loai, fname, w, h in (
+            ("tach_nen", "tach-nen.png", 500, 500),
+            ("the", "the.webp", 1000, 1000),
+            ("the_nho", "the-nho.webp", 400, 400),
+        ):
+            fp = sp_dir / fname
+            fp.write_bytes(b"fake-bytes")
+            files_meta[loai] = {
+                "path": str(fp),
+                "rong": w,
+                "cao": h,
+                "dung_luong": 10,
+                "trang_thai": "duyet",
+                "ly_do": [],
+            }
+
+        (sp_dir / "ket-qua.json").write_text(
+            json.dumps(
+                {
+                    "id": pid,
+                    "nguon": "drive",
+                    "nguon_chi_tiet": "x",
+                    "cach_khop": "ten",
+                    "files": files_meta,
+                }
+            ),
+            encoding="utf-8",
+        )
+
+        ghi_rows: list[dict] = []
+
+        class _FakeResp:
+            def __init__(self, data: list) -> None:
+                self.data = data
+
+        class _FakeTable:
+            def __init__(self, name: str) -> None:
+                self.name = name
+
+            def select(self, *_a, **_kw):
+                return self
+
+            def eq(self, *_a, **_kw):
+                return self
+
+            def limit(self, *_a, **_kw):
+                return self
+
+            def execute(self):
+                if self.name == "san_pham":
+                    return _FakeResp([{"id": pid, "anh": None}])
+                return _FakeResp([])
+
+        class _FakeSB:
+            def table(self, name: str):
+                return _FakeTable(name)
+
+        monkeypatch.setattr(common, "XU_LY_DIR", xu_ly_dir)
+        monkeypatch.setattr(common, "tao_supabase_client", lambda: (_FakeSB(), "https://example.supabase.co"))
+        monkeypatch.setattr(tai_len, "tim_dong_media_cu", lambda _sb, _dd: None)
+        monkeypatch.setattr(
+            tai_len,
+            "tai_len_file_len_bucket",
+            lambda _sb, url, _fp, dd, _ct, url_cu=None: f"{url}/{dd}",
+        )
+        monkeypatch.setattr(tai_len, "ghi_dong_media", lambda _sb, row: ghi_rows.append(row) or row)
+
+        kq = tai_len.tai_len_san_pham(pid, ep_cho_duyet=False)
+        assert len(ghi_rows) == 3
+        assert all(r["trang_thai"] == "cho_duyet" for r in ghi_rows)
+        assert kq["da_tai"]["the"]["trang_thai"] == "cho_duyet"

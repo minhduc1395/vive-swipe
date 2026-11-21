@@ -69,7 +69,7 @@ LOAI_HOP_LE = {
 
 NGUON_HOP_LE = {"drive", "booth", "thuong_hieu", "ai_boi_canh", "tong_hop"}
 
-TRANG_THAI_HOP_LE = {"cho_duyet", "duyet", "loai"}
+TRANG_THAI_HOP_LE = {"cho_duyet", "cho_mkt", "duyet", "loai"}
 
 TU_KHOA_CHU_LA = [
     "shopee",
@@ -405,7 +405,11 @@ def quyet_dinh_trang_thai(
     chu_la: list[str] | None = None,
     khop_ma_chac_chan: bool = False,
 ) -> tuple[str, list[str]]:
-    """Quyết định tự duyệt ('duyet') hay chờ duyệt ('cho_duyet') theo docs/06 mục 5."""
+    """Chạy kiểm tra kỹ thuật và luôn trả về 'cho_duyet' theo luật BOD 21/11.
+
+    Media không bao giờ tự đặt 'duyet'. Danh sách `ly_do` trả về rỗng nghĩa là đạt mọi
+    kiểm tra kỹ thuật tự động để Claude QA xem và chuyển sang 'cho_mkt' (chờ BOD duyệt).
+    """
     ly_do: list[str] = []
 
     if loai not in ("the", "the_nho", "tach_nen"):
@@ -443,8 +447,6 @@ def quyet_dinh_trang_thai(
     if chu_la:
         ly_do.append(f"Phát hiện chữ lạ/watermark: {', '.join(chu_la)}")
 
-    if not ly_do:
-        return "duyet", []
     return "cho_duyet", ly_do
 
 

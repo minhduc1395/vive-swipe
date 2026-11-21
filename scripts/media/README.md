@@ -30,7 +30,7 @@ python scripts/media/nhap.py "<thư mục>" --nguon drive
 # 3. Tách nền (rembg), chuẩn hóa 1000x1000 (<150KB) & 400x400 (<40KB), chạy kiểm tra tự động
 python scripts/media/xu_ly.py <id1> <id2> ...
 
-# 4. Đẩy lên Supabase bucket `media` và ghi/cập nhật bảng `public.media`
+# 4. Đẩy lên Supabase bucket `media` và ghi/cập nhật bảng `public.media` (luôn đặt trang_thai = cho_duyet theo luật BOD 21/11)
 python scripts/media/tai_len.py <id1> <id2> ...
 
 # 5. Dựng video 9:16 hoặc 1:1 từ tach-nen.png bằng ffmpeg (đặt trang_thai = cho_duyet)
@@ -40,7 +40,7 @@ python scripts/media/video.py <id> --boi-canh
 # Hoặc dựng video bộ ba chiến dịch:
 python scripts/media/video.py --chien-dich lopoe-better-balance --bo-ba
 
-# 6. Tạo trang duyệt media/tmp/duyet.html cho các dòng cho_duyet (và duyet)
+# 6. Tạo trang duyệt media/tmp/duyet.html cho các dòng cho_duyet, cho_mkt (chờ BOD) và duyet
 python scripts/media/trang_duyet.py
 ```
 

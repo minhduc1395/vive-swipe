@@ -102,7 +102,10 @@ def tai_len_san_pham(
             url_cu=url_cu,
         )
 
-        trang_thai = "cho_duyet" if ep_cho_duyet else info["trang_thai"]
+        # Luật duyệt BOD 21/11: Media luôn đẩy trạng thái 'cho_duyet', không bao giờ tự đặt 'duyet'
+        # kể cả khi ket-qua.json cũ còn ghi 'duyet'. Tham số ep_cho_duyet giữ lại để tương thích CLI.
+        _ = ep_cho_duyet
+        trang_thai = "cho_duyet"
         ly_do = list(info.get("ly_do") or [])
         ghi_chu_parts = []
         if cach_khop:

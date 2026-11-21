@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Sinh trang duyệt HTML media/tmp/duyet.html cho các dòng cho_duyet (và thống kê toàn bộ bảng media)."""
+"""Sinh trang duyệt HTML media/tmp/duyet.html cho các dòng cho_duyet, cho_mkt (chờ BOD) và thống kê toàn bộ bảng media."""
 
 from __future__ import annotations
 
@@ -15,6 +15,7 @@ import common  # noqa: E402
 def tao_html_trang_duyet(media_rows: list[dict], sp_map: dict[str, dict]) -> str:
     """Render nội dung HTML cho trang duyệt media."""
     cho = [r for r in media_rows if r.get("trang_thai") == "cho_duyet"]
+    cho_mkt = [r for r in media_rows if r.get("trang_thai") == "cho_mkt"]
     duyet = [r for r in media_rows if r.get("trang_thai") == "duyet"]
     loai = [r for r in media_rows if r.get("trang_thai") == "loai"]
 
@@ -38,7 +39,14 @@ def tao_html_trang_duyet(media_rows: list[dict], sp_map: dict[str, dict]) -> str
         else:
             media_tag = f'<img loading="lazy" src="{html.escape(url)}" alt="{html.escape(ten)}">'
 
-        badge_class = "badge-ok" if tt == "duyet" else ("badge-no" if tt == "loai" else "badge-wait")
+        if tt == "duyet":
+            badge_class = "badge-ok"
+        elif tt == "cho_mkt":
+            badge_class = "badge-bod"
+        elif tt == "loai":
+            badge_class = "badge-no"
+        else:
+            badge_class = "badge-wait"
         link_html = (
             f'<div class="meta-row"><strong>Nguồn:</strong> {html.escape(nguon_ct[:90])}</div>'
             if nguon_ct
@@ -68,6 +76,7 @@ def tao_html_trang_duyet(media_rows: list[dict], sp_map: dict[str, dict]) -> str
         """
 
     cho_cards = "".join(render_card(r) for r in cho) or "<p class='empty'>Không có mục nào đang chờ duyệt.</p>"
+    cho_mkt_cards = "".join(render_card(r) for r in cho_mkt) or "<p class='empty'>Không có mục nào đang chờ BOD duyệt.</p>"
     duyet_cards = "".join(render_card(r) for r in duyet) or "<p class='empty'>Chưa có mục nào được duyệt.</p>"
     loai_cards = "".join(render_card(r) for r in loai)
 
@@ -123,6 +132,7 @@ def tao_html_trang_duyet(media_rows: list[dict], sp_map: dict[str, dict]) -> str
       background: var(--hong-nhat);
     }}
     .pill-wait {{ background: var(--hong); }}
+    .pill-bod {{ background: var(--bac-ha-nhat); border: 1px solid var(--bac-ha); }}
     .pill-ok {{ background: var(--bac-ha); }}
     section {{ max-width: 1320px; margin: 0 auto 36px; }}
     h2 {{ font-size: 18px; margin: 0 0 14px; }}
@@ -168,6 +178,7 @@ def tao_html_trang_duyet(media_rows: list[dict], sp_map: dict[str, dict]) -> str
       font-weight: 700;
     }}
     .badge-wait {{ background: var(--hong); color: var(--den); }}
+    .badge-bod {{ background: var(--bac-ha-nhat); border: 1px solid var(--bac-ha); color: var(--den); }}
     .badge-ok {{ background: var(--bac-ha); color: var(--den); }}
     .badge-no {{ background: var(--den); color: #fff; }}
     h3 {{ margin: 0; font-size: 15px; line-height: 1.35; }}
@@ -180,6 +191,7 @@ def tao_html_trang_duyet(media_rows: list[dict], sp_map: dict[str, dict]) -> str
     <h1>VIVE Quẹt · Trang duyệt Media</h1>
     <div class="stats">
       <span class="pill pill-wait">Chờ duyệt: {len(cho)}</span>
+      <span class="pill pill-bod">Chờ BOD: {len(cho_mkt)}</span>
       <span class="pill pill-ok">Đã duyệt: {len(duyet)}</span>
       <span class="pill">Đã loại: {len(loai)}</span>
     </div>
@@ -187,6 +199,10 @@ def tao_html_trang_duyet(media_rows: list[dict], sp_map: dict[str, dict]) -> str
   <section>
     <h2>Chờ duyệt ({len(cho)})</h2>
     <div class="grid">{cho_cards}</div>
+  </section>
+  <section>
+    <h2>Chờ BOD duyệt ({len(cho_mkt)})</h2>
+    <div class="grid">{cho_mkt_cards}</div>
   </section>
   <section>
     <h2>Đã duyệt ({len(duyet)})</h2>
@@ -225,6 +241,7 @@ def chay_trang_duyet(out_path: Path | None = None) -> tuple[Path, dict[str, int]
 
     dem = {
         "cho_duyet": sum(1 for r in media_rows if r.get("trang_thai") == "cho_duyet"),
+        "cho_mkt": sum(1 for r in media_rows if r.get("trang_thai") == "cho_mkt"),
         "duyet": sum(1 for r in media_rows if r.get("trang_thai") == "duyet"),
         "loai": sum(1 for r in media_rows if r.get("trang_thai") == "loai"),
     }
@@ -240,7 +257,7 @@ def main() -> None:
 
     dich, dem = chay_trang_duyet(out_path=args.out)
     print(
-        f"Đã tạo {dich} | chờ duyệt: {dem['cho_duyet']} | đã duyệt: {dem['duyet']} | đã loại: {dem['loai']}"
+        f"Đã tạo {dich} | chờ duyệt: {dem['cho_duyet']} | chờ BOD: {dem['cho_mkt']} | đã duyệt: {dem['duyet']} | đã loại: {dem['loai']}"
     )
 
 
