@@ -136,7 +136,7 @@ export function TheDeal({ deal, sanPhamMap, onMo, onThemCombo, onThemBo, noiBat 
     );
     chan = (
       <>
-        <span className="flex items-baseline gap-2 flex-wrap">
+        <span className="basis-full flex items-baseline gap-2 flex-wrap">
           <b className="text-[22px] tracking-[-0.01em]">{dinhDangTien(c.gia)}</b>
           {c.tongLe > c.gia && <s className="text-[13px] text-xam">{dinhDangTien(c.tongLe)}</s>}
           {c.tietKiem > 0 && <span className="text-[12px] font-semibold text-xanh-dam bg-oliu-nhat px-2 py-0.5 rounded-full">−{tienNgan(c.tietKiem)}</span>}
