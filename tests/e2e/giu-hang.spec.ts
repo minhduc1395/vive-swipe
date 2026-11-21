@@ -1,4 +1,4 @@
-import { test, expect, datDaKhaoSat } from "./fixtures";
+import { test, expect, datDaKhaoSat, MOCK_DEALS_SUPABASE } from "./fixtures";
 import { KHOA_GIO_HANG } from "@/lib/kho-luu-tru";
 
 test.describe("W014 · Giữ hàng tại booth, màn mã giữ hàng, email xác nhận, tự hết hạn", () => {
@@ -155,5 +155,56 @@ test.describe("W014 · Giữ hàng tại booth, màn mã giữ hàng, email xác
     expect(data.ok).toBe(true);
     expect(data.route).toBe("het-han-giu-hang");
     expect(typeof data.da_cap_nhat).toBe("number");
+  });
+  test("5. Dòng thưởng giữ hàng (DC-02) hiện ở form và trang mã; tắt DC-02 thì mất", async ({
+    page,
+  }) => {
+    const QUA = "Thêm 1 lượt quay vòng quay may mắn";
+    const datGio = async () => {
+      await page.goto("/quet");
+      await page.evaluate((key) => {
+        window.localStorage.setItem(
+          key,
+          JSON.stringify([{ loai: "san_pham", sanPhamId: "LOPOE-CF", soLuong: 1 }])
+        );
+      }, KHOA_GIO_HANG);
+    };
+
+    // DC-02 đang chạy: form và trang mã đều có dòng thưởng
+    await datGio();
+    await page.goto("/giu-hang");
+    await expect(page.getByTestId("thuong-giu-hang")).toContainText(QUA);
+    await page.locator("input#ten").fill("Phan Minh Đức");
+    await page.locator("input#sdt").fill("0966554433");
+    await page.getByRole("button", { name: "Xác nhận giữ hàng" }).click();
+    await expect(page).toHaveURL(/\/giu-hang\/VIVE-\d{4}/, { timeout: 10000 });
+    await expect(page.getByTestId("thuong-giu-hang")).toContainText(QUA);
+    const urlMa = page.url();
+
+    // Tắt DC-02 (hien_thi=false): cả hai nơi không còn dòng thưởng
+    await page.route(
+      (url) => url.pathname.includes("/rest/v1/deal"),
+      async (route) => {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify(
+            MOCK_DEALS_SUPABASE.map((d) =>
+              d.id === "DC-02" ? { ...d, du_lieu: { ...d.du_lieu, hien_thi: false } } : d
+            )
+          ),
+        });
+      }
+    );
+    await page.goto(urlMa);
+    await expect(page.getByRole("heading", { name: "Đã giữ hàng" })).toBeVisible();
+    await page.waitForTimeout(1500);
+    await expect(page.getByTestId("thuong-giu-hang")).toHaveCount(0);
+
+    await datGio();
+    await page.goto("/giu-hang");
+    await expect(page.getByText("1 món · tổng ước tính")).toBeVisible();
+    await page.waitForTimeout(1500);
+    await expect(page.getByTestId("thuong-giu-hang")).toHaveCount(0);
   });
 });
