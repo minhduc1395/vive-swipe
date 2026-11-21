@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Nut } from "@/components/ui/Nut";
 import { guiMa, xacNhanMa, type NhanhDangNhap } from "@/lib/tai-khoan/dang-nhap";
 import { useTaiKhoan } from "@/lib/tai-khoan/use-tai-khoan";
@@ -11,13 +12,14 @@ import {
   laMaHopLe,
   lamSachMa,
 } from "@/lib/tai-khoan/kiem-tra";
-import { LOI } from "@/lib/tai-khoan/loi";
+import { LOI, type MaLoi } from "@/lib/tai-khoan/loi";
 
 const LOP_O_NHAP =
   "w-full h-12 px-4 rounded-2xl border border-vien bg-trang text-[16px] text-den placeholder:text-xam focus:outline-2 focus:outline-den";
 
 export function FormDangNhap() {
   const router = useRouter();
+  const t = useTranslations("tai-khoan");
   const { daTai, daDangNhap } = useTaiKhoan();
   const [buoc, setBuoc] = useState<1 | 2>(1);
   const [emailDaGui, setEmailDaGui] = useState("");
@@ -25,7 +27,7 @@ export function FormDangNhap() {
   const [nhanh, setNhanh] = useState<NhanhDangNhap>("email_change");
   const [guiLuc, setGuiLuc] = useState<number | null>(null);
   const [bayGio, setBayGio] = useState(() => Date.now());
-  const [loi, setLoi] = useState<string | null>(null);
+  const [loi, setLoi] = useState<MaLoi | null>(null);
   const [dangXuLy, setDangXuLy] = useState(false);
   const oMa = useRef<HTMLInputElement>(null);
   const oEmail = useRef<HTMLInputElement>(null);
@@ -107,20 +109,20 @@ export function FormDangNhap() {
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate className="w-full flex flex-col gap-4" aria-label="Biểu mẫu đăng nhập">
+    <form onSubmit={onSubmit} noValidate className="w-full flex flex-col gap-4" aria-label={t("form.bieuMau")}>
       {buoc === 1 ? (
         <>
           <p className="text-[15px] text-xam-dam leading-relaxed">
-            Nhập email để nhận mã 6 số. Đã thích, giỏ và đơn giữ hàng của bạn được giữ lại khi đổi máy.
+            {t("form.moTaBuoc1")}
           </p>
           <label className="flex flex-col gap-2 text-left">
-            <span className="text-[14px] font-medium text-den">Email</span>
+            <span className="text-[14px] font-medium text-den">{t("form.email")}</span>
             <input
               type="email"
               name="email"
               inputMode="email"
               autoComplete="email"
-              placeholder="ban@email.com"
+              placeholder={t("form.emailGoiY")}
               ref={oEmail}
               defaultValue={emailDaGui}
               className={LOP_O_NHAP}
@@ -130,10 +132,10 @@ export function FormDangNhap() {
       ) : (
         <>
           <p className="text-[15px] text-xam-dam leading-relaxed">
-            VIVE đã gửi mã 6 số tới email của bạn. Mã có thể nằm trong mục Quảng cáo hoặc Spam.
+            {t("form.moTaBuoc2")}
           </p>
           <label className="flex flex-col gap-2 text-left">
-            <span className="text-[14px] font-medium text-den">Mã 6 số</span>
+            <span className="text-[14px] font-medium text-den">{t("form.ma")}</span>
             <input
               ref={oMa}
               type="text"
@@ -153,14 +155,14 @@ export function FormDangNhap() {
 
       {loi && (
         <p role="alert" data-testid="loi-dang-nhap" className="text-[14px] text-loi bg-loi-nen border border-loi-vien rounded-xl px-3 py-2 text-left">
-          {loi}
+          {t(`loi.${loi}`)}
         </p>
       )}
 
       <Nut type="submit" co="lon" rong disabled={dangXuLy || !sanSang}>
         {buoc === 1
-          ? dangXuLy ? "Đang gửi…" : "Gửi mã"
-          : dangXuLy ? "Đang kiểm tra…" : "Đăng nhập"}
+          ? dangXuLy ? t("form.dangGui") : t("form.guiMa")
+          : dangXuLy ? t("form.dangKiemTra") : t("form.dangNhap")}
       </Nut>
 
       {buoc === 2 && (
@@ -171,7 +173,7 @@ export function FormDangNhap() {
             disabled={dangXuLy || conLai > 0}
             onClick={() => void gui()}
           >
-            {conLai > 0 ? `Gửi lại mã (${conLai}s)` : "Gửi lại mã"}
+            {conLai > 0 ? t("form.guiLaiCoDem", { giay: conLai }) : t("form.guiLai")}
           </Nut>
           <Nut
             bien="chu"
@@ -181,13 +183,13 @@ export function FormDangNhap() {
               setLoi(null);
             }}
           >
-            Đổi email
+            {t("form.doiEmail")}
           </Nut>
         </div>
       )}
 
       <Nut bien="chu" className="self-center min-h-11" onClick={deSau}>
-        Để sau
+        {t("form.deSau")}
       </Nut>
     </form>
   );

@@ -30,3 +30,4 @@ Khách đăng nhập để giữ lịch sử quẹt, đã thích, giỏ hàng v�
 - 2026-11-21 WEB: bảng `yeu_thich`, `gio_hang_luu` + RLS chủ sở hữu (`supabase/migrations/20261121120000_yeu_thich_gio_hang_luu.sql`, đã chạy trên Supabase) cho job #66.
 - 2026-11-21 BOD: phần email để sau. Đăng nhập email nằm sau cờ `NEXT_PUBLIC_DANG_NHAP_EMAIL=1`; WEB bật khi có SMTP. Job #66 vẫn làm được (đồng bộ chỉ chạy khi đã đăng nhập).
 - 2026-11-21 #65: đăng nhập email + mã 6 số, trang tài khoản, nút "Tài khoản" ở thanh trên máy tính và điện thoại, tất cả sau cờ.
+- 2026-11-22 #84 (W044): song ngữ VI | EN cho `/dang-nhap`, `/tai-khoan`. Chữ ở `messages/{vi,en}/tai-khoan.json`; `lib/tai-khoan/loi.ts` trả mã lỗi (`LOI.maSai`...), UI dịch bằng `tai-khoan.loi.<mã>`. Nút "Đăng nhập" trên thanh trên (shared) chưa đổi, chờ job #96.

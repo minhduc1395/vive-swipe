@@ -2,7 +2,7 @@ import type { User } from "@supabase/supabase-js";
 import { laySupabase } from "@/lib/supabase/client";
 import { damBaoKhachAnDanh } from "@/lib/supabase/auth";
 import { chuanHoaEmail, laEmailHopLe, laMaHopLe } from "./kiem-tra";
-import { LOI, dichLoi, laLoiEmailDaCo, type LoiAuth } from "./loi";
+import { LOI, dichLoi, laLoiEmailDaCo, type LoiAuth, type MaLoi } from "./loi";
 
 /**
  * - `email_change`: khách đang ẩn danh, gắn email vào chính tài khoản đó (giữ nguyên auth.uid()).
@@ -10,8 +10,8 @@ import { LOI, dichLoi, laLoiEmailDaCo, type LoiAuth } from "./loi";
  */
 export type NhanhDangNhap = "email_change" | "email";
 
-export type KetQuaGuiMa = { ok: true; nhanh: NhanhDangNhap } | { ok: false; loi: string };
-export type KetQua = { ok: true } | { ok: false; loi: string };
+export type KetQuaGuiMa = { ok: true; nhanh: NhanhDangNhap } | { ok: false; loi: MaLoi };
+export type KetQua = { ok: true } | { ok: false; loi: MaLoi };
 
 /** Đã đăng nhập bằng email (không phải khách ẩn danh). */
 export function laDaDangNhap(user: Pick<User, "is_anonymous" | "email"> | null | undefined): boolean {

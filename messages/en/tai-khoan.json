@@ -1,1 +1,46 @@
-{}
+{
+  "chung": {
+    "quayLai": "Back",
+    "taiKhoan": "Account",
+    "dangTai": "Loading…"
+  },
+  "dangNhap": {
+    "tieuDe": "Log in to VIVE",
+    "choMoTa": "Customer accounts, to sync your history and get personal offers, are coming soon (W030). For now you can swipe and reserve at the booth for free without logging in.",
+    "tiepTucQuet": "Keep swiping products"
+  },
+  "form": {
+    "bieuMau": "Login form",
+    "moTaBuoc1": "Enter your email to get a 6-digit code. Your likes, cart and reservations stay with you when you switch devices.",
+    "email": "Email",
+    "emailGoiY": "you@email.com",
+    "moTaBuoc2": "VIVE sent a 6-digit code to your email. It may be in your Promotions or Spam folder.",
+    "ma": "6-digit code",
+    "dangGui": "Sending…",
+    "guiMa": "Send code",
+    "dangKiemTra": "Checking…",
+    "dangNhap": "Log in",
+    "guiLaiCoDem": "Resend code ({giay}s)",
+    "guiLai": "Resend code",
+    "doiEmail": "Change email",
+    "deSau": "Maybe later"
+  },
+  "thongTin": {
+    "dangNhapBangEmail": "Logged in with email",
+    "cuaBan": "Yours",
+    "daThich": "Liked",
+    "gioHang": "Cart",
+    "donGiuHang": "Reservations",
+    "dangXuat": "Log out",
+    "dangDangXuat": "Logging out…"
+  },
+  "loi": {
+    "emailSai": "That email doesn't look right. Please check it.",
+    "maSai": "That code isn't right. Check the 6 digits in your email.",
+    "maHetHan": "This code has expired. Tap “Resend code” to get a new one.",
+    "quaNhieu": "You've requested too many codes. Wait a few minutes and try again.",
+    "matMang": "No internet connection. Check your connection and try again.",
+    "chuaCoTaiKhoan": "No account with this email yet. Try again to create one.",
+    "chung": "Something went wrong. Please try again in a few minutes."
+  }
+}
