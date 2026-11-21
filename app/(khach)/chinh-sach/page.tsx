@@ -158,7 +158,7 @@ export default async function TrangChinhSach() {
 
               <dt className="font-semibold text-den">{t("doanhNghiep.kenhChinhThuc")}</dt>
               <dd className="m-0">
-                Facebook: VIVE - K Beauty Experience · Instagram: @vive.k_beauty
+                Facebook: VIVE · Instagram: @vive.vers
                 · TikTok: @viveuniverse
               </dd>
             </dl>

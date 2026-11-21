@@ -26,7 +26,7 @@ Cập nhật: 18/11/2026. Chủ dự án yêu cầu:
 | Landing theo đợt | `data/chien-dich/*.yaml`: mỗi trường chữ có thêm `<trường>_en` | Như deal |
 | Trang chính sách | `messages` hoặc file nội dung riêng `content/chinh-sach.{vi,en}.md` | Claude soạn bản `vi`, AI dịch `en`, Claude duyệt |
 
-- **Không dịch:** tên thương hiệu, tên sản phẩm gốc (`ten_goc`), thành phần (tên INCI), giá, mã vạch, `@vive.k_beauty`, `@viveuniverse`.
+- **Không dịch:** tên thương hiệu, tên sản phẩm gốc (`ten_goc`), thành phần (tên INCI), giá, mã vạch, `@vive.vers`, `@viveuniverse`.
 - **Thiếu bản `en` thì hiện bản `vi`, không để trống.** Ghi log để AI agent dịch bù.
 
 ## 3. Nguồn dữ liệu và thứ tự ưu tiên

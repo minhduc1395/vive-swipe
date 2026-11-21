@@ -62,10 +62,10 @@ test.describe("W019 · Trang chính sách (/chinh-sach) và chân trang (ChanTra
       await expect(footer).toHaveCount(1);
       await expect(footer).toBeVisible();
       await expect(
-        footer.getByRole("link", { name: /Facebook VIVE - K Beauty Experience/i }),
+        footer.getByRole("link", { name: /Facebook VIVE/i }),
       ).toBeVisible();
       await expect(
-        footer.getByRole("link", { name: /Instagram @vive\.k_beauty/i }),
+        footer.getByRole("link", { name: /Instagram @vive\.vers/i }),
       ).toBeVisible();
       await expect(
         footer.getByRole("link", { name: /TikTok @viveuniverse/i }),

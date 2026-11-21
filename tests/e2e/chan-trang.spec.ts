@@ -151,18 +151,18 @@ test.describe("W049 · Chân trang gọn 4 cụm (bản 2)", () => {
 
     const footer = page.locator("footer.ct-chan");
     const fb = footer.getByRole("link", {
-      name: /Facebook VIVE - K Beauty Experience/i,
+      name: /Facebook VIVE/i,
     });
-    const ig = footer.getByRole("link", { name: /Instagram @vive\.k_beauty/i });
+    const ig = footer.getByRole("link", { name: /Instagram @vive\.vers/i });
     const tt = footer.getByRole("link", { name: /TikTok @viveuniverse/i });
 
     await expect(fb).toHaveAttribute(
       "href",
-      "https://www.facebook.com/weareVIVE"
+      "https://www.facebook.com/1530922283427509"
     );
     await expect(ig).toHaveAttribute(
       "href",
-      "https://www.instagram.com/vive.k_beauty"
+      "https://www.instagram.com/vive.vers"
     );
     await expect(tt).toHaveAttribute(
       "href",
