@@ -21,7 +21,7 @@ Quy tắc chung
 | P9 | QA PR của WEB/Antigravity ở trạng thái Review | QA (1:13, 12:13, 17:13) | Theo lịch | — |
 | P10 | BOD duyệt 19 ảnh/video ở dashboard, mục Duyệt bài | BOD | 22/11 | Chờ BOD |
 | P11 | W066: trang nhân viên hiện 'Tặng thêm 1 lượt quay' khi nhận đơn giữ hàng web từ 27/11 | Antigravity | Phiên tới | Xong 22/11 (PR #90, QA Pass) |
-| P12 | KHẨN #95: đặt giữ hàng báo "Không tìm thấy mã", trang nhân viên không thấy đơn web (select `deal(ten)` sai cột, sửa thành `deal(ten:du_lieu->>ten)`). Antigravity làm W067 (BOD 22/11 ưu tiên Anti); merge khi QA Pass, rồi mở `/giu-hang/VIVE-8247` trên web thật phải thấy 3 dòng | Antigravity (W067) | 22/11 | Todo; Anti tự chạy mỗi 2 tiếng, không trả lại coder; #95 để draft |
+| P12 | KHẨN #95: đặt giữ hàng báo "Không tìm thấy mã", trang nhân viên không thấy đơn web (select `deal(ten)` sai cột, sửa thành `deal(ten:du_lieu->>ten)`). Antigravity làm W067 (BOD 22/11 ưu tiên Anti); merge khi QA Pass, rồi mở `/giu-hang/VIVE-8247` trên web thật phải thấy 3 dòng | Antigravity (W067) | 22/11 | Xong 22/11 04:20 (PR #99, web thật VIVE-8247 hiện 3 dòng; #95 đóng) |
 
 ## Cách làm từng mục khi WEB không có mặt
 
@@ -45,6 +45,7 @@ rồi ghi cột I = `Đã lên web <YYYY-MM-DD HH:MM>`. Kiểm: `select anh from
 **Media làm xong ảnh mới (P8):** WEB/TU-DONG-E kiểm kỹ thuật (nét, tỷ lệ, viền tách nền, nền trong, dung lượng; xem AGENTS.md mục Antigravity Media), đạt thì `update media set trang_thai='cho_mkt'` và thêm 1 dòng vào tab "Duyệt media web" (cột F = `Đạt`, I = `Chưa`).
 
 ## Nhật ký chạy
+- 22/11 04:44 TU-DONG-E: gộp #99 (W067), #97 (#84), #98 (#96), #100 (W044); deploy xanh. Giao W068 (/chinh-sach LEG-002) cho Antigravity; #66 ready. P6: 7 ảnh duyet; 1 ảnh + 4 video Sửa trả Media.
 - 22/11 02:45 TU-DONG-E: gộp #93 (metadataBase), #88, #91, #92 (gỡ xung đột docs giu-hang), #94, #67. DIR-043: job #96 (shared), W044 cho Antigravity sau W067, Media ưu tiên ten_en/mo_ta_en (W047). P6: Lashcurl duyet; 8 ảnh + 4 video Uniura/Dermal/Beaund đặt cho_mkt, thêm 12 dòng tab Duyệt media web; 18 dòng Sửa ghi Trả Media.
 - 22/11 00:15 WEB: P3 gộp (#79), #80–#83 ready; #65 đổi lại ready (bị kẹt vì gắn nhầm claimed). P7 mở PR #85. e2e chạy locale vi-VN.
 - 21/11 23:20 WEB: BOD nhắc WEB là trưởng nhóm, giao việc cho đội coder và Antigravity, không tự làm hết. Giao W066 cho Antigravity. Từ giờ WEB chỉ duyệt, gộp, gỡ vướng; P7 đang chụp dở nên WEB làm nốt.
