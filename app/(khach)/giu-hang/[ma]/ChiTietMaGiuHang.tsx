@@ -67,7 +67,7 @@ END:VCALENDAR`;
   };
 
   return (
-    <div className="flex flex-col gap-3 max-w-[480px] mx-auto bg-hong-nhat rounded-[28px] p-4 md:p-6 shadow-sm border border-vien">
+    <div className="flex flex-col gap-3 max-w-[480px] mx-auto bg-kem rounded-[28px] p-4 md:p-6 shadow-sm border border-vien">
       {/* Nút quay lại & nút về trang quẹt */}
       <header className="flex items-center justify-between gap-2 pb-1">
         <NutQuayLai fallback="/gio" />
@@ -81,7 +81,7 @@ END:VCALENDAR`;
 
       {/* Biểu tượng và tiêu đề Đã giữ hàng */}
       <div className="flex flex-col items-center gap-2 text-center pt-1 pb-2">
-        <div className="w-[60px] h-[60px] rounded-full bg-bac-ha flex items-center justify-center text-den">
+        <div className="w-[60px] h-[60px] rounded-full bg-be flex items-center justify-center text-den">
           <svg
             width="28"
             height="28"
@@ -118,11 +118,11 @@ END:VCALENDAR`;
 
         {/* QR Code SVG */}
         <div
-          className="w-[176px] h-[176px] flex items-center justify-center p-2 rounded-[14px] bg-trang border border-hong-nhat"
+          className="w-[176px] h-[176px] flex items-center justify-center p-2 rounded-[14px] bg-oliu-nhat border border-oliu-nhat"
           dangerouslySetInnerHTML={{ __html: qrSvg }}
         />
 
-        <div className="h-[32px] px-3.5 rounded-full bg-bac-ha-nhat text-[13px] font-semibold text-den flex items-center gap-1.5 mt-1">
+        <div className="h-[32px] px-3.5 rounded-full bg-oliu-nhat text-[13px] font-semibold text-den flex items-center gap-1.5 mt-1">
           <svg
             width="15"
             height="15"
@@ -234,7 +234,7 @@ END:VCALENDAR`;
       </section>
 
       {thongBaoLuuAnh && (
-        <div className="p-2 text-center text-[13px] text-den bg-bac-ha-nhat rounded-[10px]">
+        <div className="p-2 text-center text-[13px] text-den bg-oliu-nhat rounded-[10px]">
           Đang mở hộp thoại lưu ảnh / in màn hình...
         </div>
       )}
