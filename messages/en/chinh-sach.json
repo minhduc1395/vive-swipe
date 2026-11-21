@@ -1,0 +1,60 @@
+{
+  "tieuDe": "Privacy & reservation policy",
+  "moTaTrang": "How we protect personal data, free reservations at {diaDiem}, and details about {congTy}.",
+  "gioiThieu": "Applies to the VIVE product experience website and the reservation counter at {diaDiem}.",
+  "baoMat": {
+    "tieuDe": "1. Personal data privacy",
+    "thuThap": {
+      "nhan": "Minimal collection:",
+      "noiDung": "VIVE only collects your name and phone number to create and verify your reservation code at the counter. We also use your skin quiz answers and swipes to sort recommendations that suit you better."
+    },
+    "email": {
+      "nhan": "Deal emails are opt-in:",
+      "noiDung": "Your consent to receive deal alerts is a separate checkbox, unticked by default. You can unsubscribe at any time with one tap from the link at the bottom of every email."
+    },
+    "quyenXoa": {
+      "nhan": "Right to access & delete:",
+      "noiDung": "You can ask to view or delete your personal history through our staff at the booth, or by email"
+    }
+  },
+  "giuHang": {
+    "tieuDe": "2. Booth reservation rules",
+    "thanhToan": {
+      "nhan": "Pay at the counter:",
+      "noiDung": "Reserving on the web is completely free and needs no payment upfront. You pay and pick up your products at the KiotViet POS counter at {diaDiem}."
+    },
+    "gia": {
+      "nhan": "Estimated price & gifts:",
+      "noiDung": "Totals and gifts on the web are estimates based on the promotions running when the code is created. Staff will confirm them again at checkout."
+    },
+    "han": {
+      "nhan": "Hold time & auto-cancel:",
+      "noiDung": "Your reservation code is valid until {gio} on your pickup date. After that, the order expires automatically so the stock goes back to customers at the counter."
+    }
+  },
+  "doiTra": {
+    "tieuDe": "3. Returns, Vietnamese labels & promotions",
+    "doiTra": {
+      "nhan": "Returns at the counter:",
+      "noiDung": "Please check that the product and its seal are intact when you receive it. All return requests are handled in person at the {cuaHang} counter or via {email}."
+    },
+    "nhanPhu": {
+      "nhan": "Vietnamese labels:",
+      "noiDung": "Imported Korean domestic cosmetics and free gifts get a full Vietnamese label at the counter before we hand them over."
+    },
+    "khuyenMai": {
+      "nhan": "Transparent promotions:",
+      "noiDung": "A promotion applies only while it is valid and you meet its conditions. Lucky-draw promotions are announced only after registration with the Department of Industry and Trade is complete."
+    }
+  },
+  "doanhNghiep": {
+    "tieuDe": "4. Business information",
+    "ten": "Business name",
+    "maSoThue": "Tax ID",
+    "diaChi": "Business address",
+    "email": "Contact email",
+    "soDienThoai": "Phone number",
+    "cuaHangPopup": "Pop-up store",
+    "kenhChinhThuc": "Official channels"
+  }
+}
