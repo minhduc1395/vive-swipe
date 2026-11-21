@@ -1,5 +1,6 @@
 import { lopNut } from "@/components/ui/Nut";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { NutQuayLai } from "@/components/NutQuayLai";
 import { layDonGiuHangTheoMa } from "@/lib/giu-hang/kho-giu-hang";
 import { ChiTietMaGiuHang } from "./ChiTietMaGiuHang";
@@ -12,6 +13,7 @@ export default async function TrangMaGiuHang({
   params: Promise<{ ma: string }>;
 }) {
   const { ma } = await params;
+  const t = await getTranslations("giu-hang");
   const maChuanHoa = decodeURIComponent(ma).toUpperCase();
 
   const donGoc = await layDonGiuHangTheoMa(maChuanHoa);
@@ -20,12 +22,12 @@ export default async function TrangMaGiuHang({
     return (
       <div className="w-full flex-1 min-h-0 flex flex-col">
         <div className="max-w-[540px] w-full mx-auto px-4 md:px-6 pt-4 md:pt-8">
-          <NutQuayLai fallback="/gio" />
+          <NutQuayLai fallback="/gio" nhan={t("chung.quayLai")} />
         </div>
         <main className="max-w-[540px] mx-auto px-6 py-12 flex flex-col items-center gap-4 text-center">
-          <h1 className="m-0 text-[24px] font-bold">Không tìm thấy mã {maChuanHoa}</h1>
-          <p className="m-0 text-[15px] text-xam-dam">Mã có thể đã hết hạn hoặc gõ sai. Bạn kiểm tra lại email xác nhận hoặc hỏi nhân viên tại booth.</p>
-          <Link href="/gio" className={lopNut("phu","lon")}>Về giỏ hàng</Link>
+          <h1 className="m-0 text-[24px] font-bold">{t("ma.khongThay", { ma: maChuanHoa })}</h1>
+          <p className="m-0 text-[15px] text-xam-dam">{t("ma.khongThayMoTa")}</p>
+          <Link href="/gio" className={lopNut("phu","lon")}>{t("ma.veGio")}</Link>
         </main>
       </div>
     );

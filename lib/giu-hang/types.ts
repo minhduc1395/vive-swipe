@@ -24,9 +24,21 @@ export interface DongGiuHangXacNhan {
   loai: "san_pham" | "combo";
 }
 
+/** Mã lỗi để giao diện hiện đúng ngôn ngữ (messages `giu-hang.loi.may.<mã>`). */
+export type MaLoiGiuHang =
+  | "chinh_sach"
+  | "ten"
+  | "sdt"
+  | "email"
+  | "gio_trong"
+  | "gioi_han"
+  | "khong_hop_le"
+  | "he_thong";
+
 export interface KetQuaTaoGiuHang {
   ok: boolean;
   loi?: string;
+  maLoi?: MaLoiGiuHang;
   ma?: string;
   ngayDenStr?: string;
   hetHanIso?: string;

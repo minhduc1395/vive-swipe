@@ -4,11 +4,12 @@ import { lopNut } from "@/components/ui/Nut";
 import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { useDuLieu } from "@/lib/du-lieu-context";
-import { dinhDangTien, dinhDangTienGio } from "@/lib/dinh-dang";
+import { dinhDangGia, dinhDangNgayNgan, dinhDangTien } from "@/lib/dinh-dang";
 import { tinhGio } from "@/lib/deals/gio-hang";
 import { chuanHoaNgay } from "@/lib/deals/hien-thi";
-import { dongThuongGiuHang } from "@/lib/giu-hang/thuong";
+import { layThuongGiuHang } from "@/lib/giu-hang/thuong";
 import {
   layGioHang,
   xoaToanBoGio,
@@ -22,6 +23,8 @@ interface Props {
 
 export function FormGiuHang({ gioBanDau }: Props) {
   const router = useRouter();
+  const ngonNgu = useLocale();
+  const t = useTranslations("giu-hang");
   const { sanPham, deals, daSanSang } = useDuLieu();
 
   const [mounted, setMounted] = useState(false);
@@ -59,7 +62,17 @@ export function FormGiuHang({ gioBanDau }: Props) {
 
   const ketQua = tinhGio(mucGioInput, sanPham, deals);
   const tongSoMon = gio.reduce((acc, it) => acc + it.soLuong, 0);
-  const dongThuong = dongThuongGiuHang(deals, chuanHoaNgay(new Date()));
+  const thuong = layThuongGiuHang(deals, chuanHoaNgay(new Date()), ngonNgu);
+  const dongThuong = thuong
+    ? thuong.daTuNgay
+      ? t("thuong.daTuNgay", { qua: thuong.qua })
+      : t("thuong.tuNgay", {
+          ngay: dinhDangNgayNgan(`${thuong.tuNgay}T00:00:00+07:00`, ngonNgu),
+          qua: thuong.qua,
+        })
+    : null;
+  const hienGiaDong = (so: number) =>
+    ngonNgu === "en" ? dinhDangGia(so, ngonNgu) : dinhDangTien(so);
 
   if (!mounted) {
     return (
@@ -93,16 +106,16 @@ export function FormGiuHang({ gioBanDau }: Props) {
           </svg>
         </div>
         <h2 className="text-[20px] font-bold text-den mb-2">
-          Giỏ hàng đang trống
+          {t("trong.tieuDe")}
         </h2>
         <p className="text-[14px] text-xam max-w-[280px] mb-6">
-          Vui lòng thêm sản phẩm bạn thích vào giỏ trước khi tiến hành giữ hàng tại booth.
+          {t("trong.moTa")}
         </p>
         <Link
           href="/quet"
           className={lopNut("phu","lon")}
         >
-          Quay lại quẹt sản phẩm
+          {t("trong.quayLaiQuet")}
         </Link>
       </div>
     );
@@ -113,27 +126,23 @@ export function FormGiuHang({ gioBanDau }: Props) {
     setLoiValidation(null);
 
     if (!ten.trim()) {
-      setLoiValidation("Vui lòng nhập họ và tên của bạn.");
+      setLoiValidation(t("loi.ten"));
       return;
     }
 
     const sdtClean = sdt.replace(/[\s.-]/g, "");
     if (!/^0[35789]\d{8}$/.test(sdtClean)) {
-      setLoiValidation(
-        "Số điện thoại không đúng định dạng (cần 10 chữ số, bắt đầu bằng 03, 05, 07, 08, 09)."
-      );
+      setLoiValidation(t("loi.sdt"));
       return;
     }
 
     if (email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      setLoiValidation("Địa chỉ email không hợp lệ. Vui lòng kiểm tra lại.");
+      setLoiValidation(t("loi.email"));
       return;
     }
 
     if (!dongYChinhSach) {
-      setLoiValidation(
-        "Vui lòng đồng ý với chính sách bảo mật và giữ hàng của VIVE."
-      );
+      setLoiValidation(t("loi.chinhSach"));
       return;
     }
 
@@ -150,7 +159,9 @@ export function FormGiuHang({ gioBanDau }: Props) {
         });
 
         if (!res.ok || !res.ma) {
-          setLoiValidation(res.loi || "Không thể tạo đơn giữ hàng. Vui lòng thử lại.");
+          setLoiValidation(
+            res.maLoi ? t(`loi.may.${res.maLoi}`) : t("loi.khongTao")
+          );
           return;
         }
 
@@ -161,7 +172,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
         // Chuyển sang màn mã giữ hàng
         router.push(`/giu-hang/${res.ma}`);
       } catch {
-        setLoiValidation("Lỗi kết nối. Vui lòng thử lại sau vài giây.");
+        setLoiValidation(t("loi.ketNoi"));
       }
     });
   };
@@ -196,7 +207,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
         {/* Họ và tên */}
         <div className="flex flex-col gap-1.5">
           <label htmlFor="ten" className="text-[14px] font-medium text-den">
-            Họ và tên <span className="text-bat-buoc">*</span>
+            {t("form.hoTen")} <span className="text-bat-buoc">*</span>
           </label>
           <input
             id="ten"
@@ -204,7 +215,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
             type="text"
             required
             autoComplete="name"
-            placeholder="Tên để nhân viên gọi"
+            placeholder={t("form.hoTenGoiY")}
             value={ten}
             onChange={(e) => setTen(e.target.value)}
             className="h-[50px] rounded-[14px] border-[1.5px] border-vien px-3.5 text-[15px] text-den placeholder:text-xam outline-none focus:border-den transition-colors bg-trang"
@@ -214,7 +225,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
         {/* Số điện thoại */}
         <div className="flex flex-col gap-1.5">
           <label htmlFor="sdt" className="text-[14px] font-medium text-den">
-            Số điện thoại <span className="text-bat-buoc">*</span>
+            {t("form.sdt")} <span className="text-bat-buoc">*</span>
           </label>
           <input
             id="sdt"
@@ -234,7 +245,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
           <label htmlFor="email" className="text-[14px] font-medium text-den">
             Email{" "}
             <span className="font-normal text-xam">
-              (không bắt buộc, để nhận xác nhận)
+              {t("form.emailGhiChu")}
             </span>
           </label>
           <input
@@ -252,7 +263,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
         {/* Ngày đến lấy */}
         <fieldset className="border-none m-0 p-0 flex flex-col gap-1.5">
           <legend className="text-[14px] font-medium text-den mb-1.5 p-0">
-            Ngày đến lấy
+            {t("form.ngayDen")}
           </legend>
           <div className="grid grid-cols-2 gap-2">
             <button
@@ -265,7 +276,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
                   : "bg-trang text-den border-vien hover:bg-kem"
               }`}
             >
-              Hôm nay
+              {t("form.homNay")}
             </button>
             <button
               type="button"
@@ -277,11 +288,11 @@ export function FormGiuHang({ gioBanDau }: Props) {
                   : "bg-trang text-den border-vien hover:bg-kem"
               }`}
             >
-              Ngày mai
+              {t("form.ngayMai")}
             </button>
           </div>
           <span className="text-[13px] text-xam mt-0.5">
-            Giữ đến 21:00 {ngayDen === "hom_nay" ? "hôm nay" : "ngày mai"}
+            {ngayDen === "hom_nay" ? t("form.giuDenHomNay") : t("form.giuDenNgayMai")}
           </span>
         </fieldset>
 
@@ -294,7 +305,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
               onChange={(e) => setDongYEmail(e.target.checked)}
               className="w-[20px] h-[20px] mt-0.5 shrink-0 accent-den cursor-pointer"
             />
-            <span className="text-den">Nhận deal qua email</span>
+            <span className="text-den">{t("form.nhanDealEmail")}</span>
           </label>
 
           <label className="flex items-start gap-2.5 text-[14px] leading-snug cursor-pointer select-none">
@@ -305,13 +316,13 @@ export function FormGiuHang({ gioBanDau }: Props) {
               className="w-[20px] h-[20px] mt-0.5 shrink-0 accent-den cursor-pointer"
             />
             <span className="text-den">
-              Tôi đồng ý với{" "}
+              {t("form.dongYTruoc")}{" "}
               <Link
                 href="/chinh-sach"
                 target="_blank"
                 className="font-semibold underline text-den hover:text-black"
               >
-                chính sách bảo mật và giữ hàng
+                {t("form.chinhSach")}
               </Link>
             </span>
           </label>
@@ -324,10 +335,10 @@ export function FormGiuHang({ gioBanDau }: Props) {
             disabled={isPending}
             className={lopNut("dam","lon",true) + " h-[54px] text-[17px] shadow-sm"}
           >
-            {isPending ? "Đang xử lý..." : "Xác nhận giữ hàng"}
+            {isPending ? t("form.dangXuLy") : t("form.xacNhan")}
           </button>
           <span className="text-[12px] text-xam text-center">
-            Mỗi số điện thoại giữ tối đa 3 mã cùng lúc
+            {t("form.toiDa3Ma")}
           </span>
         </div>
       </form>
@@ -335,19 +346,19 @@ export function FormGiuHang({ gioBanDau }: Props) {
 
       {/* Cột tóm tắt giỏ hàng responsive (trên đầu mobile/tablet, cột phải dính trên desktop) */}
       <aside
-        aria-label="Tóm tắt giỏ giữ hàng"
+        aria-label={t("tomTat.nhan")}
         className="order-first lg:order-last flex flex-col gap-3 rounded-[18px] lg:rounded-[24px] bg-kem p-4 lg:p-6 lg:border lg:border-vien lg:sticky lg:top-6"
       >
         <div className="flex justify-between items-center gap-3 lg:hidden text-[13px]">
           <div className="flex flex-col gap-0.5">
-            <span className="text-xam-dam">Quà dự kiến</span>
+            <span className="text-xam-dam">{t("tomTat.quaDuKien")}</span>
             <strong className="font-semibold text-den line-clamp-1 max-w-[180px]">
-              {ketQua.qua_du_kien || "Không có"}
+              {ketQua.qua_du_kien || t("tomTat.khong")}
             </strong>
           </div>
         </div>
         <h2 className="hidden lg:block m-0 text-[18px] font-bold text-den">
-          Đơn giữ ({tongSoMon} món)
+          {t("tomTat.donGiu", { so: tongSoMon })}
         </h2>
         <ul className="hidden lg:flex m-0 p-0 list-none flex-col gap-2 text-[14px] border-t border-vien pt-3">
           {ketQua.cac_dong.map((dong) => (
@@ -360,22 +371,22 @@ export function FormGiuHang({ gioBanDau }: Props) {
                 {dong.ten}
               </span>
               <strong className="shrink-0 text-den">
-                {dinhDangTien(dong.gia_sau_uu_dai)}
+                {hienGiaDong(dong.gia_sau_uu_dai)}
               </strong>
             </li>
           ))}
         </ul>
         {ketQua.qua_du_kien && (
           <div className="hidden lg:block rounded-xl bg-trang p-3 text-[13px] text-den">
-            Quà dự kiến: <strong>{ketQua.qua_du_kien}</strong>
+            {t("tomTat.quaDuKienDong")} <strong>{ketQua.qua_du_kien}</strong>
           </div>
         )}
         <div className="lg:border-t lg:border-vien lg:pt-3 flex justify-between items-baseline">
           <span className="text-[13px] lg:text-[15px] font-medium lg:font-semibold text-xam-dam lg:text-den">
-            {tongSoMon} món · tổng ước tính
+            {t("tomTat.tongUocTinh", { so: tongSoMon })}
           </span>
           <strong className="text-[18px] lg:text-[22px] font-bold text-den">
-            {dinhDangTienGio(ketQua.tong_tam_tinh)}
+            {dinhDangGia(ketQua.tong_tam_tinh, ngonNgu)}
           </strong>
         </div>
         {dongThuong && (
@@ -387,7 +398,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
           </p>
         )}
         <p className="hidden lg:block m-0 text-[12px] text-xam leading-relaxed">
-          Giá và quà là ước tính. Nhân viên xác nhận khi thanh toán tại booth.
+          {t("tomTat.luuY")}
         </p>
       </aside>
     </div>

@@ -126,6 +126,7 @@ export async function xuLyTaoGiuHang(
     return {
       ok: false,
       loi: "Vui lòng đồng ý với chính sách bảo mật và giữ hàng của VIVE.",
+      maLoi: "chinh_sach",
     };
   }
 
@@ -135,6 +136,7 @@ export async function xuLyTaoGiuHang(
     return {
       ok: false,
       loi: "Vui lòng nhập họ và tên để nhân viên liên hệ.",
+      maLoi: "ten",
     };
   }
 
@@ -144,6 +146,7 @@ export async function xuLyTaoGiuHang(
     return {
       ok: false,
       loi: "Số điện thoại không đúng định dạng di động Việt Nam (cần 10 chữ số, ví dụ: 09xx xxx xxx).",
+      maLoi: "sdt",
     };
   }
 
@@ -153,6 +156,7 @@ export async function xuLyTaoGiuHang(
     return {
       ok: false,
       loi: "Địa chỉ email không hợp lệ. Vui lòng kiểm tra lại hoặc để trống.",
+      maLoi: "email",
     };
   }
 
@@ -161,6 +165,7 @@ export async function xuLyTaoGiuHang(
     return {
       ok: false,
       loi: "Giỏ hàng đang trống. Vui lòng thêm sản phẩm trước khi giữ hàng.",
+      maLoi: "gio_trong",
     };
   }
 
@@ -171,6 +176,7 @@ export async function xuLyTaoGiuHang(
       return {
         ok: false,
         loi: "Mỗi số điện thoại giữ tối đa 3 mã cùng lúc tại booth. Vui lòng lấy các món đã giữ trước đó hoặc chờ đơn hết hạn.",
+        maLoi: "gioi_han",
       };
     }
 
@@ -197,6 +203,7 @@ export async function xuLyTaoGiuHang(
       return {
         ok: false,
         loi: "Không có sản phẩm hợp lệ trong giỏ hàng.",
+        maLoi: "khong_hop_le",
       };
     }
 
@@ -285,12 +292,14 @@ export async function xuLyTaoGiuHang(
       return {
         ok: false,
         loi: "Mỗi số điện thoại giữ tối đa 3 mã cùng lúc tại booth. Vui lòng lấy các món đã giữ trước đó hoặc chờ đơn hết hạn.",
+        maLoi: "gioi_han",
       };
     }
     console.error("[GiuHang] Không lưu được đơn giữ hàng:", e);
     return {
       ok: false,
       loi: "Chưa giữ hàng được do lỗi hệ thống. Bạn thử lại sau ít phút hoặc đến thẳng booth để nhân viên hỗ trợ.",
+      maLoi: "he_thong",
     };
   }
 }

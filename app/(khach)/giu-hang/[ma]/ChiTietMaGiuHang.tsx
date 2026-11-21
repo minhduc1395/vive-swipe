@@ -3,12 +3,13 @@ import { lopNut } from "@/components/ui/Nut";
 
 import { useState } from "react";
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import { NutQuayLai } from "@/components/NutQuayLai";
-import { dinhDangTien, dinhDangTienGio } from "@/lib/dinh-dang";
+import { dinhDangGia, dinhDangNgayNgan, dinhDangTien } from "@/lib/dinh-dang";
 import { taoMaQrSvg } from "@/lib/qr";
 import { useDuLieu } from "@/lib/du-lieu-context";
 import { chuanHoaNgay } from "@/lib/deals/hien-thi";
-import { dongThuongGiuHang } from "@/lib/giu-hang/thuong";
+import { layThuongGiuHang } from "@/lib/giu-hang/thuong";
 import type { DonGiuHangChiTiet } from "@/lib/giu-hang/types";
 
 interface Props {
@@ -17,8 +18,20 @@ interface Props {
 
 export function ChiTietMaGiuHang({ don }: Props) {
   const [thongBaoLuuAnh, setThongBaoLuuAnh] = useState(false);
+  const ngonNgu = useLocale();
+  const t = useTranslations("giu-hang");
   const { deals } = useDuLieu();
-  const dongThuong = dongThuongGiuHang(deals, chuanHoaNgay(new Date()));
+  const thuong = layThuongGiuHang(deals, chuanHoaNgay(new Date()), ngonNgu);
+  const dongThuong = thuong
+    ? thuong.daTuNgay
+      ? t("thuong.daTuNgay", { qua: thuong.qua })
+      : t("thuong.tuNgay", {
+          ngay: dinhDangNgayNgan(`${thuong.tuNgay}T00:00:00+07:00`, ngonNgu),
+          qua: thuong.qua,
+        })
+    : null;
+  const hienGiaDong = (so: number) =>
+    ngonNgu === "en" ? dinhDangGia(so, ngonNgu) : dinhDangTien(so);
 
   // Sinh mã QR SVG chứa URL tra cứu nhân viên
   const qrSvg = taoMaQrSvg(`/nhan-vien?ma=${don.ma}`, {
@@ -43,9 +56,9 @@ UID:${don.ma}@vive-swipe.local
 DTSTAMP:${formatIcsTime(new Date())}
 DTSTART:${formatIcsTime(batDau)}
 DTEND:${formatIcsTime(new Date(don.hetHan))}
-SUMMARY:Lấy đơn giữ hàng ${don.ma} tại VIVE Pop-up
-DESCRIPTION:Mã giữ hàng: ${don.ma}\\nTổng ước tính: ${dinhDangTienGio(don.tongUocTinh)}\\nĐịa chỉ: LL2 Union Square, 171 Đồng Khởi
-LOCATION:VIVE | K-Beauty Experience, tầng LL2 Union Square, 171 Đồng Khởi
+SUMMARY:${t("lich.tieuDe", { ma: don.ma })}
+DESCRIPTION:${t("lich.moTa", { ma: don.ma, tong: dinhDangGia(don.tongUocTinh, ngonNgu) })}
+LOCATION:${t("lich.diaDiem")}
 STATUS:CONFIRMED
 END:VEVENT
 END:VCALENDAR`;
@@ -75,12 +88,12 @@ END:VCALENDAR`;
     <div className="flex flex-col gap-3 max-w-[480px] mx-auto bg-kem rounded-[28px] p-4 md:p-6 shadow-sm border border-vien">
       {/* Nút quay lại & nút về trang quẹt */}
       <header className="flex items-center justify-between gap-2 pb-1">
-        <NutQuayLai fallback="/gio" />
+        <NutQuayLai fallback="/gio" nhan={t("chung.quayLai")} />
         <Link
           href="/quet"
           className="h-[40px] px-3 flex items-center text-[14px] font-semibold text-den hover:opacity-80 transition-opacity"
         >
-          Về trang quẹt →
+          {t("ma.veTrangQuet")}
         </Link>
       </header>
 
@@ -102,20 +115,20 @@ END:VCALENDAR`;
           </svg>
         </div>
         <h1 className="m-0 text-[26px] md:text-[28px] font-bold tracking-tight text-den">
-          Đã giữ hàng
+          {t("ma.daGiu")}
         </h1>
         <p className="m-0 text-[15px] text-xam-dam">
-          Đưa mã này cho nhân viên VIVE tại quầy.
+          {t("ma.duaMa")}
         </p>
       </div>
 
       {/* Thẻ mã giữ hàng & QR */}
       <section
-        aria-label="Mã giữ hàng"
+        aria-label={t("ma.nhanMa")}
         className="rounded-[26px] bg-trang p-5 flex flex-col items-center gap-2.5 shadow-sm border border-vien"
       >
         <span className="text-[12px] font-semibold tracking-[1.6px] text-xam uppercase">
-          MÃ GIỮ HÀNG
+          {t("ma.nhanMa")}
         </span>
         <span className="text-[34px] md:text-[38px] font-bold tracking-[3px] text-den">
           {don.ma}
@@ -152,18 +165,17 @@ END:VCALENDAR`;
             <path d="M12 6v6l4 2" />
           </svg>
           <span>
-            Giữ đến 21:00{" "}
             {don.ngayDen.includes("mai") ||
             new Date(don.hetHan).getDate() !== new Date().getDate()
-              ? "ngày mai"
-              : "hôm nay"}
+              ? t("ma.giuDenNgayMai")
+              : t("ma.giuDenHomNay")}
           </span>
         </div>
       </section>
 
       {/* Thẻ món đã giữ */}
       <section
-        aria-label="Món đã giữ"
+        aria-label={t("ma.nhanMonDaGiu")}
         className="rounded-[22px] bg-trang p-4 md:p-5 flex flex-col gap-2.5 text-[14px] shadow-sm border border-vien"
       >
         <div className="flex flex-col gap-2">
@@ -176,7 +188,7 @@ END:VCALENDAR`;
                 {d.ten} × {d.soLuong}
               </span>
               <span className="shrink-0 font-medium">
-                {dinhDangTien(d.giaSauUuDai)}
+                {hienGiaDong(d.giaSauUuDai)}
               </span>
             </div>
           ))}
@@ -185,13 +197,13 @@ END:VCALENDAR`;
         <div className="h-[1px] bg-vien my-1" />
 
         <div className="flex justify-between items-center font-bold text-[15px] text-den">
-          <span>Tổng ước tính</span>
-          <span className="text-[16px]">{dinhDangTienGio(don.tongUocTinh)}</span>
+          <span>{t("ma.tongUocTinh")}</span>
+          <span className="text-[16px]">{dinhDangGia(don.tongUocTinh, ngonNgu)}</span>
         </div>
 
         {don.quaDuKien && (
           <div className="flex justify-between items-center text-[13px] text-xam-dam">
-            <span>Quà dự kiến</span>
+            <span>{t("ma.quaDuKien")}</span>
             <span className="font-semibold text-den">{don.quaDuKien}</span>
           </div>
         )}
@@ -219,7 +231,7 @@ END:VCALENDAR`;
             <strong className="text-den font-semibold">
               VIVE | K-Beauty Experience
             </strong>
-            , tầng LL2 Union Square, 171 Đồng Khởi
+            , {t("ma.diaChi")}
           </span>
         </div>
 
@@ -241,7 +253,7 @@ END:VCALENDAR`;
               <path d="M22 6l-10 7L2 6" />
             </svg>
             <span>
-              Đã gửi xác nhận tới email <strong>{don.email}</strong>
+              {t("ma.daGuiEmail")} <strong>{don.email}</strong>
             </span>
           </div>
         )}
@@ -249,7 +261,7 @@ END:VCALENDAR`;
 
       {thongBaoLuuAnh && (
         <div className="p-2 text-center text-[13px] text-den bg-oliu-nhat rounded-[10px]">
-          Đang mở hộp thoại lưu ảnh / in màn hình...
+          {t("ma.dangLuuAnh")}
         </div>
       )}
 
@@ -260,14 +272,14 @@ END:VCALENDAR`;
           onClick={handleLuuAnh}
           className={lopNut("phu","lon",true)}
         >
-          Lưu ảnh màn hình
+          {t("ma.luuAnh")}
         </button>
         <button
           type="button"
           onClick={handleThemVaoLich}
           className={lopNut("phu","lon",true)}
         >
-          Thêm vào lịch
+          {t("ma.themLich")}
         </button>
       </div>
     </div>

@@ -2,7 +2,7 @@ import type { Deal } from "@/lib/data/types";
 import { chuanHoaNgay, hienThi } from "@/lib/deals/hien-thi";
 
 export interface ThuongGiuHang {
-  /** Chữ quà lấy từ data, ví dụ "Thêm 1 lượt quay vòng quay may mắn". */
+  /** Chữ quà lấy từ data (bản en nếu ngonNgu = "en" và có `qua_en`), ví dụ "Thêm 1 lượt quay vòng quay may mắn". */
   qua: string;
   /** Ngày bắt đầu áp thưởng, YYYY-MM-DD. */
   tuNgay: string;
@@ -16,7 +16,8 @@ export interface ThuongGiuHang {
  */
 export function layThuongGiuHang(
   deals: Deal[],
-  ngayNhanHoacHomNay: string | Date = new Date()
+  ngayNhanHoacHomNay: string | Date = new Date(),
+  ngonNgu: string = "vi"
 ): ThuongGiuHang | null {
   const ngay = chuanHoaNgay(ngayNhanHoacHomNay);
   for (const deal of deals) {
@@ -25,7 +26,7 @@ export function layThuongGiuHang(
     if (deal.trang_thai !== "DANG_CHAY") continue;
     if (!hienThi(deal, ngay)) continue;
     return {
-      qua: thuong.qua,
+      qua: ngonNgu === "en" ? thuong.qua_en || thuong.qua : thuong.qua,
       tuNgay: thuong.tu_ngay,
       daTuNgay: thuong.tu_ngay <= ngay,
     };
