@@ -1,14 +1,17 @@
 import { GIAY_HAN_MA } from "./kiem-tra";
 
+/** Mã lỗi: UI dịch bằng khóa `tai-khoan.loi.<mã>` (vi/en). */
 export const LOI = {
-  emailSai: "Email chưa đúng. Kiểm tra lại giúp VIVE nhé.",
-  maSai: "Mã chưa đúng. Kiểm tra lại 6 số trong email.",
-  maHetHan: "Mã đã hết hạn. Bấm “Gửi lại mã” để nhận mã mới.",
-  quaNhieu: "Bạn gửi mã quá nhiều lần. Đợi vài phút rồi thử lại.",
-  matMang: "Mất kết nối mạng. Kiểm tra mạng rồi thử lại.",
-  chuaCoTaiKhoan: "Email này chưa có tài khoản. Thử lại để tạo mới.",
-  chung: "Có lỗi xảy ra. Thử lại sau ít phút.",
+  emailSai: "emailSai",
+  maSai: "maSai",
+  maHetHan: "maHetHan",
+  quaNhieu: "quaNhieu",
+  matMang: "matMang",
+  chuaCoTaiKhoan: "chuaCoTaiKhoan",
+  chung: "chung",
 } as const;
+
+export type MaLoi = (typeof LOI)[keyof typeof LOI];
 
 export interface LoiAuth {
   name?: string;
@@ -31,13 +34,13 @@ export function laLoiEmailDaCo(loi: LoiAuth | null | undefined): boolean {
 }
 
 /**
- * Đổi lỗi Supabase Auth sang câu tiếng Việt.
+ * Đổi lỗi Supabase Auth sang mã lỗi (UI dịch theo ngôn ngữ).
  * Supabase trả `otp_expired` cho cả mã sai và mã hết hạn, nên dựa thêm vào thời gian từ lúc gửi.
  */
 export function dichLoi(
   loi: LoiAuth | null | undefined,
   tuyChon: { giayTuLucGui?: number } = {}
-): string {
+): MaLoi {
   if (!loi) return LOI.chung;
   if (laLoiMang(loi)) return LOI.matMang;
   const code = loi.code ?? "";
