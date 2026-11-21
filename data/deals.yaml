@@ -173,15 +173,15 @@ deals:
     hook_en: Spend 700K on Medicube, Celimax, Skinfood to get free LOPOE Cleansing Foam
     goi_y:   # bộ gợi ý để web đề xuất (khách tự gom món khác vẫn được). Giá = tổng giá lẻ hoặc giá combo POS
       - {id: G-01, ten: COMBO PINK, san_pham: ["8800256108053", "8800289467714"], gia: 999000, moc: 700000}
-      - {id: G-02, ten: COMBO VAMPIRE GLOW, san_pham: ["8809982769866", "8800256115174"], gia: 896000, moc: 700000}
+      - {id: G-02, ten: Combo Glow Vitamin C, san_pham: ["8809982769866", "8800256115174"], gia: 896000, moc: 700000}
       - {id: G-03, ten: Celimax BHA Peeling Pad và serum Pore + Dark Spot, san_pham: ["8809463992615", "8809875907412"], gia: 860000, moc: 700000}
       - {id: G-06, ten: Bộ toner pad mix, san_pham: ["8809153102201", "8809463992615", "8809032673631"], gia: 838000, moc: 700000}
       - {id: G-07, ten: Medicube Triple Collagen toner và serum, san_pham: ["8800256114320", "8800256114351"], gia: 1135000, moc: 1100000}
       - {id: G-08, ten: Medicube Zero Pore Pad và Deep Vita C Pad, san_pham: ["8800256114665", "8800256109661"], gia: 1120000, moc: 1100000}
       - {id: G-09, ten: Celimax serum và 2 BHA Peeling Pad, san_pham: ["8809875907412", "8809463992615", "8809463992615"], gia: 1120000, moc: 1100000}
-      - {id: G-10, ten: COMBO ZOMBIE HỒI SINH và Potato Pad, san_pham: ["8809511276704", "8809511276728", "8809032676359"], gia: 1176000, moc: 1100000}
+      - {id: G-10, ten: Combo Keo Ong Dưỡng Ẩm và Potato Pad, san_pham: ["8809511276704", "8809511276728", "8809032676359"], gia: 1176000, moc: 1100000}
       - {id: G-11, ten: COMBO PINK và Glutathione Glow Serum, san_pham: ["8800256108053", "8800289467714", "8800256115174"], gia: 1419000, moc: 1300000}
-      - {id: G-12, ten: COMBO VAMPIRE GLOW và Deep Vita C Pad, san_pham: ["8809982769866", "8800256115174", "8800256109661"], gia: 1511000, moc: 1300000}
+      - {id: G-12, ten: Combo Glow Vitamin C và Deep Vita C Pad, san_pham: ["8809982769866", "8800256115174", "8800256109661"], gia: 1511000, moc: 1300000}
       - {id: G-13, ten: "Celimax serum, Retinol và BHA Pad", san_pham: ["8809875907412", "8809700320805", "8809463992615"], gia: 1310000, moc: 1300000, ghi_chu: Retinol còn 2}
       - {id: G-14, ten: "SKINFOOD Acorn Pad, Potato Pad và Egg White Mask", san_pham: ["8809032673662", "8809032676359", "8809032673778"], gia: 1471000, moc: 1300000}
     # G-04 (2 Mask Party 898K) và G-05 (Combo Toner Pad SKINFOOD) chưa đưa vào: lệch giá Mask Party và chưa rõ thành phần CB22 đến CB24
@@ -229,9 +229,10 @@ deals:
     thanh_phan: [{id: "8800256108053", so_luong: 1}, {id: "8800289467714", so_luong: 1}]
     gia_combo: 999000
 
+  # QD-MKT-025 (21/11): đổi tên Vampire Glow → Combo Glow Vitamin C, Zombie hồi sinh → Combo Keo Ong Dưỡng Ẩm; giữ id, sản phẩm, giá.
   - id: COMBO-VAMPIRE-GLOW
-    ten: COMBO VAMPIRE GLOW Medicube
-    ten_en: Medicube VAMPIRE GLOW COMBO
+    ten: Combo Glow Vitamin C Medicube
+    ten_en: Medicube Glow Vitamin C Combo
     loai: combo
     trang_thai: DANG_CHAY   # POS CB21
     may_rui: false
@@ -241,8 +242,8 @@ deals:
     gia_combo: 896000
 
   - id: COMBO-ZOMBIE
-    ten: COMBO ZOMBIE HỒI SINH SKINFOOD
-    ten_en: SKINFOOD ZOMBIE REVIVAL COMBO
+    ten: Combo Keo Ong Dưỡng Ẩm SKINFOOD
+    ten_en: SKINFOOD Propolis Moisture Combo
     loai: combo
     trang_thai: DANG_CHAY   # POS CB25: toner và tinh chất keo ong
     may_rui: false
@@ -301,6 +302,8 @@ deals:
     <<: *popup
     moc:
       - {tu: 300000, qua: 1 lượt quay vòng quay may mắn}
+    # Thưởng thêm khi giữ hàng trên web rồi nhận tại booth (SALE 21/11). Web đọc trường này, không gõ chữ cứng.
+    thuong_giu_hang: {tu_ngay: "2026-11-27", qua: Thêm 1 lượt quay vòng quay may mắn, qua_en: 1 extra lucky-wheel spin}
     dieu_kien: Hóa đơn từ 300K được quay 1 lượt. Từ 27/11, giữ hàng trên web rồi nhận tại booth được thêm 1 lượt
     dieu_kien_en: Orders from 300K get 1 spin. From 27/11, reserve on the web and pick up at the booth for 1 extra spin
     hook: Hóa đơn từ 300K, quay 1 lượt. Giữ hàng trên web, thêm 1 lượt
