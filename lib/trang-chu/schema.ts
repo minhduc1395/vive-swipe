@@ -66,6 +66,8 @@ export const OTrongLuoiSchema = z.object({
   co: z.enum(["vua", "rong", "nho"]).default("vua"),
   tieu_de: z.string().min(1),
   phu_de_truoc: z.string().optional(),
+  /** DIR-040: dòng mô tả thứ 2 (xuống dòng), chỉ dùng cùng phu_de_truoc */
+  phu_de_them: z.string().optional(),
   phu_de_nghieng: z.string().optional(),
   phu_de_sau: z.string().optional(),
   co_logo: z.boolean().optional(),

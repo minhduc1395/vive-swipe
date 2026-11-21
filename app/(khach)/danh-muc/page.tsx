@@ -443,7 +443,7 @@ function DanhMucNoiDung() {
                       type="button"
                       aria-pressed={on}
                       onClick={() => capNhatBoLoc({ loai: c.id })}
-                      className={`h-10 px-3 rounded-xl flex items-center justify-between text-[14px] cursor-pointer border-none ${on ? "bg-hong-nhat font-semibold" : "bg-transparent hover:bg-hong-nhat/60"}`}
+                      className={`h-10 px-3 rounded-xl flex items-center justify-between text-[14px] cursor-pointer border-none ${on ? "bg-kem font-semibold" : "bg-transparent hover:bg-kem/60"}`}
                     >
                       <span>{c.label}</span>
                       <span className="text-[12px] text-xam">{c.dem}</span>
@@ -501,8 +501,8 @@ function DanhMucNoiDung() {
                     const liked = daThich.includes(sp.id);
                     const bgClass =
                       i % 4 === 0 || i % 4 === 3
-                        ? "bg-hong-nhat"
-                        : "bg-bac-ha-nhat";
+                        ? "bg-kem"
+                        : "bg-oliu-nhat";
                     const ghiChuDeal = layGhiChuDeal(sp, deals);
                     const anhSrc = duongDanAnh(sp.anh, "the");
 
@@ -593,7 +593,7 @@ function DanhMucNoiDung() {
                             type="button"
                             onClick={(e) => xuLyThemVaoGio(sp, e)}
                             aria-label={`Thêm ${sp.ten_hien_thi} vào giỏ`}
-                            className="w-[38px] h-[38px] shrink-0 rounded-full bg-bac-ha flex items-center justify-center text-den hover:opacity-90 cursor-pointer transition-opacity"
+                            className="w-[38px] h-[38px] shrink-0 rounded-full bg-be flex items-center justify-center text-den hover:opacity-90 cursor-pointer transition-opacity"
                           >
                             <svg
                               width="18"

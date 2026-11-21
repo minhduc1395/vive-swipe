@@ -165,7 +165,7 @@ function NoiDungDeal() {
         <header className="px-5 md:px-8 pt-7 pb-2 flex flex-col gap-2.5">
           <h1 className="tieu-de-trang">
             Deal{" "}
-            <span className="bg-hong/70 px-1 py-0.5 rounded-md">
+            <span className="bg-oliu-nhat px-1 py-0.5 rounded-md">
               cho bạn
             </span>
           </h1>
@@ -174,7 +174,7 @@ function NoiDungDeal() {
             {nhanGiaiThich.map((nhan) => (
               <span
                 key={nhan}
-                className="h-[26px] px-2.5 rounded-full bg-hong-nhat text-den flex items-center font-medium"
+                className="h-[26px] px-2.5 rounded-full bg-kem text-den flex items-center font-medium"
               >
                 {nhan}
               </span>
@@ -199,7 +199,7 @@ function NoiDungDeal() {
         {/* Lưới thẻ deal: 1 cột điện thoại, 2 cột từ 768, 3 cột từ 1280 */}
         <div className="px-4 md:px-8 pt-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 items-stretch">
           {dealsHienThi.length === 0 ? (
-            <div className="md:col-span-2 xl:col-span-3 rounded-[20px] bg-hong-nhat p-6 text-center text-xam">
+            <div className="md:col-span-2 xl:col-span-3 rounded-[20px] bg-kem p-6 text-center text-xam">
               Hiện chưa có deal nào đang chạy hôm nay. Vui lòng quay lại sau!
             </div>
           ) : (
@@ -219,7 +219,7 @@ function NoiDungDeal() {
           {/* Ô đăng ký email */}
           <section
             aria-label="Đăng ký nhận deal"
-            className="md:col-span-2 xl:col-span-3 rounded-[22px] bg-hong-nhat p-5 flex flex-col gap-2.5 mt-2"
+            className="md:col-span-2 xl:col-span-3 rounded-[22px] bg-kem p-5 flex flex-col gap-2.5 mt-2"
           >
             <div className="flex items-center gap-2">
               <svg
@@ -275,7 +275,7 @@ function NoiDungDeal() {
                 <button
                   type="submit"
                   onClick={handleDangKyEmail}
-                  className="h-11 px-4 rounded-xl bg-bac-ha text-den font-semibold text-[14px] cursor-pointer hover:opacity-95 shrink-0 border-none transition-opacity"
+                  className="h-11 px-4 rounded-xl bg-be text-den font-semibold text-[14px] cursor-pointer hover:opacity-95 shrink-0 border-none transition-opacity"
                 >
                   Đăng ký
                 </button>

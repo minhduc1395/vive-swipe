@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { useDuLieu } from "@/lib/du-lieu-context";
 import { dinhDangTien, dinhDangTienGio } from "@/lib/dinh-dang";
 import { tinhGio } from "@/lib/deals/gio-hang";
+import { chuanHoaNgay } from "@/lib/deals/hien-thi";
+import { dongThuongGiuHang } from "@/lib/giu-hang/thuong";
 import {
   layGioHang,
   xoaToanBoGio,
@@ -57,15 +59,16 @@ export function FormGiuHang({ gioBanDau }: Props) {
 
   const ketQua = tinhGio(mucGioInput, sanPham, deals);
   const tongSoMon = gio.reduce((acc, it) => acc + it.soLuong, 0);
+  const dongThuong = dongThuongGiuHang(deals, chuanHoaNgay(new Date()));
 
   if (!mounted) {
     return (
       <div className="flex flex-col gap-4 animate-pulse">
-        <div className="h-[72px] rounded-[18px] bg-hong-nhat/60" />
-        <div className="h-[50px] rounded-[14px] bg-hong-nhat/40" />
-        <div className="h-[50px] rounded-[14px] bg-hong-nhat/40" />
-        <div className="h-[50px] rounded-[14px] bg-hong-nhat/40" />
-        <div className="h-[54px] rounded-full bg-hong-nhat/70" />
+        <div className="h-[72px] rounded-[18px] bg-kem/60" />
+        <div className="h-[50px] rounded-[14px] bg-kem/40" />
+        <div className="h-[50px] rounded-[14px] bg-kem/40" />
+        <div className="h-[50px] rounded-[14px] bg-kem/40" />
+        <div className="h-[54px] rounded-full bg-kem/70" />
       </div>
     );
   }
@@ -73,7 +76,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
   if (daSanSang && gio.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
-        <div className="w-16 h-16 rounded-full bg-hong-nhat flex items-center justify-center text-xam mb-4">
+        <div className="w-16 h-16 rounded-full bg-kem flex items-center justify-center text-xam mb-4">
           <svg
             width="32"
             height="32"
@@ -204,7 +207,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
             placeholder="Tên để nhân viên gọi"
             value={ten}
             onChange={(e) => setTen(e.target.value)}
-            className="h-[50px] rounded-[14px] border-[1.5px] border-hong px-3.5 text-[15px] text-den placeholder:text-xam outline-none focus:border-hong transition-colors bg-trang"
+            className="h-[50px] rounded-[14px] border-[1.5px] border-vien px-3.5 text-[15px] text-den placeholder:text-xam outline-none focus:border-den transition-colors bg-trang"
           />
         </div>
 
@@ -222,7 +225,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
             placeholder="09xx xxx xxx"
             value={sdt}
             onChange={(e) => setSdt(e.target.value)}
-            className="h-[50px] rounded-[14px] border-[1.5px] border-hong px-3.5 text-[15px] text-den placeholder:text-xam outline-none focus:border-hong transition-colors bg-trang"
+            className="h-[50px] rounded-[14px] border-[1.5px] border-vien px-3.5 text-[15px] text-den placeholder:text-xam outline-none focus:border-den transition-colors bg-trang"
           />
         </div>
 
@@ -242,7 +245,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
             placeholder="ten@email.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="h-[50px] rounded-[14px] border-[1.5px] border-hong px-3.5 text-[15px] text-den placeholder:text-xam outline-none focus:border-hong transition-colors bg-trang"
+            className="h-[50px] rounded-[14px] border-[1.5px] border-vien px-3.5 text-[15px] text-den placeholder:text-xam outline-none focus:border-den transition-colors bg-trang"
           />
         </div>
 
@@ -259,7 +262,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
               className={`h-[48px] rounded-[14px] text-[15px] font-semibold transition-colors border-[1.5px] ${
                 ngayDen === "hom_nay"
                   ? "bg-hong text-den border-transparent font-semibold"
-                  : "bg-trang text-den border-hong hover:bg-hong-nhat/50"
+                  : "bg-trang text-den border-vien hover:bg-kem"
               }`}
             >
               Hôm nay
@@ -271,7 +274,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
               className={`h-[48px] rounded-[14px] text-[15px] font-semibold transition-colors border-[1.5px] ${
                 ngayDen === "ngay_mai"
                   ? "bg-hong text-den border-transparent font-semibold"
-                  : "bg-trang text-den border-hong hover:bg-hong-nhat/50"
+                  : "bg-trang text-den border-vien hover:bg-kem"
               }`}
             >
               Ngày mai
@@ -333,7 +336,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
       {/* Cột tóm tắt giỏ hàng responsive (trên đầu mobile/tablet, cột phải dính trên desktop) */}
       <aside
         aria-label="Tóm tắt giỏ giữ hàng"
-        className="order-first lg:order-last flex flex-col gap-3 rounded-[18px] lg:rounded-[24px] bg-hong-nhat p-4 lg:p-6 lg:border lg:border-vien lg:sticky lg:top-6"
+        className="order-first lg:order-last flex flex-col gap-3 rounded-[18px] lg:rounded-[24px] bg-kem p-4 lg:p-6 lg:border lg:border-vien lg:sticky lg:top-6"
       >
         <div className="flex justify-between items-center gap-3 lg:hidden text-[13px]">
           <div className="flex flex-col gap-0.5">
@@ -375,6 +378,14 @@ export function FormGiuHang({ gioBanDau }: Props) {
             {dinhDangTienGio(ketQua.tong_tam_tinh)}
           </strong>
         </div>
+        {dongThuong && (
+          <p
+            data-testid="thuong-giu-hang"
+            className="m-0 text-[13px] leading-snug text-den"
+          >
+            {dongThuong}
+          </p>
+        )}
         <p className="hidden lg:block m-0 text-[12px] text-xam leading-relaxed">
           Giá và quà là ước tính. Nhân viên xác nhận khi thanh toán tại booth.
         </p>

@@ -56,7 +56,7 @@ export function AnhNho({ sp, co = 56, chong = false }: { sp: SanPham; co?: numbe
   const coAnh = src && !src.startsWith("/products/") && !loi;
   return (
     <span
-      className={`shrink-0 rounded-[14px] bg-bac-ha-nhat flex items-center justify-center overflow-hidden ${chong ? "border-2 border-trang -ml-4 first:ml-0" : ""}`}
+      className={`shrink-0 rounded-[14px] bg-oliu-nhat flex items-center justify-center overflow-hidden ${chong ? "border-2 border-trang -ml-4 first:ml-0" : ""}`}
       style={{ width: co, height: co }}
     >
       {coAnh ? (
@@ -73,12 +73,12 @@ export function DuongMocQua({ deal, gon = false }: { deal: Deal; gon?: boolean }
   const moc = deal.moc ?? [];
   return (
     <ol className="relative m-0 p-0 list-none flex items-start" aria-label="Các mốc quà">
-      <span className="absolute left-1.5 right-1.5 top-[6px] h-[2px] bg-hong" aria-hidden="true" />
+      <span className="absolute left-1.5 right-1.5 top-[6px] h-[2px] bg-oliu-vua" aria-hidden="true" />
       {moc.map((m, i) => {
         const tien = m.tu ?? m.tren ?? 0;
         return (
           <li key={i} className="relative flex-1 pt-[18px] text-[12px] leading-[1.35] min-w-0 pr-1">
-            <span className="absolute left-0 top-[1px] w-3 h-3 rounded-full bg-trang border-2 border-moc" aria-hidden="true" />
+            <span className="absolute left-0 top-[1px] w-3 h-3 rounded-full bg-trang border-2 border-oliu" aria-hidden="true" />
             <b className="block text-[13px]">{m.tren ? "Trên " : ""}{tienNgan(tien)}</b>
             <span className={`text-xam ${gon ? "line-clamp-1" : ""}`}>{m.qua.replace(/^1\s+/, "")}</span>
           </li>
@@ -101,7 +101,7 @@ interface TheDealProps {
 export function TheDeal({ deal, sanPhamMap, onMo, onThemCombo, onThemBo, noiBat = false }: TheDealProps) {
   const nhom = nhomCuaDeal(deal);
   const han = nhanGioiHan(deal);
-  const nenNhan = nhom === "qua" ? "bg-hong-nhat" : nhom === "combo" ? "bg-bac-ha-nhat" : "bg-vang-nhat";
+  const nenNhan = nhom === "qua" ? "bg-be" : nhom === "combo" ? "bg-oliu-nhat" : "bg-cat";
   const dungLan = (e: React.MouseEvent) => e.stopPropagation();
 
   let than: React.ReactNode = null;
@@ -139,7 +139,7 @@ export function TheDeal({ deal, sanPhamMap, onMo, onThemCombo, onThemBo, noiBat 
         <span className="flex items-baseline gap-2 flex-wrap">
           <b className="text-[22px] tracking-[-0.01em]">{dinhDangTien(c.gia)}</b>
           {c.tongLe > c.gia && <s className="text-[13px] text-xam">{dinhDangTien(c.tongLe)}</s>}
-          {c.tietKiem > 0 && <span className="text-[12px] font-semibold text-xanh-dam bg-bac-ha-nhat px-2 py-0.5 rounded-full">−{tienNgan(c.tietKiem)}</span>}
+          {c.tietKiem > 0 && <span className="text-[12px] font-semibold text-xanh-dam bg-oliu-nhat px-2 py-0.5 rounded-full">−{tienNgan(c.tietKiem)}</span>}
         </span>
         <button type="button" onClick={(e) => { dungLan(e); onThemCombo(deal); }} className={lopNut("chinh-bac-ha", "vua")}>
           Thêm vào giỏ

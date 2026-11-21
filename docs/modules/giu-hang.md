@@ -9,10 +9,12 @@ Khách giữ hàng trên web, nhận mã giữ hàng, trả tiền và nhận t�
 - `app/api/` (trừ `cron/`): API giữ hàng.
 - `lib/email/`: email xác nhận (tắt mặc định, bật bằng `VIVE_BAT_GUI_EMAIL=1`).
 - `lib/qr.ts`.
+- `lib/giu-hang/thuong.ts`: hàm thuần `thuongGiuHang`, `dongThuongGiuHang` đọc `thuong_giu_hang` của deal (qua `hienThi`); form và trang mã hiện dòng này.
 
 ## Quy ước riêng
 - Giá tính lại ở server khi giữ hàng, không tin giá từ trình duyệt.
 - Không ghi dữ liệu cá nhân của khách vào log.
 
 ## Lịch sử ngắn
-- (chưa có)
+- 2026-11-21 (#64): màu theo bảng nội thất: kem/be/oliu-nhat thay token cũ, ô nhập viền `vien` (chọn: `den`), khung QR `oliu-nhat`; hồng chỉ còn chip đang chọn.
+- 2026-11-21 (#75): hiện thưởng thêm lượt quay (DC-02 `thuong_giu_hang`) ở form giữ hàng và trang mã; chữ và ngày lấy từ data, tắt DC-02 thì ẩn.
