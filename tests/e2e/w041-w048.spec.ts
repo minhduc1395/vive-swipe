@@ -1,11 +1,12 @@
 import { test, expect, datDaKhaoSat } from "./fixtures";
 
 test.describe("W041 · nút landing dẫn thẳng tới sản phẩm, deal", () => {
-  test("Xem bộ sản phẩm ra đúng 3 sản phẩm LOPOE", async ({ page }) => {
+  test("Mua (khối mở đầu LOPOE) ra đúng 3 sản phẩm LOPOE", async ({ page }) => {
     await datDaKhaoSat(page);
     await page.goto("/new-arrival");
     await page.waitForLoadState("networkidle");
-    await page.getByRole("link", { name: "Xem bộ sản phẩm" }).first().click();
+    // W064: phần đầu là khối cuộn LOPOE; chữ có hiệu ứng nên bấm bằng DOM như trang-chu.spec
+    await page.locator('#lopoe [data-mo-dau] a:has-text("Mua")').evaluate((el: HTMLElement) => el.click());
     await expect(page).toHaveURL(/thuong-hieu=LOPOE/);
     await expect(page.locator("article")).toHaveCount(3);
   });
@@ -30,13 +31,14 @@ test.describe("W041 · nút landing dẫn thẳng tới sản phẩm, deal", () 
     await expect(page.getByRole("dialog")).toHaveCount(0);
   });
 
-  test("Khối ampoule: Xem sản phẩm mở bảng chi tiết LOPOE-AMP", async ({ page }) => {
+  test("Xem combo xuống khối combo; tên combo mở /deal?id=", async ({ page }) => {
     await datDaKhaoSat(page);
     await page.goto("/new-arrival");
     await page.waitForLoadState("networkidle");
-    await page.getByRole("link", { name: "Xem sản phẩm" }).first().click();
-    await expect(page).toHaveURL(/sp=LOPOE-AMP/);
-    await expect(page.getByRole("dialog")).toBeVisible();
+    await page.locator('#lopoe [data-mo-dau] a:has-text("Xem combo")').evaluate((el: HTMLElement) => el.click());
+    await expect(page).toHaveURL(/#ke-ra-mat$/);
+    await page.locator("#ke-ra-mat").getByRole("link", { name: "Bộ 3 LOPOE", exact: true }).click();
+    await expect(page).toHaveURL(/\/deal\?id=LOPOE-COMBO-BO3/);
   });
 });
 
