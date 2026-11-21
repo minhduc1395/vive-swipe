@@ -54,7 +54,7 @@ export function NganKeoDeal({
                     type="button"
                     aria-selected={tab === i}
                     onClick={() => setTab(i)}
-                    className={`h-9 px-3.5 rounded-full text-[13px] border-0 cursor-pointer ${tab === i ? "bg-hong font-semibold" : "bg-nen-phu"}`}
+                    className={`h-9 px-3.5 rounded-full text-[13px] border-0 cursor-pointer ${tab === i ? "bg-hong font-semibold" : "bg-kem"}`}
                   >
                     Mốc {tienNgan(m.tu ?? m.tren ?? 0)}
                   </button>
