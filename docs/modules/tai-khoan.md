@@ -5,9 +5,9 @@ Khách đăng nhập để giữ lịch sử quẹt, đã thích, giỏ hàng v�
 
 ## Thư mục và file chính
 - Trang: `app/(khach)/dang-nhap/` (form 2 bước khi bật cờ, trang chờ khi tắt), `app/(khach)/tai-khoan/`.
-- `lib/tai-khoan/`: `dang-nhap.ts` (`guiMa`, `xacNhanMa`, `dangXuat`, `laDaDangNhap`), `kiem-tra.ts` (email, mã, che email, đếm ngược), `loi.ts` (lỗi tiếng Việt), `use-tai-khoan.ts` (hook trạng thái đăng nhập), `co.ts` (cờ `NEXT_PUBLIC_DANG_NHAP_EMAIL`).
-- `components/tai-khoan/`: `FormDangNhap.tsx` (2 bước), `ThongTinTaiKhoan.tsx`, `LinkTaiKhoan.tsx` (đổi nút "Đăng nhập" thành "Tài khoản" khi đã đăng nhập và bật cờ).
-- Test: `tests/tai-khoan.test.ts`, `tests/e2e/tai-khoan.spec.ts` (mock `/auth/v1/otp`, `/verify`, `/user` PUT ngay trong spec).
+- `lib/tai-khoan/`: `dong-bo.ts` (#66: gộp 3 chiều `gopDaThich`, `gopGioHang`, `dongBoMotLan`, bộ chạy nền `batDauDongBo`), `dang-nhap.ts` (`guiMa`, `xacNhanMa`, `dangXuat`, `laDaDangNhap`), `kiem-tra.ts` (email, mã, che email, đếm ngược), `loi.ts` (lỗi tiếng Việt), `use-tai-khoan.ts` (hook trạng thái đăng nhập), `co.ts` (cờ `NEXT_PUBLIC_DANG_NHAP_EMAIL`).
+- `components/tai-khoan/`: `FormDangNhap.tsx` (2 bước), `ThongTinTaiKhoan.tsx`, `DongBoTaiKhoan.tsx` (gắn bộ đồng bộ, đang đặt trong `LinkTaiKhoan` vì thanh trên có ở mọi trang khách), `LinkTaiKhoan.tsx` (đổi nút "Đăng nhập" thành "Tài khoản" khi đã đăng nhập và bật cờ).
+- Test: `tests/tai-khoan.test.ts`, `tests/tai-khoan-dong-bo.test.ts`, `tests/e2e/tai-khoan-dong-bo.spec.ts` (2 context, Supabase giả trong bộ nhớ), `tests/e2e/tai-khoan.spec.ts` (mock `/auth/v1/otp`, `/verify`, `/user` PUT ngay trong spec).
 - Đọc, không sửa: `lib/supabase/auth.ts` (khách ẩn danh `damBaoKhachAnDanh`), `lib/supabase/client.ts`, `lib/kho-luu-tru.ts` (khóa localStorage `vive_da_thich`, `vive_gio_hang`). Cần sửa các file này thì comment BLOCKED, WEB làm.
 - Thanh trên (`components/ThanhTren*.tsx`, thanh điện thoại trong `components/AppShell.tsx`) là file shared: job cần đổi nút "Đăng nhập" thì ghi rõ trong PR, WEB gộp.
 
@@ -31,3 +31,4 @@ Khách đăng nhập để giữ lịch sử quẹt, đã thích, giỏ hàng v�
 - 2026-11-21 BOD: phần email để sau. Đăng nhập email nằm sau cờ `NEXT_PUBLIC_DANG_NHAP_EMAIL=1`; WEB bật khi có SMTP. Job #66 vẫn làm được (đồng bộ chỉ chạy khi đã đăng nhập).
 - 2026-11-21 #65: đăng nhập email + mã 6 số, trang tài khoản, nút "Tài khoản" ở thanh trên máy tính và điện thoại, tất cả sau cờ.
 - 2026-11-22 #84 (W044): song ngữ VI | EN cho `/dang-nhap`, `/tai-khoan`. Chữ ở `messages/{vi,en}/tai-khoan.json`; `lib/tai-khoan/loi.ts` trả mã lỗi (`LOI.maSai`...), UI dịch bằng `tai-khoan.loi.<mã>`. Nút "Đăng nhập" trên thanh trên (shared) chưa đổi, chờ job #96.
+- 2026-11-22 #66: đồng bộ đã thích + giỏ lên `yeu_thich`, `gio_hang_luu` khi đã đăng nhập email. Gộp 3 chiều với bản gốc `vive_dong_bo_tai_khoan` (máy mới: hợp đã thích, cộng giỏ theo món, combo lấy số lớn hơn; cùng máy đăng nhập lại không nhân đôi). Nghe `vive_storage_update`, ghi server sau 400ms; ghi server trước rồi mới ghi local; lỗi mạng thử lại 2s→60s và khi `online`, khi quay lại tab thì đọc lại server.
