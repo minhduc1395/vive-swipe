@@ -65,15 +65,12 @@ test.describe("W050 · Trang chủ mới / theo landing v3", () => {
       await expect(page.locator(selector).first()).toBeVisible();
     }
 
-    // Số liệu đọc từ data/ hiện đúng
-    await expect(page.locator("#deal-pdrn")).toContainText("999K");
-    await expect(page.locator("#deal-mat-na")).toContainText("396K");
+    // DIR-040: ô lớn hiện mô tả (xem test 1b), giá và quà chỉ còn ở hàng trượt, lấy từ data/deals.yaml
     await expect(page.locator("#qua-lopoe")).toContainText("800K"); // QA-003: mốc hóa đơn 800K thay KM-08
-    // W055: ô combo và hàng trượt lấy giá, quà từ data/deals.yaml
-    await expect(page.locator("#combo-lopoe-bo3")).toContainText("911K");
-    await expect(page.locator("#combo-lopoe-bo3")).toContainText("Số lượng có hạn");
-    await expect(page.locator("#combo-lopoe-kem-amp")).toContainText("725K");
-    await expect(page.locator("#combo-vampire-glow")).toContainText("896K");
+    for (const gia of ["911K", "725K", "999K", "896K", "396K"]) {
+      await expect(page.locator("#hang-combo .the-combo .gia", { hasText: gia })).toHaveCount(1);
+    }
+    await expect(page.locator("#hang-combo .the-combo .qua").first()).toContainText("Số lượng có hạn");
     await expect(page.locator("#hang-combo .the-combo")).toHaveCount(7);
     // Huy hiệu Hwahae gắn khối giải thưởng Ampoule, không còn "Winner" ở sữa rửa mặt
     await expect(page.locator('#lopoe [data-khoi="amp-giai-thuong"] img[alt*="Hwahae"]')).toHaveCount(1);
@@ -86,6 +83,40 @@ test.describe("W050 · Trang chủ mới / theo landing v3", () => {
     await expect(page.getByRole("heading", { name: /LOPOE/i, level: 1 })).toBeVisible();
 
     expect(loiConsole).toEqual([]);
+  });
+
+  test("1b. DIR-040: 9 ô lớn hiện đúng chữ mô tả, không giá/quà; hàng trượt giữ giá, quà và tên combo mới", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/");
+    const CHU_O: Record<string, string> = {
+      "combo-lopoe-bo3": "Làm sạch, làm dịu, khóa ẩm.Phù hợp mọi loại da.",
+      "combo-lopoe-kem-amp": "Dưỡng ẩm chuyên sâu cho làn da khô.",
+      repiel: "Làm dịu da nhạy cảm.",
+      tiela: "Dưỡng thể nước hoa Tiela.",
+      lalarecipe: "Combo sáng da Vita C.",
+      "deal-pdrn": "PDRN + Collagen cho da căng mướt.",
+      "combo-vampire-glow": "Vit C + Glutathione: da sáng bừng.",
+      "combo-lopoe-2srm": "Sạch sâu mà da vẫn mềm mượt.",
+      "deal-mat-na": "Mặt nạ thạch cấp ẩm nhanh",
+    };
+    for (const [id, chu] of Object.entries(CHU_O)) {
+      const o = page.locator(`#${id}`);
+      await expect(o.locator(".hien > p").first()).toHaveText(chu);
+      await expect(o.locator("p.dong-nho")).toHaveCount(0);
+      expect(((await o.locator(".hien").first().innerText()).match(/\d[\d.]*\s?(K|đ)\b/g)) ?? []).toHaveLength(0);
+    }
+    await expect(page.locator("#combo-vampire-glow h2")).toHaveText("Glow Vitamin C");
+
+    const truot = page.locator("a[href^='/deal?id=']").filter({ has: page.locator(".gia") });
+    for (const gia of ["911K", "725K", "349K", "999K", "896K", "589K", "396K"]) {
+      await expect(truot.locator(".gia", { hasText: gia }).first()).toHaveCount(1);
+    }
+    await expect(truot.filter({ hasText: "Glow Vitamin C" })).toHaveCount(1);
+    await expect(truot.filter({ hasText: "Keo Ong Dưỡng Ẩm" })).toHaveCount(1);
+    await expect(truot.filter({ hasText: "Vampire Glow" })).toHaveCount(0);
+    await expect(truot.filter({ hasText: "Zombie" })).toHaveCount(0);
   });
 
   test("2. Bấm từng nút trên dải khuyến mãi và khối 1–6 tới đúng URL (sap_co hiện toast)", async ({

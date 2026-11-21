@@ -111,9 +111,10 @@ luoi_doi:
   - id: "combo-lopoe-bo3"
     mau_nen: "oliu-nhat"
     tieu_de: "Bộ 3 LOPOE"
+    phu_de_truoc: "Làm sạch, làm dịu, khóa ẩm."
+    phu_de_them: "Phù hợp mọi loại da."
     deal_id: "LOPOE-COMBO-BO3"
     nhan_thuong_hieu: "Better Balance"
-    hien_qua: true
     anh_bo:
       - "/trang-chu/srm.webp"
       - "/trang-chu/ampoule.webp"
@@ -130,9 +131,9 @@ luoi_doi:
   - id: "combo-lopoe-kem-amp"
     mau_nen: "kem"
     tieu_de: "Kem + Ampoule"
+    phu_de_truoc: "Dưỡng ẩm chuyên sâu cho làn da khô."
     deal_id: "LOPOE-COMBO-KEM-AMP"
     nhan_thuong_hieu: "LOPOE"
-    hien_qua: true
     anh_bo:
       - "/trang-chu/kem.webp"
       - "/trang-chu/ampoule.webp"
@@ -151,6 +152,7 @@ luoi_doi:
     mau_nen: "cat"
     co: "rong"
     tieu_de: "Combo PDRN Pink"
+    phu_de_truoc: "PDRN + Collagen cho da căng mướt."
     deal_id: "COMBO-PINK"
     nhan_thuong_hieu: "Medicube"
     anh_bo: ["/trang-chu/medicube-pdrn-serum.webp"]
@@ -164,7 +166,7 @@ luoi_doi:
     mau_nen: "oliu-nhat"
     co: "nho"
     tieu_de: "Rep!el"
-    phu_de_truoc: "Serum và toner pad."
+    phu_de_truoc: "Làm dịu da nhạy cảm."
     san_pham: ["8809198846238?v=2", "8809198846252"]
     mo_ta_anh: "Serum CICA-Niacin và toner pad Vita-Toning của Rep!el"
     nut:
@@ -177,7 +179,7 @@ luoi_doi:
     mau_nen: "kem"
     co: "nho"
     tieu_de: "Tiela"
-    phu_de_truoc: "Dưỡng thể có hương."
+    phu_de_truoc: "Dưỡng thể nước hoa Tiela."
     san_pham: ["8800282110150", "8800282110174"]
     mo_ta_anh: "Kem dưỡng thể và tẩy da chết toàn thân Tiela"
     nut:
@@ -188,7 +190,8 @@ luoi_doi:
   - id: "combo-vampire-glow"
     mau_nen: "oliu-vua"
     co: "nho"
-    tieu_de: "Vampire Glow"
+    tieu_de: "Glow Vitamin C"
+    phu_de_truoc: "Vit C + Glutathione: da sáng bừng."
     deal_id: "COMBO-VAMPIRE-GLOW"
     nhan_thuong_hieu: "Medicube"
     # Hũ Deep Vita C đóng nắp (cắt từ ảnh chính hãng themedicube.co.kr, 20/11) thay ảnh hũ mở nắp
@@ -203,9 +206,9 @@ luoi_doi:
     mau_nen: "be"
     co: "nho"
     tieu_de: "2 sữa rửa mặt"
+    phu_de_truoc: "Sạch sâu mà da vẫn mềm mượt."
     deal_id: "LOPOE-COMBO-2SRM"
     nhan_thuong_hieu: "LOPOE"
-    hien_qua: true
     anh_bo:
       - "/trang-chu/srm.webp"
       - "/trang-chu/srm.webp"
@@ -220,6 +223,7 @@ luoi_doi:
     mau_nen: "oliu-nhat"
     co: "nho"
     tieu_de: "Mua 4 tặng 1"
+    phu_de_truoc: "Mặt nạ thạch cấp ẩm nhanh"
     deal_id: "DC-05"
     nhan_thuong_hieu: "Mặt nạ Uniura"
     so_lon: "4+1"
@@ -233,7 +237,7 @@ luoi_doi:
     mau_nen: "kem"
     co: "rong"
     tieu_de: "Lalarecipe"
-    phu_de_truoc: "Bộ Yuzu Vita C."
+    phu_de_truoc: "Combo sáng da Vita C."
     # 20/11 (W061): ảnh kho media của 3 mã này là ảnh đời sống (trái cây, tay) cắt lỗi → dùng ảnh cắt sạch trong repo (nguồn ảnh bán lẻ, nền trắng). Media có ảnh chuẩn thì đổi lại san_pham.
     anh_bo: ["/trang-chu/lalarecipe-yuzu-pad.webp", "/trang-chu/lalarecipe-yuzu-ampoule.webp", "/trang-chu/lalarecipe-yuzu-cream.webp"]
     mo_ta_anh: "Toner pad, ampoule và kem dưỡng Yuzu Vita C của Lalarecipe"
@@ -287,12 +291,12 @@ truot_combo:
     - deal_id: "COMBO-VAMPIRE-GLOW"
       mau_nen: "oliu-vua"
       nhan: "Medicube"
-      ten: "Vampire Glow"
+      ten: "Glow Vitamin C"
       anh_bo: ["/trang-chu/medicube-vitac-dong.webp", "/trang-chu/medicube-glutathione.webp"]
     - deal_id: "COMBO-ZOMBIE"
       mau_nen: "trang"
       nhan: "SKINFOOD"
-      ten: "Zombie hồi sinh"
+      ten: "Keo Ong Dưỡng Ẩm"
       san_pham: ["8809511276704", "8809511276728"]
     - deal_id: "DC-05"
       mau_nen: "oliu-nhat"
