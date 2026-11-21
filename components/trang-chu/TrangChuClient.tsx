@@ -499,13 +499,21 @@ export function TrangChuClient({
                       <em>{o.phu_de_nghieng}</em>
                       {o.phu_de_sau}
                     </p>
+                  ) : o.phu_de_truoc ? (
+                    <p>
+                      {o.phu_de_truoc}
+                      {o.phu_de_them && (
+                        <>
+                          <br />
+                          {o.phu_de_them}
+                        </>
+                      )}
+                    </p>
                   ) : o.nhan_thuong_hieu ? (
                     <p>
                       {o.nhan_thuong_hieu}
                       {giaNgan ? ` · ${giaNgan}` : ""}
                     </p>
-                  ) : o.phu_de_truoc ? (
-                    <p>{o.phu_de_truoc}</p>
                   ) : null}
                   {o.hien_qua && dongQua && <p className="dong-nho">{dongQua}</p>}
 
