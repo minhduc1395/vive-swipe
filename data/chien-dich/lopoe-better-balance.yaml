@@ -4,8 +4,10 @@ ten_en: LOPOE Better Balance
 bat_dau: "2026-11-14"
 ket_thuc: "2026-11-29"
 uu_tien: 10
+# W064: phần đầu trang New Arrival giống khối LOPOE ở trang chủ
+cuon_3d: lopoe
 mau:
-  nen: "#F7EEEB"
+  nen: "#F7F5EF"
   nhan: "#E8D2CC"
   chu: "#2B2B2A"
 khoi:

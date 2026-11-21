@@ -53,8 +53,8 @@ export default function TrangChu() {
       />
       <TrangChuClient
         cauHinh={TRANG_CHU_CONFIG}
-        // W063: chuỗi ảnh trên điện thoại đang thử ở /thu-nghiem/lopoe-khung; CĐT duyệt rồi mới bật cho trang chủ
-        lopoe3D={{ ...docCauHinhLopoe3D(), khung_dien_thoai: undefined }}
+        // W063: điện thoại chạy chuỗi ảnh (CĐT giữ cách này 21/11), máy tính chạy three.js
+        lopoe3D={docCauHinhLopoe3D()}
         deals={dealsTrangChu}
         doanhNghiep={DOANH_NGHIEP}
         gioMoCua={CAU_HINH_BOOTH.gioMoCua}

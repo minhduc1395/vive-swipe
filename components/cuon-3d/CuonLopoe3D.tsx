@@ -104,7 +104,7 @@ function NhanThanhPhan({ ten, loi, giua }: { ten: string; loi: string; giua: boo
 function BanTinh({ cfg, id }: { cfg: CauHinhLopoe3D; id?: string }) {
   const anh: Record<string, string> = { srm: cfg.tai_san.sua_rua_mat, amp: cfg.tai_san.ampoule_than, kem: cfg.tai_san.kem_duong };
   return (
-    <section id={id} aria-label="LOPOE Better Balance" className="bg-hong-nhat px-5 md:px-16 py-16 flex flex-col gap-16">
+    <section id={id} aria-label="LOPOE Better Balance" className="bg-lopoe-nen px-5 md:px-16 py-16 flex flex-col gap-16">
       {cfg.khoi.map((k) => {
         const sp = k.id.startsWith("srm") ? "srm" : k.id.startsWith("amp") ? "amp" : "kem";
         return (
@@ -401,7 +401,7 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
   if (cheDo === "tinh") return <BanTinh cfg={cfg} id={id} />;
 
   return (
-    <section ref={doan} id={id} aria-label="LOPOE Better Balance" className="relative h-[1600vh] md:h-[1500vh] bg-hong-nhat">
+    <section ref={doan} id={id} aria-label="LOPOE Better Balance" className="relative h-[1600vh] md:h-[1500vh] bg-lopoe-nen">
       <div className="sticky top-0 h-[100svh] overflow-hidden">
         <canvas ref={canvas} aria-hidden="true" className={`absolute inset-0 w-full h-full block transition-opacity duration-700 ${daTai ? "opacity-100" : "opacity-0"}`} />
         {/* Ảnh tĩnh bộ 3 trong lúc tải cảnh 3D, cùng vị trí với khung đầu của cảnh */}

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { layChienDichHienTai } from "@/lib/chien-dich";
 import { LandingClient } from "@/components/landing/LandingClient";
+import { docCauHinhLopoe3D } from "@/lib/thu-nghiem/lopoe-3d";
 
 export async function generateMetadata(): Promise<Metadata> {
   const chienDich = layChienDichHienTai();
@@ -34,11 +35,16 @@ export default function TrangNewArrival() {
 
   if (!chienDich) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-hong-nhat text-den">
+      <div className="min-h-screen flex items-center justify-center bg-kem text-den">
         <p>Chưa có chiến dịch nào được cấu hình.</p>
       </div>
     );
   }
 
-  return <LandingClient chienDich={chienDich} />;
+  return (
+    <LandingClient
+      chienDich={chienDich}
+      lopoe3D={chienDich.cuon_3d === "lopoe" ? docCauHinhLopoe3D() : undefined}
+    />
+  );
 }

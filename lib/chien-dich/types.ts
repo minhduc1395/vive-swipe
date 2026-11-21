@@ -145,5 +145,7 @@ export interface ChienDich {
     nhan: string;
     chu: string;
   };
+  /** W064: phần đầu landing dùng khối cuộn 3D như trang chủ */
+  cuon_3d?: "lopoe";
   khoi: KhoiLanding[];
 }

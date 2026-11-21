@@ -1,14 +1,27 @@
 @import "tailwindcss";
 
 @theme {
+  /* W064 (CĐT 21/11): mọi trang theo màu chủ đạo của landing trang chủ = nền trắng + bảng màu nội thất Option 2
+     (QD-WEB-005), hồng chỉ còn là màu nhấn (nút chính, chip đang chọn). Tên token cũ giữ để không vỡ code;
+     hong-nhat / bac-ha / bac-ha-nhat / vien đã đổi mã sang nội thất. Code mới dùng tên mới bên dưới. */
   --color-hong: #E8D2CC;
-  --color-hong-nhat: #F7EEEB;
-  --color-bac-ha: #CFE3D5;
-  --color-bac-ha-nhat: #EAF3ED;
+  --color-hong-nhat: #F7F5EF;  /* = kem (trước 21/11: #F7EEEB) */
+  --color-bac-ha: #DBE5D3;     /* = be (trước: #CFE3D5) */
+  --color-bac-ha-nhat: #E8EDE1;/* = oliu-nhat (trước: #EAF3ED) */
   --color-den: #2B2B2A;
   --color-xam: #737373;
   --color-xam-dam: #5C5C5B;
-  --color-vien: #EEE5E2;
+  --color-vien: #E5E7DE;       /* viền trung tính ngả sage (trước: #EEE5E2) */
+  /* Bảng màu nội thất Option 2 (giống components/trang-chu/trang-chu.css) */
+  --color-kem: #F7F5EF;
+  --color-be: #DBE5D3;
+  --color-cat: #C5D8EA;
+  --color-soi: #D6B88A;
+  --color-oliu: #8A9679;
+  --color-oliu-vua: #B9C3A6;
+  --color-oliu-nhat: #E8EDE1;
+  /* Nền khối LOPOE: chuỗi ảnh điện thoại đã chụp trên nền này, đổi thì phải chụp lại khung */
+  --color-lopoe-nen: #F7EEEB;
   --color-nen-phu: #F4F2F1;
   --color-trang: #FFFFFF;
   /* phụ: nhãn, trạng thái (W052) */
