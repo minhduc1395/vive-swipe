@@ -132,17 +132,17 @@ export default function TrangBatDau() {
           >
             <div
               className={`h-1 rounded-[4px] transition-colors ${
-                buoc >= 1 ? "bg-moc" : "bg-hong-nhat"
+                buoc >= 1 ? "bg-moc" : "bg-kem"
               }`}
             />
             <div
               className={`h-1 rounded-[4px] transition-colors ${
-                buoc >= 2 ? "bg-moc" : "bg-hong-nhat"
+                buoc >= 2 ? "bg-moc" : "bg-kem"
               }`}
             />
             <div
               className={`h-1 rounded-[4px] transition-colors ${
-                buoc >= 3 ? "bg-moc" : "bg-hong-nhat"
+                buoc >= 3 ? "bg-moc" : "bg-kem"
               }`}
             />
           </div>
@@ -183,7 +183,7 @@ export default function TrangBatDau() {
                     className={`h-[52px] box-border rounded-[16px] px-4 flex items-center justify-between gap-2 text-[15px] font-medium cursor-pointer text-left transition-all ${
                       daChon
                         ? "bg-hong border-[1.5px] border-transparent text-den font-semibold"
-                        : "bg-nen-phu border-[1.5px] border-transparent text-den hover:bg-hong-nhat"
+                        : "bg-nen-phu border-[1.5px] border-transparent text-den hover:bg-kem"
                     }`}
                   >
                     <span>{item.label}</span>
@@ -245,7 +245,7 @@ export default function TrangBatDau() {
                     className={`h-[52px] box-border rounded-[16px] px-4 flex items-center justify-between gap-2 text-[15px] font-medium cursor-pointer text-left transition-all ${
                       daChon
                         ? "bg-hong border-[1.5px] border-transparent text-den font-semibold"
-                        : "bg-nen-phu border-[1.5px] border-transparent text-den hover:bg-hong-nhat"
+                        : "bg-nen-phu border-[1.5px] border-transparent text-den hover:bg-kem"
                     }`}
                   >
                     <span className="truncate">{item.label}</span>
@@ -314,7 +314,7 @@ export default function TrangBatDau() {
                     className={`h-[52px] box-border rounded-[16px] px-4 flex items-center justify-between gap-2 text-[15px] font-medium cursor-pointer text-left transition-all ${
                       daChon
                         ? "bg-hong border-[1.5px] border-transparent text-den font-semibold"
-                        : "bg-nen-phu border-[1.5px] border-transparent text-den hover:bg-hong-nhat"
+                        : "bg-nen-phu border-[1.5px] border-transparent text-den hover:bg-kem"
                     }`}
                   >
                     <span>{item.label}</span>

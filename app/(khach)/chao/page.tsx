@@ -18,7 +18,7 @@ export default function TrangChao() {
           <NutQuayLai fallback="/" />
         </div>
 
-        <div className="relative h-[400px] sm:h-[460px] shrink-0 bg-hong-nhat rounded-[36px] overflow-hidden">
+        <div className="relative h-[400px] sm:h-[460px] shrink-0 bg-kem rounded-[36px] overflow-hidden">
           <LogoVive
             rong={92}
             className="absolute left-1/2 top-8 -translate-x-1/2"

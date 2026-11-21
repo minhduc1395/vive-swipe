@@ -74,7 +74,7 @@ export function ChonXep({ giaTri, onChon }: { giaTri: string; onChon: (id: strin
                 onClick={() => chon(l.id)}
                 onMouseEnter={() => setViTri(i)}
                 className={`h-11 px-3 rounded-[12px] flex items-center justify-between text-[14px] cursor-pointer ${
-                  i === viTri ? "bg-hong-nhat" : ""
+                  i === viTri ? "bg-kem" : ""
                 } ${l.id === hienTai.id ? "font-semibold" : ""}`}
               >
                 {l.nhan}

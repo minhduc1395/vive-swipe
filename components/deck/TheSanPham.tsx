@@ -169,8 +169,8 @@ export function TheSanPham({
 
   const nenAnh =
     sanPham.danh_muc === "mat-na" || sanPham.danh_muc === "kem-duong"
-      ? "bg-bac-ha-nhat"
-      : "bg-hong-nhat";
+      ? "bg-oliu-nhat"
+      : "bg-kem";
 
   const chipList = [
     ...(sanPham.van_de?.map(layNhanVanDe).slice(0, 2) ?? []),
@@ -225,7 +225,7 @@ export function TheSanPham({
             onMoChiTiet();
           }}
           aria-label={`Xem chi tiết ${sanPham.ten_hien_thi}`}
-          className="absolute top-2.5 right-2.5 w-10 h-10 rounded-full bg-trang flex items-center justify-center text-den shadow-sm hover:bg-hong-nhat transition-colors cursor-pointer z-20"
+          className="absolute top-2.5 right-2.5 w-10 h-10 rounded-full bg-trang flex items-center justify-center text-den shadow-sm hover:bg-kem transition-colors cursor-pointer z-20"
         >
           <svg
             width="20"
@@ -278,7 +278,7 @@ export function TheSanPham({
             opacity: likeOp,
             transform: `rotate(-16deg) scale(${0.8 + likeOp * 0.2})`,
           }}
-          className="absolute left-[18px] top-[26px] px-4 py-1.5 border-[3px] border-den rounded-xl bg-bac-ha text-den font-bold text-[30px] tracking-[4px] pointer-events-none transition-transform"
+          className="absolute left-[18px] top-[26px] px-4 py-1.5 border-[3px] border-den rounded-xl bg-be text-den font-bold text-[30px] tracking-[4px] pointer-events-none transition-transform"
         >
           THÍCH
         </div>
@@ -290,7 +290,7 @@ export function TheSanPham({
             opacity: skipOp,
             transform: `rotate(16deg) scale(${0.8 + skipOp * 0.2})`,
           }}
-          className="absolute right-[18px] top-[26px] px-4 py-1.5 border-[3px] border-den rounded-xl bg-hong-nhat text-den font-bold text-[30px] tracking-[4px] pointer-events-none transition-transform"
+          className="absolute right-[18px] top-[26px] px-4 py-1.5 border-[3px] border-den rounded-xl bg-kem text-den font-bold text-[30px] tracking-[4px] pointer-events-none transition-transform"
         >
           BỎ QUA
         </div>
@@ -335,7 +335,7 @@ export function TheSanPham({
 
       {/* Dải ghi chú deal (docs/01 mục 2.3) */}
       {ghiChuDeal && (
-        <div className="mx-5 mb-1 px-3 py-1.5 rounded-xl bg-hong-nhat border border-vien flex items-center gap-2 text-[12px] font-medium text-den shrink-0">
+        <div className="mx-5 mb-1 px-3 py-1.5 rounded-xl bg-kem border border-vien flex items-center gap-2 text-[12px] font-medium text-den shrink-0">
           <svg
             width="14"
             height="14"
@@ -360,7 +360,7 @@ export function TheSanPham({
           {chipList.map((chip) => (
             <span
               key={chip}
-              className="h-7 px-3 rounded-full bg-hong-nhat text-[13px] flex items-center text-den"
+              className="h-7 px-3 rounded-full bg-kem text-[13px] flex items-center text-den"
             >
               {chip}
             </span>

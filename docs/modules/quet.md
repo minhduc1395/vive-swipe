@@ -16,3 +16,4 @@ Trải nghiệm quẹt sản phẩm kiểu Tinder, danh mục, sản phẩm đã
 ## Lịch sử ngắn
 - 2026-11-20 W057: chạm thẻ mở chi tiết, khóa cuộn nền.
 - 2026-11-21 W064: `/new-arrival` mở đầu bằng khối cuộn LOPOE như trang chủ; màu toàn site theo bảng nội thất (xem `_chung.md`).
+- 2026-11-21 #62: các trang khám phá (`danh-muc`, `quet`, `da-thich`, `chao`, `bat-dau`, `components/deck`) đổi token cũ sang tên mới: `hong-nhat`→`kem`, `bac-ha`→`be`, `bac-ha-nhat`→`oliu-nhat`; `vien` giữ.
