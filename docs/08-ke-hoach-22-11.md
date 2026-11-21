@@ -13,8 +13,8 @@ Quy tắc chung
 | P1 | Gộp PR #76 (chữ 9 ô trang chủ, job #74) và #77 (thưởng giữ hàng, job #75) | WEB | 21/11 tối | Xong 21/11 22:20 |
 | P2 | W045 + W046 (trang kho, Excel): sửa mặc định mã mới trong migration, mở PR, chạy 2 migration, QA, gộp. WEB làm thay vì Antigravity đã hết phiên | WEB | 21/11 tối | Xong 21/11 23:00 (PR #78, 2 migration đã chạy) |
 | P3 | W044 phần nền song ngữ: next-intl, `messages/<vi|en>/<module>.json`, định dạng giá/ngày, nút VI \| EN trên thanh trên | WEB | 21/11 đêm | Xong 22/11 00:10 (PR #79). #80–#83 đã ready |
-| P4 | W044 chuyển chữ từng module sang từ điển (5 job đội coder: #80 trang-chu, #81 quet, #82 deal, #83 giu-hang, #84 tai-khoan) | Đội coder | Đêm 22/11 sau P3 | Đã tạo issue (draft). #84 chỉ ready sau khi #65 gộp |
-| P5 | #65 đăng nhập xong → gộp → đổi #66 sang `status:ready` | Đội coder, WEB/TU-DONG-E | 22/11 | Đang code |
+| P4 | W044 chuyển chữ từng module sang từ điển (5 job đội coder: #80 trang-chu, #81 quet, #82 deal, #83 giu-hang, #84 tai-khoan) | Đội coder | Đêm 22/11 sau P3 | #80–#83 đã gộp 22/11 02:30 (PR #88 #91 #92 #94). #84 ready 22/11 02:40. Phần dùng chung: job #96; còn lại + e2e chặn tiếng Việt: Antigravity W044 (DIR-043) |
+| P5 | #65 đăng nhập xong → gộp → đổi #66 sang `status:ready` | Đội coder, WEB/TU-DONG-E | 22/11 | #65 gộp 22/11 02:40 (PR #67, cờ tắt trên web thật). #66 giữ draft tới khi #84 xong (1 job/module) |
 | P6 | Ảnh/video BOD duyệt trên dashboard → đưa lên web (cách làm bên dưới) | WEB/TU-DONG-E | Mỗi lượt | Chờ BOD |
 | P7 | DES-004: 4 ảnh thành phần LOPOE vào khối cuộn (cả 3D máy tính và chuỗi ảnh điện thoại) | WEB | 22/11 | PR #85 chờ CI. WEB đã duyệt: CI xanh thì TU-DONG-E gộp luôn (không cần nhãn QA) |
 | P8 | W036: tách lại 2 ảnh Beaund (8809953160067, 8809953160081) | Antigravity Media | Khi có phiên | Chờ |
@@ -45,6 +45,7 @@ rồi ghi cột I = `Đã lên web <YYYY-MM-DD HH:MM>`. Kiểm: `select anh from
 **Media làm xong ảnh mới (P8):** WEB/TU-DONG-E kiểm kỹ thuật (nét, tỷ lệ, viền tách nền, nền trong, dung lượng; xem AGENTS.md mục Antigravity Media), đạt thì `update media set trang_thai='cho_mkt'` và thêm 1 dòng vào tab "Duyệt media web" (cột F = `Đạt`, I = `Chưa`).
 
 ## Nhật ký chạy
+- 22/11 02:45 TU-DONG-E: gộp #93 (metadataBase), #88, #91, #92 (gỡ xung đột docs giu-hang), #94, #67. DIR-043: job #96 (shared), W044 cho Antigravity sau W067, Media ưu tiên ten_en/mo_ta_en (W047). P6: Lashcurl duyet; 8 ảnh + 4 video Uniura/Dermal/Beaund đặt cho_mkt, thêm 12 dòng tab Duyệt media web; 18 dòng Sửa ghi Trả Media.
 - 22/11 00:15 WEB: P3 gộp (#79), #80–#83 ready; #65 đổi lại ready (bị kẹt vì gắn nhầm claimed). P7 mở PR #85. e2e chạy locale vi-VN.
 - 21/11 23:20 WEB: BOD nhắc WEB là trưởng nhóm, giao việc cho đội coder và Antigravity, không tự làm hết. Giao W066 cho Antigravity. Từ giờ WEB chỉ duyệt, gộp, gỡ vướng; P7 đang chụp dở nên WEB làm nốt.
 - 21/11 23:05 WEB: P1, P2 xong. P3 mở PR #79 (đã gộp main). Tạo #80–#84. P7 đang chụp khung.
