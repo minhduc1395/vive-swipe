@@ -16,10 +16,10 @@ tai_san:
   giot: /thu-nghiem/lopoe-3d/giot.webp
   sua_rua_mat: /thu-nghiem/lopoe-3d/srm.webp
   kem_duong: /thu-nghiem/lopoe-3d/kem.webp
-# W063: điện thoại (<768px) dùng 300 khung ảnh chụp từ chính cảnh 3D ở khung nhìn 390×844 @2x; nhan.json = vị trí nhãn thành phần mỗi khung.
+# W063: điện thoại (<768px) dùng 422 khung ảnh chụp từ chính cảnh 3D ở khung nhìn 390×844 @2x, khung dày ở đoạn hình đổi nhiều; nhan.json = {p: tiến trình mỗi khung, nhan: vị trí nhãn thành phần}.
 khung_dien_thoai:
   thu_muc: /thu-nghiem/lopoe-khung
-  so: 300
+  so: 422
   rong: 780
   cao: 1688
   vp_rong: 390
