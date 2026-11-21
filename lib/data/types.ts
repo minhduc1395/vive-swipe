@@ -28,6 +28,7 @@ export const SanPhamSchema = z.object({
   thuong_hieu: z.string().min(1, "Thiếu thương hiệu"),
   ten_goc: z.string().min(1, "Thiếu ten_goc"),
   ten_hien_thi: z.string().min(1, "Thiếu ten_hien_thi"),
+  ten_en: z.string().nullable().optional(),
   quy_cach: z.string().nullable(),
   gia_goc: z.number().int().positive().nullable(),
   gia_ban: z.number().int().positive("gia_ban phải là số nguyên dương"),
@@ -37,6 +38,7 @@ export const SanPhamSchema = z.object({
   thanh_phan: z.array(z.string()),
   loai_da: z.array(z.string()),
   mo_ta: z.string().nullable().default(null),
+  mo_ta_en: z.string().nullable().optional(),
   con_hang: ConHangSchema,
   ton: z.number().int().nonnegative().nullable(),
   hien_thi: z.boolean(),
@@ -75,13 +77,16 @@ export const ThanhPhanComboSchema = z.object({
 export const KhiHetQuaSchema = z.object({
   gia_combo: z.number().int().positive().optional(),
   qua: z.string().nullable().optional(),
+  qua_en: z.string().nullable().optional(),
   uu_dai: z.string().optional(),
+  uu_dai_en: z.string().optional(),
 });
 
 export const BangQuaItemSchema = z.object({
   id: z.string().min(1),
   gia_tra: z.number().int().nonnegative(),
   qua: z.string().nullable(),
+  qua_en: z.string().nullable().optional(),
 });
 
 export const MocQuaSchema = z
@@ -89,6 +94,7 @@ export const MocQuaSchema = z
     tu: z.number().int().positive().optional(),
     tren: z.number().int().positive().optional(),
     qua: z.string().min(1),
+    qua_en: z.string().optional(),
     gioi_han: z.number().int().positive().optional(),
   })
   .refine((m) => m.tu !== undefined || m.tren !== undefined, {
@@ -98,6 +104,7 @@ export const MocQuaSchema = z
 export const GoiYBoSchema = z.object({
   id: z.string().min(1),
   ten: z.string().min(1),
+  ten_en: z.string().optional(),
   san_pham: z.array(z.string().min(1)).min(1),
   gia: z.number().int().positive(),
   moc: z.number().int().positive(),
@@ -111,6 +118,7 @@ const NgayISOSchema = z
 export const DealSchema = z.object({
   id: z.string().min(1, "Thiếu id deal"),
   ten: z.string().min(1, "Thiếu tên deal"),
+  ten_en: z.string().optional(),
   loai: LoaiDealSchema,
   nhom_qua: z.enum(["hoa_don", "cong_them"]).optional(),
   /** Thưởng thêm khi khách giữ hàng trên web rồi nhận tại booth, từ ngày tu_ngay (YYYY-MM-DD, giờ VN). */
@@ -126,12 +134,15 @@ export const DealSchema = z.object({
   /** W048: mã sản phẩm có ảnh hiện trên thẻ deal (ưu tiên hơn thanh_phan, ap_dung_cho) */
   anh_san_pham: z.array(z.string().min(1)).optional(),
   dieu_kien: z.string().optional(),
+  dieu_kien_en: z.string().optional(),
   gia_uu_dai: z.record(z.string(), z.number().int().positive()).optional(),
   khong_cong_voi: z.array(z.string().min(1)).optional(),
   hook: z.string().optional(),
+  hook_en: z.string().optional(),
   thanh_phan: z.array(ThanhPhanComboSchema).optional(),
   gia_combo: z.number().int().positive().optional(),
   qua: z.string().nullable().optional(),
+  qua_en: z.string().nullable().optional(),
   gioi_han_qua: z.number().int().positive().optional(),
   khi_het_qua: KhiHetQuaSchema.optional(),
   gioi_han: z.number().int().positive().optional(),

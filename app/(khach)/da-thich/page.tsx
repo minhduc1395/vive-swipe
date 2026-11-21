@@ -13,6 +13,7 @@ import {
   nhanHamDich,
   taoNhan,
   tenSanPham,
+  thieuBanEn,
   tienCoDon,
 } from "@/components/deck/ngon-ngu-quet";
 import { ghiLuotQuet } from "@/lib/supabase/luot-quet";
@@ -273,7 +274,10 @@ export default function TrangDaThich() {
                   <span className="text-[11px] font-semibold tracking-[1.2px] text-xam uppercase truncate">
                     {sp.thuong_hieu}
                   </span>
-                  <span className="text-[14px] leading-[1.35] font-medium h-[38px] overflow-hidden line-clamp-2 text-den">
+                  <span
+                    data-thieu-en={thieuBanEn(sp, ngonNgu)}
+                    className="text-[14px] leading-[1.35] font-medium h-[38px] overflow-hidden line-clamp-2 text-den"
+                  >
                     {tenSp}
                   </span>
 

@@ -5,7 +5,7 @@ import { CuonLopoe3D } from "@/components/cuon-3d/CuonLopoe3D";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "LOPOE Better Balance · thử nghiệm cuộn 3D",
+  title: "LOPOE Better Balance · 3D Scroll Preview",
   robots: { index: false, follow: false },
 };
 

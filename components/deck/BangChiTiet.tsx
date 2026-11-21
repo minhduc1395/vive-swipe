@@ -15,9 +15,11 @@ import {
   dichDuLieu,
   moTaSanPham,
   moTaTamEn,
+  moTaThieuEn,
   nhanHamDich,
   taoNhan,
   tenSanPham,
+  thieuBanEn,
   tienKhongDon,
   truongTheoNgonNgu,
 } from "./ngon-ngu-quet";
@@ -141,7 +143,10 @@ export function BangChiTiet({
             <span className="text-[12px] font-semibold tracking-[1.4px] text-xam uppercase">
               {sanPham.thuong_hieu}
             </span>
-            <h2 className="m-0 text-[20px] leading-[1.3] font-semibold text-den">
+            <h2
+              data-thieu-en={thieuBanEn(sanPham, ngonNgu)}
+              className="m-0 text-[20px] leading-[1.3] font-semibold text-den"
+            >
               {tenSp}
             </h2>
             <div className="flex items-baseline justify-between mt-1">
@@ -233,7 +238,10 @@ export function BangChiTiet({
             <h3 className="m-0 text-[13px] font-semibold tracking-[1px] text-xam uppercase">
               {t("gioiThieu")}
             </h3>
-            <p className="m-0 text-[14px] leading-relaxed text-den/90">
+            <p
+              data-thieu-en={moTaThieuEn(sanPham, ngonNgu)}
+              className="m-0 text-[14px] leading-relaxed text-den/90"
+            >
               {moTa}
             </p>
           </div>

@@ -5,7 +5,7 @@ import { CuonLopoe3D } from "@/components/cuon-3d/CuonLopoe3D";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "LOPOE · thử cuộn bằng chuỗi ảnh",
+  title: "LOPOE · Frame Sequence Preview",
   robots: { index: false, follow: false },
 };
 

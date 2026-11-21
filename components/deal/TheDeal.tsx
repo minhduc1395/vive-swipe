@@ -5,7 +5,8 @@ import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import type { Deal, SanPham } from "@/lib/data/types";
 import { duongDanAnh } from "@/lib/anh";
-import { dieuKienDeal, dichVi, quaDeal, quaMoc, tenDeal, tenNganSanPham, tienNgan, tienThe, type Dich } from "@/lib/deals/ngon-ngu";
+import { dieuKienDeal, dichVi, quaDeal, quaMoc, tenBoGoiY, tenDeal, tenNganSanPham, tienNgan, tienThe, type Dich } from "@/lib/deals/ngon-ngu";
+import { tenSanPham, thieuBanEn } from "@/components/deck/ngon-ngu-quet";
 import { lopNut } from "@/components/ui/Nut";
 
 export type NhomDeal = "qua" | "combo" | "giam";
@@ -127,8 +128,8 @@ export function TheDeal({ deal, sanPhamMap, onMo, onThemCombo, onThemBo, noiBat 
           {deal.goi_y?.length ? t("the.boGoiY", { so: deal.goi_y.length }) : t("the.xemDieuKien")}
         </button>
         {bo ? (
-          <button type="button" onClick={(e) => { dungLan(e); onThemBo(bo.ten, bo.san_pham); }} className={lopNut("chinh", "vua")}>
-            {t("the.themBo", { ten: bo.ten.length > 16 ? t("the.themBoGoiY") : bo.ten })}
+          <button type="button" onClick={(e) => { dungLan(e); onThemBo(tenBoGoiY(bo, nn), bo.san_pham); }} className={lopNut("chinh", "vua")}>
+            {t("the.themBo", { ten: tenBoGoiY(bo, nn).length > 16 ? t("the.themBoGoiY") : tenBoGoiY(bo, nn) })}
           </button>
         ) : (
           <Link href="/gio" onClick={dungLan} className={lopNut("phu", "vua")}>{t("the.xemGio")}</Link>
@@ -140,8 +141,11 @@ export function TheDeal({ deal, sanPhamMap, onMo, onThemCombo, onThemBo, noiBat 
     than = (
       <div className="flex items-center gap-3 min-w-0">
         <span className="flex">{c.sp.slice(0, 3).map((s) => <AnhNho key={s.id} sp={s} co={56} chong={c.sp.length > 1} />)}</span>
-        <span className="text-[13px] text-xam leading-[1.4] line-clamp-2 min-w-0">
-          {qua ? t("the.tang", { qua: qua.replace(/^1\s+/, "") }) : c.sp.map((s) => s.ten_hien_thi).join(" + ")}
+        <span
+          data-thieu-en={!qua && c.sp.some((s) => thieuBanEn(s, nn) === "") ? "" : undefined}
+          className="text-[13px] text-xam leading-[1.4] line-clamp-2 min-w-0"
+        >
+          {qua ? t("the.tang", { qua: qua.replace(/^1\s+/, "") }) : c.sp.map((s) => tenSanPham(s, nn)).join(" + ")}
         </span>
       </div>
     );

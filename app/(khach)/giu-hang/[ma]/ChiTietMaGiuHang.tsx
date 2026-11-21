@@ -9,6 +9,8 @@ import { dinhDangGia, dinhDangNgayNgan, dinhDangTien } from "@/lib/dinh-dang";
 import { taoMaQrSvg } from "@/lib/qr";
 import { useDuLieu } from "@/lib/du-lieu-context";
 import { chuanHoaNgay } from "@/lib/deals/hien-thi";
+import { tenDeal } from "@/lib/deals/ngon-ngu";
+import { tenSanPham, thieuBanEn } from "@/components/deck/ngon-ngu-quet";
 import { layThuongGiuHang } from "@/lib/giu-hang/thuong";
 import type { DonGiuHangChiTiet } from "@/lib/giu-hang/types";
 
@@ -20,7 +22,7 @@ export function ChiTietMaGiuHang({ don }: Props) {
   const [thongBaoLuuAnh, setThongBaoLuuAnh] = useState(false);
   const ngonNgu = useLocale();
   const t = useTranslations("giu-hang");
-  const { deals } = useDuLieu();
+  const { deals, timSanPham } = useDuLieu();
   const thuong = layThuongGiuHang(deals, chuanHoaNgay(new Date()), ngonNgu);
   const dongThuong = thuong
     ? thuong.daTuNgay
@@ -179,19 +181,32 @@ END:VCALENDAR`;
         className="rounded-[22px] bg-trang p-4 md:p-5 flex flex-col gap-2.5 text-[14px] shadow-sm border border-vien"
       >
         <div className="flex flex-col gap-2">
-          {don.cacDong.map((d, idx) => (
-            <div
-              key={`${d.id}-${idx}`}
-              className="flex justify-between items-center text-den"
-            >
-              <span className="font-medium line-clamp-1 pr-2">
-                {d.ten} × {d.soLuong}
-              </span>
-              <span className="shrink-0 font-medium">
-                {hienGiaDong(d.giaSauUuDai)}
-              </span>
-            </div>
-          ))}
+          {don.cacDong.map((d, idx) => {
+            const sp = d.loai === "san_pham" ? timSanPham(d.id) : undefined;
+            const deal =
+              d.loai === "combo"
+                ? deals.find((x) => x.id.toUpperCase() === d.id.toUpperCase())
+                : undefined;
+            const tenDong = deal ? tenDeal(deal, ngonNgu) : sp ? tenSanPham(sp, ngonNgu) : d.ten;
+            const thieuEnDong = sp
+              ? thieuBanEn(sp, ngonNgu)
+              : ngonNgu === "en" && !deal
+                ? ""
+                : undefined;
+            return (
+              <div
+                key={`${d.id}-${idx}`}
+                className="flex justify-between items-center text-den"
+              >
+                <span data-thieu-en={thieuEnDong} className="font-medium line-clamp-1 pr-2">
+                  {tenDong} × {d.soLuong}
+                </span>
+                <span className="shrink-0 font-medium">
+                  {hienGiaDong(d.giaSauUuDai)}
+                </span>
+              </div>
+            );
+          })}
         </div>
 
         <div className="h-[1px] bg-vien my-1" />
@@ -204,7 +219,9 @@ END:VCALENDAR`;
         {don.quaDuKien && (
           <div className="flex justify-between items-center text-[13px] text-xam-dam">
             <span>{t("ma.quaDuKien")}</span>
-            <span className="font-semibold text-den">{don.quaDuKien}</span>
+            <span data-thieu-en={ngonNgu === "en" ? "" : undefined} className="font-semibold text-den">
+              {don.quaDuKien}
+            </span>
           </div>
         )}
       </section>

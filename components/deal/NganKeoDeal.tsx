@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import type { Deal, SanPham } from "@/lib/data/types";
 import { timDealTheoId } from "@/lib/data";
 import { dieuKienDeal, hookDeal, quaDeal, tenBoGoiY, tenDeal, tienNgan, tienThe } from "@/lib/deals/ngon-ngu";
+import { tenSanPham, thieuBanEn } from "@/components/deck/ngon-ngu-quet";
 import { lopNut } from "@/components/ui/Nut";
 import { AnhNho, DuongMocQua, dichSanPhamApDung, nhanGioiHan, nhanLoaiDeal, tinhCombo } from "./TheDeal";
 
@@ -98,7 +99,7 @@ export function NganKeoDeal({
               return (
                 <div key={tp.id} className="flex items-center gap-3 p-2.5 rounded-[14px] border border-vien">
                   <AnhNho sp={sp} co={48} />
-                  <div className="min-w-0 flex-1 text-[13px]"><b className="block truncate">{sp.ten_hien_thi}</b><span className="text-xam">{tp.so_luong > 1 ? `${tp.so_luong} × ` : ""}{tienThe(sp.gia_ban, nn)}</span></div>
+                  <div className="min-w-0 flex-1 text-[13px]"><b data-thieu-en={thieuBanEn(sp, nn)} className="block truncate">{tenSanPham(sp, nn)}</b><span className="text-xam">{tp.so_luong > 1 ? `${tp.so_luong} × ` : ""}{tienThe(sp.gia_ban, nn)}</span></div>
                 </div>
               );
             })}
@@ -120,7 +121,7 @@ export function NganKeoDeal({
             const gia = deal.gia_uu_dai?.[id] ?? Math.round(sp.gia_ban * 0.75);
             return (
               <div key={id} className="flex items-center justify-between gap-3 py-1.5 text-[14px]">
-                <span className="truncate">{sp.ten_hien_thi}</span>
+                <span data-thieu-en={thieuBanEn(sp, nn)} className="truncate">{tenSanPham(sp, nn)}</span>
                 <span className="shrink-0"><s className="text-xam text-[12px] mr-1.5">{tienThe(sp.gia_ban, nn)}</s><b>{tienThe(gia, nn)}</b></span>
               </div>
             );

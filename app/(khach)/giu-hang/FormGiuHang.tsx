@@ -8,6 +8,8 @@ import { useLocale, useTranslations } from "next-intl";
 import { useDuLieu } from "@/lib/du-lieu-context";
 import { dinhDangGia, dinhDangNgayNgan, dinhDangTien } from "@/lib/dinh-dang";
 import { tinhGio } from "@/lib/deals/gio-hang";
+import { tenDeal } from "@/lib/deals/ngon-ngu";
+import { tenSanPham, thieuBanEn } from "@/components/deck/ngon-ngu-quet";
 import { chuanHoaNgay } from "@/lib/deals/hien-thi";
 import { layThuongGiuHang } from "@/lib/giu-hang/thuong";
 import {
@@ -361,20 +363,28 @@ export function FormGiuHang({ gioBanDau }: Props) {
           {t("tomTat.donGiu", { so: tongSoMon })}
         </h2>
         <ul className="hidden lg:flex m-0 p-0 list-none flex-col gap-2 text-[14px] border-t border-vien pt-3">
-          {ketQua.cac_dong.map((dong) => (
-            <li
-              key={`${dong.loai}-${dong.id}`}
-              className="flex justify-between gap-2"
-            >
-              <span className="text-den truncate">
-                {dong.so_luong > 1 ? `${dong.so_luong}× ` : ""}
-                {dong.ten}
-              </span>
-              <strong className="shrink-0 text-den">
-                {hienGiaDong(dong.gia_sau_uu_dai)}
-              </strong>
-            </li>
-          ))}
+          {ketQua.cac_dong.map((dong) => {
+            const sp = dong.loai === "san_pham" ? sanPham.find((s) => s.id === dong.id) : undefined;
+            const deal = dong.loai === "combo" ? deals.find((d) => d.id === dong.id) : undefined;
+            const tenDong = deal ? tenDeal(deal, ngonNgu) : sp ? tenSanPham(sp, ngonNgu) : dong.ten;
+            return (
+              <li
+                key={`${dong.loai}-${dong.id}`}
+                className="flex justify-between gap-2"
+              >
+                <span
+                  data-thieu-en={sp ? thieuBanEn(sp, ngonNgu) : undefined}
+                  className="text-den truncate"
+                >
+                  {dong.so_luong > 1 ? `${dong.so_luong}× ` : ""}
+                  {tenDong}
+                </span>
+                <strong className="shrink-0 text-den">
+                  {hienGiaDong(dong.gia_sau_uu_dai)}
+                </strong>
+              </li>
+            );
+          })}
         </ul>
         {ketQua.qua_du_kien && (
           <div className="hidden lg:block rounded-xl bg-trang p-3 text-[13px] text-den">

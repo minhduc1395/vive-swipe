@@ -26,7 +26,7 @@ export default async function TrangPersonalColor() {
     <div className="bg-trang text-den w-full flex-1">
         {/* Khối quay lại */}
         <div className="max-w-[1360px] mx-auto px-5 md:px-8 pt-4 md:pt-6">
-          <NutQuayLai fallback="/" />
+          <NutQuayLai fallback="/" nhan={t("quayLai")} />
         </div>
 
         {/* Hero theo Pawlette.dc.html */}
