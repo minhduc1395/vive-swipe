@@ -408,24 +408,20 @@ export function tinhGio(
 
   // Bước 6: Quà cộng thêm (không tính vào 1 quà theo hóa đơn)
   const quaCongThem: string[] = [];
-  const dealKm09 = dealHienThiMap.get("KM-09");
-  if (dealKm09 && !dealKm09.het_qua && dealKm09.moc) {
-    for (const m of dealKm09.moc) {
-      const datTu = m.tu !== undefined && tongTamTinh >= m.tu;
-      const datTren = m.tren !== undefined && tongTamTinh > m.tren;
-      if (datTu || datTren) {
-        quaCongThem.push(m.qua);
+  for (const deal of dealsHienThi) {
+    if (deal.nhom_qua !== "cong_them" || deal.het_qua) continue;
+    if (deal.moc) {
+      for (const m of deal.moc) {
+        const datTu = m.tu !== undefined && tongTamTinh >= m.tu;
+        const datTren = m.tren !== undefined && tongTamTinh > m.tren;
+        if (datTu || datTren) quaCongThem.push(m.qua);
       }
     }
-  }
-
-  const dealDc06 = dealHienThiMap.get("DC-06");
-  if (dealDc06 && !dealDc06.het_qua && dealDc06.qua && dealDc06.ap_dung_cho) {
-    const coMay = cacDong.some(
-      (d) => d.loai === "san_pham" && dealDc06.ap_dung_cho?.includes(d.id)
-    );
-    if (coMay) {
-      quaCongThem.push(dealDc06.qua);
+    if (deal.qua && deal.ap_dung_cho) {
+      const apDung = deal.ap_dung_cho;
+      if (cacDong.some((d) => d.loai === "san_pham" && apDung.includes(d.id))) {
+        quaCongThem.push(deal.qua);
+      }
     }
   }
 

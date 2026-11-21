@@ -240,4 +240,52 @@ describe("engine giỏ hàng tinhGio (W008)", () => {
     // Máy đã ẩn khỏi web
     expect(SAN_PHAM.find((s) => s.id === "8800289468759")?.hien_thi).toBe(false);
   });
+
+  it("ưu đãi 3 (DC-02): quà cộng thêm là lượt quay từ 300K, cộng được với quà hóa đơn", () => {
+    const ngay = "2026-11-21";
+    const ampoule = tinhGio(
+      [{ san_pham_id: "LOPOE-AMP", so_luong: 1 }],
+      SAN_PHAM,
+      DEALS,
+      ngay
+    );
+    expect(ampoule.tong_tam_tinh).toBe(419_000);
+    expect(ampoule.qua_du_kien).toBeNull();
+    expect(ampoule.qua_cong_them).toEqual(["1 lượt quay vòng quay may mắn"]);
+
+    const srm = tinhGio(
+      [{ san_pham_id: "LOPOE-CF", so_luong: 1 }],
+      SAN_PHAM,
+      DEALS,
+      ngay
+    );
+    expect(srm.qua_cong_them).toEqual([]);
+  });
+
+  it("DC-02 cộng với quà hóa đơn 800K (Medicube toner + serum 1.135.000)", () => {
+    const kq = tinhGio(
+      [
+        { san_pham_id: "8800256114320", so_luong: 1 },
+        { san_pham_id: "8800256114351", so_luong: 1 },
+      ],
+      SAN_PHAM,
+      DEALS,
+      "2026-11-21"
+    );
+    expect(kq.tong_tam_tinh).toBe(1_135_000);
+    expect(kq.qua_du_kien).toBe("1 sữa rửa mặt LOPOE");
+    expect(kq.qua_cong_them).toContain("1 lượt quay vòng quay may mắn");
+  });
+
+  it("DC-02 bị tắt (hien_thi false hoặc da_dang_ky false) thì không có lượt quay", () => {
+    const gio = [{ san_pham_id: "LOPOE-AMP", so_luong: 1 }];
+    for (const doi of [{ hien_thi: false }, { da_dang_ky: false }]) {
+      const dealsTat: Deal[] = DEALS.map((d) =>
+        d.id === "DC-02" ? { ...d, ...doi } : d
+      );
+      expect(
+        tinhGio(gio, SAN_PHAM, dealsTat, "2026-11-21").qua_cong_them
+      ).toEqual([]);
+    }
+  });
 });

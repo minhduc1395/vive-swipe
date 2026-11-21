@@ -149,6 +149,42 @@ test.describe("W012 · Đã thích và Giỏ hàng (giao diện)", () => {
       await expect(page.getByText(/Quà dự kiến:/)).toHaveCount(0);
     });
 
+    test("ưu đãi 3: giỏ 419.000đ thấy lượt quay", async ({
+      page,
+    }, testInfo) => {
+      await page.addInitScript(() => {
+        localStorage.clear();
+        localStorage.setItem(
+          "vive_gio_hang",
+          JSON.stringify([{ sanPhamId: "LOPOE-AMP", soLuong: 1 }])
+        );
+      });
+      await page.goto("/gio");
+      await expect(page.getByText("419.000đ").first()).toBeVisible();
+      await expect(
+        page.getByText("Thêm: 1 lượt quay vòng quay may mắn")
+      ).toBeVisible();
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.screenshot({
+        path: testInfo.outputPath("gio-luot-quay.png"),
+      });
+    });
+
+    test("ưu đãi 3: giỏ 249.000đ (dưới 300K) không thấy lượt quay", async ({
+      page,
+    }) => {
+      await page.addInitScript(() => {
+        localStorage.clear();
+        localStorage.setItem(
+          "vive_gio_hang",
+          JSON.stringify([{ sanPhamId: "LOPOE-CF", soLuong: 1 }])
+        );
+      });
+      await page.goto("/gio");
+      await expect(page.getByText("249.000đ").first()).toBeVisible();
+      await expect(page.getByText(/lượt quay/)).toHaveCount(0);
+    });
+
     test("Case 3 docs/02 mục 4.3: Combo LOPOE bộ 3 -> 911K, quà 1 kem dưỡng LOPOE; không hiện 549K", async ({
       page,
     }) => {
