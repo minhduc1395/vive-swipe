@@ -84,6 +84,7 @@ test.describe("W046 · Nhập & xuất Excel tại /quan-tri/san-pham/nhap", () 
       danh_muc: "tinh-chat",
       van_de: "cap-am",
       loai_da: "moi-loai-da",
+      gia_ban: "250000",
       hien_thi: "FALSE",
     });
 
