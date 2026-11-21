@@ -3,6 +3,7 @@ import { lopNut } from "@/components/ui/Nut";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { NutQuayLai } from "@/components/NutQuayLai";
 import {
   layTraLoiLocal,
@@ -12,42 +13,44 @@ import {
 } from "@/lib/khao-sat";
 import { dongBoTraLoi } from "@/lib/supabase/auth";
 import { ghiSuKien } from "@/lib/supabase/su-kien";
+import { nhanHamDich, taoNhan } from "@/components/deck/ngon-ngu-quet";
 
 interface LuaChon {
   id: string;
-  label: string;
 }
 
 const DANH_SACH_LOAI_DA: LuaChon[] = [
-  { id: "da-dau", label: "Da dầu" },
-  { id: "da-kho", label: "Da khô" },
-  { id: "da-hon-hop", label: "Da hỗn hợp" },
-  { id: "da-nhay-cam", label: "Da nhạy cảm" },
-  { id: "da-thuong", label: "Da thường" },
-  { id: "chua-ro", label: "Chưa rõ" },
+  { id: "da-dau" },
+  { id: "da-kho" },
+  { id: "da-hon-hop" },
+  { id: "da-nhay-cam" },
+  { id: "da-thuong" },
+  { id: "chua-ro" },
 ];
 
 const DANH_SACH_MOI_QUAN_TAM: LuaChon[] = [
-  { id: "mun", label: "Mụn" },
-  { id: "lo-chan-long", label: "Lỗ chân lông" },
-  { id: "sang-da", label: "Thâm, sáng da" },
-  { id: "cap-am", label: "Cấp ẩm" },
-  { id: "lam-diu", label: "Làm dịu" },
-  { id: "chong-lao-hoa", label: "Chống lão hóa" },
-  { id: "chong-nang", label: "Chống nắng" },
-  { id: "trang-diem", label: "Trang điểm" },
-  { id: "cham-soc-co-the", label: "Chăm sóc cơ thể" },
-  { id: "thiet-bi", label: "Thiết bị làm đẹp" },
+  { id: "mun" },
+  { id: "lo-chan-long" },
+  { id: "sang-da" },
+  { id: "cap-am" },
+  { id: "lam-diu" },
+  { id: "chong-lao-hoa" },
+  { id: "chong-nang" },
+  { id: "trang-diem" },
+  { id: "cham-soc-co-the" },
+  { id: "thiet-bi" },
 ];
 
 const DANH_SACH_NGAN_SACH: LuaChon[] = [
-  { id: "duoi-200k", label: "Dưới 200K" },
-  { id: "200k-500k", label: "200K–500K" },
-  { id: "tren-500k", label: "Trên 500K" },
-  { id: "khong-quan-trong", label: "Không quan trọng" },
+  { id: "duoi-200k" },
+  { id: "200k-500k" },
+  { id: "tren-500k" },
+  { id: "khong-quan-trong" },
 ];
 
 export default function TrangBatDau() {
+  const t = useTranslations("quet.batDau");
+  const nhan = taoNhan(nhanHamDich(useTranslations("quet.nhan")));
   const [buoc, setBuoc] = useState<number>(1);
   const [loaiDa, setLoaiDa] = useState<string | null>(null);
   const [vanDe, setVanDe] = useState<string[]>([]);
@@ -116,10 +119,11 @@ export default function TrangBatDau() {
         {/* Header điều hướng */}
         <header className="flex items-center gap-2 pt-3 md:pt-5 px-4 pb-2 shrink-0">
           {buoc === 1 ? (
-            <NutQuayLai fallback="/chao" />
+            <NutQuayLai fallback="/chao" nhan={t("quayLai")} />
           ) : (
             <NutQuayLai
               fallback="/bat-dau"
+              nhan={t("quayLai")}
               onClick={() => setBuoc((b) => b - 1)}
             />
           )}
@@ -128,7 +132,7 @@ export default function TrangBatDau() {
           <div
             className="flex-1 grid grid-cols-3 gap-1.5"
             role="img"
-            aria-label={`Câu ${buoc} trên 3`}
+            aria-label={t("ariaTienDo", { buoc })}
           >
             <div
               className={`h-1 rounded-[4px] transition-colors ${
@@ -152,7 +156,7 @@ export default function TrangBatDau() {
             onClick={xuLyBoQua}
             className="text-[15px] font-medium text-den no-underline px-2 py-2.5 hover:text-den/80 cursor-pointer"
           >
-            Bỏ qua
+            {t("boQua")}
           </Link>
         </header>
 
@@ -161,13 +165,13 @@ export default function TrangBatDau() {
           <div className="flex-1 flex flex-col overflow-y-auto">
             <main className="px-6 pt-5 pb-2 flex flex-col gap-2 shrink-0">
               <span className="text-[13px] font-semibold tracking-[1.2px] text-xam">
-                CÂU 1/3
+                {t("cau", { buoc: 1 })}
               </span>
               <h1 className="m-0 text-[30px] md:text-[36px] leading-[1.1] font-bold tracking-[-0.03em]">
-                Da bạn thuộc <span className="vet-hong">loại nào?</span>
+                {t("c1Dau")} <span className="vet-hong">{t("c1Nhan")}</span>
               </h1>
               <p className="m-0 text-[15px] leading-relaxed text-xam">
-                Chọn loại da gần với bạn nhất để VIVE gợi ý sản phẩm phù hợp.
+                {t("c1MoTa")}
               </p>
             </main>
 
@@ -186,7 +190,7 @@ export default function TrangBatDau() {
                         : "bg-nen-phu border-[1.5px] border-transparent text-den hover:bg-kem"
                     }`}
                   >
-                    <span>{item.label}</span>
+                    <span>{nhan.loaiDa(item.id)}</span>
                     {daChon && (
                       <svg
                         width="18"
@@ -213,7 +217,7 @@ export default function TrangBatDau() {
                 onClick={xuLyTiepTuc}
                 className={lopNut("chinh","lon",true)}
               >
-                Tiếp tục
+                {t("tiepTuc")}
               </button>
             </footer>
           </div>
@@ -223,13 +227,13 @@ export default function TrangBatDau() {
           <div className="flex-1 flex flex-col overflow-y-auto">
             <main className="px-6 pt-5 pb-2 flex flex-col gap-2 shrink-0">
               <span className="text-[13px] font-semibold tracking-[1.2px] text-xam">
-                CÂU 2/3
+                {t("cau", { buoc: 2 })}
               </span>
               <h1 className="m-0 text-[30px] md:text-[36px] leading-[1.1] font-bold tracking-[-0.03em]">
-                Bạn quan tâm <span className="vet-hong">điều gì?</span>
+                {t("c2Dau")} <span className="vet-hong">{t("c2Nhan")}</span>
               </h1>
               <p className="m-0 text-[15px] leading-relaxed text-xam">
-                Chọn tối đa 3. VIVE dùng để xếp sản phẩm hợp với bạn lên trước.
+                {t("c2MoTa")}
               </p>
             </main>
 
@@ -248,7 +252,7 @@ export default function TrangBatDau() {
                         : "bg-nen-phu border-[1.5px] border-transparent text-den hover:bg-kem"
                     }`}
                   >
-                    <span className="truncate">{item.label}</span>
+                    <span className="truncate">{nhan.vanDe(item.id)}</span>
                     {daChon && (
                       <svg
                         width="18"
@@ -272,8 +276,8 @@ export default function TrangBatDau() {
 
             <div className="px-6 py-2 text-[14px] text-xam min-h-[24px]">
               {canhBaoQuaSoLuong
-                ? "Đã đủ 3 lựa chọn. Bỏ bớt một mục để đổi."
-                : `Đã chọn ${vanDe.length}/3`}
+                ? t("daDu3")
+                : t("daChon", { so: vanDe.length })}
             </div>
 
             <footer className="mt-auto p-6 pb-8 shrink-0">
@@ -282,7 +286,7 @@ export default function TrangBatDau() {
                 onClick={xuLyTiepTuc}
                 className={lopNut("chinh","lon",true)}
               >
-                Tiếp tục
+                {t("tiepTuc")}
               </button>
             </footer>
           </div>
@@ -292,13 +296,13 @@ export default function TrangBatDau() {
           <div className="flex-1 flex flex-col overflow-y-auto">
             <main className="px-6 pt-5 pb-2 flex flex-col gap-2 shrink-0">
               <span className="text-[13px] font-semibold tracking-[1.2px] text-xam">
-                CÂU 3/3
+                {t("cau", { buoc: 3 })}
               </span>
               <h1 className="m-0 text-[30px] md:text-[36px] leading-[1.1] font-bold tracking-[-0.03em]">
-                Mỗi món bạn thường <span className="vet-hong">chi khoảng?</span>
+                {t("c3Dau")} <span className="vet-hong">{t("c3Nhan")}</span>
               </h1>
               <p className="m-0 text-[15px] leading-relaxed text-xam">
-                Khoảng giá bạn thấy thoải mái nhất khi mua một món chăm sóc da.
+                {t("c3MoTa")}
               </p>
             </main>
 
@@ -317,7 +321,7 @@ export default function TrangBatDau() {
                         : "bg-nen-phu border-[1.5px] border-transparent text-den hover:bg-kem"
                     }`}
                   >
-                    <span>{item.label}</span>
+                    <span>{nhan.nganSach(item.id)}</span>
                     {daChon && (
                       <svg
                         width="18"
@@ -351,7 +355,7 @@ export default function TrangBatDau() {
                 }}
                 className={lopNut("chinh","lon",true)}
               >
-                Bắt đầu quẹt
+                {t("batDauQuet")}
               </Link>
             </footer>
           </div>

@@ -1,16 +1,19 @@
 import type { Metadata } from "next";
+import { getLocale, getTranslations } from "next-intl/server";
 import { layChienDichHienTai } from "@/lib/chien-dich";
 import { LandingClient } from "@/components/landing/LandingClient";
 import { docCauHinhLopoe3D } from "@/lib/thu-nghiem/lopoe-3d";
+import { truongTheoNgonNgu } from "@/components/deck/ngon-ngu-quet";
 
 export async function generateMetadata(): Promise<Metadata> {
   const chienDich = layChienDichHienTai();
+  const ngonNgu = await getLocale();
+  const t = await getTranslations("quet.newArrival");
+  const hero = chienDich?.khoi.find((k) => k.loai === "hero");
   const title = chienDich
-    ? `${chienDich.ten} · VIVE New Arrival`
+    ? `${truongTheoNgonNgu(chienDich, "ten", ngonNgu)} · VIVE New Arrival`
     : "VIVE New Arrival · K-Beauty Experience";
-  const description =
-    chienDich?.khoi.find((k) => k.loai === "hero")?.mo_ta ||
-    "Giới thiệu các dòng sản phẩm mới và chương trình ưu đãi K-Beauty tại VIVE Tầng LL2 Union Square.";
+  const description = (hero && truongTheoNgonNgu(hero, "mo_ta", ngonNgu)) || t("moTaTrang");
 
   return {
     title,
@@ -30,13 +33,14 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function TrangNewArrival() {
+export default async function TrangNewArrival() {
+  const t = await getTranslations("quet.newArrival");
   const chienDich = layChienDichHienTai();
 
   if (!chienDich) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-kem text-den">
-        <p>Chưa có chiến dịch nào được cấu hình.</p>
+        <p>{t("chuaCoChienDich")}</p>
       </div>
     );
   }

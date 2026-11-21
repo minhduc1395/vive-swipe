@@ -3,13 +3,18 @@ import { lopNut } from "@/components/ui/Nut";
 
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import { BangChiTiet } from "@/components/deck/BangChiTiet";
 import { useDuLieu } from "@/lib/du-lieu-context";
 import type { SanPham } from "@/lib/data/types";
-import { dinhDangTien } from "@/lib/dinh-dang";
 import { duongDanAnh } from "@/lib/anh";
-import { NHAN_DANH_MUC } from "@/lib/nhan";
-import { layGhiChuDeal } from "@/lib/deals/ghi-chu";
+import {
+  ghiChuDealTheoNgonNgu,
+  nhanHamDich,
+  taoNhan,
+  tenSanPham,
+  tienCoDon,
+} from "@/components/deck/ngon-ngu-quet";
 import { ghiLuotQuet } from "@/lib/supabase/luot-quet";
 import {
   layDanhSachDaThich,
@@ -18,10 +23,12 @@ import {
   themVaoGio,
 } from "@/lib/kho-luu-tru";
 
-const DANH_MUC_LABEL = NHAN_DANH_MUC;
-
 export default function TrangDaThich() {
   const { timSanPham, deals } = useDuLieu();
+  const ngonNgu = useLocale();
+  const t = useTranslations("quet.daThich");
+  const nhan = taoNhan(nhanHamDich(useTranslations("quet.nhan")));
+  const tGhiChu = nhanHamDich(useTranslations("quet.ghiChuDeal"));
   const [danhSachThich, setDanhSachThich] = useState<string[]>([]);
   const [danhMucChon, setDanhMucChon] = useState<string>("all");
   const [sanPhamChiTiet, setSanPhamChiTiet] = useState<SanPham | null>(null);
@@ -60,19 +67,19 @@ export default function TrangDaThich() {
     }
 
     const cacMuc = [
-      { id: "all", label: "Tất cả", count: sanPhamThich.length },
+      { id: "all", label: t("tatCa"), count: sanPhamThich.length },
     ];
 
     for (const [dm, count] of Object.entries(demTheoDanhMuc)) {
       cacMuc.push({
         id: dm,
-        label: DANH_MUC_LABEL[dm] ?? dm,
+        label: nhan.danhMuc(dm),
         count,
       });
     }
 
     return cacMuc;
-  }, [sanPhamThich]);
+  }, [sanPhamThich, t, nhan]);
 
   const sanPhamHienThi = useMemo(() => {
     if (danhMucChon === "all") return sanPhamThich;
@@ -94,7 +101,7 @@ export default function TrangDaThich() {
       hanh_dong: "gio",
       nguon: "kham_pha",
     });
-    setThongBao(`Đã thêm "${sp.ten_hien_thi}" vào giỏ`);
+    setThongBao(t("daThemGio", { ten: tenSanPham(sp, ngonNgu) }));
     setTimeout(() => setThongBao(null), 2500);
   };
 
@@ -102,9 +109,9 @@ export default function TrangDaThich() {
     <div className="max-w-[1280px] w-full mx-auto flex-1 flex flex-col min-h-0 bg-trang text-den font-sans overflow-hidden">
         {/* Header */}
         <header className="px-5 pt-7 pb-2 flex items-baseline gap-2 shrink-0">
-          <h1 className="tieu-de-trang">Đã thích</h1>
+          <h1 className="tieu-de-trang">{t("tieuDe")}</h1>
           <span suppressHydrationWarning className="text-[15px] text-xam">
-            {sanPhamThich.length} món
+            {t("soMon", { so: sanPhamThich.length })}
           </span>
         </header>
 
@@ -116,7 +123,7 @@ export default function TrangDaThich() {
           >
             <span className="truncate">{thongBao}</span>
             <Link href="/gio" className="ml-2 text-oliu underline shrink-0 font-semibold">
-              Xem giỏ
+              {t("xemGio")}
             </Link>
           </div>
         )}
@@ -125,7 +132,7 @@ export default function TrangDaThich() {
         {daSanSang && sanPhamThich.length > 0 && (
           <div
             role="group"
-            aria-label="Lọc theo danh mục"
+            aria-label={t("locDanhMuc")}
             className="px-5 py-2 flex gap-2 overflow-x-auto shrink-0 no-scrollbar"
           >
             {danhSachLoc.map((f) => {
@@ -170,35 +177,35 @@ export default function TrangDaThich() {
               </svg>
             </div>
             <p className="text-[17px] font-semibold text-den mb-1">
-              Quẹt phải để lưu món bạn thích.
+              {t("trongTieuDe")}
             </p>
             <p className="text-[14px] text-xam max-w-[280px] mb-6">
-              Các sản phẩm bạn thích trong lúc quẹt sẽ hiển thị ở đây để dễ dàng so sánh và đưa vào giỏ.
+              {t("trongMoTa")}
             </p>
             <div className="flex gap-3">
               <Link
                 href="/quet"
                 className={lopNut("chinh")}
               >
-                Bắt đầu quẹt
+                {t("batDauQuet")}
               </Link>
               <Link
                 href="/danh-muc"
                 className="h-11 px-5 rounded-full bg-trang text-den border border-hong text-[14px] font-semibold inline-flex items-center justify-center"
               >
-                Xem danh mục
+                {t("xemDanhMuc")}
               </Link>
             </div>
           </div>
         ) : sanPhamHienThi.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center p-6 text-center text-xam">
-            <p className="text-[15px]">Không có sản phẩm nào trong danh mục này.</p>
+            <p className="text-[15px]">{t("khongCo")}</p>
             <button
               type="button"
               onClick={() => setDanhMucChon("all")}
               className="mt-3 text-[14px] text-den underline font-medium"
             >
-              Xem tất cả
+              {t("xemTatCa")}
             </button>
           </div>
         ) : (
@@ -208,7 +215,8 @@ export default function TrangDaThich() {
                 sp.danh_muc === "mat-na" || sp.danh_muc === "kem-duong"
                   ? "bg-oliu-nhat"
                   : "bg-kem";
-              const dealNote = layGhiChuDeal(sp, deals);
+              const dealNote = ghiChuDealTheoNgonNgu(tGhiChu, ngonNgu, sp, deals);
+              const tenSp = tenSanPham(sp, ngonNgu);
               const anhSrc = duongDanAnh(sp.anh, "nho");
 
               return (
@@ -225,14 +233,14 @@ export default function TrangDaThich() {
                       /* eslint-disable-next-line @next/next/no-img-element */
                       <img
                         src={anhSrc}
-                        alt={sp.ten_hien_thi}
+                        alt={tenSp}
                         className="w-[128px] h-[128px] object-contain"
                         loading="lazy"
                       />
                     ) : (
                       <span
                         role="img"
-                        aria-label="Ảnh sản phẩm chờ bổ sung"
+                        aria-label={t("anhCho")}
                         className="text-[11px] font-semibold tracking-wider uppercase text-xam-dam"
                       >
                         {sp.thuong_hieu}
@@ -242,7 +250,7 @@ export default function TrangDaThich() {
                     {/* Nút bỏ thích */}
                     <button
                       type="button"
-                      aria-label="Bỏ thích"
+                      aria-label={t("boThich")}
                       onClick={(e) => handleBoThich(sp.id, e)}
                       className="absolute top-1.5 right-1.5 w-10 h-10 rounded-full bg-trang/95 hover:bg-trang shadow-sm flex items-center justify-center cursor-pointer transition-transform active:scale-90"
                     >
@@ -266,14 +274,14 @@ export default function TrangDaThich() {
                     {sp.thuong_hieu}
                   </span>
                   <span className="text-[14px] leading-[1.35] font-medium h-[38px] overflow-hidden line-clamp-2 text-den">
-                    {sp.ten_hien_thi}
+                    {tenSp}
                   </span>
 
                   {/* Giá và nút thêm giỏ */}
                   <div className="flex items-center justify-between gap-1.5 mt-auto pt-1">
                     <div className="flex flex-col min-w-0">
                       <span className="text-[16px] font-bold text-den leading-tight">
-                        {dinhDangTien(sp.gia_ban)}đ
+                        {tienCoDon(sp.gia_ban, ngonNgu)}
                       </span>
                       <span className="text-[11px] text-xam h-[16px] truncate">
                         {dealNote ?? ""}
@@ -282,7 +290,7 @@ export default function TrangDaThich() {
 
                     <button
                       type="button"
-                      aria-label="Thêm vào giỏ"
+                      aria-label={t("themGio")}
                       onClick={(e) => handleThemVaoGio(sp, e)}
                       className="w-10 h-10 shrink-0 rounded-full bg-be hover:opacity-90 text-den flex items-center justify-center transition-transform active:scale-90 cursor-pointer"
                     >
@@ -322,7 +330,7 @@ export default function TrangDaThich() {
           if (sanPhamChiTiet) {
             themVaoGio(sanPhamChiTiet.id, 1);
             setSanPhamChiTiet(null);
-            setThongBao(`Đã thêm "${sanPhamChiTiet.ten_hien_thi}" vào giỏ`);
+            setThongBao(t("daThemGio", { ten: tenSanPham(sanPhamChiTiet, ngonNgu) }));
             setTimeout(() => setThongBao(null), 2500);
           }
         }}

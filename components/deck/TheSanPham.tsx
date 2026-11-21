@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import type { SanPham } from "@/lib/data/types";
-import { dinhDangTien } from "@/lib/dinh-dang";
 import { duongDanAnh } from "@/lib/anh";
-import { layNhanVanDe } from "@/lib/nhan";
+import { useDichQuet } from "./dung-dich";
+import { dichDuLieu, taoNhan, tenSanPham, tienKhongDon } from "./ngon-ngu-quet";
 
 interface TheSanPhamProps {
   sanPham: SanPham;
@@ -39,6 +40,11 @@ export function TheSanPham({
   onDragStateChange,
   animState = "",
 }: TheSanPhamProps) {
+  const ngonNgu = useLocale();
+  const t = useTranslations("quet.the");
+  const tNhan = useDichQuet("quet.nhan");
+  const nhan = taoNhan(tNhan);
+  const tenSp = tenSanPham(sanPham, ngonNgu);
   const [keo, setKeo] = useState<{ x: number; y: number; dangKeo: boolean }>({
     x: 0,
     y: 0,
@@ -173,8 +179,8 @@ export function TheSanPham({
       : "bg-kem";
 
   const chipList = [
-    ...(sanPham.van_de?.map(layNhanVanDe).slice(0, 2) ?? []),
-    ...(sanPham.thanh_phan?.slice(0, 1) ?? []),
+    ...(sanPham.van_de?.map(nhan.vanDe).slice(0, 2) ?? []),
+    ...(sanPham.thanh_phan?.slice(0, 1).map((tp) => dichDuLieu(tNhan, "thanhPhan", tp, ngonNgu)) ?? []),
   ].slice(0, 3);
 
   const anhSrc = duongDanAnh(sanPham.anh, "the") || "/brand/vive-logo-black.png";
@@ -210,7 +216,7 @@ export function TheSanPham({
           /* eslint-disable-next-line @next/next/no-img-element */
           <img
             src={anhSrc}
-            alt={sanPham.ten_hien_thi}
+            alt={tenSp}
             onError={() => setAnhLoi(true)}
             draggable="false"
             className="w-[236px] h-[236px] max-w-[85%] max-h-[85%] object-contain pointer-events-none"
@@ -224,7 +230,7 @@ export function TheSanPham({
             e.stopPropagation();
             onMoChiTiet();
           }}
-          aria-label={`Xem chi tiết ${sanPham.ten_hien_thi}`}
+          aria-label={t("xemChiTiet", { ten: tenSp })}
           className="absolute top-2.5 right-2.5 w-10 h-10 rounded-full bg-trang flex items-center justify-center text-den shadow-sm hover:bg-kem transition-colors cursor-pointer z-20"
         >
           <svg
@@ -246,7 +252,7 @@ export function TheSanPham({
         {/* Tag giảm giá */}
         {sanPham.giam_tren_tag && (
           <span className="absolute top-2.5 left-2.5 h-7 px-2.5 rounded-full bg-hong text-den text-[12px] font-bold flex items-center">
-            {sanPham.giam_tren_tag}
+            {dichDuLieu(tNhan, "nhanGiam", sanPham.giam_tren_tag, ngonNgu)}
           </span>
         )}
 
@@ -280,7 +286,7 @@ export function TheSanPham({
           }}
           className="absolute left-[18px] top-[26px] px-4 py-1.5 border-[3px] border-den rounded-xl bg-be text-den font-bold text-[30px] tracking-[4px] pointer-events-none transition-transform"
         >
-          THÍCH
+          {t("thich")}
         </div>
 
         {/* Stamp BỎ QUA (trái) */}
@@ -292,7 +298,7 @@ export function TheSanPham({
           }}
           className="absolute right-[18px] top-[26px] px-4 py-1.5 border-[3px] border-den rounded-xl bg-kem text-den font-bold text-[30px] tracking-[4px] pointer-events-none transition-transform"
         >
-          BỎ QUA
+          {t("boQua")}
         </div>
 
         {/* Stamp VÀO GIỎ (lên) */}
@@ -304,7 +310,7 @@ export function TheSanPham({
           }}
           className="absolute left-1/2 bottom-[52px] px-4 py-1.5 border-[3px] border-den rounded-xl bg-trang text-den font-bold text-[26px] tracking-[3px] whitespace-nowrap pointer-events-none"
         >
-          VÀO GIỎ
+          {t("vaoGio")}
         </div>
       </div>
 
@@ -314,21 +320,21 @@ export function TheSanPham({
           {sanPham.thuong_hieu}
         </span>
         <h2 className="m-0 text-[18px] sm:text-[19px] leading-[1.3] font-semibold text-den line-clamp-2">
-          {sanPham.ten_hien_thi}
+          {tenSp}
         </h2>
         <span className="text-[13px] text-xam">
-          {sanPham.quy_cach || "Quy cách chuẩn"}
+          {sanPham.quy_cach ? dichDuLieu(tNhan, "quyCach", sanPham.quy_cach, ngonNgu) : t("quyCachChuan")}
         </span>
       </div>
 
       {/* Giá bán */}
       <div className="px-5 py-1 flex items-baseline gap-2 shrink-0">
         <span className="text-[24px] sm:text-[26px] font-bold tracking-[-0.3px] text-den">
-          {dinhDangTien(sanPham.gia_ban)}
+          {tienKhongDon(sanPham.gia_ban, ngonNgu)}
         </span>
         {sanPham.gia_goc && sanPham.gia_goc > sanPham.gia_ban && (
           <span className="text-[14px] text-xam line-through">
-            {dinhDangTien(sanPham.gia_goc)}
+            {tienKhongDon(sanPham.gia_goc, ngonNgu)}
           </span>
         )}
       </div>

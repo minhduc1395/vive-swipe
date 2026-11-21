@@ -2,15 +2,25 @@
 import { lopNut } from "@/components/ui/Nut";
 
 import { useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import type { SanPham } from "@/lib/data/types";
 import { useDuLieu } from "@/lib/du-lieu-context";
 import { NutQuayLai } from "@/components/NutQuayLai";
-import { dinhDangTien } from "@/lib/dinh-dang";
 import { duongDanAnh } from "@/lib/anh";
-import { layNhanLoaiDa, layNhanVanDe } from "@/lib/nhan";
 import { layCacDealCuaSanPham } from "@/lib/deals/ghi-chu";
 import { moTaTam } from "@/lib/mo-ta-tam";
 import { useKhoaCuon } from "@/lib/khoa-cuon";
+import { useDichQuet } from "./dung-dich";
+import {
+  dichDuLieu,
+  moTaSanPham,
+  moTaTamEn,
+  nhanHamDich,
+  taoNhan,
+  tenSanPham,
+  tienKhongDon,
+  truongTheoNgonNgu,
+} from "./ngon-ngu-quet";
 
 interface BangChiTietProps {
   sanPham: SanPham | null;
@@ -30,6 +40,11 @@ export function BangChiTiet({
   daThich = false,
 }: BangChiTietProps) {
   const { deals } = useDuLieu();
+  const ngonNgu = useLocale();
+  const t = useTranslations("quet.chiTiet");
+  const tNhan = useDichQuet("quet.nhan");
+  const nhan = taoNhan(tNhan);
+  const tMoTa = nhanHamDich(useTranslations("quet.chiTiet.moTaTam"));
   const [anhLoi, setAnhLoi] = useState<boolean>(false);
   useKhoaCuon(dangMo && sanPham !== null);
 
@@ -42,12 +57,16 @@ export function BangChiTiet({
 
   const anhSrc = duongDanAnh(sanPham.anh, "the") || "/brand/vive-logo-black.png";
   const dealsLienQuan = layCacDealCuaSanPham(sanPham, deals);
+  const tenSp = tenSanPham(sanPham, ngonNgu);
+  const moTa =
+    moTaSanPham(sanPham, ngonNgu) ||
+    (ngonNgu === "en" ? moTaTamEn(sanPham, tMoTa, nhan, tNhan) : moTaTam(sanPham));
 
   return (
     <div
       role="dialog"
       aria-modal="true"
-      aria-label={`Chi tiết sản phẩm ${sanPham.ten_hien_thi}`}
+      aria-label={t("dialog", { ten: tenSp })}
       className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/50 transition-opacity p-0 md:p-6"
       onClick={onDong}
     >
@@ -67,6 +86,7 @@ export function BangChiTiet({
         {/* Nút quay lại (góc trên trái) */}
         <NutQuayLai
           fallback="/quet"
+          nhan={t("quayLai")}
           onClick={onDong}
           className="absolute top-2.5 left-4 z-10"
         />
@@ -75,7 +95,7 @@ export function BangChiTiet({
         <button
           type="button"
           onClick={onDong}
-          aria-label="Đóng chi tiết"
+          aria-label={t("dong")}
           className="absolute top-3 right-3 w-11 h-11 rounded-full flex items-center justify-center text-den hover:bg-kem transition-colors cursor-pointer z-10"
         >
           <svg
@@ -109,7 +129,7 @@ export function BangChiTiet({
               /* eslint-disable-next-line @next/next/no-img-element */
               <img
                 src={anhSrc}
-                alt={sanPham.ten_hien_thi}
+                alt={tenSp}
                 onError={() => setAnhLoi(true)}
                 className="w-[176px] h-[176px] object-contain"
               />
@@ -122,21 +142,21 @@ export function BangChiTiet({
               {sanPham.thuong_hieu}
             </span>
             <h2 className="m-0 text-[20px] leading-[1.3] font-semibold text-den">
-              {sanPham.ten_hien_thi}
+              {tenSp}
             </h2>
             <div className="flex items-baseline justify-between mt-1">
               <div className="flex items-baseline gap-2">
                 <span className="text-[24px] font-bold text-den">
-                  {dinhDangTien(sanPham.gia_ban)}
+                  {tienKhongDon(sanPham.gia_ban, ngonNgu)}
                 </span>
                 {sanPham.gia_goc && sanPham.gia_goc > sanPham.gia_ban && (
                   <span className="text-[14px] text-xam line-through">
-                    {dinhDangTien(sanPham.gia_goc)}
+                    {tienKhongDon(sanPham.gia_goc, ngonNgu)}
                   </span>
                 )}
               </div>
               <span className="text-[13px] text-xam">
-                {sanPham.quy_cach || "Quy cách chuẩn"} · Còn hàng
+                {sanPham.quy_cach ? dichDuLieu(tNhan, "quyCach", sanPham.quy_cach, ngonNgu) : t("quyCachChuan")} · {t("conHang")}
               </span>
             </div>
           </div>
@@ -145,7 +165,7 @@ export function BangChiTiet({
           {sanPham.loai_da?.length || sanPham.van_de?.length ? (
             <div className="flex flex-col gap-2 pt-2 border-t border-vien">
               <h3 className="m-0 text-[13px] font-semibold tracking-[1px] text-xam uppercase">
-                Phù hợp với
+                {t("phuHop")}
               </h3>
               <div className="flex flex-wrap gap-1.5">
                 {sanPham.loai_da?.map((da) => (
@@ -153,7 +173,7 @@ export function BangChiTiet({
                     key={da}
                     className="h-[30px] px-3 rounded-full bg-kem text-[13px] font-medium flex items-center text-den"
                   >
-                    {layNhanLoaiDa(da)}
+                    {nhan.loaiDa(da)}
                   </span>
                 ))}
                 {sanPham.van_de?.map((vd) => (
@@ -161,7 +181,7 @@ export function BangChiTiet({
                     key={vd}
                     className="h-[30px] px-3 rounded-full bg-oliu-nhat text-[13px] font-medium flex items-center text-den"
                   >
-                    {layNhanVanDe(vd)}
+                    {nhan.vanDe(vd)}
                   </span>
                 ))}
               </div>
@@ -172,7 +192,7 @@ export function BangChiTiet({
           {dealsLienQuan.length > 0 && (
             <div className="flex flex-col gap-2 pt-2 border-t border-vien">
               <h3 className="m-0 text-[13px] font-semibold tracking-[1px] text-xam uppercase">
-                Các deal có sản phẩm này
+                {t("dealCoSp")}
               </h3>
               <div className="flex flex-col gap-2">
                 {dealsLienQuan.map((deal) => (
@@ -182,12 +202,12 @@ export function BangChiTiet({
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-semibold text-[14px] text-den">
-                        {deal.ten}
+                        {truongTheoNgonNgu(deal, "ten", ngonNgu)}
                       </span>
                     </div>
                     {(deal.hook || deal.dieu_kien) && (
                       <p className="m-0 text-[13px] text-xam-dam">
-                        {deal.hook || deal.dieu_kien}
+                        {truongTheoNgonNgu(deal, "hook", ngonNgu) || truongTheoNgonNgu(deal, "dieu_kien", ngonNgu)}
                       </p>
                     )}
                   </div>
@@ -200,10 +220,10 @@ export function BangChiTiet({
           {sanPham.thanh_phan?.length ? (
             <div className="flex flex-col gap-1.5 pt-2 border-t border-vien">
               <h3 className="m-0 text-[13px] font-semibold tracking-[1px] text-xam uppercase">
-                Thành phần nổi bật
+                {t("thanhPhan")}
               </h3>
               <p className="m-0 text-[14px] leading-relaxed text-den">
-                {sanPham.thanh_phan.join(" · ")}
+                {sanPham.thanh_phan.map((tp) => dichDuLieu(tNhan, "thanhPhan", tp, ngonNgu)).join(" · ")}
               </p>
             </div>
           ) : null}
@@ -211,10 +231,10 @@ export function BangChiTiet({
           {/* Giới thiệu: mô tả thật (W047) hoặc mô tả tạm ghép từ dữ liệu, luôn có */}
           <div className="flex flex-col gap-1.5 pt-2 border-t border-vien" data-mo-ta={sanPham.mo_ta ? "that" : "tam"}>
             <h3 className="m-0 text-[13px] font-semibold tracking-[1px] text-xam uppercase">
-              Giới thiệu
+              {t("gioiThieu")}
             </h3>
             <p className="m-0 text-[14px] leading-relaxed text-den/90">
-              {sanPham.mo_ta || moTaTam(sanPham)}
+              {moTa}
             </p>
           </div>
         </div>
@@ -227,7 +247,7 @@ export function BangChiTiet({
               onThich();
               onDong();
             }}
-            aria-label="Thích sản phẩm này"
+            aria-label={t("thichSp")}
             className={`h-[52px] px-5 rounded-full flex items-center justify-center gap-2 font-semibold text-[15px] border cursor-pointer transition-colors ${
               daThich
                 ? "bg-hong border-transparent text-den font-semibold"
@@ -246,7 +266,7 @@ export function BangChiTiet({
             >
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
             </svg>
-            <span>{daThich ? "Đã thích" : "Thích"}</span>
+            <span>{daThich ? t("daThich") : t("thich")}</span>
           </button>
 
           <button
@@ -272,7 +292,7 @@ export function BangChiTiet({
               <path d="M3 6h18" />
               <path d="M16 10a4 4 0 0 1-8 0" />
             </svg>
-            <span>Thêm vào giỏ</span>
+            <span>{t("themGio")}</span>
           </button>
         </div>
       </div>

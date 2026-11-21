@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import type { DealChoBan } from "@/lib/deals/diem-deal";
-import { dinhDangTien } from "@/lib/dinh-dang";
+import { tienKhongDon, truongTheoNgonNgu } from "./ngon-ngu-quet";
 
 interface TheDealDacBietProps {
   onBoQua: () => void;
@@ -22,17 +23,19 @@ export function TheDealDacBiet({
   tenThuongHieuNoiBat,
   soMonThuongHieu,
 }: TheDealDacBietProps) {
+  const ngonNgu = useLocale();
+  const t = useTranslations("quet.dealThe");
   // Nếu có thông tin deal cụ thể theo thiết kế TheDeal.dc.html
   if (dealTop) {
     const moTaPhu = tenThuongHieuNoiBat && soMonThuongHieu
-      ? `Bạn đã thích ${soMonThuongHieu} món ${tenThuongHieuNoiBat}`
-      : `Đã có ${soMonHopDa} món hợp da của bạn`;
+      ? t("daThichThuongHieu", { so: soMonThuongHieu, ten: tenThuongHieuNoiBat })
+      : t("hopDaCuaBan", { so: soMonHopDa });
 
     const boGoiYDau = dealTop.goi_y && dealTop.goi_y.length > 0 ? dealTop.goi_y[0] : null;
 
     return (
       <article
-        aria-label="Thẻ deal trong deck"
+        aria-label={t("aria")}
         className="absolute inset-0 rounded-[28px] bg-den text-trang p-6 box-border flex flex-col justify-between shadow-[0_16px_40px_rgba(43,43,42,0.22)] select-none z-10"
       >
         <div className="flex flex-col gap-3">
@@ -55,15 +58,15 @@ export function TheDealDacBiet({
                 <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
                 <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
               </svg>
-              Deal hợp với bạn
+              {t("hopVoiBan")}
             </span>
-            <span className="text-[12px] text-hong">Số lượng có hạn</span>
+            <span className="text-[12px] text-hong">{t("soLuongHan")}</span>
           </div>
 
           <span className="text-[14px] text-hong">{moTaPhu}</span>
 
           <h2 className="m-0 font-bold text-[24px] leading-[1.25] tracking-[-0.5px]">
-            {dealTop.hook ?? dealTop.ten}
+            {truongTheoNgonNgu(dealTop, "hook", ngonNgu) ?? truongTheoNgonNgu(dealTop, "ten", ngonNgu)}
           </h2>
 
           {dealTop.moc && dealTop.moc.length > 0 ? (
@@ -75,9 +78,9 @@ export function TheDealDacBiet({
                     key={idx}
                     className="flex justify-between py-2 border-b border-white/20 text-[13px]"
                   >
-                    <span className="text-hong">Từ {dinhDangTien(mocGia)}</span>
+                    <span className="text-hong">{t("tu", { gia: tienKhongDon(mocGia, ngonNgu) })}</span>
                     <strong className="font-semibold text-trang line-clamp-1">
-                      {m.qua}
+                      {truongTheoNgonNgu(m, "qua", ngonNgu)}
                     </strong>
                   </div>
                 );
@@ -85,16 +88,16 @@ export function TheDealDacBiet({
             </div>
           ) : dealTop.dieu_kien ? (
             <p className="m-0 text-[14px] text-hong leading-relaxed">
-              {dealTop.dieu_kien}
+              {truongTheoNgonNgu(dealTop, "dieu_kien", ngonNgu)}
             </p>
           ) : null}
 
           {boGoiYDau && (
             <div className="flex items-center gap-2.5 mt-1 bg-white/10 rounded-2xl p-2.5">
               <div className="flex flex-col text-[13px]">
-                <span className="text-hong text-[11px]">Gợi ý vừa mốc</span>
+                <span className="text-hong text-[11px]">{t("goiYVuaMoc")}</span>
                 <span className="font-semibold text-trang truncate">
-                  {boGoiYDau.ten} · {dinhDangTien(boGoiYDau.gia)}
+                  {truongTheoNgonNgu(boGoiYDau, "ten", ngonNgu)} · {tienKhongDon(boGoiYDau.gia, ngonNgu)}
                 </span>
               </div>
             </div>
@@ -106,14 +109,14 @@ export function TheDealDacBiet({
             href={`/deal?id=${encodeURIComponent(dealTop.id)}`}
             className="h-[50px] rounded-full bg-trang text-den no-underline flex items-center justify-center font-semibold text-[16px] hover:opacity-95 transition-opacity"
           >
-            Xem bộ gợi ý
+            {t("xemBoGoiY")}
           </Link>
           <button
             type="button"
             onClick={onBoQua}
             className="h-[44px] rounded-full border border-white/20 text-trang bg-transparent text-[14px] font-medium cursor-pointer hover:bg-white/10 transition-colors"
           >
-            Để sau (tiếp tục quẹt)
+            {t("deSau")}
           </button>
         </div>
       </article>
@@ -123,7 +126,7 @@ export function TheDealDacBiet({
   // Mặc định (khi chưa có deal top)
   return (
     <article
-      aria-label="Gợi ý deal sau 5 lượt thích"
+      aria-label={t("ariaMacDinh")}
       className="absolute inset-0 rounded-[28px] bg-den text-trang p-6 box-border flex flex-col justify-between shadow-[0_16px_40px_rgba(43,43,42,0.22)] select-none z-10"
     >
       <div className="flex items-center justify-between">
@@ -142,7 +145,7 @@ export function TheDealDacBiet({
             <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
             <path d="M7 7h.01" />
           </svg>
-          Deal cho bạn
+          {t("dealChoBan")}
         </span>
       </div>
 
@@ -160,10 +163,10 @@ export function TheDealDacBiet({
         </div>
 
         <h2 className="m-0 font-bold text-[24px] leading-[1.3] tracking-[-0.5px]">
-          Đã có {soMonHopDa} món hợp da
+          {t("daCoMon", { so: soMonHopDa })}
         </h2>
         <p className="m-0 text-[15px] leading-relaxed text-hong max-w-[280px]">
-          Các sản phẩm bạn thích đang có các deal và quà tặng hấp dẫn hôm nay tại booth.
+          {t("moTa")}
         </p>
       </div>
 
@@ -172,14 +175,14 @@ export function TheDealDacBiet({
           href="/deal"
           className="h-[52px] rounded-full bg-trang text-den no-underline flex items-center justify-center font-semibold text-[16px] hover:opacity-90 transition-opacity"
         >
-          Xem deal cho bạn
+          {t("xemDeal")}
         </Link>
         <button
           type="button"
           onClick={onBoQua}
           className="h-[44px] rounded-full border border-white/20 text-trang bg-transparent text-[14px] font-medium cursor-pointer hover:bg-white/10 transition-colors"
         >
-          Tiếp tục quẹt
+          {t("tiepTucQuet")}
         </button>
       </div>
     </article>

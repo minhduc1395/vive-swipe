@@ -11,6 +11,7 @@ import {
 } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { TheSanPham } from "@/components/deck/TheSanPham";
 import { TheDealDacBiet } from "@/components/deck/TheDealDacBiet";
 import { BangChiTiet } from "@/components/deck/BangChiTiet";
@@ -24,10 +25,15 @@ import {
   type HanhDongHoSo,
 } from "@/lib/goi-y/ho-so";
 import { layTraLoiLocal, daTungKhaoSat } from "@/lib/khao-sat";
-import { layNhanVanDe, layNhanLoaiDa, layLyDoGoiY } from "@/lib/nhan";
-import { dinhDangTien } from "@/lib/dinh-dang";
+import { useDichQuet, useNhanQuet } from "@/components/deck/dung-dich";
+import {
+  ghiChuDealTheoNgonNgu,
+  lyDoGoiY,
+  tenSanPham,
+  tienCoDon,
+  truongTheoNgonNgu,
+} from "@/components/deck/ngon-ngu-quet";
 import { duongDanAnh } from "@/lib/anh";
-import { layGhiChuDeal } from "@/lib/deals/ghi-chu";
 import { layDanhSachDealChoBan } from "@/lib/deals/diem-deal";
 import { tinhGio, type MucGioInput } from "@/lib/deals/gio-hang";
 import { chuanHoaNgay } from "@/lib/deals/hien-thi";
@@ -55,6 +61,10 @@ interface BuocLichSu {
   hoSoTruoc: HoSoKhach;
 }
 
+type GuTag = { nhom: "phuHopNhat" | "loaiDa" | "vanDe" | "nganSach"; ma: string };
+
+const MA_NGAN_SACH = ["duoi-200k", "duoi_200", "200k-500k", "tu_200_500", "tren-500k", "tren_500"];
+
 const HEARTS = [
   { x: -52, delay: 0, size: 18, fill: "#2B2B2A" },
   { x: -24, delay: 70, size: 14, fill: "#E8D2CC" },
@@ -66,6 +76,11 @@ const HEARTS = [
 
 export default function TrangQuet() {
   const router = useRouter();
+  const ngonNgu = useLocale();
+  const t = useTranslations("quet.deck");
+  const tThe = useDichQuet("quet.the");
+  const tGhiChu = useDichQuet("quet.ghiChuDeal");
+  const nhan = useNhanQuet();
   const {
     sanPham: danhSachSanPham,
     deals: danhSachDeals,
@@ -78,7 +93,8 @@ export default function TrangQuet() {
   const [gioHang, setGioHang] = useState<ItemGioHang[]>([]);
   const [soLuongGio, setSoLuongGio] = useState<number>(0);
   const [hoSo, setHoSo] = useState<HoSoKhach>({});
-  const [guTags, setGuTags] = useState<string[]>(["Phù hợp nhất"]);
+  // Nhãn Gu của bạn lưu theo mã (nhóm + mã) để đổi ngôn ngữ vẫn đúng
+  const [guTags, setGuTags] = useState<GuTag[]>([{ nhom: "phuHopNhat", ma: "" }]);
   const [lichSu, setLichSu] = useState<BuocLichSu[]>([]);
   const [sanPhamChiTiet, setSanPhamChiTiet] = useState<SanPham | null>(null);
   const [hienTheDealDacBiet, setHienTheDealDacBiet] = useState<boolean>(false);
@@ -93,7 +109,7 @@ export default function TrangQuet() {
     []
   );
 
-  const [toast, setToast] = useState<string>("");
+  const [toast, setToast] = useState<"" | "ungY" | "hopDa" | "vaoGio">("");
   const [burst, setBurst] = useState<boolean>(false);
   const [dragOffset, setDragOffset] = useState<{ dx: number; dy: number }>({
     dx: 0,
@@ -106,6 +122,19 @@ export default function TrangQuet() {
     () => new Map<string, SanPham>(danhSachSanPham.map((sp) => [sp.id, sp])),
     [danhSachSanPham]
   );
+
+  const nhanGuTag = (tag: GuTag) =>
+    tag.nhom === "phuHopNhat" ? nhan.phuHopNhat() : nhan[tag.nhom](tag.ma);
+
+  // Tên dòng trong giỏ theo ngôn ngữ: sản phẩm lấy tên en, combo lấy tên en của deal
+  const tenDongGio = (dong: { loai: "san_pham" | "combo"; id: string; ten: string }) => {
+    if (dong.loai === "san_pham") {
+      const sp = sanPhamMap.get(dong.id);
+      return sp ? tenSanPham(sp, ngonNgu) : dong.ten;
+    }
+    const deal = danhSachDeals.find((d) => d.id === dong.id);
+    return (deal && truongTheoNgonNgu(deal, "ten", ngonNgu)) || dong.ten;
+  };
 
   const { dealTopDacBiet, thongTinThuongHieu } = useMemo(() => {
     if (!hienTheDealDacBiet) {
@@ -175,28 +204,20 @@ export default function TrangQuet() {
     // Lấy label mối quan tâm hiển thị ở header phụ & cột Gu của bạn
     if (traLoi?.van_de?.length) {
       setMoiQuanTamLabels(
-        traLoi.van_de.map((k) => layNhanVanDe(k)).slice(0, 2)
+        traLoi.van_de.slice(0, 2)
       );
     }
 
-    const tagsGu: string[] = [];
+    const tagsGu: GuTag[] = [];
     if (traLoi?.loai_da) {
-      tagsGu.push(layNhanLoaiDa(traLoi.loai_da));
+      tagsGu.push({ nhom: "loaiDa", ma: traLoi.loai_da });
     }
     if (traLoi?.van_de?.length) {
-      traLoi.van_de.slice(0, 3).forEach((k) => tagsGu.push(layNhanVanDe(k)));
+      traLoi.van_de.slice(0, 3).forEach((k) => tagsGu.push({ nhom: "vanDe", ma: k }));
     }
     if (traLoi?.ngan_sach) {
-      const budgetMap: Record<string, string> = {
-        "duoi-200k": "Dưới 200K",
-        duoi_200: "Dưới 200K",
-        "200k-500k": "200K–500K",
-        tu_200_500: "200K–500K",
-        "tren-500k": "Trên 500K",
-        tren_500: "Trên 500K",
-      };
-      if (budgetMap[traLoi.ngan_sach]) {
-        tagsGu.push(budgetMap[traLoi.ngan_sach]);
+      if (MA_NGAN_SACH.includes(traLoi.ngan_sach)) {
+        tagsGu.push({ nhom: "nganSach", ma: traLoi.ngan_sach });
       }
     }
     if (tagsGu.length > 0) {
@@ -283,13 +304,13 @@ export default function TrangQuet() {
       return;
     }
 
-    const toastText =
+    const toastText: "ungY" | "hopDa" =
       sp.danh_muc === "trang-diem" ||
       sp.danh_muc === "duong-the" ||
       sp.danh_muc === "thiet-bi" ||
       sp.danh_muc === "dich-vu"
-        ? "Ưng ý!"
-        : "Hợp da!";
+        ? "ungY"
+        : "hopDa";
 
     capNhatAnimState("like");
     setToast(toastText);
@@ -408,7 +429,7 @@ export default function TrangQuet() {
     }
 
     capNhatAnimState("cart");
-    setToast("Đã vào giỏ");
+    setToast("vaoGio");
 
     setTimeout(() => {
       hoanTat();
@@ -538,18 +559,13 @@ export default function TrangQuet() {
     dy < 0 && Math.abs(dx) < 60 ? Math.min(1.16, 1 + -dy / 400) : 1;
 
   // Lý do gợi ý & ghi chú deal cho thẻ hiện tại
-  const lyDoHienTai = useMemo(() => {
-    if (!theHienTai) return undefined;
-    return layLyDoGoiY(
-      theHienTai.san_pham.van_de,
-      theHienTai.san_pham.loai_da
-    );
-  }, [theHienTai]);
+  const lyDoHienTai = theHienTai
+    ? lyDoGoiY(tThe, nhan, theHienTai.san_pham.van_de, theHienTai.san_pham.loai_da)
+    : undefined;
 
-  const ghiChuDealHienTai = useMemo(() => {
-    if (!theHienTai) return undefined;
-    return layGhiChuDeal(theHienTai.san_pham, danhSachDeals);
-  }, [theHienTai, danhSachDeals]);
+  const ghiChuDealHienTai = theHienTai
+    ? ghiChuDealTheoNgonNgu(tGhiChu, ngonNgu, theHienTai.san_pham, danhSachDeals)
+    : undefined;
 
   // Top deal cho bạn hiển thị ở cột phải trên máy tính bảng & máy tính
   const topDealsAside = useMemo(() => {
@@ -585,7 +601,7 @@ export default function TrangQuet() {
   if (!daKiemTraKhaoSat) {
     return (
       <div className="flex-1 flex items-center justify-center p-6">
-        <h1 className="sr-only">Deck quẹt VIVE</h1>
+        <h1 className="sr-only">{t("tieuDe")}</h1>
       </div>
     );
   }
@@ -610,69 +626,69 @@ export default function TrangQuet() {
           100% { transform: translateX(-50%) scale(1); opacity: 1; }
         }
       `}</style>
-      <h1 className="sr-only">Deck quẹt VIVE</h1>
+      <h1 className="sr-only">{t("tieuDe")}</h1>
 
         {/* Khung nội dung co giãn 3 mốc: 1 cột mobile | 2 cột tablet | 3 cột PC */}
         <div className="w-full flex-1 min-h-0 flex justify-center md:gap-6 lg:grid lg:grid-cols-[minmax(220px,280px)_minmax(360px,1fr)_minmax(260px,340px)] max-w-[1280px] px-0 md:px-6 lg:px-8 py-0 md:py-4 lg:gap-8 items-stretch">
           {/* Cột trái (Desktop >= 1024px): Gu của bạn & Phím tắt (QuetPC) */}
           <aside
-            aria-label="Gu của bạn"
+            aria-label={t("guCuaBan")}
             className="hidden lg:flex flex-col gap-5 shrink-0 pt-2 overflow-y-auto"
           >
             <section className="rounded-[24px] bg-kem p-5 flex flex-col gap-3.5 border border-vien">
               <div className="flex justify-between items-center">
-                <h2 className="m-0 text-[18px] font-bold">Gu của bạn</h2>
+                <h2 className="m-0 text-[18px] font-bold">{t("guCuaBan")}</h2>
                 <Link
                   href="/bat-dau"
                   className="text-[14px] font-semibold text-den hover:underline"
                 >
-                  Sửa
+                  {t("sua")}
                 </Link>
               </div>
               <div className="flex flex-wrap gap-2">
                 {guTags.map((tag) => (
                   <span
-                    key={tag}
+                    key={`${tag.nhom}-${tag.ma}`}
                     className="h-[34px] px-3.5 rounded-full bg-be text-den text-[13px] font-semibold flex items-center"
                   >
-                    {tag}
+                    {nhanGuTag(tag)}
                   </span>
                 ))}
               </div>
               <p className="m-0 text-[13px] text-xam-dam leading-[1.5]">
-                Web học thêm sau mỗi lượt quẹt.
+                {t("webHoc")}
               </p>
             </section>
 
             <section className="rounded-[24px] border border-vien p-5 flex flex-col gap-3.5 bg-trang">
-              <h2 className="m-0 text-[18px] font-bold">Phím tắt</h2>
+              <h2 className="m-0 text-[18px] font-bold">{t("phimTat")}</h2>
               <ul className="m-0 p-0 list-none flex flex-col gap-2.5 text-[14px]">
                 <li className="flex items-center justify-between">
-                  <span>Bỏ qua</span>
+                  <span>{t("boQua")}</span>
                   <kbd className="min-w-[28px] h-7 px-2 rounded-lg border border-hong bg-kem/40 font-semibold text-[13px] flex items-center justify-center">
                     ←
                   </kbd>
                 </li>
                 <li className="flex items-center justify-between">
-                  <span>Thích</span>
+                  <span>{t("thich")}</span>
                   <kbd className="min-w-[28px] h-7 px-2 rounded-lg border border-hong bg-kem/40 font-semibold text-[13px] flex items-center justify-center">
                     →
                   </kbd>
                 </li>
                 <li className="flex items-center justify-between">
-                  <span>Vào giỏ</span>
+                  <span>{t("vaoGio")}</span>
                   <kbd className="min-w-[28px] h-7 px-2 rounded-lg border border-hong bg-kem/40 font-semibold text-[13px] flex items-center justify-center">
                     ↑
                   </kbd>
                 </li>
                 <li className="flex items-center justify-between">
-                  <span>Hoàn tác</span>
+                  <span>{t("hoanTac")}</span>
                   <kbd className="min-w-[28px] h-7 px-2 rounded-lg border border-hong bg-kem/40 font-semibold text-[13px] flex items-center justify-center">
                     Z
                   </kbd>
                 </li>
                 <li className="flex items-center justify-between">
-                  <span>Xem chi tiết</span>
+                  <span>{t("xemChiTiet")}</span>
                   <kbd className="min-w-[28px] h-7 px-2 rounded-lg border border-hong bg-kem/40 font-semibold text-[13px] flex items-center justify-center">
                     Space
                   </kbd>
@@ -685,32 +701,32 @@ export default function TrangQuet() {
           <div className="flex-1 min-w-0 h-full flex flex-col items-center justify-between max-w-[460px] w-full mx-auto">
             {/* Thanh phụ: Xếp theo + Sửa */}
             <div className="w-full max-w-[480px] px-5 pt-1 pb-2.5 flex items-center gap-1.5 text-[13px] shrink-0 lg:hidden">
-              <span className="text-xam">Xếp theo</span>
+              <span className="text-xam">{t("xepTheo")}</span>
               {moiQuanTamLabels.length > 0 ? (
-                moiQuanTamLabels.map((tag) => (
+                moiQuanTamLabels.map((ma) => (
                   <span
-                    key={tag}
+                    key={ma}
                     className="h-[26px] px-2.5 rounded-full bg-kem flex items-center font-medium text-den"
                   >
-                    {tag}
+                    {nhan.vanDe(ma)}
                   </span>
                 ))
               ) : (
                 <span className="h-[26px] px-2.5 rounded-full bg-kem flex items-center font-medium text-den">
-                  Phù hợp nhất
+                  {nhan.phuHopNhat()}
                 </span>
               )}
               <Link
                 href="/bat-dau"
                 className="ml-auto font-medium text-den no-underline py-1 px-1.5 hover:underline"
               >
-                Sửa
+                {t("sua")}
               </Link>
             </div>
 
             {/* Khu vực Deck quẹt thẻ */}
             <section
-              aria-label="Thẻ sản phẩm"
+              aria-label={t("theSanPham")}
               className="relative flex-1 min-h-0 w-full px-4 md:px-0 max-w-[440px]"
             >
               <div className="relative w-full h-full">
@@ -726,7 +742,7 @@ export default function TrangQuet() {
             <div className="absolute inset-0 rounded-[28px] bg-kem border border-vien p-8 flex flex-col items-center justify-center gap-3 text-center">
               <div className="w-10 h-10 rounded-full border-2 border-primary border-t-transparent animate-spin mb-1" />
               <span className="font-bold text-[16px] tracking-[-0.3px] text-chu">
-                Đang chuẩn bị sản phẩm...
+                {t("dangChuanBi")}
               </span>
             </div>
           ) : theHienTai ? (
@@ -768,23 +784,22 @@ export default function TrangQuet() {
             /* Khi đã xem hết thẻ (docs/01 mục 2.3) */
             <div className="absolute inset-0 rounded-[28px] bg-kem border border-vien p-8 flex flex-col items-center justify-center gap-3 text-center">
               <span className="font-bold text-[26px] tracking-[-0.5px]">
-                Bạn đã xem hết sản phẩm hôm nay.
+                {t("xemHet")}
               </span>
               <p className="m-0 text-[15px] leading-relaxed text-xam-dam">
-                Bạn đã thích {daThich.length} món. Xem lại danh sách hoặc các
-                deal hợp với bạn hôm nay.
+                {t("xemHetMoTa", { so: daThich.length })}
               </p>
               <Link
                 href="/deal"
                 className={lopNut("chinh","lon")}
               >
-                Xem deal cho bạn
+                {t("xemDeal")}
               </Link>
               <Link
                 href="/da-thich"
                 className="font-medium text-den no-underline p-2 hover:underline text-[14px]"
               >
-                Xem món đã thích ({daThich.length})
+                {t("xemDaThich", { so: daThich.length })}
               </Link>
             </div>
           ) : null}
@@ -796,7 +811,7 @@ export default function TrangQuet() {
               style={{ animation: "vq-toast 420ms ease-out both" }}
               className="absolute left-1/2 top-[120px] -translate-x-1/2 z-50 h-[68px] px-7 rounded-full bg-den text-trang shadow-[0_12px_32px_rgba(43,43,42,0.22)] flex items-center gap-3 whitespace-nowrap pointer-events-none"
             >
-              {toast === "Đã vào giỏ" ? (
+              {toast === "vaoGio" ? (
                 <svg
                   width="24"
                   height="24"
@@ -827,7 +842,7 @@ export default function TrangQuet() {
                 </svg>
               )}
               <span className="font-bold text-[24px] tracking-[-0.5px]">
-                {toast}
+                {t(`toast.${toast}`)}
               </span>
             </div>
           )}
@@ -873,7 +888,7 @@ export default function TrangQuet() {
                 type="button"
                 onClick={xuLyHoanTac}
                 disabled={lichSu.length === 0 || !!animState}
-                aria-label="Hoàn tác"
+                aria-label={t("hoanTac")}
                 className="w-[52px] h-[52px] rounded-full border-[1.5px] border-hong bg-trang flex items-center justify-center text-den cursor-pointer hover:bg-kem disabled:opacity-40 disabled:cursor-not-allowed transition-all"
               >
                 <svg
@@ -897,7 +912,7 @@ export default function TrangQuet() {
                 type="button"
                 onClick={xuLyBoQua}
                 disabled={!theHienTai || !!animState}
-                aria-label="Bỏ qua"
+                aria-label={t("boQua")}
                 style={{
                   transform: `scale(${skipBtnScale})`,
                   backgroundColor: skipBtnBg,
@@ -924,7 +939,7 @@ export default function TrangQuet() {
                 type="button"
                 onClick={xuLyThich}
                 disabled={!theHienTai || !!animState}
-                aria-label="Thích"
+                aria-label={t("thich")}
                 style={{
                   transform: `scale(${likeBtnScale})`,
                   boxShadow: likeRing > 0 ? `0 0 0 ${likeRing}px #CFE3D5` : "none",
@@ -950,7 +965,7 @@ export default function TrangQuet() {
                 type="button"
                 onClick={xuLyVaoGio}
                 disabled={!theHienTai || !!animState}
-                aria-label="Thêm vào giỏ"
+                aria-label={t("ariaThemGio")}
                 style={{
                   transform: `scale(${cartBtnScale})`,
                 }}
@@ -975,23 +990,23 @@ export default function TrangQuet() {
             </div>
 
             <p className="hidden md:block m-0 text-center text-[13px] text-xam pb-1 shrink-0">
-              Kéo thẻ bằng chuột hoặc dùng phím mũi tên.
+              {t("huongDan")}
             </p>
           </div>
 
           {/* Cột phải (Tablet >= 768px cao >= 900px, Desktop >= 1024px): Deal cho bạn & Giỏ */}
           <aside
-            aria-label="Deal và giỏ"
+            aria-label={t("dealVaGio")}
             className="hidden md:flex [@media(max-width:1023px)_and_(max-height:899px)]:hidden flex-col gap-5 shrink-0 w-[260px] lg:w-[320px] pt-2 overflow-y-auto max-h-full"
           >
             <section className="rounded-[24px] bg-oliu-nhat p-5 flex flex-col gap-3.5 border border-be/40">
               <div className="flex justify-between items-center">
-                <h2 className="m-0 text-[18px] font-bold">Deal cho bạn</h2>
+                <h2 className="m-0 text-[18px] font-bold">{t("dealChoBan")}</h2>
                 <Link
                   href="/deal"
                   className="text-[14px] font-semibold text-den hover:underline"
                 >
-                  Tất cả
+                  {t("tatCa")}
                 </Link>
               </div>
               <ul className="m-0 p-0 list-none flex flex-col gap-3">
@@ -1002,13 +1017,13 @@ export default function TrangQuet() {
                     </span>
                     <div className="flex flex-col gap-0.5 min-w-0">
                       <span className="text-[13px] font-bold text-den leading-[1.3] truncate">
-                        {d.ten}
+                        {truongTheoNgonNgu(d, "ten", ngonNgu)}
                       </span>
                       <span className="text-[12px] text-xam-dam truncate">
-                        {d.hook ||
+                        {truongTheoNgonNgu(d, "hook", ngonNgu) ||
                           (d.gia_combo
-                            ? dinhDangTien(d.gia_combo)
-                            : "Ưu đãi tại booth")}
+                            ? tienCoDon(d.gia_combo, ngonNgu)
+                            : t("uuDaiBooth"))}
                       </span>
                     </div>
                   </li>
@@ -1019,13 +1034,13 @@ export default function TrangQuet() {
             <section className="rounded-[24px] border border-vien p-5 flex flex-col gap-3.5 bg-trang">
               <div className="flex justify-between items-center">
                 <h2 className="m-0 text-[18px] font-bold">
-                  Giỏ · {soLuongGio} món
+                  {t("gio", { so: soLuongGio })}
                 </h2>
                 <Link
                   href="/gio"
                   className="text-[14px] font-semibold text-den hover:underline"
                 >
-                  Mở giỏ
+                  {t("moGio")}
                 </Link>
               </div>
 
@@ -1038,10 +1053,10 @@ export default function TrangQuet() {
                     >
                       <span className="truncate text-den">
                         {dong.so_luong > 1 ? `${dong.so_luong}× ` : ""}
-                        {dong.ten}
+                        {tenDongGio(dong)}
                       </span>
                       <strong className="shrink-0 text-den">
-                        {dinhDangTien(dong.gia_sau_uu_dai)}đ
+                        {tienCoDon(dong.gia_sau_uu_dai, ngonNgu)}
                       </strong>
                     </li>
                   ))}
@@ -1050,19 +1065,19 @@ export default function TrangQuet() {
 
               {ketQuaGioAside.qua_du_kien && (
                 <div className="rounded-xl bg-kem px-3 py-2 text-[12px] text-den">
-                  Quà dự kiến: {ketQuaGioAside.qua_du_kien}
+                  {t("quaDuKien", { qua: ketQuaGioAside.qua_du_kien })}
                 </div>
               )}
 
               <div className="border-t border-vien pt-3 flex justify-between font-bold text-[15px]">
-                <span>Tạm tính</span>
-                <span>{dinhDangTien(ketQuaGioAside.tong_tam_tinh)}đ</span>
+                <span>{t("tamTinh")}</span>
+                <span>{tienCoDon(ketQuaGioAside.tong_tam_tinh, ngonNgu)}</span>
               </div>
               <Link
                 href="/giu-hang"
                 className={lopNut("chinh","vua",true)}
               >
-                Giữ hàng tại booth
+                {t("giuHang")}
               </Link>
             </section>
           </aside>
