@@ -20,7 +20,7 @@ Quy tắc chung
 | P8 | W036: tách lại 2 ảnh Beaund (8809953160067, 8809953160081) | Antigravity Media | Khi có phiên | Chờ |
 | P9 | QA PR của WEB/Antigravity ở trạng thái Review | QA (1:13, 12:13, 17:13) | Theo lịch | — |
 | P10 | BOD duyệt 19 ảnh/video ở dashboard, mục Duyệt bài | BOD | 22/11 | Chờ BOD |
-| P11 | W066: trang nhân viên hiện 'Tặng thêm 1 lượt quay' khi nhận đơn giữ hàng web từ 27/11 | Antigravity | Phiên tới | Đã giao (tasks/W066.md) |
+| P11 | W066: trang nhân viên hiện 'Tặng thêm 1 lượt quay' khi nhận đơn giữ hàng web từ 27/11 | Antigravity | Phiên tới | Xong 22/11 (PR #90, QA Pass) |
 
 ## Cách làm từng mục khi WEB không có mặt
 
