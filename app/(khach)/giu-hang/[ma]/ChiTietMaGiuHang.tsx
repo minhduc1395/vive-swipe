@@ -6,6 +6,9 @@ import Link from "next/link";
 import { NutQuayLai } from "@/components/NutQuayLai";
 import { dinhDangTien, dinhDangTienGio } from "@/lib/dinh-dang";
 import { taoMaQrSvg } from "@/lib/qr";
+import { useDuLieu } from "@/lib/du-lieu-context";
+import { chuanHoaNgay } from "@/lib/deals/hien-thi";
+import { dongThuongGiuHang } from "@/lib/giu-hang/thuong";
 import type { DonGiuHangChiTiet } from "@/lib/giu-hang/types";
 
 interface Props {
@@ -14,6 +17,8 @@ interface Props {
 
 export function ChiTietMaGiuHang({ don }: Props) {
   const [thongBaoLuuAnh, setThongBaoLuuAnh] = useState(false);
+  const { deals } = useDuLieu();
+  const dongThuong = dongThuongGiuHang(deals, chuanHoaNgay(new Date()));
 
   // Sinh mã QR SVG chứa URL tra cứu nhân viên
   const qrSvg = taoMaQrSvg(`/nhan-vien?ma=${don.ma}`, {
@@ -121,6 +126,15 @@ END:VCALENDAR`;
           className="w-[176px] h-[176px] flex items-center justify-center p-2 rounded-[14px] bg-oliu-nhat border border-oliu-nhat"
           dangerouslySetInnerHTML={{ __html: qrSvg }}
         />
+
+        {dongThuong && (
+          <p
+            data-testid="thuong-giu-hang"
+            className="m-0 text-center text-[13px] font-semibold leading-snug text-den"
+          >
+            {dongThuong}
+          </p>
+        )}
 
         <div className="h-[32px] px-3.5 rounded-full bg-oliu-nhat text-[13px] font-semibold text-den flex items-center gap-1.5 mt-1">
           <svg

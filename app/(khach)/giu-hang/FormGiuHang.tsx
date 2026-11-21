@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { useDuLieu } from "@/lib/du-lieu-context";
 import { dinhDangTien, dinhDangTienGio } from "@/lib/dinh-dang";
 import { tinhGio } from "@/lib/deals/gio-hang";
+import { chuanHoaNgay } from "@/lib/deals/hien-thi";
+import { dongThuongGiuHang } from "@/lib/giu-hang/thuong";
 import {
   layGioHang,
   xoaToanBoGio,
@@ -57,6 +59,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
 
   const ketQua = tinhGio(mucGioInput, sanPham, deals);
   const tongSoMon = gio.reduce((acc, it) => acc + it.soLuong, 0);
+  const dongThuong = dongThuongGiuHang(deals, chuanHoaNgay(new Date()));
 
   if (!mounted) {
     return (
@@ -375,6 +378,14 @@ export function FormGiuHang({ gioBanDau }: Props) {
             {dinhDangTienGio(ketQua.tong_tam_tinh)}
           </strong>
         </div>
+        {dongThuong && (
+          <p
+            data-testid="thuong-giu-hang"
+            className="m-0 text-[13px] leading-snug text-den"
+          >
+            {dongThuong}
+          </p>
+        )}
         <p className="hidden lg:block m-0 text-[12px] text-xam leading-relaxed">
           Giá và quà là ước tính. Nhân viên xác nhận khi thanh toán tại booth.
         </p>
