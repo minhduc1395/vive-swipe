@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(diaChiWeb()),
   title: "VIVE Quẹt · K-Beauty Experience",
   description:
-    "Quẹt phải món hợp da, khám phá mỹ phẩm nội địa Hàn và nhận deal tại VIVE.",
+    "Quẹt phải món hợp da, khám phá mỹ phẩm Hàn Quốc và nhận deal tại VIVE.",
 };
 
 export const viewport: Viewport = {

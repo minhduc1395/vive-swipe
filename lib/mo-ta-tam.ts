@@ -16,6 +16,6 @@ export function moTaTam(sp: SanPham): string {
   else if ((sp.loai_da ?? []).includes("moi-loai-da")) cau.push("Dùng được cho mọi loại da.");
   const vd = (sp.van_de ?? []).map((v) => layNhanVanDe(v).toLowerCase()).filter((v) => v !== loai);
   if (vd.length) cau.push(`Hợp với ai đang quan tâm ${vd.slice(0, 3).join(", ")}.`);
-  cau.push("Hàng nội địa Hàn, có tại VIVE Union Square để bạn thử trực tiếp.");
+  cau.push("Hàng Hàn Quốc, có tại VIVE Union Square để bạn thử trực tiếp.");
   return cau.join(" ");
 }
