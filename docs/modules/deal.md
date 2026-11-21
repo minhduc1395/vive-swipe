@@ -18,3 +18,4 @@ Hiển thị deal và tính giỏ hàng theo luật giá, quà.
 - 2026-11-20 W062 (QA-003): deal web theo 3 ưu đãi (PR #50).
 - 2026-11-21 #53: bước 6 của tinhGio duyệt mọi deal `nhom_qua: cong_them` (không gõ cứng id); /gio hiện "Thêm: …" (lượt quay DC-02).
 - 2026-11-21 #63 (W064): trang /deal và /gio theo bảng nội thất: `hong-nhat`→`kem`, `bac-ha`→`be`, `bac-ha-nhat`→`oliu-nhat`; nhãn loại thẻ deal `be`/`oliu-nhat`/`cat`; khối tổng tiền `/gio` nền `kem`.
+- 2026-11-21 #82 (W044): /deal, /gio, ngăn kéo deal song ngữ VI | EN (`messages/*/deal.json`, `lib/deals/ngon-ngu.ts`). Chữ trong lib nhận `t` (mặc định bản vi). Tên/điều kiện/hook/quà en đọc qua trường `*_en`, cần schema deal (WEB) cho qua trường này.

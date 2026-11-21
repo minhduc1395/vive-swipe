@@ -5,6 +5,7 @@ import type { HoSoKhach } from "@/lib/goi-y/ho-so";
 import type { ItemGioHang } from "@/lib/kho-luu-tru";
 import { layDealHienThi } from "./hien-thi";
 import { layGiaTriQua } from "./qua";
+import { dichVi, type Dich } from "./ngon-ngu";
 
 export interface DiemDealChiTiet {
   diem_deal: number;
@@ -264,7 +265,8 @@ export function layDanhSachDealChoBan(
 export function trichXuatNhanGiaiThich(
   hoSo: HoSoKhach,
   daThich: string[],
-  sanPhamMap: Map<string, SanPham>
+  sanPhamMap: Map<string, SanPham>,
+  t: Dich = dichVi
 ): string[] {
   const diemNhan = new Map<string, number>();
 
@@ -277,16 +279,8 @@ export function trichXuatNhanGiaiThich(
       diemNhan.set(ten, (diemNhan.get(ten) ?? 0) + diem * 1.2);
     } else if (khoa.startsWith("vd:")) {
       const slug = khoa.slice(3);
-      const nhanVd: Record<string, string> = {
-        "mun": "Mụn",
-        "lo-chan-long": "Lỗ chân lông",
-        "sang-da": "Sáng da",
-        "cap-am": "Cấp ẩm",
-        "lam-diu": "Làm dịu",
-        "chong-lao-hoa": "Chống lão hóa",
-        "chong-nang": "Chống nắng",
-      };
-      const label = nhanVd[slug] ?? slug;
+      const biet = ["mun", "lo-chan-long", "sang-da", "cap-am", "lam-diu", "chong-lao-hoa", "chong-nang"].includes(slug);
+      const label = biet ? t(`vanDe.${slug}`) : slug;
       diemNhan.set(label, (diemNhan.get(label) ?? 0) + diem);
     } else if (khoa.startsWith("th:")) {
       const ten = khoa.slice(3);
@@ -308,7 +302,7 @@ export function trichXuatNhanGiaiThich(
   const ketQua = sapXep.slice(0, 3).map(([nhan]) => nhan);
 
   if (ketQua.length === 0) {
-    return ["Ưu đãi hot", "Cấp ẩm", "Combo tiết kiệm"];
+    return [t("nhanGiaiThich.hot"), t("vanDe.cap-am"), t("nhanGiaiThich.combo")];
   }
 
   return ketQua;

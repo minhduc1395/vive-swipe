@@ -2,14 +2,24 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import type { Deal, SanPham } from "@/lib/data/types";
 import { duongDanAnh } from "@/lib/anh";
-import { dinhDangTien } from "@/lib/dinh-dang";
+import { dieuKienDeal, dichVi, quaDeal, quaMoc, tenDeal, tenNganSanPham, tienNgan, tienThe, type Dich } from "@/lib/deals/ngon-ngu";
 import { lopNut } from "@/components/ui/Nut";
 
 export type NhomDeal = "qua" | "combo" | "giam";
 
-export const TEN_NHOM: Record<NhomDeal, string> = { qua: "Quà theo hóa đơn", combo: "Combo", giam: "Giảm giá" };
+export function tenNhom(nhom: NhomDeal, t: Dich = dichVi): string {
+  return t(`nhom.${nhom}`);
+}
+
+/** Nhãn loại trên thẻ/ngăn kéo: loại đặc biệt trước, còn lại theo nhóm. */
+export function nhanLoaiDeal(d: Deal, t: Dich = dichVi): string {
+  if (d.loai === "mua_x_tang_y") return t("nhom.muaNhieu");
+  if (d.loai === "may_rui") return t("nhom.mayMan");
+  return tenNhom(nhomCuaDeal(d), t);
+}
 
 export function nhomCuaDeal(d: Deal): NhomDeal {
   if (d.loai === "combo") return "combo";
@@ -18,16 +28,10 @@ export function nhomCuaDeal(d: Deal): NhomDeal {
 }
 
 /** Dòng nhỏ góc phải thẻ: chỉ nói có giới hạn, không tự tính còn bao nhiêu (web không biết tồn quà). */
-export function nhanGioiHan(d: Deal): string | null {
-  if (d.gioi_han || d.moc?.some((m) => m.gioi_han)) return "Số lượng có hạn";
-  if (d.gioi_han_qua) return "Quà có hạn";
+export function nhanGioiHan(d: Deal, t: Dich = dichVi): string | null {
+  if (d.gioi_han || d.moc?.some((m) => m.gioi_han)) return t("the.gioiHanSoLuong");
+  if (d.gioi_han_qua) return t("the.gioiHanQua");
   return null;
-}
-
-/** 700000 → "700K", 1100000 → "1,1 triệu" */
-export function tienNgan(n: number): string {
-  if (n >= 1_000_000) return `${(n / 1_000_000).toLocaleString("vi-VN", { maximumFractionDigits: 1 })} triệu`;
-  return `${Math.round(n / 1000)}K`;
 }
 
 export function tinhCombo(d: Deal, sanPhamMap: Map<string, SanPham>) {
@@ -70,17 +74,19 @@ export function AnhNho({ sp, co = 56, chong = false }: { sp: SanPham; co?: numbe
 }
 
 export function DuongMocQua({ deal, gon = false }: { deal: Deal; gon?: boolean }) {
+  const t = useTranslations("deal");
+  const nn = useLocale();
   const moc = deal.moc ?? [];
   return (
-    <ol className="relative m-0 p-0 list-none flex items-start" aria-label="Các mốc quà">
+    <ol className="relative m-0 p-0 list-none flex items-start" aria-label={t("the.cacMocQua")}>
       <span className="absolute left-1.5 right-1.5 top-[6px] h-[2px] bg-oliu-vua" aria-hidden="true" />
       {moc.map((m, i) => {
         const tien = m.tu ?? m.tren ?? 0;
         return (
           <li key={i} className="relative flex-1 pt-[18px] text-[12px] leading-[1.35] min-w-0 pr-1">
             <span className="absolute left-0 top-[1px] w-3 h-3 rounded-full bg-trang border-2 border-oliu" aria-hidden="true" />
-            <b className="block text-[13px]">{m.tren ? "Trên " : ""}{tienNgan(tien)}</b>
-            <span className={`text-xam ${gon ? "line-clamp-1" : ""}`}>{m.qua.replace(/^1\s+/, "")}</span>
+            <b className="block text-[13px]">{m.tren ? `${t("the.tren")} ` : ""}{tienNgan(tien, nn, t)}</b>
+            <span className={`text-xam ${gon ? "line-clamp-1" : ""}`}>{quaMoc(m, nn).replace(/^1\s+/, "")}</span>
           </li>
         );
       })}
@@ -99,8 +105,13 @@ interface TheDealProps {
 
 /** W039: mỗi deal một thẻ gọn (~240px). Chi tiết dài mở trong ngăn kéo khi bấm thẻ. */
 export function TheDeal({ deal, sanPhamMap, onMo, onThemCombo, onThemBo, noiBat = false }: TheDealProps) {
+  const t = useTranslations("deal");
+  const nn = useLocale();
+  const ten = tenDeal(deal, nn);
+  const dieuKien = dieuKienDeal(deal, nn);
+  const qua = quaDeal(deal, nn);
   const nhom = nhomCuaDeal(deal);
-  const han = nhanGioiHan(deal);
+  const han = nhanGioiHan(deal, t);
   const nenNhan = nhom === "qua" ? "bg-be" : nhom === "combo" ? "bg-oliu-nhat" : "bg-cat";
   const dungLan = (e: React.MouseEvent) => e.stopPropagation();
 
@@ -113,14 +124,14 @@ export function TheDeal({ deal, sanPhamMap, onMo, onThemCombo, onThemBo, noiBat 
     chan = (
       <>
         <button type="button" onClick={(e) => { dungLan(e); onMo(deal); }} className={lopNut("chu", "vua")}>
-          {deal.goi_y?.length ? `${deal.goi_y.length} bộ gợi ý vừa mốc` : "Xem điều kiện"}
+          {deal.goi_y?.length ? t("the.boGoiY", { so: deal.goi_y.length }) : t("the.xemDieuKien")}
         </button>
         {bo ? (
           <button type="button" onClick={(e) => { dungLan(e); onThemBo(bo.ten, bo.san_pham); }} className={lopNut("chinh", "vua")}>
-            Thêm {bo.ten.length > 16 ? "bộ gợi ý" : bo.ten}
+            {t("the.themBo", { ten: bo.ten.length > 16 ? t("the.themBoGoiY") : bo.ten })}
           </button>
         ) : (
-          <Link href="/gio" onClick={dungLan} className={lopNut("phu", "vua")}>Xem giỏ</Link>
+          <Link href="/gio" onClick={dungLan} className={lopNut("phu", "vua")}>{t("the.xemGio")}</Link>
         )}
       </>
     );
@@ -130,19 +141,19 @@ export function TheDeal({ deal, sanPhamMap, onMo, onThemCombo, onThemBo, noiBat 
       <div className="flex items-center gap-3 min-w-0">
         <span className="flex">{c.sp.slice(0, 3).map((s) => <AnhNho key={s.id} sp={s} co={56} chong={c.sp.length > 1} />)}</span>
         <span className="text-[13px] text-xam leading-[1.4] line-clamp-2 min-w-0">
-          {deal.qua ? `Tặng ${deal.qua.replace(/^1\s+/, "")}` : c.sp.map((s) => s.ten_hien_thi).join(" + ")}
+          {qua ? t("the.tang", { qua: qua.replace(/^1\s+/, "") }) : c.sp.map((s) => s.ten_hien_thi).join(" + ")}
         </span>
       </div>
     );
     chan = (
       <>
         <span className="flex items-baseline gap-2 flex-wrap">
-          <b className="text-[22px] tracking-[-0.01em]">{dinhDangTien(c.gia)}</b>
-          {c.tongLe > c.gia && <s className="text-[13px] text-xam">{dinhDangTien(c.tongLe)}</s>}
-          {c.tietKiem > 0 && <span className="text-[12px] font-semibold text-xanh-dam bg-oliu-nhat px-2 py-0.5 rounded-full">−{tienNgan(c.tietKiem)}</span>}
+          <b className="text-[22px] tracking-[-0.01em]">{tienThe(c.gia, nn)}</b>
+          {c.tongLe > c.gia && <s className="text-[13px] text-xam">{tienThe(c.tongLe, nn)}</s>}
+          {c.tietKiem > 0 && <span className="text-[12px] font-semibold text-xanh-dam bg-oliu-nhat px-2 py-0.5 rounded-full">−{tienNgan(c.tietKiem, nn, t)}</span>}
         </span>
         <button type="button" onClick={(e) => { dungLan(e); onThemCombo(deal); }} className={lopNut("chinh-bac-ha", "vua")}>
-          Thêm vào giỏ
+          {t("the.themVaoGio")}
         </button>
       </>
     );
@@ -150,31 +161,31 @@ export function TheDeal({ deal, sanPhamMap, onMo, onThemCombo, onThemBo, noiBat 
     const ds = (deal.ap_dung_cho ?? []).map((id) => sanPhamMap.get(id)).filter((s): s is SanPham => Boolean(s));
     than = (
       <div className="flex flex-col gap-1.5 text-[13px] text-xam leading-[1.4]">
-        {deal.dieu_kien && <p className="m-0 line-clamp-1">{deal.dieu_kien}</p>}
+        {dieuKien && <p className="m-0 line-clamp-1">{dieuKien}</p>}
         <p className="m-0 text-den">
           {ds.map((s, i) => (
-            <span key={s.id}>{i ? " · " : ""}{s.ten_hien_thi.replace(/^.*?(Sữa rửa mặt|Ampoule|Kem dưỡng|Kem).*$/i, "$1")} <b>{tienNgan(deal.gia_uu_dai?.[s.id] ?? Math.round(s.gia_ban * 0.75))}</b></span>
+            <span key={s.id}>{i ? " · " : ""}{tenNganSanPham(s.ten_hien_thi, nn, t)} <b>{tienNgan(deal.gia_uu_dai?.[s.id] ?? Math.round(s.gia_ban * 0.75), nn, t)}</b></span>
           ))}
         </p>
       </div>
     );
     chan = (
       <>
-        <button type="button" onClick={(e) => { dungLan(e); onMo(deal); }} className={lopNut("chu", "vua")}>Xem điều kiện</button>
-        <Link href={dichSanPhamApDung(deal, sanPhamMap)} onClick={dungLan} className={lopNut("phu", "vua")}>Xem sản phẩm</Link>
+        <button type="button" onClick={(e) => { dungLan(e); onMo(deal); }} className={lopNut("chu", "vua")}>{t("the.xemDieuKien")}</button>
+        <Link href={dichSanPhamApDung(deal, sanPhamMap)} onClick={dungLan} className={lopNut("phu", "vua")}>{t("the.xemSanPham")}</Link>
       </>
     );
   } else {
     than = (
       <div className="flex flex-col gap-1.5 text-[13px] text-xam leading-[1.4]">
-        {deal.dieu_kien && <p className="m-0 line-clamp-2">{deal.dieu_kien}</p>}
-        {deal.qua && <p className="m-0 text-den line-clamp-1">Quà: {deal.qua}</p>}
+        {dieuKien && <p className="m-0 line-clamp-2">{dieuKien}</p>}
+        {qua && <p className="m-0 text-den line-clamp-1">{t("the.quaCo", { qua })}</p>}
       </div>
     );
     chan = (
       <>
-        <button type="button" onClick={(e) => { dungLan(e); onMo(deal); }} className={lopNut("chu", "vua")}>Xem điều kiện</button>
-        <Link href={dichSanPhamApDung(deal, sanPhamMap)} onClick={dungLan} className={lopNut("phu", "vua")}>Xem sản phẩm</Link>
+        <button type="button" onClick={(e) => { dungLan(e); onMo(deal); }} className={lopNut("chu", "vua")}>{t("the.xemDieuKien")}</button>
+        <Link href={dichSanPhamApDung(deal, sanPhamMap)} onClick={dungLan} className={lopNut("phu", "vua")}>{t("the.xemSanPham")}</Link>
       </>
     );
   }
@@ -183,7 +194,7 @@ export function TheDeal({ deal, sanPhamMap, onMo, onThemCombo, onThemBo, noiBat 
     <article
       id={`deal-${deal.id}`}
       data-nhom={nhom}
-      aria-label={deal.ten}
+      aria-label={ten}
       onClick={() => onMo(deal)}
       className={`min-w-0 flex flex-col gap-3 p-4 rounded-[20px] bg-trang border cursor-pointer transition-[box-shadow,transform,border-color] duration-200 hover:shadow-[0_8px_28px_rgba(43,43,42,0.08)] hover:-translate-y-0.5 md:min-h-[236px] ${
         noiBat ? "border-hong ring-2 ring-hong" : "border-vien"
@@ -191,7 +202,7 @@ export function TheDeal({ deal, sanPhamMap, onMo, onThemCombo, onThemBo, noiBat 
     >
       <div className="flex items-center justify-between gap-2 text-[12px] text-xam">
         <span className={`inline-flex items-center h-6 px-2.5 rounded-full font-semibold text-den ${nenNhan}`}>
-          {deal.loai === "mua_x_tang_y" ? "Mua nhiều" : deal.loai === "may_rui" ? "May mắn" : TEN_NHOM[nhom]}
+          {nhanLoaiDeal(deal, t)}
         </span>
         {han && (
           <span className="inline-flex items-center gap-1.5">
@@ -200,7 +211,7 @@ export function TheDeal({ deal, sanPhamMap, onMo, onThemCombo, onThemBo, noiBat 
           </span>
         )}
       </div>
-      <h3 className="m-0 text-[17px] font-semibold leading-[1.35] line-clamp-2">{deal.ten}</h3>
+      <h3 className="m-0 text-[17px] font-semibold leading-[1.35] line-clamp-2">{ten}</h3>
       {than}
       <div className="mt-auto flex flex-wrap items-center justify-between gap-x-2 gap-y-2.5">{chan}</div>
     </article>

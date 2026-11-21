@@ -3,8 +3,10 @@ import { lopNut } from "@/components/ui/Nut";
 
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import { useDuLieu } from "@/lib/du-lieu-context";
-import { dinhDangTien } from "@/lib/dinh-dang";
+import { dinhDangGia } from "@/lib/dinh-dang";
+import { dieuKienDeal, tenDeal } from "@/lib/deals/ngon-ngu";
 import { duongDanAnh } from "@/lib/anh";
 import { chuanHoaNgay } from "@/lib/deals/hien-thi";
 import {
@@ -29,7 +31,14 @@ function layNgayTinhGio(): string {
 }
 
 export default function TrangGio() {
+  const t = useTranslations("deal");
+  const nn = useLocale();
   const { sanPham, deals, timSanPham } = useDuLieu();
+  const g = (so: number) => dinhDangGia(so, nn);
+  const tenCombo = (id: string, macDinh: string) => {
+    const d = deals.find((x) => x.id === id);
+    return d ? tenDeal(d, nn) : macDinh;
+  };
   const [gioHang, setGioHang] = useState<ItemGioHang[]>([]);
   const [danhSachThich, setDanhSachThich] = useState<string[]>([]);
   const [daSanSang, setDaSanSang] = useState(false);
@@ -86,8 +95,8 @@ export default function TrangGio() {
         (d.moc?.some((m) => ketQua.qua_cong_them.includes(m.qua)) ||
           (d.qua != null && ketQua.qua_cong_them.includes(d.qua)))
     );
-    return deal?.dieu_kien ?? null;
-  }, [ketQua.qua_cong_them, deals]);
+    return deal ? dieuKienDeal(deal, nn) ?? null : null;
+  }, [ketQua.qua_cong_them, deals, nn]);
 
   const tongSoLuongGio = useMemo(() => {
     return gioHang.reduce((sum, item) => sum + item.soLuong, 0);
@@ -121,9 +130,9 @@ export default function TrangGio() {
     <div className="max-w-[1280px] w-full mx-auto flex-1 flex flex-col min-h-0 bg-trang text-den font-sans overflow-hidden">
         {/* Header */}
         <header className="px-5 pt-7 pb-2 flex items-baseline gap-2 shrink-0">
-          <h1 className="tieu-de-trang">Giỏ hàng</h1>
+          <h1 className="tieu-de-trang">{t("gio.tieuDe")}</h1>
           <span suppressHydrationWarning className="text-[15px] text-xam">
-            {tongSoLuongGio} món
+            {t("gio.soMon", { so: tongSoLuongGio })}
           </span>
         </header>
 
@@ -150,23 +159,23 @@ export default function TrangGio() {
               </svg>
             </div>
             <p className="text-[17px] font-semibold text-den mb-1">
-              Giỏ đang trống. Quẹt lên để thêm nhanh.
+              {t("gio.trong")}
             </p>
             <p className="text-[14px] text-xam max-w-[280px] mb-6">
-              Bạn có thể vuốt thẻ lên trong khi quẹt hoặc bấm nút thêm giỏ ở trang Danh mục.
+              {t("gio.trongMoTa")}
             </p>
             <div className="flex gap-3">
               <Link
                 href="/quet"
                 className={lopNut("chinh")}
               >
-                Bắt đầu quẹt
+                {t("gio.batDauQuet")}
               </Link>
               <Link
                 href="/danh-muc"
                 className="h-11 px-5 rounded-full bg-trang text-den border border-hong text-[14px] font-semibold inline-flex items-center justify-center"
               >
-                Xem danh mục
+                {t("gio.xemDanhMuc")}
               </Link>
             </div>
           </div>
@@ -180,7 +189,7 @@ export default function TrangGio() {
               ketQua.qua_cong_them.length > 0 ||
               ketQua.moc_tiep_theo) && (
               <section
-                aria-label="Quà theo hóa đơn"
+                aria-label={t("gio.quaTheoHoaDon")}
                 className="rounded-[22px] bg-kem p-4 flex flex-col gap-3"
               >
                 {/* Quà dự kiến */}
@@ -207,10 +216,10 @@ export default function TrangGio() {
                     </div>
                     <div className="flex flex-col gap-0.5">
                       <strong className="text-[15px] font-semibold text-den">
-                        Quà dự kiến: {ketQua.qua_du_kien}
+                        {t("gio.quaDuKienDai", { qua: ketQua.qua_du_kien })}
                       </strong>
                       <span className="text-[13px] text-xam-dam">
-                        Mỗi hóa đơn nhận 1 quà có giá trị cao nhất
+                        {t("gio.moiHoaDon")}
                       </span>
                     </div>
                   </div>
@@ -224,7 +233,7 @@ export default function TrangGio() {
                         key={qua}
                         className="text-[15px] font-semibold text-den"
                       >
-                        Thêm: {qua}
+                        {t("gio.them", { qua })}
                       </strong>
                     ))}
                     {dieuKienCongThem && (
@@ -242,29 +251,21 @@ export default function TrangGio() {
                       <div className="h-[1px] bg-vien" />
                     )}
                     <p className="m-0 text-[14px] leading-[1.45] text-den">
-                      Thêm{" "}
-                      <strong className="font-bold text-den">
-                        {dinhDangTien(ketQua.moc_tiep_theo.con_thieu)}đ
-                      </strong>{" "}
-                      {ketQua.moc_tiep_theo.nhan_ap_dung
-                        ? `sản phẩm ${ketQua.moc_tiep_theo.nhan_ap_dung.join(
-                            ", "
-                          )} `
-                        : ""}
-                      để nhận{" "}
-                      <strong className="font-bold text-den">
-                        {ketQua.moc_tiep_theo.qua}
-                      </strong>
+                      {t.rich(ketQua.moc_tiep_theo.nhan_ap_dung ? "gio.mocTiepNhan" : "gio.mocTiep", {
+                        tien: g(ketQua.moc_tiep_theo.con_thieu),
+                        nhan: ketQua.moc_tiep_theo.nhan_ap_dung?.join(", ") ?? "",
+                        qua: ketQua.moc_tiep_theo.qua,
+                        b: (chunks) => <strong className="font-bold text-den">{chunks}</strong>,
+                      })}
                     </p>
 
                     {/* Progress Bar */}
                     <div
                       role="img"
-                      aria-label={`Đã có ${dinhDangTien(
-                        ketQua.moc_tiep_theo.muc_hien_tai
-                      )} trên mốc ${dinhDangTien(
-                        ketQua.moc_tiep_theo.moc_muc_tieu
-                      )}`}
+                      aria-label={t("gio.tienDo", {
+                        hienTai: g(ketQua.moc_tiep_theo.muc_hien_tai),
+                        muc: g(ketQua.moc_tiep_theo.moc_muc_tieu),
+                      })}
                       className="flex flex-col gap-1.5"
                     >
                       <div className="h-2 rounded-full bg-trang overflow-hidden">
@@ -287,10 +288,10 @@ export default function TrangGio() {
                       </div>
                       <div className="flex justify-between text-[12px] text-xam-dam">
                         <span>
-                          Đang có {dinhDangTien(ketQua.moc_tiep_theo.muc_hien_tai)}đ
+                          {t("gio.dangCo", { tien: g(ketQua.moc_tiep_theo.muc_hien_tai) })}
                         </span>
                         <span>
-                          Mốc {dinhDangTien(ketQua.moc_tiep_theo.moc_muc_tieu)}đ
+                          {t("gio.mocMucTieu", { tien: g(ketQua.moc_tiep_theo.moc_muc_tieu) })}
                         </span>
                       </div>
                     </div>
@@ -299,7 +300,7 @@ export default function TrangGio() {
                     {ketQua.moc_tiep_theo.goi_y.length > 0 && (
                       <div className="flex flex-col gap-2 pt-1">
                         <span className="text-[12px] font-medium text-xam">
-                          Gợi ý từ danh sách Đã thích:
+                          {t("gio.goiYDaThich")}
                         </span>
                         {ketQua.moc_tiep_theo.goi_y.map((spGoiY) => {
                           const anhGoiY = duongDanAnh(spGoiY.anh, "nho");
@@ -310,7 +311,7 @@ export default function TrangGio() {
                             >
                               <div
                                 role="img"
-                                aria-label="Ảnh sản phẩm"
+                                aria-label={t("gio.anhSanPham")}
                                 className="w-12 h-12 rounded-xl bg-kem text-[10px] font-semibold tracking-wider uppercase text-xam-dam flex items-center justify-center shrink-0 overflow-hidden"
                               >
                                 {anhGoiY ? (
@@ -329,7 +330,7 @@ export default function TrangGio() {
                                   {spGoiY.thuong_hieu}
                                 </span>
                                 <strong className="font-semibold text-den truncate">
-                                  {spGoiY.ten_hien_thi} · {dinhDangTien(spGoiY.gia_ban)}đ
+                                  {spGoiY.ten_hien_thi} · {g(spGoiY.gia_ban)}
                                 </strong>
                               </div>
                               <button
@@ -337,7 +338,7 @@ export default function TrangGio() {
                                 onClick={() => handleThemGoiY(spGoiY.id)}
                                 className="h-9 px-3 rounded-full bg-be hover:opacity-90 text-den font-semibold text-[13px] shrink-0 transition-transform active:scale-95 cursor-pointer"
                               >
-                                + Thêm
+                                {t("gio.themNhanh")}
                               </button>
                             </div>
                           );
@@ -352,7 +353,7 @@ export default function TrangGio() {
             {/* Gợi ý đổi combo nếu có */}
             {ketQua.goi_y_doi_combo.length > 0 && (
               <section
-                aria-label="Gợi ý đổi combo"
+                aria-label={t("gio.goiYDoiCombo")}
                 className="rounded-[18px] bg-oliu-nhat border border-be p-3.5 flex flex-col gap-2"
               >
                 {ketQua.goi_y_doi_combo.map((combo) => (
@@ -362,13 +363,13 @@ export default function TrangGio() {
                   >
                     <div className="flex flex-col min-w-0">
                       <span className="text-[11px] font-bold text-den uppercase tracking-wide">
-                        Gợi ý combo tiết kiệm
+                        {t("gio.goiYComboTieuDe")}
                       </span>
                       <strong className="text-[14px] font-semibold text-den truncate">
-                        Đổi sang {combo.ten}
+                        {t("gio.doiSang", { ten: tenCombo(combo.deal_id, combo.ten) })}
                       </strong>
                       <span className="text-[12px] text-xam">
-                        Tiết kiệm thêm {dinhDangTien(combo.tiet_kiem)}đ (giá {dinhDangTien(combo.gia_combo)}đ)
+                        {t("gio.tietKiemThem", { tiet: g(combo.tiet_kiem), gia: g(combo.gia_combo) })}
                       </span>
                     </div>
                     <button
@@ -378,7 +379,7 @@ export default function TrangGio() {
                       }
                       className={lopNut("chinh","nho")}
                     >
-                      Đổi combo
+                      {t("gio.doiCombo")}
                     </button>
                   </div>
                 ))}
@@ -387,7 +388,7 @@ export default function TrangGio() {
 
             {/* 2. Danh sách sản phẩm trong giỏ */}
             <section
-              aria-label="Sản phẩm trong giỏ"
+              aria-label={t("gio.sanPhamTrongGio")}
               className="flex flex-col divide-y divide-vien"
             >
               {ketQua.cac_dong.map((dong) => {
@@ -400,6 +401,7 @@ export default function TrangGio() {
                     : "bg-kem";
 
                 const anhSrc = duongDanAnh(sp?.anh, "nho");
+                const tenDong = dong.loai === "combo" ? tenCombo(dong.id, dong.ten) : dong.ten;
 
                 return (
                   <article
@@ -409,19 +411,19 @@ export default function TrangGio() {
                     {/* Ảnh sản phẩm / combo */}
                     <div
                       role="img"
-                      aria-label="Ảnh mục giỏ hàng"
+                      aria-label={t("gio.anhMucGio")}
                       className={`relative w-[76px] h-[76px] rounded-[16px] ${bgAnh} flex items-center justify-center shrink-0 overflow-hidden`}
                     >
                       {dong.loai === "combo" && (
                         <span className="absolute left-1.5 top-1.5 px-1.5 py-0.5 rounded-md bg-hong text-den text-[10px] font-bold">
-                          COMBO
+                          {t("gio.nhanCombo")}
                         </span>
                       )}
                       {anhSrc ? (
                         /* eslint-disable-next-line @next/next/no-img-element */
                         <img
                           src={anhSrc}
-                          alt={dong.ten}
+                          alt={tenDong}
                           className="w-14 h-14 object-contain"
                         />
                       ) : (
@@ -437,13 +439,13 @@ export default function TrangGio() {
                         {dong.thuong_hieu}
                       </span>
                       <strong className="text-[15px] font-semibold text-den leading-[1.3] line-clamp-2">
-                        {dong.ten}
+                        {tenDong}
                       </strong>
 
                       {/* Tag deal nếu có */}
                       {dong.deal_ap_dung.includes("LOPOE-25") && (
                         <span className="self-start px-2 py-0.5 rounded-full bg-be text-den text-[11px] font-semibold">
-                          Giảm 25% vì mua kèm
+                          {t("gio.giam25")}
                         </span>
                       )}
 
@@ -461,12 +463,12 @@ export default function TrangGio() {
 
                           return (
                             <div className="flex items-baseline gap-1.5">
-                              <strong className="text-[16px] font-bold text-den">
-                                {dinhDangTien(giaHienThi)}đ
+                              <strong className="text-[16px] font-bold text-den whitespace-nowrap">
+                                {g(giaHienThi)}
                               </strong>
                               {coGachGia && (
-                                <s className="text-[12px] text-xam">
-                                  {dinhDangTien(dong.gia_goc_dong)}đ
+                                <s className="text-[12px] text-xam whitespace-nowrap">
+                                  {g(dong.gia_goc_dong)}
                                 </s>
                               )}
                             </div>
@@ -477,7 +479,7 @@ export default function TrangGio() {
                         <div className="flex items-center border border-hong rounded-full overflow-hidden bg-trang">
                           <button
                             type="button"
-                            aria-label="Giảm số lượng"
+                            aria-label={t("gio.giamSoLuong")}
                             onClick={() => handleGiamSoLuong(dong)}
                             className="w-9 h-9 flex items-center justify-center text-[18px] text-den hover:bg-neutral-100 cursor-pointer active:scale-95"
                           >
@@ -488,7 +490,7 @@ export default function TrangGio() {
                           </span>
                           <button
                             type="button"
-                            aria-label="Tăng số lượng"
+                            aria-label={t("gio.tangSoLuong")}
                             onClick={() => handleTangSoLuong(dong)}
                             className="w-9 h-9 flex items-center justify-center text-[18px] text-den hover:bg-neutral-100 cursor-pointer active:scale-95"
                           >
@@ -506,31 +508,31 @@ export default function TrangGio() {
           {/* Cột phải: Tóm tắt đơn hàng dính trên máy tính */}
           <div className="lg:sticky lg:top-6 flex flex-col gap-4 bg-kem p-5 md:p-6 rounded-[24px] border border-vien shadow-xs">
             <h2 className="m-0 text-[18px] font-bold text-den">
-              Tóm tắt đơn hàng
+              {t("gio.tomTat")}
             </h2>
 
             {/* 3. Tổng tiền */}
             <section
-              aria-label="Tổng tiền"
+              aria-label={t("gio.tongTien")}
               className="flex flex-col gap-2 pt-2 text-[14px] border-t border-vien"
             >
               <div className="flex justify-between text-xam">
-                <span>Tạm tính theo giá lẻ</span>
+                <span>{t("gio.tamTinh")}</span>
                 <span className="text-den font-medium">
-                  {dinhDangTien(ketQua.tong_le)}đ
+                  {g(ketQua.tong_le)}
                 </span>
               </div>
 
               {ketQua.tiet_kiem > 0 && (
                 <div className="flex justify-between text-den font-semibold">
-                  <span>Bạn tiết kiệm</span>
-                  <span>−{dinhDangTien(ketQua.tiet_kiem)}đ</span>
+                  <span>{t("gio.banTietKiem")}</span>
+                  <span>−{g(ketQua.tiet_kiem)}</span>
                 </div>
               )}
 
               {ketQua.qua_du_kien && (
                 <div className="flex justify-between text-xam">
-                  <span>Quà dự kiến</span>
+                  <span>{t("gio.quaDuKien")}</span>
                   <span className="text-den font-semibold">
                     {ketQua.qua_du_kien}
                   </span>
@@ -541,15 +543,15 @@ export default function TrangGio() {
 
               <div className="flex justify-between items-baseline">
                 <span className="font-semibold text-den text-[16px]">
-                  Tổng ước tính
+                  {t("gio.tongUocTinh")}
                 </span>
                 <span className="text-[24px] font-bold text-den">
-                  {dinhDangTien(ketQua.tong_tam_tinh)}đ
+                  {g(ketQua.tong_tam_tinh)}
                 </span>
               </div>
 
               <p className="m-0 mt-1.5 text-[12px] leading-[1.5] text-xam">
-                Giá và quà là ước tính. Nhân viên xác nhận khi thanh toán tại booth. Quà số lượng có hạn.
+                {t("gio.luuY")}
               </p>
             </section>
 
@@ -565,10 +567,10 @@ export default function TrangGio() {
                 }
                 className={lopNut("dam","lon",true) + " h-14 text-[17px] shadow-sm"}
               >
-                Giữ hàng tại booth
+                {t("gio.giuHang")}
               </Link>
               <span className="text-[12px] text-xam text-center">
-                Trả tiền và nhận hàng tại VIVE, tầng LL2 Union Square
+                {t("gio.diaChiBooth")}
               </span>
             </div>
           </div>
