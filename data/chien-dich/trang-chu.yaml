@@ -255,6 +255,7 @@ qua_lopoe:   # QA-003 (20/11): KM-08 đã dừng, dùng mốc hóa đơn 800K / 
       kieu: "chinh"
 
 # W055: hàng cuối phần combo, thẻ trượt ngang. Giá, quà lấy từ deal_id.
+# Nền hàng trượt là kem: thẻ không dùng "kem", 2 thẻ kề nhau khác màu (CĐT 21/11: ô trùng màu nền bị hòa vào).
 truot_combo:
   tieu_de: "Thêm combo."
   phu_de: "Giá combo tại VIVE. Quà số lượng có hạn."
@@ -269,17 +270,17 @@ truot_combo:
       ten: "Bộ 3 Better Balance"
       anh_bo: ["/trang-chu/srm.webp", "/trang-chu/ampoule.webp", "/trang-chu/kem.webp"]
     - deal_id: "LOPOE-COMBO-KEM-AMP"
-      mau_nen: "kem"
+      mau_nen: "trang"
       nhan: "LOPOE"
       ten: "Kem dưỡng + Ampoule"
       anh_bo: ["/trang-chu/kem.webp", "/trang-chu/ampoule.webp"]
     - deal_id: "LOPOE-COMBO-2SRM"
-      mau_nen: "kem"
+      mau_nen: "be"
       nhan: "LOPOE"
       ten: "2 sữa rửa mặt"
       anh_bo: ["/trang-chu/srm.webp", "/trang-chu/srm.webp"]
     - deal_id: "COMBO-PINK"
-      mau_nen: "be"
+      mau_nen: "cat"
       nhan: "Medicube"
       ten: "PDRN Pink"
       anh_bo: ["/trang-chu/medicube-pdrn-serum.webp"]
@@ -289,12 +290,12 @@ truot_combo:
       ten: "Vampire Glow"
       anh_bo: ["/trang-chu/medicube-vitac-dong.webp", "/trang-chu/medicube-glutathione.webp"]
     - deal_id: "COMBO-ZOMBIE"
-      mau_nen: "be"
+      mau_nen: "trang"
       nhan: "SKINFOOD"
       ten: "Zombie hồi sinh"
       san_pham: ["8809511276704", "8809511276728"]
     - deal_id: "DC-05"
-      mau_nen: "kem"
+      mau_nen: "oliu-nhat"
       nhan: "Uniura"
       ten: "Mặt nạ mua 4 tặng 1"
       so_lon: "4+1"

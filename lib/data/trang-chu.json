@@ -377,7 +377,7 @@
       },
       {
         "deal_id": "LOPOE-COMBO-KEM-AMP",
-        "mau_nen": "kem",
+        "mau_nen": "trang",
         "nhan": "LOPOE",
         "ten": "Kem dưỡng + Ampoule",
         "anh_bo": [
@@ -387,7 +387,7 @@
       },
       {
         "deal_id": "LOPOE-COMBO-2SRM",
-        "mau_nen": "kem",
+        "mau_nen": "be",
         "nhan": "LOPOE",
         "ten": "2 sữa rửa mặt",
         "anh_bo": [
@@ -397,7 +397,7 @@
       },
       {
         "deal_id": "COMBO-PINK",
-        "mau_nen": "be",
+        "mau_nen": "cat",
         "nhan": "Medicube",
         "ten": "PDRN Pink",
         "anh_bo": [
@@ -416,7 +416,7 @@
       },
       {
         "deal_id": "COMBO-ZOMBIE",
-        "mau_nen": "be",
+        "mau_nen": "trang",
         "nhan": "SKINFOOD",
         "ten": "Zombie hồi sinh",
         "san_pham": [
@@ -426,7 +426,7 @@
       },
       {
         "deal_id": "DC-05",
-        "mau_nen": "kem",
+        "mau_nen": "oliu-nhat",
         "nhan": "Uniura",
         "ten": "Mặt nạ mua 4 tặng 1",
         "so_lon": "4+1"
