@@ -15,11 +15,11 @@ describe("W049 · Chân trang & DoanhNghiepSchema", () => {
     expect(DOANH_NGHIEP.mang_xa_hoi).toHaveLength(3);
 
     const fb = DOANH_NGHIEP.mang_xa_hoi.find((m) => m.ten === "Facebook");
-    expect(fb?.url).toBe("https://www.facebook.com/weareVIVE");
-    expect(fb?.tai_khoan).toBe("VIVE - K Beauty Experience");
+    expect(fb?.url).toBe("https://www.facebook.com/1530922283427509");
+    expect(fb?.tai_khoan).toBe("VIVE");
 
     const ig = DOANH_NGHIEP.mang_xa_hoi.find((m) => m.ten === "Instagram");
-    expect(ig?.tai_khoan).toBe("@vive.k_beauty");
+    expect(ig?.tai_khoan).toBe("@vive.vers");
 
     const tt = DOANH_NGHIEP.mang_xa_hoi.find((m) => m.ten === "TikTok");
     expect(tt?.tai_khoan).toBe("@viveuniverse");
