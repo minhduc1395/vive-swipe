@@ -25,6 +25,13 @@ test("/quet: không lỗi console, thẻ đầu hiện ảnh ưu tiên cao, CLS 
   await page.route(`${MEDIA_BASE}/**`, (route) =>
     route.fulfill({ status: 200, contentType: "image/svg+xml", body: SVG_MOCK })
   );
+  // Máy chủ dev dùng chung giữa các test: nếu test quản trị chạy trước đã sửa kho dev,
+  // DuLieuProvider lấy dữ liệu tĩnh (ảnh /products/<id>.webp, phần lớn không có trong repo -> 404).
+  // Trả ảnh giả cho đường này để test không phụ thuộc thứ tự chạy.
+  await page.route(
+    (url) => url.pathname.startsWith("/products/") && /\.(webp|png|jpe?g)$/i.test(url.pathname),
+    (route) => route.fulfill({ status: 200, contentType: "image/svg+xml", body: SVG_MOCK })
+  );
   await page.route(
     (url) => url.pathname.includes("/rest/v1/san_pham"),
     (route) =>
