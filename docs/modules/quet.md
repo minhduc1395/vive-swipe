@@ -19,3 +19,4 @@ Trải nghiệm quẹt sản phẩm kiểu Tinder, danh mục, sản phẩm đã
 - 2026-11-21 W064: `/new-arrival` mở đầu bằng khối cuộn LOPOE như trang chủ; màu toàn site theo bảng nội thất (xem `_chung.md`).
 - 2026-11-21 #62: các trang khám phá (`danh-muc`, `quet`, `da-thich`, `chao`, `bat-dau`, `components/deck`) đổi token cũ sang tên mới: `hong-nhat`→`kem`, `bac-ha`→`be`, `bac-ha-nhat`→`oliu-nhat`; `vien` giữ.
 - 2026-11-21 #81 W044: song ngữ VI | EN cho `quet`, `da-thich`, `danh-muc`, `new-arrival` (metadata), `bat-dau`, `chao`, `components/deck`; test `tests/w044-quet-song-ngu.test.ts`, e2e `tests/e2e/w044-quet-en.spec.ts`.
+- 2026-11-22 #104 LEG-003: bỏ "nội địa Hàn" / "Korean domestic" trong `messages/*/quet.json` (khóa `cuoi`, `moTaTrang`); test `tests/quet-leg003.test.ts`.
