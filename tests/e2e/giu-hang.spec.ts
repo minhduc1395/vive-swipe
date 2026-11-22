@@ -27,6 +27,9 @@ test.describe("W014 · Giữ hàng tại booth, màn mã giữ hàng, email xác
     await expect(page.getByText("1 món · tổng ước tính")).toBeVisible();
     await expect(page.getByText("249.000đ")).toBeVisible();
 
+    // LEG-002: ô chính sách mặc định chưa tick
+    await expect(page.getByLabel(/chính sách bảo mật và giữ hàng/)).not.toBeChecked();
+
     // Bấm xác nhận ngay khi chưa nhập tên -> Báo lỗi
     const btnXacNhan = page.getByRole("button", { name: "Xác nhận giữ hàng" });
     await btnXacNhan.click();
@@ -57,6 +60,29 @@ test.describe("W014 · Giữ hàng tại booth, màn mã giữ hàng, email xác
     await expect(page.getByText(/Giữ đến 21:00 ngày mai/i)).toBeVisible();
   });
 
+  test("1b. LEG-002: chưa tick chính sách thì báo lỗi và không tạo mã; tick thì tạo được", async ({ page }) => {
+    await page.goto("/");
+    await page.evaluate((key) => {
+      window.localStorage.setItem(
+        key,
+        JSON.stringify([{ loai: "san_pham", sanPhamId: "LOPOE-CF", soLuong: 1 }])
+      );
+    }, KHOA_GIO_HANG);
+    await page.goto("/giu-hang");
+    await page.locator("input#ten").fill("Phan Minh Đức");
+    await page.locator("input#sdt").fill("0955443322");
+    const o = page.getByLabel(/chính sách bảo mật và giữ hàng/);
+    await expect(o).not.toBeChecked();
+    await page.getByRole("button", { name: "Xác nhận giữ hàng" }).click();
+    await expect(
+      page.getByText("Vui lòng đồng ý với chính sách bảo mật và giữ hàng của VIVE.")
+    ).toBeVisible();
+    await expect(page).toHaveURL(/\/giu-hang$/);
+    await o.check();
+    await page.getByRole("button", { name: "Xác nhận giữ hàng" }).click();
+    await expect(page).toHaveURL(/\/giu-hang\/VIVE-\d{4}/, { timeout: 10000 });
+  });
+
   test("2. Luồng hoàn chỉnh: Tạo mã giữ hàng thành công -> Chuyển sang /giu-hang/[ma] có QR & chi tiết món", async ({
     page,
   }) => {
@@ -77,6 +103,8 @@ test.describe("W014 · Giữ hàng tại booth, màn mã giữ hàng, email xác
     await page.locator('input#sdt').fill("0988776655");
     await page.locator('input#email').fill("duc.test@vive.vn");
 
+    // LEG-002: ô chính sách mặc định chưa tick, khách phải tự tick
+    await page.getByLabel(/chính sách bảo mật và giữ hàng/).check();
     // Bấm Xác nhận giữ hàng
     const btnXacNhan = page.getByRole("button", { name: "Xác nhận giữ hàng" });
     await btnXacNhan.click();
@@ -126,6 +154,7 @@ test.describe("W014 · Giữ hàng tại booth, màn mã giữ hàng, email xác
     await page.locator("input#ten").fill("Phan Minh Đức");
     await page.locator("input#sdt").fill("0977665544");
     await page.locator("input#email").fill("duc.test@vive.vn");
+    await page.getByLabel(/chính sách bảo mật và giữ hàng/).check();
     await page.getByRole("button", { name: "Xác nhận giữ hàng" }).click();
     await expect(page).toHaveURL(/\/giu-hang\/VIVE-\d{4}/);
 
@@ -176,6 +205,7 @@ test.describe("W014 · Giữ hàng tại booth, màn mã giữ hàng, email xác
     await expect(page.getByTestId("thuong-giu-hang")).toContainText(QUA);
     await page.locator("input#ten").fill("Phan Minh Đức");
     await page.locator("input#sdt").fill("0966554433");
+    await page.getByLabel(/chính sách bảo mật và giữ hàng/).check();
     await page.getByRole("button", { name: "Xác nhận giữ hàng" }).click();
     await expect(page).toHaveURL(/\/giu-hang\/VIVE-\d{4}/, { timeout: 10000 });
     await expect(page.getByTestId("thuong-giu-hang")).toContainText(QUA);

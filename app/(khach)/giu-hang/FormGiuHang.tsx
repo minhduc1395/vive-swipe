@@ -46,7 +46,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
   const [email, setEmail] = useState("");
   const [ngayDen, setNgayDen] = useState<"hom_nay" | "ngay_mai">("ngay_mai");
   const [dongYEmail, setDongYEmail] = useState(false);
-  const [dongYChinhSach, setDongYChinhSach] = useState(true);
+  const [dongYChinhSach, setDongYChinhSach] = useState(false);
 
   const [loiValidation, setLoiValidation] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();

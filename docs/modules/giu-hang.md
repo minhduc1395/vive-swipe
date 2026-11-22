@@ -21,3 +21,4 @@ Khách giữ hàng trên web, nhận mã giữ hàng, trả tiền và nhận t�
 - 22/11: Antigravity làm W067 (sửa select deal(ten) trong lib/giu-hang/kho-giu-hang.ts). Đội coder không nhận job chạm file này tới khi W067 Done.
 - 2026-11-21 (#83, W044): chữ của trang giữ hàng và trang mã nằm ở `messages/{vi,en}/giu-hang.json`; lỗi server trả thêm `maLoi` để hiện đúng ngôn ngữ; thưởng giữ hàng en dùng `qua_en`. Email chưa song ngữ.
 - 2026-11-22 (#106, LEG-003): email xác nhận bỏ chữ "nội địa Hàn", dòng chân là "Mỹ phẩm Hàn Quốc tại TP. Hồ Chí Minh"; test khóa trong `tests/giu-hang-leg003.test.ts`.
+- 2026-11-22 (#116, LEG-002): ô đồng ý chính sách ở form giữ hàng mặc định chưa tick (`useState(false)`); chưa tick thì báo `loi.chinhSach`, không gọi tạo giữ hàng. Test: `tests/giu-hang-dong-y.test.ts`, e2e 1b trong `giu-hang.spec.ts`.
