@@ -19,7 +19,7 @@ tai_san:
 # W063: điện thoại (<768px) dùng 699 khung ảnh chụp từ chính cảnh 3D ở khung nhìn 390×844 @2x (đủ khung đều, dày thêm ở đoạn chuyển động lớn); nhan.json = {p: tiến trình mỗi khung, nhan: vị trí nhãn thành phần}.
 khung_dien_thoai:
   thu_muc: /thu-nghiem/lopoe-khung
-  so: 699
+  so: 799
   rong: 780
   cao: 1688
   vp_rong: 390
