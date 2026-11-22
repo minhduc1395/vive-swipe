@@ -86,9 +86,11 @@ khoi:
     cau: "*Dịu da tức thì.*"
     cau_en: "*Instantly calms skin.*"
     cau_lon: true
+  # W072: đoạn 4 hoạt chất nới từ 0,53–0,62 thành 0,53–0,68; các khối sau dời theo (giữ thứ tự, độ dài tương đối).
+  # Cảnh 3D và ảnh khung điện thoại vẫn theo mốc gốc, code đổi mốc (pCanh trong components/cuon-3d/phat-khung.ts).
   - id: amp-thanh-phan
     a: 0.53
-    b: 0.62
+    b: 0.68
     vi_tri: cot
     tu: phai
     ten_nho: "Ampoule"
@@ -99,8 +101,8 @@ khoi:
     cau_en: "Repairs & *locks in moisture.*"
   # Bằng chứng: huy hiệu "2025 상반기 hwahae awards · 라이징 트렌드 | 진정 · 1위 · 에센스/앰플/세럼" (CĐT gửi 20/11)
   - id: amp-giai-thuong
-    a: 0.65
-    b: 0.72
+    a: 0.705
+    b: 0.764
     vi_tri: duoi-giua
     tu: duoi
     huy_hieu:
@@ -113,8 +115,8 @@ khoi:
     cau_en: "No. 1 *soothing ampoule*"
     cho_duyet: true
   - id: kem-cong-dung
-    a: 0.78
-    b: 0.87
+    a: 0.815
+    b: 0.891
     vi_tri: trai-duoi
     tu: trai
     ten_nho: "Kem dưỡng"
@@ -125,7 +127,7 @@ khoi:
     cau_lon: true
   # Kết: bộ 3 đứng lại, mời xem combo rồi nhả sang khối sau
   - id: ket
-    a: 0.93
+    a: 0.941
     b: 1
     vi_tri: tren-giua
     tu: duoi
@@ -154,3 +156,22 @@ anh_thanh_phan:
   phan-tu: /thanh-phan/thanh-phan-b5-panthenol.webp
   rau-ma: /thanh-phan/thanh-phan-rau-ma.webp
 so_1: "No.1"   # chữ lớn sau ampoule ở phần giải thưởng, chỉ hiện khi khối amp-giai-thuong hiện
+# W072 (#126): bố cục "bọt nước" cho đoạn 4 hoạt chất ampoule (BOD chọn hướng, WEB-020). Công tắc: bat: true,
+# hoặc thêm ?bot-nuoc=1 vào URL để xem trước. Tắt thì đoạn giữ như cũ. Ảnh bọt DES (DES-010 bản v1), thay ảnh thì giữ tên file.
+# Ghép bọt với hoạt chất theo `loai` trong thanh_phan.ampoule. Chữ bọt lấy từ thanh_phan.ampoule; 2 nút lấy từ khối `ket`.
+bot_nuoc:
+  bat: false
+  anh:
+    thua: /thanh-phan/bot-nuoc-la-thua.webp
+    sen: /thanh-phan/bot-nuoc-sen-xanh.webp
+    xoan: /thanh-phan/bot-nuoc-hyaluronic-acid.webp
+    phan-tu: /thanh-phan/bot-nuoc-panthenol-niacinamide.webp
+  may_tinh:
+    tam: [29, 50]          # % khung nhìn: chỗ chai ampoule đứng cuối đoạn (x = (1 - 0.42) / 2)
+    ban_kinh: [34, 42]     # min(34vw, 42vh)
+    goc: [-50, -16.7, 16.7, 50]
+    co: [13, 20]           # min(13vw, 20vh)
+  dien_thoai:
+    tren: 57               # % chiều cao: lưới 2×2 bắt đầu dưới đáy chai
+    duoi: 72               # px chừa cho thanh tab dưới (64px)
+    co: [22, 8.5]          # min(22vw, 8.5vh)
