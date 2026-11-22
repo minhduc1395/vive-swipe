@@ -41,6 +41,8 @@ test.describe("W044 · giu-hang song ngữ", () => {
     expect(await dongVietTrongMain(page)).toEqual([]);
 
     await page.locator("input#sdt").fill("0911222333");
+    // LEG-002: ô chính sách mặc định chưa tick, khách phải tự tick
+    await page.getByLabel(/privacy and reservation policy/).check();
     await page.getByRole("button", { name: "Confirm reservation" }).click();
     await expect(page).toHaveURL(/\/giu-hang\/VIVE-\d{4}/);
     await expect(page.getByRole("heading", { name: "Reserved" })).toBeVisible();
