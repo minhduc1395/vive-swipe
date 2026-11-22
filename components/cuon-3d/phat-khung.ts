@@ -1,50 +1,42 @@
 /**
- * Phát chuỗi ảnh khung LOPOE trên điện thoại với tốc độ đều, không phụ thuộc tốc độ cuộn.
- *
- * Cuộn chỉ đặt "khung đích". Khung đang hiện chạy về đích như phát video:
- * - tốc độ cơ bản cố định (`coBan` khung/giây), cuộn nhanh hay chậm, thả tay hay vuốt mạnh đều như nhau;
- * - chỉ khi bị bỏ xa (vuốt rất mạnh) mới tăng tốc dần để đuổi kịp, tối đa `toiDa`;
- * - mọi thay đổi tốc độ bị giới hạn gia tốc `gia` (khung/giây²): khởi động và dừng êm, không giật;
- * - không bao giờ vượt qua đích.
+ * Chuỗi ảnh khung LOPOE trên điện thoại: khung đang hiện bám theo vị trí cuộn bằng lò xo giảm chấn tới hạn
+ * (kiểu SmoothDamp). Hình theo tay ngay (trễ ~0,1 giây), dừng ngay khi trang ngừng cuộn, và tốc độ hình luôn
+ * đổi liền mạch: ngón tay đổi nhịp, nhấc tay hay quán tính chậm dần cũng không làm hình giật cục.
+ * Không tự chạy thêm sau khi trang đã đứng yên.
  */
 export type TrangThaiPhat = { f: number; v: number };
 
-export const PHAT_MAC_DINH = {
-  /** khung/giây khi đi bình thường (~47 khung cho mỗi màn hình cuộn) */
-  coBan: 40,
-  /** trễ quá số khung này (~3 màn hình cuộn) mới bắt đầu tăng tốc đuổi theo; dưới ngưỡng luôn đúng tốc độ cơ bản */
-  nguongDuoi: 150,
-  /** mỗi khung trễ thêm (sau ngưỡng) tăng bao nhiêu khung/giây */
-  heSoDuoi: 0.5,
-  /** khung/giây tối đa khi đuổi */
-  toiDa: 140,
-  /** gia tốc tối đa (khung/giây²): 0 → 40 khung/giây trong ~0,33 giây */
-  gia: 120,
+export const BAM_MAC_DINH = {
+  /** thời gian bám (giây): càng nhỏ càng sát tay, càng lớn càng mượt */
+  thoiGian: 0.1,
+  /** khung/giây tối đa (tránh nhảy quá nhiều khung trong 1 lần vẽ khi vuốt rất mạnh) */
+  toiDa: 300,
 };
 
-export type CauHinhPhat = typeof PHAT_MAC_DINH;
+export type CauHinhBam = typeof BAM_MAC_DINH;
 
-export function buocPhat(
+export function buocBam(
   s: TrangThaiPhat,
   dich: number,
   dt: number,
-  o: CauHinhPhat = PHAT_MAC_DINH,
+  o: CauHinhBam = BAM_MAC_DINH,
 ): TrangThaiPhat {
-  const e = dich - s.f;
-  const d = Math.abs(e);
-  if (d < 0.02 && Math.abs(s.v) < 2) return { f: dich, v: 0 };
   if (dt <= 0) return s;
-
-  let toc = Math.min(o.toiDa, o.coBan + Math.max(0, d - o.nguongDuoi) * o.heSoDuoi);
-  // gần đích thì hãm dần để dừng êm đúng khung đích
-  toc = Math.min(toc, Math.sqrt(2 * o.gia * d));
-  const vMuon = Math.sign(e) * toc;
-
-  const buocToiDa = o.gia * dt;
-  const v = s.v + Math.max(-buocToiDa, Math.min(buocToiDa, vMuon - s.v));
-  const f = s.f + v * dt;
-  // đi qua đích trong bước này thì dừng đúng đích
-  if (e * (dich - f) < 0) return { f: dich, v: 0 };
+  if (Math.abs(dich - s.f) < 0.01 && Math.abs(s.v) < 0.5) return { f: dich, v: 0 };
+  const omega = 2 / o.thoiGian;
+  const x = omega * dt;
+  const giam = 1 / (1 + x + 0.48 * x * x + 0.235 * x * x * x);
+  const toiDaLech = o.toiDa * o.thoiGian;
+  const lech = Math.max(-toiDaLech, Math.min(toiDaLech, s.f - dich));
+  const dich2 = s.f - lech;
+  const tam = (s.v + omega * lech) * dt;
+  let v = (s.v - omega * tam) * giam;
+  let f = dich2 + (lech + tam) * giam;
+  // không vượt đích
+  if (dich - s.f > 0 === f > dich) {
+    f = dich;
+    v = 0;
+  }
   return { f, v };
 }
 
@@ -70,41 +62,4 @@ export function pTuKhung(pKhung: number[], f: number): number {
   const i = Math.max(0, Math.min(n - 1, Math.floor(f)));
   const j = Math.min(n - 1, i + 1);
   return pKhung[i] + (pKhung[j] - pKhung[i]) * Math.max(0, Math.min(1, f - i));
-}
-
-/**
- * Chọn điểm dừng làm đích theo hướng cuộn, để tốc độ hình không phụ thuộc tốc độ ngón tay
- * kể cả khi kéo rất chậm: cuộn tới một chút là hình tự chạy (tốc độ đều) tới cảnh kế tiếp rồi dừng;
- * cuộn lui một chút là chạy lùi về cảnh trước. Rung tay nhỏ hơn `nguong` (theo tiến trình p) bị bỏ qua.
- *
- * - `q`: tiến trình cuộn hiện tại (0–1)
- * - `dich`: đích đang chạy tới (p)
- * - `moc`: tiến trình cuộn lúc ra quyết định gần nhất
- * - `diemDung`: các điểm dừng (p), tăng dần, gồm 0 và 1
- */
-export function chonDich(
-  st: { dich: number; moc: number },
-  q: number,
-  diemDung: number[],
-  nguong = 0.003,
-): { dich: number; moc: number } {
-  const dq = q - st.moc;
-  if (dq > nguong) {
-    if (st.dich > q) return { dich: st.dich, moc: q };
-    const tren = diemDung.find((d) => d >= q) ?? 1;
-    return { dich: tren, moc: q };
-  }
-  if (dq < -nguong) {
-    if (st.dich < q) return { dich: st.dich, moc: q };
-    let duoi = 0;
-    for (const d of diemDung) if (d <= q) duoi = d;
-    return { dich: duoi, moc: q };
-  }
-  return st;
-}
-
-/** Điểm dừng từ các khối chữ: lúc chữ của khối đã hiện đủ (a + 0,02), cộng đầu và cuối đoạn. */
-export function diemDungTuKhoi(khoi: { a: number }[]): number[] {
-  const ds = [0, ...khoi.map((k) => Math.min(1, k.a + 0.02)), 1];
-  return [...new Set(ds)].sort((x, y) => x - y);
 }

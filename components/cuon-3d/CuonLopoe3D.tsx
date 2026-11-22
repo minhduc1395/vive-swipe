@@ -22,7 +22,7 @@ function NutMacDinh({ n, i }: { n: Nut3D; i: number }) {
 }
 const veNutMacDinh: VeNut3D = (n, i) => <NutMacDinh key={n.chu} n={n} i={i} />;
 import type { Canh, LoaiHat } from "./canh";
-import { buocPhat, chonDich, diemDungTuKhoi, khungTuP, pTuKhung, type TrangThaiPhat } from "./phat-khung";
+import { buocBam, khungTuP, pTuKhung, type TrangThaiPhat } from "./phat-khung";
 
 const kep = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const muot = (t: number) => t * t * (3 - 2 * t);
@@ -169,9 +169,8 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
     let ctx2d: CanvasRenderingContext2D | null = null, khoaVe = -1;
     let raf = 0, hien = false, huy = false, p = 0, truoc = performance.now(), dangTai = false;
     let phat: TrangThaiPhat | null = null; // null = nhảy thẳng tới đích ở lần vẽ tới
-    let chonDung = { dich: 0, moc: 0 };
-    const diemDung = diemDungTuKhoi(cfg.khoi);
     const elDoan = doan.current, elLop = lop.current, elCanvas = canvas.current;
+    const chupKhung = new URLSearchParams(location.search).has("ba-chieu"); // ?ba-chieu=1: chế độ chụp lại chuỗi ảnh khung
 
     const moDau = elLop.querySelector<HTMLElement>("[data-mo-dau]");
     const khoi = cfg.khoi.map((k) => {
@@ -223,19 +222,17 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
       const dich = tienTrinh();
       // Đứng yên (không cuộn): vẽ 1/4 số khung để máy đỡ nóng và không giật
       if (kd) {
-        // Chế độ khung ảnh: cuộn chỉ chọn cảnh đích (điểm dừng theo khối chữ), ảnh tự chạy tới đó với tốc độ đều
-        // như video (không bám tốc độ ngón tay: thả tay, vuốt mạnh hay nhẹ, kéo chậm đều cùng một tốc độ)
+        // Chế độ khung ảnh: khung bám vị trí cuộn bằng lò xo giảm chấn (~0,1 giây): theo tay ngay, dừng khi trang dừng,
+        // tốc độ hình đổi liền mạch nên đổi nhịp tay hay nhấc tay không làm hình giật cục
         const dt = Math.min(0.1, (time - truoc) / 1000);
         truoc = time;
         if (pKhung.length < 2) p = dich;
         else if (!phat) {
-          // lần đầu hoặc vừa quay lại khối: hiện đúng chỗ đang cuộn, không chạy
+          // lần đầu hoặc vừa quay lại khối: hiện đúng chỗ đang cuộn
           phat = { f: khungTuP(pKhung, dich), v: 0 };
-          chonDung = { dich, moc: dich };
           p = dich;
         } else {
-          chonDung = chonDich(chonDung, dich, diemDung);
-          phat = buocPhat(phat, khungTuP(pKhung, chonDung.dich), dt);
+          phat = buocBam(phat, khungTuP(pKhung, dich), dt);
           p = pTuKhung(pKhung, phat.f);
         }
         veAnh(p);
@@ -255,6 +252,7 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
       if (typeof ep === "number") p = ep;
       if (canh) {
         const vt = canh.ve(p, time);
+        if (chupKhung) (window as unknown as { __vt?: unknown }).__vt = vt;
         const dienThoai = innerWidth < 768;
         datNhan(nhanSrm, vt.srm, 0, dienThoai ? 40 : 72, true);
         // Điện thoại: nhãn nằm dưới từng hạt, canh giữa; máy tính: nhãn bên phải hạt
@@ -373,6 +371,7 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
           so1: cfg.so_1,
           hienSo1: cfg.khoi.some((k) => k.id === "amp-giai-thuong"),
           giamChuyenDong: false,
+          thoiGianTheoP: chupKhung,
           onSanSang: () => { sanSangVe = true; setDaTai(true); },
         });
         p = tienTrinh();

@@ -92,7 +92,7 @@ export interface Canh {
 
 export function taoCanh(
   canvas: HTMLCanvasElement,
-  opts: { taiSan: TaiSan; hatSrm: LoaiHat[]; hatAmp: LoaiHat[]; anhHat?: Partial<Record<LoaiHat, string>>; so1: string; hienSo1?: boolean; giamChuyenDong: boolean; onSanSang?: () => void },
+  opts: { taiSan: TaiSan; hatSrm: LoaiHat[]; hatAmp: LoaiHat[]; anhHat?: Partial<Record<LoaiHat, string>>; so1: string; hienSo1?: boolean; giamChuyenDong: boolean; thoiGianTheoP?: boolean; onSanSang?: () => void },
 ): Canh {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   const dt0 = window.innerWidth < 768;
@@ -392,8 +392,17 @@ export function taoCanh(
     return { x: (tam.x * 0.5 + 0.5) * canvas.clientWidth, y: (-tam.y * 0.5 + 0.5) * canvas.clientHeight, o };
   };
   const mauNen = { a: new THREE.Color(), b: new THREE.Color() };
+  const MAU_NEN: [number, string, string][] = [
+    [0, "#F7EEEB", "#F3DED8"],
+    [0.37, "#F4F7FB", "#D8E7F6"],
+    [0.72, "#FBF7F3", "#EAF3ED"],
+    [0.87, "#F7EEEB", "#EAF3ED"],
+    [0.95, "#FFFFFF", "#F4F1EE"],
+  ];
 
   const ve = (p: number, time: number) => {
+    // Chụp chuỗi ảnh khung: chuyển động theo thời gian (bọt lắc, vòng xoay) tính theo p để khung liền nhau không giật
+    if (opts.thoiGianTheoP) time = p * 60000;
     for (const k of ["srm", "amp", "kem"] as const) {
       const s = noiSuy(KHOA[k], p, dienThoai), g = SP[k].g;
       const tho = opts.giamChuyenDong || dienThoai ? 0 : Math.sin(time * 0.0011 + (k === "amp" ? 1 : k === "kem" ? 2 : 0)) * 0.035;
@@ -513,9 +522,22 @@ export function taoCanh(
     }
 
     // màu nền theo chương
-    const mau = p < 0.37 ? ["#F7EEEB", "#F3DED8"] : p < 0.72 ? ["#F4F7FB", "#D8E7F6"] : p < 0.87 ? ["#FBF7F3", "#EAF3ED"] : p < 0.95 ? ["#F7EEEB", "#EAF3ED"] : ["#FFFFFF", "#F4F1EE"];
-    nenMat.uniforms.uA.value.lerp(mauNen.a.set(mau[0]), 0.06);
-    nenMat.uniforms.uB.value.lerp(mauNen.b.set(mau[1]), 0.06);
+    if (opts.thoiGianTheoP) {
+      // chụp khung: màu nền là hàm của p, chuyển dần qua mỗi ranh giới chương (không nhảy 1 khung)
+      nenMat.uniforms.uA.value.set(MAU_NEN[0][1]);
+      nenMat.uniforms.uB.value.set(MAU_NEN[0][2]);
+      for (let i = 1; i < MAU_NEN.length; i++) {
+        const [moc, a, b] = MAU_NEN[i];
+        const t = seg(p, moc - 0.015, moc + 0.015);
+        if (t <= 0) break;
+        nenMat.uniforms.uA.value.lerp(mauNen.a.set(a), t);
+        nenMat.uniforms.uB.value.lerp(mauNen.b.set(b), t);
+      }
+    } else {
+      const mau = p < 0.37 ? ["#F7EEEB", "#F3DED8"] : p < 0.72 ? ["#F4F7FB", "#D8E7F6"] : p < 0.87 ? ["#FBF7F3", "#EAF3ED"] : p < 0.95 ? ["#F7EEEB", "#EAF3ED"] : ["#FFFFFF", "#F4F1EE"];
+      nenMat.uniforms.uA.value.lerp(mauNen.a.set(mau[0]), 0.06);
+      nenMat.uniforms.uB.value.lerp(mauNen.b.set(mau[1]), 0.06);
+    }
 
     renderer.render(scene, camera);
     return { srm: nhanSrm, amp: nhanAmp };
