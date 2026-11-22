@@ -32,7 +32,7 @@ export function NutNgonNgu({ className = "" }: { className?: string }) {
       aria-pressed={ngonNgu === ma}
       aria-label={nhan}
       lang={ma}
-      className={`min-h-[44px] min-w-[32px] px-1 text-[12px] tracking-wide transition-colors focus-visible:outline-2 focus-visible:outline-den rounded ${
+      className={`min-h-[44px] min-w-[44px] md:min-w-[32px] px-1 text-[12px] tracking-wide transition-colors focus-visible:outline-2 focus-visible:outline-den rounded ${
         ngonNgu === ma ? "text-den font-bold" : "text-den/60 hover:text-den font-medium"
       }`}
     >
