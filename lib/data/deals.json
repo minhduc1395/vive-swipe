@@ -414,8 +414,8 @@
     "ket_thuc": "2026-11-29",
     "dieu_kien": "Tính trên tổng hóa đơn sau giảm, mọi nhãn, gồm cả combo. Mỗi hóa đơn nhận quà của mốc cao nhất. Số lượng quà có hạn",
     "dieu_kien_en": "Based on the order total after discounts, all brands, combos included. Each order gets the gift of the highest tier reached. Limited quantity",
-    "hook": "Hóa đơn từ 800K tặng sữa rửa mặt LOPOE, từ 1,2 triệu tặng ampoule LOPOE và voucher nhà hàng 15%",
-    "hook_en": "Spend 800K for a free LOPOE cleanser, 1.2M for a free LOPOE ampoule and a 15% restaurant voucher",
+    "hook": "Hóa đơn từ 800K tặng sữa rửa mặt LOPOE, từ 1,2 triệu tặng ampoule LOPOE",
+    "hook_en": "Spend 800K for a free LOPOE cleanser, 1.2M for a free LOPOE ampoule",
     "moc": [
       {
         "tu": 800000,
@@ -425,33 +425,39 @@
       },
       {
         "tu": 1200000,
-        "qua": "1 ampoule LOPOE và 1 voucher giảm 15% nhà hàng Union Square",
-        "qua_en": "1 LOPOE ampoule and 1 15% off Union Square restaurant voucher",
+        "qua": "1 ampoule LOPOE",
+        "qua_en": "1 LOPOE ampoule",
         "gioi_han": 15
       }
     ]
   },
   {
     "id": "KM-09",
-    "ten": "Voucher 15% nhà hàng Union Square",
+    "ten": "Voucher nhà hàng Union Square 15%",
     "ten_en": "15% Union Square restaurant voucher",
     "loai": "qua_theo_nguong_don",
     "nhom_qua": "cong_them",
-    "trang_thai": "HUY",
+    "trang_thai": "DA_DUYET",
     "may_rui": false,
     "da_dang_ky": false,
-    "hien_thi": false,
+    "hien_thi": true,
     "het_qua": false,
     "bat_dau": "2026-11-14",
     "ket_thuc": "2026-11-29",
-    "hook": "Hóa đơn trên 1 triệu, tặng thêm voucher 15% nhà hàng Union Square",
-    "hook_en": "Orders over 1M get an extra 15% Union Square restaurant voucher",
+    "dieu_kien": "Được tặng voucher nhà hàng Union Square 15%, cộng thêm với quà LOPOE. Nhân viên xác nhận tại quầy",
+    "dieu_kien_en": "Get a 15% Union Square restaurant voucher, on top of the LOPOE gift. Staff confirm at the counter",
+    "hook": "Được tặng voucher nhà hàng 15%",
+    "hook_en": "Get a 15% restaurant voucher",
+    "qua": "1 voucher giảm 15% nhà hàng Union Square",
+    "qua_en": "1 15% off Union Square restaurant voucher",
     "moc": [
       {
-        "tren": 1000000,
-        "qua": "1 voucher giảm 15% tại nhà hàng Union Square (cho hóa đơn nhà hàng trên 1 triệu)"
+        "tu": 1000000,
+        "qua": "1 voucher giảm 15% nhà hàng Union Square",
+        "qua_en": "1 15% off Union Square restaurant voucher"
       }
-    ]
+    ],
+    "an_moc": true
   },
   {
     "id": "COMBO-PINK",
@@ -599,17 +605,20 @@
     "het_qua": false,
     "bat_dau": "2026-11-14",
     "ket_thuc": "2026-11-29",
-    "dieu_kien": "Hóa đơn từ 300K được quay 1 lượt. Từ 27/11, giữ hàng trên web rồi nhận tại booth được thêm 1 lượt",
-    "dieu_kien_en": "Orders from 300K get 1 spin. From 27/11, reserve on the web and pick up at the booth for 1 extra spin",
-    "hook": "Hóa đơn từ 300K, quay 1 lượt. Giữ hàng trên web, thêm 1 lượt",
-    "hook_en": "Spend 300K, get 1 spin. Reserve on the web for an extra spin",
+    "dieu_kien": "Mỗi hóa đơn tại VIVE được quay 1 lượt. Từ 27/11, giữ hàng trên web rồi nhận tại booth được thêm 1 lượt",
+    "dieu_kien_en": "Every order at VIVE gets 1 spin. From 27/11, reserve on the web and pick up at the booth for 1 extra spin",
+    "hook": "Mỗi hóa đơn tại VIVE được quay 1 lượt. Từ 27/11 giữ hàng trên web, thêm 1 lượt",
+    "hook_en": "Every order at VIVE gets 1 spin. From 27/11, reserve on the web for an extra spin",
+    "qua": "1 lượt quay vòng quay may mắn",
+    "qua_en": "1 lucky-wheel spin",
     "moc": [
       {
-        "tu": 300000,
+        "tu": 1,
         "qua": "1 lượt quay vòng quay may mắn",
         "qua_en": "1 lucky-wheel spin"
       }
-    ]
+    ],
+    "an_moc": true
   },
   {
     "id": "DC-04",

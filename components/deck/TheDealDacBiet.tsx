@@ -69,7 +69,7 @@ export function TheDealDacBiet({
             {truongTheoNgonNgu(dealTop, "hook", ngonNgu) ?? truongTheoNgonNgu(dealTop, "ten", ngonNgu)}
           </h2>
 
-          {dealTop.moc && dealTop.moc.length > 0 ? (
+          {dealTop.moc && dealTop.moc.length > 0 && !dealTop.an_moc ? (
             <div className="flex flex-col border-t border-white/20 mt-1">
               {dealTop.moc.slice(0, 3).map((m, idx) => {
                 const mocGia = m.tu ?? m.tren ?? 0;

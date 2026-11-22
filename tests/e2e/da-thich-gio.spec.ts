@@ -170,7 +170,7 @@ test.describe("W012 · Đã thích và Giỏ hàng (giao diện)", () => {
       });
     });
 
-    test("ưu đãi 3: giỏ 249.000đ (dưới 300K) không thấy lượt quay", async ({
+    test("ưu đãi 3 (QD-BOD-072): giỏ 249.000đ vẫn thấy lượt quay, không có voucher", async ({
       page,
     }) => {
       await page.addInitScript(() => {
@@ -182,7 +182,8 @@ test.describe("W012 · Đã thích và Giỏ hàng (giao diện)", () => {
       });
       await page.goto("/gio");
       await expect(page.getByText("249.000đ").first()).toBeVisible();
-      await expect(page.getByText(/lượt quay/)).toHaveCount(0);
+      await expect(page.getByText("Thêm: 1 lượt quay vòng quay may mắn")).toBeVisible();
+      await expect(page.getByText(/voucher/)).toHaveCount(0);
     });
 
     test("Case 3 docs/02 mục 4.3: Combo LOPOE bộ 3 -> 911K, quà 1 kem dưỡng LOPOE; không hiện 549K", async ({
