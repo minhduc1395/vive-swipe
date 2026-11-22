@@ -45,6 +45,7 @@ rồi ghi cột I = `Đã lên web <YYYY-MM-DD HH:MM>`. Kiểm: `select anh from
 **Media làm xong ảnh mới (P8):** WEB/TU-DONG-E kiểm kỹ thuật (nét, tỷ lệ, viền tách nền, nền trong, dung lượng; xem AGENTS.md mục Antigravity Media), đạt thì `update media set trang_thai='cho_mkt'` và thêm 1 dòng vào tab "Duyệt media web" (cột F = `Đạt`, I = `Chưa`).
 
 ## Nhật ký chạy
+- 22/11 06:29 TU-DONG-E: gộp #101 (#66 đồng bộ tài khoản), #102 (DIR-044 kênh MXH mới), #107 (W068 /chinh-sach LEG-002), #108 (W047 scripts/du_lieu, chép từ PR #25 vì nhánh lệch lịch sử); deploy xanh. Giao job #103–#106 (bỏ 'nội địa Hàn', LEG-003) cho đội coder, W069 (hiệu năng + trợ năng) cho Antigravity. P6: sửa cột I tab Duyệt media web ghi lệch 1 dòng.
 - 22/11 04:44 TU-DONG-E: gộp #99 (W067), #97 (#84), #98 (#96), #100 (W044); deploy xanh. Giao W068 (/chinh-sach LEG-002) cho Antigravity; #66 ready. P6: 7 ảnh duyet; 1 ảnh + 4 video Sửa trả Media.
 - 22/11 02:45 TU-DONG-E: gộp #93 (metadataBase), #88, #91, #92 (gỡ xung đột docs giu-hang), #94, #67. DIR-043: job #96 (shared), W044 cho Antigravity sau W067, Media ưu tiên ten_en/mo_ta_en (W047). P6: Lashcurl duyet; 8 ảnh + 4 video Uniura/Dermal/Beaund đặt cho_mkt, thêm 12 dòng tab Duyệt media web; 18 dòng Sửa ghi Trả Media.
 - 22/11 00:15 WEB: P3 gộp (#79), #80–#83 ready; #65 đổi lại ready (bị kẹt vì gắn nhầm claimed). P7 mở PR #85. e2e chạy locale vi-VN.

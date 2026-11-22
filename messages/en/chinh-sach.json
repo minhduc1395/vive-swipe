@@ -1,20 +1,33 @@
 {
   "tieuDe": "Privacy & reservation policy",
-  "moTaTrang": "How we protect personal data, free reservations at {diaDiem}, and details about {congTy}.",
+  "moTaTrang": "How we protect personal data, free reservations at {diaDiem}, terms of use, and details about {congTy}.",
   "gioiThieu": "Applies to the VIVE product experience website and the reservation counter at {diaDiem}.",
   "baoMat": {
     "tieuDe": "1. Personal data privacy",
-    "thuThap": {
-      "nhan": "Minimal collection:",
-      "noiDung": "VIVE only collects your name and phone number to create and verify your reservation code at the counter. We also use your skin quiz answers and swipes to sort recommendations that suit you better."
+    "donVi": {
+      "nhan": "Data controller:",
+      "noiDung": "Viet Han International Solutions JSC."
     },
-    "email": {
-      "nhan": "Deal emails are opt-in:",
-      "noiDung": "Your consent to receive deal alerts is a separate checkbox, unticked by default. You can unsubscribe at any time with one tap from the link at the bottom of every email."
+    "mucDich": {
+      "nhan": "Purpose of collection:",
+      "noiDung": "Your name, phone number, and email are used to reserve products and send your pickup code; skin quiz answers and swipes are used to recommend suitable products. Deal emails are sent only with your opt-in consent via a separate unticked checkbox, and you can unsubscribe with one tap at the bottom of every email."
     },
-    "quyenXoa": {
-      "nhan": "Right to access & delete:",
-      "noiDung": "You can ask to view or delete your personal history through our staff at the booth, or by email"
+    "thoiGianLuu": {
+      "nhan": "Retention period:",
+      "noiDung": "Reservation records are deleted or anonymized after 12 months; swipe history is anonymized after 12 months; deal emails are kept until you unsubscribe."
+    },
+    "benXuLy": {
+      "nhan": "Data processors:",
+      "noiDung": "Supabase and Google Cloud; data may be stored on servers outside Vietnam (Japan)."
+    },
+    "quyen": {
+      "nhan": "Your rights:",
+      "noiDung": "You have the right to view, edit, delete your data, or withdraw consent via booth staff or our contact email",
+      "hauTo": "; VIVE responds within 72 working hours."
+    },
+    "cookie": {
+      "nhan": "Cookies & browser storage:",
+      "noiDung": "Used only to remember your language, cart, and liked items; not used for advertising."
     }
   },
   "giuHang": {
@@ -40,11 +53,11 @@
     },
     "nhanPhu": {
       "nhan": "Vietnamese labels:",
-      "noiDung": "Imported Korean domestic cosmetics and free gifts get a full Vietnamese label at the counter before we hand them over."
+      "noiDung": "Products sold at the counter carry Vietnamese supplementary labels as required by regulations."
     },
     "khuyenMai": {
       "nhan": "Transparent promotions:",
-      "noiDung": "A promotion applies only while it is valid and you meet its conditions. Lucky-draw promotions are announced only after registration with the Department of Industry and Trade is complete."
+      "noiDung": "Promotions apply according to the schedule and conditions published at the counter and on the website; staff confirm at checkout."
     }
   },
   "doanhNghiep": {
@@ -56,5 +69,28 @@
     "soDienThoai": "Phone number",
     "cuaHangPopup": "Pop-up store",
     "kenhChinhThuc": "Official channels"
+  },
+  "dieuKhoan": {
+    "tieuDe": "5. Terms of use",
+    "gia": {
+      "nhan": "Pricing:",
+      "noiDung": "Website prices may change; the counter price at checkout is final."
+    },
+    "hinhAnh": {
+      "nhan": "Product images:",
+      "noiDung": "Images on the website are for illustration only."
+    },
+    "gioiHanDon": {
+      "nhan": "Reservation limit:",
+      "noiDung": "Each phone number may hold up to 3 open reservations at a time."
+    },
+    "lamDung": {
+      "nhan": "Abuse prevention:",
+      "noiDung": "VIVE reserves the right to cancel reservation codes showing signs of abuse."
+    },
+    "luatApDung": {
+      "nhan": "Governing law:",
+      "noiDung": "These terms are governed by the laws of Vietnam."
+    }
   }
 }

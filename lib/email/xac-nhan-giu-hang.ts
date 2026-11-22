@@ -56,7 +56,7 @@ export function taoHtmlEmailGiuHang(thongTin: ThongTinEmailGiuHang): {
     
     <div style="text-align: center; margin-bottom: 24px;">
       <h2 style="margin: 0; font-size: 20px; font-weight: 700; color: #2B2B2A; letter-spacing: 1px;">VIVE | K-Beauty Experience</h2>
-      <p style="margin: 6px 0 0 0; font-size: 13px; color: #737373;">Mỹ phẩm nội địa Hàn tại TP. Hồ Chí Minh</p>
+      <p style="margin: 6px 0 0 0; font-size: 13px; color: #737373;">Mỹ phẩm Hàn Quốc tại TP. Hồ Chí Minh</p>
     </div>
 
     <div style="background-color: #F7EEEB; border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 24px;">
