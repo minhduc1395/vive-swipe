@@ -34,6 +34,7 @@ import {
   truongTheoNgonNgu,
 } from "@/components/deck/ngon-ngu-quet";
 import { duongDanAnh } from "@/lib/anh";
+import { taiSomChoQuet } from "./tai-som";
 import { layDanhSachDealChoBan } from "@/lib/deals/diem-deal";
 import { tinhGio, type MucGioInput } from "@/lib/deals/gio-hang";
 import { chuanHoaNgay } from "@/lib/deals/hien-thi";
@@ -54,6 +55,9 @@ import {
   luuHoSoLocal,
   type ItemGioHang,
 } from "@/lib/kho-luu-tru";
+
+// #128: tải sớm dữ liệu và ảnh thẻ đầu, không chờ DuLieuProvider gắn xong (xem tai-som.ts).
+taiSomChoQuet();
 
 interface BuocLichSu {
   sanPham: SanPham;
@@ -117,6 +121,7 @@ export default function TrangQuet() {
   });
   const [moiQuanTamLabels, setMoiQuanTamLabels] = useState<string[]>([]);
   const deckKhoiTaoRef = useRef(false);
+  const khuDeckRef = useRef<HTMLElement | null>(null);
 
   const sanPhamMap = useMemo(
     () => new Map<string, SanPham>(danhSachSanPham.map((sp) => [sp.id, sp])),
@@ -237,21 +242,48 @@ export default function TrangQuet() {
     setDeck(dsThe);
   }, [daSanSang, daKiemTraKhaoSat, danhSachSanPham]);
 
-  // Preload ảnh của 3 thẻ kế tiếp
+  // Preload ảnh của 3 thẻ kế tiếp. Với thẻ đầu tiên, đợi ảnh thẻ trên cùng tải xong (hoặc 3 giây)
+  // để các ảnh này không tranh băng thông 4G với ảnh LCP (#128).
   useEffect(() => {
     if (typeof window === "undefined") return;
-    for (
-      let i = indexHienTai + 1;
-      i <= indexHienTai + 3 && i < deck.length;
-      i++
-    ) {
-      const sp = deck[i]?.san_pham;
-      const anh = duongDanAnh(sp?.anh, "the");
-      if (anh) {
-        const img = new Image();
-        img.src = anh;
+    const taiAnhKeTiep = () => {
+      for (
+        let i = indexHienTai + 1;
+        i <= indexHienTai + 3 && i < deck.length;
+        i++
+      ) {
+        const sp = deck[i]?.san_pham;
+        const anh = duongDanAnh(sp?.anh, "the");
+        if (anh) {
+          const img = new Image();
+          img.src = anh;
+        }
       }
+    };
+    if (indexHienTai > 0 || deck.length === 0) {
+      taiAnhKeTiep();
+      return;
     }
+    let xong = false;
+    const chay = () => {
+      if (xong) return;
+      xong = true;
+      taiAnhKeTiep();
+    };
+    const timer = window.setTimeout(chay, 3000);
+    const anhTren = khuDeckRef.current?.querySelector("article img");
+    if (!anhTren || (anhTren as HTMLImageElement).complete) {
+      chay();
+    } else {
+      anhTren.addEventListener("load", chay, { once: true });
+      anhTren.addEventListener("error", chay, { once: true });
+    }
+    return () => {
+      xong = true;
+      window.clearTimeout(timer);
+      anhTren?.removeEventListener("load", chay);
+      anhTren?.removeEventListener("error", chay);
+    };
   }, [deck, indexHienTai]);
 
   const theHienTai = deck[indexHienTai];
@@ -726,6 +758,7 @@ export default function TrangQuet() {
 
             {/* Khu vực Deck quẹt thẻ */}
             <section
+              ref={khuDeckRef}
               aria-label={t("theSanPham")}
               className="relative flex-1 min-h-0 w-full px-4 md:px-0 max-w-[440px]"
             >
