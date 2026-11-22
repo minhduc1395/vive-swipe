@@ -5,6 +5,7 @@
 - CI trên GitHub chạy lint, typecheck, test, e2e cho mọi PR. PR phải xanh.
 - Giao diện: mobile-first, không khóa độ rộng, dùng dvh, nút ≥ 44px, chỉ animate transform/opacity (docs/05 mục 2.2). Bám `design/` cho màn tương ứng. Màu cửa hàng Option 2 (QD-WEB-005) ở `docs/03`.
 - Màu (W064, CĐT 21/11): mọi trang theo trang chủ. Nền trang trắng (`bg-trang`); mảng màu, thẻ, ô dùng bảng nội thất `kem`, `be`, `cat`, `soi`, `oliu`, `oliu-vua`, `oliu-nhat` (token trong `app/globals.css`). Hồng (`hong`) chỉ là màu nhấn: nút chính, chip đang chọn, nhãn giảm giá. Không dùng nền hồng nhạt cho cả trang. Nền khối LOPOE là `lopoe-nen` (không đổi, ảnh đã chụp trên nền này). Token cũ `hong-nhat`, `bac-ha`, `bac-ha-nhat`, `vien` đã đổi mã sang nội thất; code mới dùng tên mới. Không gõ mã #hex trong `app/(khach)` và `components/` (test w052 chặn).
+- Chữ xám (W069, #122, 22/11): chữ phụ dùng `text-xam` (#626262, ≥ 4.5:1 trên trắng, kem, lopoe-nen, oliu-nhat, be). Không dùng `text-den/10`–`/60` cho chữ (test `tests/w069-tuong-phan.test.ts`); độ mờ chỉ cho viền/nền.
 - Chữ giao diện tiếng Việt, "nội địa Hàn" (không "local"), không nhắc cửa hàng chính. Logo chỉ dùng file trong `public/brand/`.
 - Giá, deal, quà chỉ lấy từ `data/` (file dùng chung, WEB sửa). Không gõ số trên giao diện. Giá trong giỏ luôn tính lại ở server.
 - Không commit khóa bí mật, không in biến môi trường ra log.
