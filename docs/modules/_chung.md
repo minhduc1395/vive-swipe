@@ -17,3 +17,5 @@
 - Dữ liệu sản phẩm/deal/chiến dịch: tiếng Anh dùng trường `*_en` (`ten_en`, `mo_ta_en`, `dieu_kien_en`…), thiếu thì hiện bản vi.
 - Mỗi khóa phải có ở cả vi và en (test `tests/w044-tu-dien.test.ts`). Bản en: câu ngắn, tự nhiên, không dịch tên thương hiệu/sản phẩm.
 - Kiểm: mở trang với `?lang=en` (đặt cookie `vive_lang`), nút VI | EN trên thanh trên.
+
+- Lịch sử ngắn: #131 (22/11) `app/icon.png` thu còn 192px, 2,9 KB (trước 512px, 34 KB); font giữ 4 độ đậm vì cả 4 đều dùng, Be Vietnam Pro và Playfair đều `preload: false`.
