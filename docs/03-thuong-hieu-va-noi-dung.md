@@ -40,7 +40,7 @@ Không thêm màu ngoài bảng này (kể cả đỏ cho giảm giá). Nhãn gi
 - Thông điệp: trải nghiệm mua sắm độc đáo; thương hiệu Hàn Quốc bán ngay tại Việt Nam (không dùng chữ "nội địa Hàn", LEG-003); chất lượng và phù hợp làn da châu Á.
 - Không nhắc tới cửa hàng chính sẽ mở sau này.
 - Tên thương hiệu công khai: Rep!el (không viết Repiel). Các tên khác theo cột `thuong_hieu`.
-- Tài khoản: Facebook **VIVE** (https://www.facebook.com/1530922283427509, BOD đổi page 22/11) · Instagram **@vive.vers** · TikTok **@viveuniverse** (có chữ "e" cuối). Threads theo tài khoản Instagram.
+- Tài khoản: Facebook **VIVE** (https://www.facebook.com/viveuniverse, link chính thức BOD 22/11, WEB-019) · Instagram **@vive.vers** · TikTok **@viveuniverse** (có chữ "e" cuối). Threads theo tài khoản Instagram.
 - Địa chỉ: VIVE | K-Beauty Experience, tầng LL2 Union Square, 171 Đồng Khởi, Phường Sài Gòn.
 - Giờ mở cửa và ngày cuối pop-up lấy từ cấu hình, chỉ ghi khi đã chốt. Không ghi "11:59 PM".
 - Hashtag (nếu có ở trang chia sẻ): tối đa 5.

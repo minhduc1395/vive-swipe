@@ -158,7 +158,7 @@ test.describe("W049 · Chân trang gọn 4 cụm (bản 2)", () => {
 
     await expect(fb).toHaveAttribute(
       "href",
-      "https://www.facebook.com/1530922283427509"
+      "https://www.facebook.com/viveuniverse"
     );
     await expect(ig).toHaveAttribute(
       "href",
