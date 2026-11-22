@@ -15,7 +15,7 @@ describe("W049 · Chân trang & DoanhNghiepSchema", () => {
     expect(DOANH_NGHIEP.mang_xa_hoi).toHaveLength(3);
 
     const fb = DOANH_NGHIEP.mang_xa_hoi.find((m) => m.ten === "Facebook");
-    expect(fb?.url).toBe("https://www.facebook.com/1530922283427509");
+    expect(fb?.url).toBe("https://www.facebook.com/viveuniverse");
     expect(fb?.tai_khoan).toBe("VIVE");
 
     const ig = DOANH_NGHIEP.mang_xa_hoi.find((m) => m.ten === "Instagram");

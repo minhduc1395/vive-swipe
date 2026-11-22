@@ -13,6 +13,6 @@ dia_chi_booth: "Tầng LL2 Union Square, 171 Đồng Khởi, Phường Sài Gòn
 dia_chi_booth_en: "Level LL2, Union Square, 171 Dong Khoi, Sai Gon Ward, Ho Chi Minh City"
 ban_do: "https://maps.app.goo.gl/JLNcDuKxeuYFT1yA7"   # BOD gửi 22/11, ghim đúng booth
 mang_xa_hoi:
-  - {ten: Facebook, tai_khoan: "VIVE", url: "https://www.facebook.com/1530922283427509"}   # BOD đổi page mới 22/11 (page cũ weareVIVE bỏ)
+  - {ten: Facebook, tai_khoan: "VIVE", url: "https://www.facebook.com/viveuniverse"}   # BOD 22/11: link chính thức (WEB-019); link số cũ vẫn mở được
   - {ten: Instagram, tai_khoan: "@vive.vers", url: "https://www.instagram.com/vive.vers"}   # BOD đổi 22/11
   - {ten: TikTok, tai_khoan: "@viveuniverse", url: "https://www.tiktok.com/@viveuniverse"}
