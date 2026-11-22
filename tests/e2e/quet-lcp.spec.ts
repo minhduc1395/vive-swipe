@@ -19,7 +19,11 @@ test("/quet: không lỗi console, thẻ đầu hiện ảnh ưu tiên cao, CLS 
   const loi: string[] = [];
   page.on("pageerror", (e) => loi.push(`pageerror: ${e.message}`));
   page.on("console", (m) => {
-    if (m.type() === "error") loi.push(m.text());
+    if (m.type() !== "error") return;
+    // WebKit báo lỗi khi preconnect tới máy Supabase giả của e2e (không phân giải DNS được;
+    // page.route không chặn preconnect). Web thật dùng máy Supabase có thật nên không gặp.
+    if (m.text().startsWith(`Failed to preconnect to ${GOC_SUPABASE_E2E}`)) return;
+    loi.push(m.text());
   });
 
   await page.route(`${MEDIA_BASE}/**`, (route) =>
