@@ -33,7 +33,7 @@ export function NutNgonNgu({ className = "" }: { className?: string }) {
       aria-label={nhan}
       lang={ma}
       className={`min-h-[44px] min-w-[44px] md:min-w-[32px] px-1 text-[12px] tracking-wide transition-colors focus-visible:outline-2 focus-visible:outline-den rounded ${
-        ngonNgu === ma ? "text-den font-bold" : "text-den/60 hover:text-den font-medium"
+        ngonNgu === ma ? "text-den font-bold" : "text-xam hover:text-den font-medium"
       }`}
     >
       {chu}
@@ -49,7 +49,7 @@ export function NutNgonNgu({ className = "" }: { className?: string }) {
       className={`inline-flex items-center ${className}`}
     >
       {nut("vi", "VI", t("doiSangVi"))}
-      <span aria-hidden="true" className="text-den/30 text-[12px]">|</span>
+      <span aria-hidden="true" className="text-xam text-[12px]">|</span>
       {nut("en", "EN", t("doiSangEn"))}
     </div>
   );
