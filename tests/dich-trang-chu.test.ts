@@ -291,7 +291,7 @@ describe("W050 + W041 · Cấu hình trang chủ YAML & kiểm đích", () => {
   });
 
   it("DOANH_NGHIEP có đầy đủ ban_do, dia_chi_booth, mang_xa_hoi từ doanh-nghiep.yaml", () => {
-    expect(DOANH_NGHIEP.ban_do).toContain("maps.google.com");
+    expect(DOANH_NGHIEP.ban_do).toBe("https://maps.app.goo.gl/JLNcDuKxeuYFT1yA7");
     expect(DOANH_NGHIEP.dia_chi_booth).toContain("Phường Sài Gòn");
     expect(DOANH_NGHIEP.mang_xa_hoi?.length).toBe(3);
 
