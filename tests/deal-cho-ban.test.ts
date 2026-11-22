@@ -76,10 +76,12 @@ describe("W016: Deal cho bạn và xếp theo diem_deal", () => {
 
     // 2. Các deal bị ẩn hoặc đã dừng (QD-SALE-012, INV-005) không được xuất hiện; vòng quay DC-02 được hiện (QD-DIR-018)
     const tapIdHienThi = new Set(dealsChoBan.map((d) => d.id));
-    for (const id of ["KM-10", "KM-09", "KM-08", "KM-11", "KM-13", "DC-01", "DC-04", "DC-06", "KM-12", "KM-12b"]) {
+    for (const id of ["KM-10", "KM-08", "KM-11", "KM-13", "DC-01", "DC-04", "DC-06", "KM-12", "KM-12b"]) {
       expect(tapIdHienThi.has(id), `deal ${id} phải ẩn`).toBe(false);
     }
     expect(tapIdHienThi.has("DC-02")).toBe(true);
+    // QD-BOD-060: voucher nhà hàng thành deal riêng
+    expect(tapIdHienThi.has("KM-09")).toBe(true);
   });
 
   it("Tính đúng giá trị kinh tế gia_tri theo docs/02 mục 6", () => {

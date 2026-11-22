@@ -30,7 +30,7 @@ export function NganKeoDeal({
   const hook = hookDeal(deal, nn);
   const dieuKien = dieuKienDeal(deal, nn);
   const qua = quaDeal(deal, nn);
-  const moc = deal.moc ?? [];
+  const moc = deal.an_moc ? [] : (deal.moc ?? []);
   const [tab, setTab] = useState(0);
   const tienMoc = moc[tab] ? moc[tab].tu ?? moc[tab].tren ?? 0 : 0;
   const boTheoMoc = (deal.goi_y ?? []).filter((b) => (moc.length ? b.moc === tienMoc : true));

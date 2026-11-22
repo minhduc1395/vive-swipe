@@ -11,6 +11,7 @@
 #                          AND (may_rui == false OR da_dang_ky == true)   # da_dang_ky = được phép chạy (đã đăng ký, hoặc BOD quyết không cần đăng ký: QD-DIR-018)
 #                          AND hôm nay nằm trong [bat_dau, ket_thuc]
 #   Deal ĐỀ XUẤT không có trong file này (KM-01, KM-06, bậc hóa đơn 200K/300K/400K, CB-01 đến CB-06).
+#   an_moc: true = thẻ deal không hiện đường mốc (mốc vẫn dùng tính giỏ): KM-09 (QD-BOD-060), DC-02 (QD-BOD-072).
 #
 # Giá trên web là giá ƯỚC TÍNH. Giá và quà cuối cùng do nhân viên xác nhận trên POS tại quầy.
 # "Số lượng có hạn" chỉ ghi khi gioi_han có số thật. Không hiện số suất còn lại nếu không có dữ liệu thật.
@@ -202,23 +203,28 @@ deals:
     dieu_kien_en: Based on the order total after discounts, all brands, combos included. Each order gets the gift of the highest tier reached. Limited quantity
     moc:
       - {tu: 800000, qua: 1 sữa rửa mặt LOPOE, qua_en: 1 LOPOE cleansing foam, gioi_han: 30}
-      - {tu: 1200000, qua: 1 ampoule LOPOE và 1 voucher giảm 15% nhà hàng Union Square, qua_en: 1 LOPOE ampoule and 1 15% off Union Square restaurant voucher, gioi_han: 15}
-    hook: Hóa đơn từ 800K tặng sữa rửa mặt LOPOE, từ 1,2 triệu tặng ampoule LOPOE và voucher nhà hàng 15%
-    hook_en: Spend 800K for a free LOPOE cleanser, 1.2M for a free LOPOE ampoule and a 15% restaurant voucher
+      - {tu: 1200000, qua: 1 ampoule LOPOE, qua_en: 1 LOPOE ampoule, gioi_han: 15}   # QD-BOD-060: voucher tách ra KM-09
+    hook: Hóa đơn từ 800K tặng sữa rửa mặt LOPOE, từ 1,2 triệu tặng ampoule LOPOE
+    hook_en: Spend 800K for a free LOPOE cleanser, 1.2M for a free LOPOE ampoule
 
-  - id: KM-09
-    ten: Voucher 15% nhà hàng Union Square
+  - id: KM-09   # QD-BOD-060 (22/11): voucher tách khỏi mốc 1,2 triệu; mọi hóa đơn từ 1 triệu, không giới hạn, cộng thêm quà LOPOE
+    ten: Voucher nhà hàng Union Square 15%
     ten_en: 15% Union Square restaurant voucher
     loai: qua_theo_nguong_don
     nhom_qua: cong_them
-    trang_thai: HUY   # QD-SALE-012: gộp vào mốc 1,2 triệu của BAC-HOA-DON
+    trang_thai: DA_DUYET
     may_rui: false
-    hien_thi: false
+    hien_thi: true
     <<: *popup
+    an_moc: true   # chữ khách thấy không ghi mốc (doc LOPOE mục 6); mốc chỉ để giỏ hàng tính
     moc:
-      - {tren: 1000000, qua: 1 voucher giảm 15% tại nhà hàng Union Square (cho hóa đơn nhà hàng trên 1 triệu)}
-    hook: Hóa đơn trên 1 triệu, tặng thêm voucher 15% nhà hàng Union Square
-    hook_en: Orders over 1M get an extra 15% Union Square restaurant voucher
+      - {tu: 1000000, qua: 1 voucher giảm 15% nhà hàng Union Square, qua_en: 1 15% off Union Square restaurant voucher}
+    qua: 1 voucher giảm 15% nhà hàng Union Square
+    qua_en: 1 15% off Union Square restaurant voucher
+    dieu_kien: Được tặng voucher nhà hàng Union Square 15%, cộng thêm với quà LOPOE. Nhân viên xác nhận tại quầy
+    dieu_kien_en: Get a 15% Union Square restaurant voucher, on top of the LOPOE gift. Staff confirm at the counter
+    hook: Được tặng voucher nhà hàng 15%
+    hook_en: Get a 15% restaurant voucher
 
   # ---------- Chương trình đang chạy khác ----------
   - id: COMBO-PINK
@@ -303,14 +309,17 @@ deals:
     da_dang_ky: true
     hien_thi: true
     <<: *popup
+    an_moc: true   # QD-BOD-072 (22/11): mọi hóa đơn được quay, bỏ mốc 300K; tu: 1 = hóa đơn có hàng
     moc:
-      - {tu: 300000, qua: 1 lượt quay vòng quay may mắn, qua_en: 1 lucky-wheel spin}
+      - {tu: 1, qua: 1 lượt quay vòng quay may mắn, qua_en: 1 lucky-wheel spin}
+    qua: 1 lượt quay vòng quay may mắn
+    qua_en: 1 lucky-wheel spin
     # Thưởng thêm khi giữ hàng trên web rồi nhận tại booth (SALE 21/11). Web đọc trường này, không gõ chữ cứng.
     thuong_giu_hang: {tu_ngay: "2026-11-27", qua: Thêm 1 lượt quay vòng quay may mắn, qua_en: 1 extra lucky-wheel spin}
-    dieu_kien: Hóa đơn từ 300K được quay 1 lượt. Từ 27/11, giữ hàng trên web rồi nhận tại booth được thêm 1 lượt
-    dieu_kien_en: Orders from 300K get 1 spin. From 27/11, reserve on the web and pick up at the booth for 1 extra spin
-    hook: Hóa đơn từ 300K, quay 1 lượt. Giữ hàng trên web, thêm 1 lượt
-    hook_en: Spend 300K, get 1 spin. Reserve on the web for an extra spin
+    dieu_kien: Mỗi hóa đơn tại VIVE được quay 1 lượt. Từ 27/11, giữ hàng trên web rồi nhận tại booth được thêm 1 lượt
+    dieu_kien_en: Every order at VIVE gets 1 spin. From 27/11, reserve on the web and pick up at the booth for 1 extra spin
+    hook: Mỗi hóa đơn tại VIVE được quay 1 lượt. Từ 27/11 giữ hàng trên web, thêm 1 lượt
+    hook_en: Every order at VIVE gets 1 spin. From 27/11, reserve on the web for an extra spin
   - {id: DC-04, ten: Lá thăm trong sample, ten_en: Lucky draw inside sample, loai: may_rui, trang_thai: DANG_CHAY, may_rui: true, da_dang_ky: false, hien_thi: false}
   - {id: KM-12, ten: Vòng quay LOPOE, ten_en: LOPOE Lucky Wheel, loai: may_rui, trang_thai: HUY, may_rui: true, da_dang_ky: false, hien_thi: false}
   - {id: KM-12b, ten: Bốc thăm máy uốn mi Beaund, ten_en: Beaund Lashcurl Lucky Draw, loai: may_rui, trang_thai: DA_DUYET, may_rui: true, da_dang_ky: false, hien_thi: false}

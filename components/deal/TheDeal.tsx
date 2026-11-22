@@ -119,7 +119,7 @@ export function TheDeal({ deal, sanPhamMap, onMo, onThemCombo, onThemBo, noiBat 
   let than: React.ReactNode = null;
   let chan: React.ReactNode = null;
 
-  if (deal.moc?.length) {
+  if (deal.moc?.length && !deal.an_moc) {
     const bo = deal.goi_y?.[0];
     than = <DuongMocQua deal={deal} gon />;
     chan = (

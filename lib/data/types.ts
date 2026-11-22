@@ -150,6 +150,8 @@ export const DealSchema = z.object({
   bang_qua: z.array(BangQuaItemSchema).optional(),
   nhan_tinh: z.array(z.string().min(1)).optional(),
   moc: z.array(MocQuaSchema).optional(),
+  /** Ẩn đường mốc trên thẻ và ngăn kéo deal (mốc vẫn dùng để tính giỏ). QD-BOD-060: voucher không ghi mốc; QD-BOD-072: vòng quay mọi hóa đơn. */
+  an_moc: z.boolean().optional(),
   goi_y: z.array(GoiYBoSchema).optional(),
   can_xac_nhan: z.string().optional(),
 });

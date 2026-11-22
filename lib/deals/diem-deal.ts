@@ -44,7 +44,7 @@ export function giaTriDeal(
   }
 
   if (deal.loai === "may_rui") {
-    // Vòng quay: chi phí quà trung bình 18.500 / mốc 300.000 (doc LOPOE đã chốt 20/11 mục 4)
+    // Vòng quay: chi phí 18.500 / hóa đơn 300.000 (giá trị tương đối để xếp hạng; từ QD-BOD-072 mọi hóa đơn được quay)
     return 18_500 / 300_000;
   }
 

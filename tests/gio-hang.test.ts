@@ -204,8 +204,9 @@ describe("engine giỏ hàng tinhGio (W008)", () => {
     expect(kq.tong_le).toBe(1_444_000);
     expect(kq.tiet_kiem).toBe(209_000);
     expect(kq.tong_tam_tinh).toBe(1_235_000);
-    // 20/11: mốc 1,2 triệu tặng ampoule + voucher nhà hàng; KM-08 (mốc 1,3 triệu tặng kem) đã dừng nên không còn mốc tiếp theo
-    expect(kq.qua_du_kien).toBe("1 ampoule LOPOE và 1 voucher giảm 15% nhà hàng Union Square");
+    // QD-BOD-060 (22/11): mốc 1,2 triệu chỉ tặng ampoule; voucher nhà hàng là quà cộng thêm (KM-09). KM-08 đã dừng nên không còn mốc tiếp theo
+    expect(kq.qua_du_kien).toBe("1 ampoule LOPOE");
+    expect(kq.qua_cong_them).toContain("1 voucher giảm 15% nhà hàng Union Square");
     expect(kq.moc_tiep_theo).toBeNull();
   });
 
@@ -241,7 +242,7 @@ describe("engine giỏ hàng tinhGio (W008)", () => {
     expect(SAN_PHAM.find((s) => s.id === "8800289468759")?.hien_thi).toBe(false);
   });
 
-  it("ưu đãi 3 (DC-02): quà cộng thêm là lượt quay từ 300K, cộng được với quà hóa đơn", () => {
+  it("ưu đãi 3 (DC-02): mọi hóa đơn được quay 1 lượt (QD-BOD-072), cộng được với quà hóa đơn", () => {
     const ngay = "2026-11-21";
     const ampoule = tinhGio(
       [{ san_pham_id: "LOPOE-AMP", so_luong: 1 }],
@@ -259,7 +260,8 @@ describe("engine giỏ hàng tinhGio (W008)", () => {
       DEALS,
       ngay
     );
-    expect(srm.qua_cong_them).toEqual([]);
+    // QD-BOD-072: bỏ mốc 300K, hóa đơn nhỏ vẫn được quay
+    expect(srm.qua_cong_them).toEqual(["1 lượt quay vòng quay may mắn"]);
   });
 
   it("DC-02 cộng với quà hóa đơn 800K (Medicube toner + serum 1.135.000)", () => {
