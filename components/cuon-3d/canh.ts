@@ -92,7 +92,7 @@ export interface Canh {
 
 export function taoCanh(
   canvas: HTMLCanvasElement,
-  opts: { taiSan: TaiSan; hatSrm: LoaiHat[]; hatAmp: LoaiHat[]; anhHat?: Partial<Record<LoaiHat, string>>; so1: string; hienSo1?: boolean; giamChuyenDong: boolean; thoiGianTheoP?: boolean; onSanSang?: () => void },
+  opts: { taiSan: TaiSan; hatSrm: LoaiHat[]; hatAmp: LoaiHat[]; anhHat?: Partial<Record<LoaiHat, string>>; so1: string; hienSo1?: boolean; giamChuyenDong: boolean; thoiGianTheoP?: boolean; anHatAmp?: boolean; onSanSang?: () => void },
 ): Canh {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   const dt0 = window.innerWidth < 768;
@@ -480,6 +480,8 @@ export function taoCanh(
 
     // 5) Thành phần ampoule: cột có đường nối
     const nhanAmp = TP_AMP.map(({ g, line }, i) => {
+      // W072: bố cục bọt nước (HTML) thay hạt + đường kẻ: ẩn cả hai
+      if (opts.anHatAmp) { datMo(g, 0); line.visible = false; return { x: 0, y: 0, o: 0 }; }
       const e = seg(p, 0.532 + i * 0.012, 0.556 + i * 0.012) * (1 - seg(p, 0.612, 0.636));
       datMo(g, e);
       line.visible = e > 0.01;

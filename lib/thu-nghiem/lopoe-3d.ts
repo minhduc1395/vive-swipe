@@ -36,6 +36,19 @@ const ThanhPhanSchema = z.object({
   loi: z.string().min(1),
   loi_en: z.string().optional(),
 });
+const Cap = z.tuple([z.number(), z.number()]);
+/**
+ * W072: bố cục "bọt nước" cho đoạn 4 hoạt chất ampoule (sau công tắc). Bật khi `bat: true` hoặc URL có `?bot-nuoc=1`.
+ * Máy tính: 4 bọt xếp vòng cung quanh tâm `tam` (% khung nhìn), bán kính min(ban_kinh[0]vw, ban_kinh[1]vh), góc theo `goc` (độ);
+ * cỡ bọt min(co[0]vw, co[1]vh). Điện thoại: lưới 2×2 từ `tren` (% chiều cao) tới cách đáy `duoi` px, cỡ bọt min(co[0]vw, co[1]vh).
+ */
+export const BotNuocSchema = z.object({
+  bat: z.boolean().default(false),
+  anh: z.object({ thua: z.string(), sen: z.string(), "phan-tu": z.string(), "rau-ma": z.string(), xoan: z.string() }).partial(),
+  may_tinh: z.object({ tam: Cap, ban_kinh: Cap, goc: z.array(z.number()).length(4), co: Cap }),
+  dien_thoai: z.object({ tren: z.number().min(0).max(100), duoi: z.number().min(0), co: Cap }),
+});
+export type BotNuoc = z.infer<typeof BotNuocSchema>;
 export const CauHinhLopoe3DSchema = z.object({
   hien_cho_duyet: z.boolean().default(false),
   tai_san: z.object({ ampoule_than: z.string(), ampoule_nap: z.string(), ampoule_co: z.string(), giot: z.string(), sua_rua_mat: z.string(), kem_duong: z.string() }),
@@ -46,6 +59,7 @@ export const CauHinhLopoe3DSchema = z.object({
   anh_thanh_phan: z.object({ thua: z.string(), sen: z.string(), "phan-tu": z.string(), "rau-ma": z.string() }).partial().default({}),
   so_1: z.string().default("No.1"),
   so_1_en: z.string().optional(),
+  bot_nuoc: BotNuocSchema.optional(),
   /** W063: điện thoại dùng chuỗi ảnh dựng sẵn thay three.js (mượt, không nóng máy). Ảnh chỉ có sản phẩm + nền; chữ và nhãn vẫn là DOM. */
   khung_dien_thoai: z.object({
     thu_muc: z.string(), so: z.number().int().min(2), rong: z.number(), cao: z.number(),

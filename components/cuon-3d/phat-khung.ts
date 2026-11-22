@@ -63,3 +63,31 @@ export function pTuKhung(pKhung: number[], f: number): number {
   const j = Math.min(n - 1, i + 1);
   return pKhung[i] + (pKhung[j] - pKhung[i]) * Math.max(0, Math.min(1, f - i));
 }
+
+/**
+ * W072: mốc gốc của đoạn 4 hoạt chất ampoule trong cảnh (canh.ts) và trong chuỗi ảnh khung điện thoại (đã chụp theo mốc này).
+ * `het`: lúc 4 hạt thành phần cũ (có đường kẻ) đã mờ hết trong ảnh khung.
+ */
+export const MOC_CANH_AMP = { a: 0.53, b: 0.62, het: 0.636 } as const;
+
+/**
+ * Đổi tiến trình cuộn p (mốc mới trong yaml: đoạn amp-thanh-phan = [a, b]) sang tiến trình của cảnh / ảnh khung (mốc gốc).
+ * Tuyến tính từng khúc qua (0,0), (a, 0.53), (b, 0.62), (1,1): nới đoạn 4 hoạt chất mà không phải dựng lại cảnh.
+ * giu = true (điện thoại, bố cục bọt nước): cả đoạn [a, b) đứng ở khung 0.53 (chưa có hạt, chưa có đường kẻ),
+ * sau b đi tiếp từ khung 0.636 (hạt cũ đã mờ hết).
+ */
+export function pCanh(p: number, a: number, b: number, giu = false): number {
+  const A = MOC_CANH_AMP.a, B = MOC_CANH_AMP.b, C = giu ? MOC_CANH_AMP.het : B;
+  if (p <= a) return a > 0 ? (p * A) / a : A;
+  if (p < b) return giu ? A : A + ((p - a) * (B - A)) / (b - a);
+  return b < 1 ? Math.min(1, C + ((p - b) * (1 - C)) / (1 - b)) : 1;
+}
+
+/** Ngược của pCanh (giu = false): tiến trình cảnh → tiến trình cuộn. Với giu, đoạn đứng [0.53, 0.636] trả về a. */
+export function pTuCanh(pc: number, a: number, b: number, giu = false): number {
+  const A = MOC_CANH_AMP.a, B = MOC_CANH_AMP.b, C = giu ? MOC_CANH_AMP.het : B;
+  if (pc <= A) return (pc * a) / A;
+  if (giu && pc <= C) return a;
+  if (pc < B) return a + ((pc - A) * (b - a)) / (B - A);
+  return Math.min(1, b + ((pc - C) * (1 - b)) / (1 - C));
+}

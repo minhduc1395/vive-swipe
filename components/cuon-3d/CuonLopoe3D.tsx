@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
-import type { CauHinhLopoe3D, KhoiChu3D } from "@/lib/thu-nghiem/lopoe-3d";
+import { Fragment, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import type { BotNuoc, CauHinhLopoe3D, KhoiChu3D } from "@/lib/thu-nghiem/lopoe-3d";
 import { lopNut } from "@/components/ui/Nut";
 import { hienToast } from "@/components/ui/Toast";
 
@@ -22,7 +22,7 @@ function NutMacDinh({ n, i }: { n: Nut3D; i: number }) {
 }
 const veNutMacDinh: VeNut3D = (n, i) => <NutMacDinh key={n.chu} n={n} i={i} />;
 import type { Canh, LoaiHat } from "./canh";
-import { buocBam, khungTuP, pTuKhung, type TrangThaiPhat } from "./phat-khung";
+import { buocBam, khungTuP, MOC_CANH_AMP, pCanh, pTuCanh, pTuKhung, type TrangThaiPhat } from "./phat-khung";
 
 const kep = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const muot = (t: number) => t * t * (3 - 2 * t);
@@ -69,10 +69,14 @@ const VI_TRI: Record<KhoiChu3D["vi_tri"], string> = {
   "tren-giua": "max-md:!top-[8vh] max-md:!bottom-auto max-md:text-center md:left-1/2 md:top-[8vh] md:w-[min(84vw,980px)] md:-translate-x-1/2 md:text-center",
 };
 
-function KhoiChu({ k, veNut }: { k: KhoiChu3D; veNut: VeNut3D }) {
-  const giua = k.vi_tri === "duoi-giua" || k.vi_tri === "tren-giua";
+/** W072: đoạn 4 hoạt chất kiểu bọt nước: chữ + 2 nút cột trái, cùng mép trái (máy tính và điện thoại). */
+const VI_TRI_BOT_NUOC = "left-[6vw] max-md:right-[6vw] top-[calc(max(8svh,60px)+env(safe-area-inset-top))] md:top-[max(11vh,84px)] md:w-[min(31vw,460px)]";
+
+function KhoiChu({ k, veNut, botNuoc = false, nutThem = [] }: { k: KhoiChu3D; veNut: VeNut3D; botNuoc?: boolean; nutThem?: Nut3D[] }) {
+  const giua = !botNuoc && (k.vi_tri === "duoi-giua" || k.vi_tri === "tren-giua");
+  const nut = botNuoc ? nutThem : k.nut;
   return (
-    <div data-khoi={k.id} className={`absolute opacity-0 invisible max-md:left-5 max-md:right-5 max-md:bottom-[calc(4vh+72px)] ${VI_TRI[k.vi_tri]}`}>
+    <div data-khoi={k.id} className={`absolute opacity-0 invisible ${botNuoc ? VI_TRI_BOT_NUOC : `max-md:left-5 max-md:right-5 max-md:bottom-[calc(4vh+72px)] ${VI_TRI[k.vi_tri]}`}`}>
       {k.huy_hieu && (
         // eslint-disable-next-line @next/next/no-img-element
         <img data-con src={k.huy_hieu.anh} alt={k.huy_hieu.mo_ta} width={211} height={212} loading="lazy" decoding="async" className={`block w-[88px] h-auto mb-3 drop-shadow-[0_10px_24px_rgba(60,90,130,0.22)] ${giua ? "md:mx-auto" : ""} ${k.vi_tri === "duoi-giua" ? "md:absolute md:mb-0 md:w-[150px] md:left-[calc(max(16px,50vw-min(48vh,40vw)-175px)-50vw+min(42vw,490px))] md:bottom-[calc(100%+14vh)]" : "md:w-[124px]"}`} />
@@ -88,9 +92,9 @@ function KhoiChu({ k, veNut }: { k: KhoiChu3D; veNut: VeNut3D }) {
           ))}
         </p>
       )}
-      {k.nut.length > 0 && (
-        <div data-con className={`mt-5 flex flex-wrap items-center gap-3.5 pointer-events-auto ${giua ? "justify-center" : ""}`}>
-          {k.nut.map((n, i) => veNut(n, i))}
+      {nut.length > 0 && (
+        <div data-con data-nut-khoi className={`mt-5 flex flex-wrap items-center gap-3.5 pointer-events-auto ${giua ? "justify-center" : ""}`}>
+          {nut.map((n, i) => veNut(n, i))}
         </div>
       )}
     </div>
@@ -106,13 +110,90 @@ function NhanThanhPhan({ ten, loi, giua }: { ten: string; loi: string; giua: boo
   );
 }
 
+/** Ảnh bọt của 1 hoạt chất: ảnh DES (bot_nuoc.anh), thiếu thì ảnh thành phần cũ. */
+const anhBot = (cfg: CauHinhLopoe3D, bn: BotNuoc, loai: string) =>
+  bn.anh[loai as keyof BotNuoc["anh"]] ?? cfg.anh_thanh_phan[loai as keyof CauHinhLopoe3D["anh_thanh_phan"]];
+
+function ChuBot({ ten, loi }: { ten: string; loi: string }) {
+  return (
+    <span data-bot-chu className="block mt-1.5 md:mt-0 max-w-full md:max-w-[min(17vw,240px)]">
+      <b className="block text-[13px] md:text-[clamp(16px,1.45vw,21px)] font-bold tracking-[-0.01em] leading-tight text-den">{ten}</b>
+      <span className="block text-[12px] md:text-[clamp(13px,1.05vw,15px)] font-medium leading-tight md:leading-snug text-den/75 mt-0.5">{loi}</span>
+    </span>
+  );
+}
+
+/**
+ * W072: 4 bọt nước (ảnh + tên + công dụng) cho đoạn 4 hoạt chất, là HTML trên canvas / chuỗi ảnh khung.
+ * Máy tính: vòng cung bên phải chai; điện thoại: lưới 2×2 dưới chai. Bọt đứng yên đúng chỗ, độ mờ theo cuộn (capNhatChu).
+ */
+function LopBotNuoc({ cfg, bn }: { cfg: CauHinhLopoe3D; bn: BotNuoc }) {
+  const m = bn.may_tinh, d = bn.dien_thoai;
+  const R = `min(${m.ban_kinh[0]}vw, ${m.ban_kinh[1]}vh)`;
+  const caoHang = `((100% - ${d.tren}% - ${d.duoi}px) / 2)`;
+  const goc: CSSProperties = { ["--bn-s" as string]: `min(${m.co[0]}vw, ${m.co[1]}vh)`, ["--bn-sd" as string]: `min(${d.co[0]}vw, ${d.co[1]}vh)` };
+  return (
+    <div data-bot-nuoc className="absolute inset-0" style={goc}>
+      {cfg.thanh_phan.ampoule.map((t, i) => {
+        const g = (m.goc[i] * Math.PI) / 180;
+        const vt: CSSProperties = {
+          ["--bn-x" as string]: `calc(${m.tam[0]}% + ${Math.cos(g).toFixed(4)} * ${R} - var(--bn-s) / 2)`,
+          ["--bn-y" as string]: `calc(${m.tam[1]}% + ${Math.sin(g).toFixed(4)} * ${R} - var(--bn-s) / 2)`,
+          ["--bn-xd" as string]: `${6 + (i % 2) * 44}%`,
+          ["--bn-yd" as string]: `calc(${d.tren}% + ${Math.floor(i / 2)} * ${caoHang})`,
+          ["--bn-hd" as string]: `calc${caoHang}`,
+        };
+        const anh = anhBot(cfg, bn, t.loai);
+        return (
+          <div key={t.loai + i} data-bot={t.loai} style={vt}
+            className="absolute opacity-0 invisible left-[var(--bn-xd)] top-[var(--bn-yd)] w-[44%] h-[var(--bn-hd)] flex flex-col items-center justify-start text-center md:left-[var(--bn-x)] md:top-[var(--bn-y)] md:w-auto md:h-auto md:flex-row md:justify-start md:text-left md:gap-4">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            {anh && <img data-bot-anh src={anh} alt="" width={512} height={512} loading="lazy" decoding="async" className="block shrink-0 w-[var(--bn-sd)] h-auto md:w-[var(--bn-s)]" />}
+            <ChuBot ten={t.ten} loi={t.loi} />
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 /** Bản dự phòng: không có WebGL hoặc người dùng giảm chuyển động → ảnh tĩnh + chữ, không dính đoạn dài. */
-function BanTinh({ cfg, id }: { cfg: CauHinhLopoe3D; id?: string }) {
+function BanTinh({ cfg, id, botNuoc, veNut }: { cfg: CauHinhLopoe3D; id?: string; botNuoc: BotNuoc | null; veNut: VeNut3D }) {
   const anh: Record<string, string> = { srm: cfg.tai_san.sua_rua_mat, amp: cfg.tai_san.ampoule_than, kem: cfg.tai_san.kem_duong };
   return (
     <section id={id} aria-label="LOPOE Better Balance" className="bg-lopoe-nen px-5 md:px-16 py-16 flex flex-col gap-16">
       {cfg.khoi.map((k) => {
         const sp = k.id.startsWith("srm") ? "srm" : k.id.startsWith("amp") ? "amp" : "kem";
+        if (botNuoc && k.id === "amp-thanh-phan") {
+          // W072, giảm chuyển động: chữ + 2 nút căn trái, 4 bọt hiện sẵn (không mờ dần, không bay)
+          const nut = cfg.khoi.find((x) => x.id === "ket")?.nut ?? [];
+          return (
+            <div key={k.id} data-khoi={k.id} className="max-w-[980px] mx-auto w-full">
+              <div className="grid md:grid-cols-[200px_1fr] gap-6 items-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={anh[sp]} alt="" className="h-[220px] w-auto object-contain mx-auto" />
+                <div>
+                  {k.ten_nho && <p className="m-0 text-[12px] font-semibold tracking-[0.1em] uppercase text-xam">{k.ten_nho}</p>}
+                  {k.tu_khoa && <h3 className="m-0 mt-2 text-[40px] font-bold tracking-[-0.03em] leading-none">{k.tu_khoa.replace("|", " ")}</h3>}
+                  {k.cau && <p className="m-0 mt-2 text-[20px] font-medium">{chuNghieng(k.cau)}</p>}
+                  {nut.length > 0 && <div data-nut-khoi className="mt-5 flex flex-wrap items-center gap-3.5">{nut.map((n, i) => veNut(n, i))}</div>}
+                </div>
+              </div>
+              <div data-bot-nuoc className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-6">
+                {cfg.thanh_phan.ampoule.map((t, i) => {
+                  const a = anhBot(cfg, botNuoc, t.loai);
+                  return (
+                    <div key={t.loai + i} data-bot={t.loai} className="flex flex-col items-center text-center">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      {a && <img data-bot-anh src={a} alt="" width={512} height={512} loading="lazy" decoding="async" className="block w-[min(36vw,160px)] h-auto" />}
+                      <ChuBot ten={t.ten} loi={t.loi} />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        }
         return (
           <div key={k.id} className="grid md:grid-cols-[200px_1fr] gap-6 items-center max-w-[980px] mx-auto w-full">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -142,17 +223,22 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
   const lop = useRef<HTMLDivElement>(null);
   const [cheDo, setCheDo] = useState<"cho" | "3d" | "khung" | "tinh">("cho");
   const [daTai, setDaTai] = useState(false);
+  // W072: bố cục bọt nước cho đoạn 4 hoạt chất: bật bằng yaml (bot_nuoc.bat) hoặc ?bot-nuoc=1 (xem trước, đọc phía client)
+  const [botNuoc, setBotNuoc] = useState(!!cfg.bot_nuoc?.bat);
+  const bn = botNuoc && cfg.bot_nuoc ? cfg.bot_nuoc : null;
 
   useEffect(() => {
     const giam = matchMedia("(prefers-reduced-motion: reduce)").matches;
     let coWebGL = false;
     try { coWebGL = !!document.createElement("canvas").getContext("webgl2"); } catch { coWebGL = false; }
     // ?ba-chieu=1: ép chạy three.js trên điện thoại (chỉ dùng khi chụp lại chuỗi ảnh khung)
-    const epBaChieu = new URLSearchParams(location.search).has("ba-chieu");
+    const thamSo = new URLSearchParams(location.search);
+    const epBaChieu = thamSo.has("ba-chieu");
     const dungKhung = !!cfg.khung_dien_thoai && innerWidth < 768 && !epBaChieu;
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setCheDo(giam ? "tinh" : dungKhung ? "khung" : coWebGL ? "3d" : "tinh");
-  }, [cfg.khung_dien_thoai]);
+    if (cfg.bot_nuoc && (cfg.bot_nuoc.bat || thamSo.get("bot-nuoc") === "1")) setBotNuoc(true);
+  }, [cfg.khung_dien_thoai, cfg.bot_nuoc]);
 
   useEffect(() => {
     if ((cheDo !== "3d" && cheDo !== "khung") || !canvas.current || !doan.current || !lop.current) return;
@@ -167,10 +253,17 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
     let nhanKhung: ({ srm: (number[] | 0)[]; amp: (number[] | 0)[] })[] = [];
     let pKhung: number[] = []; // tiến trình p của từng khung (khung dày ở đoạn hình đổi nhiều, thưa ở đoạn đứng yên)
     let ctx2d: CanvasRenderingContext2D | null = null, khoaVe = -1;
-    let raf = 0, hien = false, huy = false, p = 0, truoc = performance.now(), dangTai = false;
+    let raf = 0, hien = false, huy = false, p = 0, pc = 0, truoc = performance.now(), dangTai = false;
     let phat: TrangThaiPhat | null = null; // null = nhảy thẳng tới đích ở lần vẽ tới
     const elDoan = doan.current, elLop = lop.current, elCanvas = canvas.current;
     const chupKhung = new URLSearchParams(location.search).has("ba-chieu"); // ?ba-chieu=1: chế độ chụp lại chuỗi ảnh khung
+    // W072: mốc yaml của đoạn 4 hoạt chất đã nới; cảnh 3D và ảnh khung vẫn theo mốc gốc → đổi p sang pc (tiến trình cảnh).
+    // Bọt nước trên điện thoại: ảnh khung đứng ở khung chưa có hạt + đường kẻ cũ suốt đoạn (giu).
+    const kAmp = cfg.khoi.find((k) => k.id === "amp-thanh-phan");
+    const aAmp = kAmp?.a ?? MOC_CANH_AMP.a, bAmp = kAmp?.b ?? MOC_CANH_AMP.b;
+    const giu = !!kd && botNuoc;
+    const sangCanh = (q: number) => pCanh(q, aAmp, bAmp, giu);
+    const bot = [...elLop.querySelectorAll<HTMLElement>("[data-bot]")];
 
     const moDau = elLop.querySelector<HTMLElement>("[data-mo-dau]");
     const khoi = cfg.khoi.map((k) => {
@@ -183,9 +276,9 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
     const dong = [...elLop.querySelectorAll<HTMLElement>("[data-dong]")];
 
     const tienTrinh = () => { const r = elDoan.getBoundingClientRect(); return kep(-r.top / (r.height - innerHeight)); };
-    const capNhatChu = (p: number) => {
+    const capNhatChu = (p: number, pc: number) => {
       if (moDau) {
-        const o = 1 - seg(p, 0.025, 0.045);
+        const o = 1 - seg(pc, 0.025, 0.045);
         moDau.style.opacity = String(o);
         moDau.style.transform = `translateY(${-30 * (1 - o)}px)`;
         moDau.style.visibility = o < 0.01 ? "hidden" : "visible";
@@ -201,10 +294,20 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
         tus.forEach((w, i) => { const e = muot(kep(t * 1.6 - i * 0.18)) * ra; w.style.opacity = String(e); w.style.transform = `translate(${dx * (1 - e) * 0.5}px,${(dy || 18) * (1 - e)}px)`; });
         con.forEach((c, i) => { const e = muot(kep(t * 1.4 - 0.1 - i * 0.09)) * ra; c.style.opacity = String(e); c.style.transform = `translate(${dx * (1 - e)}px,${dy * (1 - e)}px)`; });
       }
+      // Bọt nước: hiện mờ dần lần lượt đầu đoạn, mờ cùng khối chữ cuối đoạn (chưa bay, job sau)
+      if (bot.length && kAmp) {
+        const ra = 1 - seg(p, bAmp - 0.014, bAmp + 0.006);
+        bot.forEach((el, i) => {
+          const e = seg(p, aAmp + 0.008 + i * 0.01, aAmp + 0.03 + i * 0.01) * ra;
+          el.style.opacity = String(e);
+          el.style.visibility = e < 0.01 ? "hidden" : "visible";
+        });
+      }
+      // thanh tiến trình bên phải theo mốc cảnh
       const khoang = [[0.045, 0.37], [0.37, 0.72], [0.72, 0.87]];
       const tt = elLop.querySelector<HTMLElement>("[data-tien-trinh]");
-      if (tt) tt.style.opacity = String(seg(p, 0.05, 0.08) * (1 - seg(p, 0.87, 0.9)));
-      khoang.forEach(([a, b], i) => { if (vach[i]) vach[i].style.transform = `scaleY(${kep((p - a) / (b - a))})`; dong[i]?.classList.toggle("font-semibold", p >= a && p < b); });
+      if (tt) tt.style.opacity = String(seg(pc, 0.05, 0.08) * (1 - seg(pc, 0.87, 0.9)));
+      khoang.forEach(([a, b], i) => { if (vach[i]) vach[i].style.transform = `scaleY(${kep((pc - a) / (b - a))})`; dong[i]?.classList.toggle("font-semibold", pc >= a && pc < b); });
     };
     const datNhan = (els: HTMLElement[], vt: { x: number; y: number; o: number }[], dx: number, dy: number, giua: boolean) => {
       els.forEach((el, i) => {
@@ -226,17 +329,20 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
         // tốc độ hình đổi liền mạch nên đổi nhịp tay hay nhấc tay không làm hình giật cục
         const dt = Math.min(0.1, (time - truoc) / 1000);
         truoc = time;
-        if (pKhung.length < 2) p = dich;
-        else if (!phat) {
+        const dichCanh = sangCanh(dich);
+        if (pKhung.length < 2 || !phat) {
           // lần đầu hoặc vừa quay lại khối: hiện đúng chỗ đang cuộn
-          phat = { f: khungTuP(pKhung, dich), v: 0 };
+          if (pKhung.length >= 2) phat = { f: khungTuP(pKhung, dichCanh), v: 0 };
+          pc = dichCanh;
           p = dich;
         } else {
-          phat = buocBam(phat, khungTuP(pKhung, dich), dt);
-          p = pTuKhung(pKhung, phat.f);
+          phat = buocBam(phat, khungTuP(pKhung, dichCanh), dt);
+          pc = pTuKhung(pKhung, phat.f);
+          // đang đứng khung ở đoạn bọt nước: chữ theo vị trí cuộn
+          p = giu && pc >= MOC_CANH_AMP.a && pc <= MOC_CANH_AMP.het ? kep(dich, aAmp, bAmp) : pTuCanh(pc, aAmp, bAmp, giu);
         }
-        veAnh(p);
-        capNhatChu(p);
+        veAnh(pc);
+        capNhatChu(p, pc);
         if (hien) raf = requestAnimationFrame(khung);
         return;
       }
@@ -250,15 +356,16 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
       if (Math.abs(dich - p) < 1e-5) p = dich;
       const ep = (window as unknown as { __p?: number }).__p; // chỉ dùng khi kiểm thử
       if (typeof ep === "number") p = ep;
+      pc = sangCanh(p);
       if (canh) {
-        const vt = canh.ve(p, time);
+        const vt = canh.ve(pc, time);
         if (chupKhung) (window as unknown as { __vt?: unknown }).__vt = vt;
         const dienThoai = innerWidth < 768;
         datNhan(nhanSrm, vt.srm, 0, dienThoai ? 40 : 72, true);
         // Điện thoại: nhãn nằm dưới từng hạt, canh giữa; máy tính: nhãn bên phải hạt
         datNhan(nhanAmp, vt.amp, dienThoai ? 0 : 48, dienThoai ? 46 : 0, dienThoai);
       }
-      capNhatChu(p);
+      capNhatChu(p, pc);
       if (hien) raf = requestAnimationFrame(khung);
     };
 
@@ -347,7 +454,7 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
         fetch(url(i)).then((r) => r.blob()).then((bl) => { blobKhung[i] = bl; capNhatCuaSo(); }, () => {});
       (async () => {
         try { const j = await (await fetch(kd.nhan)).json(); pKhung = j.p; nhanKhung = j.nhan; khoaVe = -1; } catch { return; }
-        tamCuaSo = timKhung(p);
+        tamCuaSo = timKhung(pc);
         await tai(0);
         // tải các khung gần vị trí hiện tại trước, sau đó lấp hết (song song 4 luồng)
         const thuTu = Array.from({ length: kd.so }, (_, i) => i).sort((a, b) => Math.abs(a - tamCuaSo) - Math.abs(b - tamCuaSo));
@@ -372,6 +479,7 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
           hienSo1: cfg.khoi.some((k) => k.id === "amp-giai-thuong"),
           giamChuyenDong: false,
           thoiGianTheoP: chupKhung,
+          anHatAmp: botNuoc,
           onSanSang: () => { sanSangVe = true; setDaTai(true); },
         });
         p = tienTrinh();
@@ -418,12 +526,13 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
       removeEventListener("resize", doiCo);
       canh?.huy();
     };
-  }, [cheDo, cfg]);
+  }, [cheDo, cfg, botNuoc]);
 
-  if (cheDo === "tinh") return <BanTinh cfg={cfg} id={id} />;
+  if (cheDo === "tinh") return <BanTinh cfg={cfg} id={id} botNuoc={bn} veNut={veNut} />;
+  const nutKet = cfg.khoi.find((k) => k.id === "ket")?.nut ?? [];
 
   return (
-    <section ref={doan} id={id} aria-label="LOPOE Better Balance" className="relative h-[1600vh] md:h-[1500vh] bg-lopoe-nen">
+    <section ref={doan} id={id} aria-label="LOPOE Better Balance" data-bot-nuoc-bat={bn ? "1" : undefined} className="relative h-[1600vh] md:h-[1500vh] bg-lopoe-nen">
       <div className="sticky top-0 h-[100svh] overflow-hidden">
         <canvas ref={canvas} aria-hidden="true" className={`absolute inset-0 w-full h-full block transition-opacity duration-700 ${daTai ? "opacity-100" : "opacity-0"}`} />
         {/* Ảnh tĩnh bộ 3 trong lúc tải cảnh 3D, cùng vị trí với khung đầu của cảnh */}
@@ -449,9 +558,13 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
               {cfg.mo_dau.nut.map((n, i) => veNut(n, i))}
             </div>
           </div>
-          {cfg.khoi.map((k) => <KhoiChu key={k.id} k={k} veNut={veNut} />)}
+          {cfg.khoi.map((k) => {
+            const kieuBot = !!bn && k.id === "amp-thanh-phan";
+            return <KhoiChu key={k.id} k={k} veNut={veNut} botNuoc={kieuBot} nutThem={kieuBot ? nutKet : []} />;
+          })}
+          {bn && <LopBotNuoc cfg={cfg} bn={bn} />}
           <div data-nhom-nhan="srm">{cfg.thanh_phan.sua_rua_mat.map((t) => <NhanThanhPhan key={t.ten} ten={t.ten} loi={t.loi} giua />)}</div>
-          <div data-nhom-nhan="amp">{cfg.thanh_phan.ampoule.map((t) => <NhanThanhPhan key={t.ten} ten={t.ten} loi={t.loi} giua={false} />)}</div>
+          {!bn && <div data-nhom-nhan="amp">{cfg.thanh_phan.ampoule.map((t) => <NhanThanhPhan key={t.ten} ten={t.ten} loi={t.loi} giua={false} />)}</div>}
           <div data-tien-trinh aria-hidden="true" className="hidden md:grid absolute right-7 top-1/2 -translate-y-1/2 gap-3.5 opacity-0">
             {[tTienTrinh("suaRuaMat"), tTienTrinh("ampoule"), tTienTrinh("kemDuong")].map((t) => (
               <div key={t} data-dong className="flex items-center justify-end gap-2.5 text-[11px] tracking-[0.06em] text-xam">
