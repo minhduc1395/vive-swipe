@@ -31,6 +31,28 @@ function layNgayTinhGio(): string {
   return chuanHoaNgay(new Date());
 }
 
+/** Ảnh nhỏ; ảnh lỗi (404) thì hiện chữ thương hiệu như khi không có ảnh. */
+function AnhHoacChu({
+  src,
+  alt,
+  className,
+  chu,
+  chuClassName,
+}: {
+  src: string | null;
+  alt: string;
+  className: string;
+  chu: string;
+  chuClassName?: string;
+}) {
+  const [loi, setLoi] = useState(false);
+  if (!src || loi) return <span className={chuClassName}>{chu}</span>;
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={src} alt={alt} className={className} onError={() => setLoi(true)} />
+  );
+}
+
 export default function TrangGio() {
   const t = useTranslations("deal");
   const nn = useLocale();
@@ -315,16 +337,13 @@ export default function TrangGio() {
                                 aria-label={t("gio.anhSanPham")}
                                 className="w-12 h-12 rounded-xl bg-kem text-[10px] font-semibold tracking-wider uppercase text-xam-dam flex items-center justify-center shrink-0 overflow-hidden"
                               >
-                                {anhGoiY ? (
-                                  /* eslint-disable-next-line @next/next/no-img-element */
-                                  <img
-                                    src={anhGoiY}
-                                    alt={tenSanPham(spGoiY, nn)}
-                                    className="w-10 h-10 object-contain"
-                                  />
-                                ) : (
-                                  spGoiY.thuong_hieu
-                                )}
+                                <AnhHoacChu
+                                  key={anhGoiY}
+                                  src={anhGoiY}
+                                  alt={tenSanPham(spGoiY, nn)}
+                                  className="w-10 h-10 object-contain"
+                                  chu={spGoiY.thuong_hieu}
+                                />
                               </div>
                               <div className="flex-1 flex flex-col min-w-0 text-[13px]">
                                 <span className="text-xam text-[11px]">
@@ -434,18 +453,14 @@ export default function TrangGio() {
                           {t("gio.nhanCombo")}
                         </span>
                       )}
-                      {anhSrc ? (
-                        /* eslint-disable-next-line @next/next/no-img-element */
-                        <img
-                          src={anhSrc}
-                          alt={tenDong}
-                          className="w-14 h-14 object-contain"
-                        />
-                      ) : (
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-xam-dam px-1 text-center">
-                          {dong.thuong_hieu}
-                        </span>
-                      )}
+                      <AnhHoacChu
+                        key={anhSrc}
+                        src={anhSrc}
+                        alt={tenDong}
+                        className="w-14 h-14 object-contain"
+                        chu={dong.thuong_hieu}
+                        chuClassName="text-[10px] font-bold uppercase tracking-wider text-xam-dam px-1 text-center"
+                      />
                     </div>
 
                     {/* Thông tin dòng */}
