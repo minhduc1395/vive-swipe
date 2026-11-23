@@ -17,4 +17,4 @@ Trang nhân viên (tra mã giữ hàng tại booth) và trang quản trị; cron
 - #136 (23/11) SĐT khách che ở server (`lib/nhan-vien/che-sdt.ts`): `/nhan-vien` chỉ nhận và hiện 4 số cuối; ô tìm khớp 4 số cuối còn thấy.
 
 ## Đang khóa
-- (không có). #136 gộp PR #138 (23/11), W066 Done.
+- 23/11: job #140 (bỏ email khỏi dữ liệu /nhan-vien) đang chạy. Không giao job hay task W khác vào `app/nhan-vien/` tới khi #140 đóng.
