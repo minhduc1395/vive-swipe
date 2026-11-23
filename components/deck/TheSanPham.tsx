@@ -217,6 +217,11 @@ export function TheSanPham({
           <img
             src={anhSrc}
             alt={tenSp}
+            width={236}
+            height={236}
+            fetchPriority={isTopCard ? "high" : "auto"}
+            loading={isTopCard ? "eager" : "lazy"}
+            decoding="async"
             onError={() => setAnhLoi(true)}
             draggable="false"
             className="w-[236px] h-[236px] max-w-[85%] max-h-[85%] object-contain pointer-events-none"
