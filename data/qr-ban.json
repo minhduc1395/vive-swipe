@@ -1,0 +1,8 @@
+{
+  "_ghi_chu": "QR để bàn (QD-BOD-027, DES-013). QR in trỏ <web>/q/<ma>. Đổi đích ở đây (đường dẫn trong web hoặc link đầy đủ tên miền mới), không in lại QR. WEB sửa file này.",
+  "mac_dinh": "/bat-dau",
+  "ma": {
+    "thu-ngan": "/bat-dau?nguon=qr-thu-ngan",
+    "lopoe": "/bat-dau?nguon=qr-lopoe"
+  }
+}
