@@ -28,15 +28,32 @@ export function hopNhatDongDeal(row: Record<string, unknown>): Record<string, un
 let cacheSanPham: SanPham[] | null = null;
 let cacheDeals: Deal[] | null = null;
 
+// #132: request đang chạy được dùng chung. Gọi lần 2 khi lần 1 chưa xong (tải sớm của /quet và
+// DuLieuProvider) nhận lại đúng promise đó, không gửi request thứ hai. `doiCache` tăng khi xóa cache,
+// để request cũ về muộn không ghi đè cache mới.
+let dangTaiSanPham: Promise<SanPham[]> | null = null;
+let dangTaiDeals: Promise<Deal[]> | null = null;
+let doiCache = 0;
+
 /**
  * Tải danh sách sản phẩm từ Supabase (bảng `san_pham`).
  * Dữ liệu trả về được kiểm tra kỹ lưỡng qua `SanPhamSchema` (Zod).
  * Nếu không kết nối được hoặc lỗi, tự động dùng danh sách tĩnh trong `data/products.json`.
  */
-export async function taiSanPhamTuSupabase(): Promise<SanPham[]> {
+export function taiSanPhamTuSupabase(): Promise<SanPham[]> {
   if (cacheSanPham && cacheSanPham.length > 0) {
-    return cacheSanPham;
+    return Promise.resolve(cacheSanPham);
   }
+  if (dangTaiSanPham) return dangTaiSanPham;
+  const doi = doiCache;
+  const lanTai = taiSanPhamMoi(doi).finally(() => {
+    if (dangTaiSanPham === lanTai) dangTaiSanPham = null;
+  });
+  dangTaiSanPham = lanTai;
+  return lanTai;
+}
+
+async function taiSanPhamMoi(doi: number): Promise<SanPham[]> {
 
   const supabase = laySupabase();
   if (!supabase) {
@@ -73,8 +90,8 @@ export async function taiSanPhamTuSupabase(): Promise<SanPham[]> {
       return SAN_PHAM;
     }
 
-    cacheSanPham = danhSachHopLe;
-    return cacheSanPham;
+    if (doi === doiCache) cacheSanPham = danhSachHopLe;
+    return danhSachHopLe;
   } catch (err) {
     console.warn("[Supabase] Ngoại lệ tải san_pham, dùng dữ liệu tĩnh:", err);
     return SAN_PHAM;
@@ -86,10 +103,20 @@ export async function taiSanPhamTuSupabase(): Promise<SanPham[]> {
  * Dữ liệu trả về được kiểm tra qua `DealSchema` (Zod).
  * Nếu không kết nối được hoặc lỗi, tự động dùng danh sách tĩnh trong `data/deals.json`.
  */
-export async function taiDealsTuSupabase(): Promise<Deal[]> {
+export function taiDealsTuSupabase(): Promise<Deal[]> {
   if (cacheDeals && cacheDeals.length > 0) {
-    return cacheDeals;
+    return Promise.resolve(cacheDeals);
   }
+  if (dangTaiDeals) return dangTaiDeals;
+  const doi = doiCache;
+  const lanTai = taiDealsMoi(doi).finally(() => {
+    if (dangTaiDeals === lanTai) dangTaiDeals = null;
+  });
+  dangTaiDeals = lanTai;
+  return lanTai;
+}
+
+async function taiDealsMoi(doi: number): Promise<Deal[]> {
 
   const supabase = laySupabase();
   if (!supabase) {
@@ -126,8 +153,8 @@ export async function taiDealsTuSupabase(): Promise<Deal[]> {
       return DEALS;
     }
 
-    cacheDeals = danhSachHopLe;
-    return cacheDeals;
+    if (doi === doiCache) cacheDeals = danhSachHopLe;
+    return danhSachHopLe;
   } catch (err) {
     console.warn("[Supabase] Ngoại lệ tải deal, dùng dữ liệu tĩnh:", err);
     return DEALS;
@@ -140,4 +167,7 @@ export async function taiDealsTuSupabase(): Promise<Deal[]> {
 export function xoaCacheDuLieu(): void {
   cacheSanPham = null;
   cacheDeals = null;
+  dangTaiSanPham = null;
+  dangTaiDeals = null;
+  doiCache++;
 }

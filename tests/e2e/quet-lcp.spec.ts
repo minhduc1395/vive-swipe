@@ -1,5 +1,5 @@
 import { test, expect, datDaKhaoSat } from "./fixtures";
-import { SAN_PHAM } from "../../lib/data";
+import { SAN_PHAM, DEALS } from "../../lib/data";
 
 // #128: /quet hiện ảnh thẻ đầu nhanh. Kiểm ở điện thoại 390×844 (cách đo LCP: scripts/do-lcp-quet.mjs).
 test.use({ viewport: { width: 390, height: 844 } });
@@ -96,4 +96,34 @@ test("/quet: không lỗi console, thẻ đầu hiện ảnh ưu tiên cao, CLS 
   const cls = await page.evaluate(() => (window as unknown as { __cls: number }).__cls);
   expect(cls, "CLS /quet").toBeLessThanOrEqual(0.1);
   expect(loi, `Lỗi console:\n${loi.join("\n")}`).toEqual([]);
+});
+
+test("/quet: mở lần đầu chỉ gọi sản phẩm và deal mỗi loại 1 lần (#132)", async ({ page }) => {
+  const dem = { san_pham: 0, deal: 0 };
+  const SVG = Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="236" height="236"/>');
+  await page.route(`${MEDIA_BASE}/**`, (r) => r.fulfill({ status: 200, contentType: "image/svg+xml", body: SVG }));
+  await page.route(
+    (url) => url.pathname.startsWith("/products/") && /\.(webp|png|jpe?g)$/i.test(url.pathname),
+    (r) => r.fulfill({ status: 200, contentType: "image/svg+xml", body: SVG })
+  );
+  for (const bang of ["san_pham", "deal"] as const) {
+    await page.route(
+      (url) => url.pathname.includes(`/rest/v1/${bang}`),
+      (route) => {
+        dem[bang]++;
+        const du = bang === "san_pham" ? SAN_PHAM : DEALS.map((d) => ({ id: d.id, du_lieu: d }));
+        return route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify(du),
+        });
+      }
+    );
+  }
+  await datDaKhaoSat(page);
+  await page.goto("/quet", { waitUntil: "load" });
+  await expect(page.locator("article img").first()).toBeVisible({ timeout: 30000 });
+  await page.waitForTimeout(2500);
+  expect(dem.san_pham, "số request san_pham").toBe(1);
+  expect(dem.deal, "số request deal").toBe(1);
 });
