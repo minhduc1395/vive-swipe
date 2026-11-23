@@ -9,6 +9,7 @@ import type { PhienNhanVien } from "@/lib/nhan-vien/auth";
 import { actionCapNhatTrangThai, actionLayDanhSachDon } from "./actions";
 import { layTokenNhanVien } from "@/lib/nhan-vien/auth";
 import { useDuLieu } from "@/lib/du-lieu-context";
+import { duoiSdtDaChe } from "@/lib/nhan-vien/che-sdt";
 import { tinhThuongNhanDon } from "@/lib/nhan-vien/thuong-giu-hang";
 
 interface Props {
@@ -70,8 +71,8 @@ export function BangNhanVien({ phien, onDangXuat }: Props) {
 
     return danhSach.filter((d) => {
       const khopMa = d.ma.toLowerCase().includes(q);
-      const sdtClean = d.sdt.replace(/\s+/g, "");
-      const khopSdt = sdtClean.endsWith(q) || sdtClean.includes(q);
+      // SĐT đã che ở server: chỉ so khớp với 4 số cuối còn thấy.
+      const khopSdt = /^\d+$/.test(q) && duoiSdtDaChe(d.sdt).includes(q);
       const khopTen = d.ten.toLowerCase().includes(q);
       return khopMa || khopSdt || khopTen;
     });

@@ -142,12 +142,17 @@ test.describe("W015 · Trang nhân viên /nhan-vien", () => {
 
     await page.goto("/nhan-vien");
 
-    // Tìm kiếm theo 4 số cuối SĐT của đơn VIVE-3307 (0987112112 -> 2112)
+    // Tìm kiếm theo 4 số cuối SĐT của đơn VIVE-3307 (SĐT che thành ******2112, tìm bằng 2112)
     const inputTim = page.locator("input#tim");
     await inputTim.fill("2112");
 
     // Kết quả phải thấy đơn VIVE-3307
     await expect(page.getByText("VIVE-3307").first()).toBeVisible();
+
+    // SĐT chỉ hiện 4 số cuối, không có số đầy đủ trong trang
+    await expect(page.getByText("******2112").first()).toBeVisible();
+    await expect(page.locator("body")).not.toContainText("0987112112");
+    await expect(page.locator("body")).not.toContainText("0987 112 112");
 
     // Bấm nút Đăng xuất
     await page.getByRole("button", { name: "Đăng xuất" }).click();
