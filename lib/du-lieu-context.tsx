@@ -9,6 +9,7 @@ import React, {
 } from "react";
 import { SAN_PHAM as SAN_PHAM_TINH, DEALS as DEALS_TINH } from "@/lib/data";
 import type { SanPham, Deal } from "@/lib/data/types";
+import { usePathname } from "next/navigation";
 import { actionLayDuLieuKhachDev } from "@/app/quan-tri/actions";
 
 interface DuLieuContextType {
@@ -31,6 +32,11 @@ export function DuLieuProvider({ children }: { children: React.ReactNode }) {
   const [sanPham, setSanPham] = useState<SanPham[]>(SAN_PHAM_TINH);
   const [deals, setDeals] = useState<Deal[]>(DEALS_TINH);
   const [daSanSang, setDaSanSang] = useState<boolean>(false);
+  // #132: chỉ trang quản trị cần override dữ liệu dev. Ở khách, bản chạy thật (production) không gọi
+  // Server Action này nữa (nó luôn trả null và chỉ thêm một vòng request vào đường tới thẻ đầu).
+  const pathname = usePathname() ?? "";
+  const canDevOverride =
+    pathname.startsWith("/quan-tri") || process.env.NODE_ENV !== "production";
 
   const layDuLieuTuNguon = useCallback(async (epBuoc: boolean) => {
     const {
@@ -42,10 +48,12 @@ export function DuLieuProvider({ children }: { children: React.ReactNode }) {
     const [sp, dl, devOverride] = await Promise.all([
       taiSanPhamTuSupabase(),
       taiDealsTuSupabase(),
-      actionLayDuLieuKhachDev().catch(() => null),
+      canDevOverride
+        ? actionLayDuLieuKhachDev().catch(() => null)
+        : Promise.resolve(null),
     ]);
     return { sp, dl, devOverride };
-  }, []);
+  }, [canDevOverride]);
 
   const apDungKetQua = useCallback(
     (ketQua: {

@@ -15,6 +15,11 @@ import { dongBoTraLoi } from "@/lib/supabase/auth";
 import { ghiSuKien } from "@/lib/supabase/su-kien";
 import { nhanHamDich, taoNhan } from "@/components/deck/ngon-ngu-quet";
 
+/** #132: gọi tải sớm của /quet (sản phẩm, deal, ảnh thẻ đầu) ngay khi khách nộp khảo sát; không chờ, lỗi bỏ qua. */
+function taiSomQuet(): void {
+  void import("../quet/tai-som").then((m) => m.taiSomChoQuet()).catch(() => {});
+}
+
 interface LuaChon {
   id: string;
 }
@@ -69,6 +74,11 @@ export default function TrangBatDau() {
     }
   }, []);
 
+  useEffect(() => {
+    // Nạp sẵn mã tải sớm ở câu cuối để lúc bấm chuyển trang chạy ngay, không phải chờ thêm chunk.
+    if (buoc === 3) void import("../quet/tai-som").catch(() => {});
+  }, [buoc]);
+
   const luuKetQuaHienTai = () => {
     const ketQua: TraLoiCauHoi = {
       loai_da: loaiDa,
@@ -82,6 +92,7 @@ export default function TrangBatDau() {
   const xuLyBoQua = () => {
     danhDauBoQuaKhaoSat();
     luuKetQuaHienTai();
+    taiSomQuet();
     ghiSuKien("bo_qua_cau_hoi", { buoc });
   };
 
@@ -347,6 +358,7 @@ export default function TrangBatDau() {
                 href="/quet"
                 onClick={() => {
                   luuKetQuaHienTai();
+                  taiSomQuet();
                   ghiSuKien("xong_cau_hoi", {
                     loai_da: loaiDa,
                     van_de: vanDe,
