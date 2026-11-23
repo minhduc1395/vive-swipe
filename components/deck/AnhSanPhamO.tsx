@@ -25,13 +25,15 @@ export function AnhSanPhamO({
   /** aria-label cho ô chữ (có thì ô chữ có role="img"). */
   nhanChu?: string;
 }) {
-  const [loi, setLoi] = useState(false);
+  // Nhớ đúng src đã lỗi: đổi src (vd dữ liệu Supabase về sau) thì thử lại, không kẹt ở chữ thương hiệu.
+  const [srcLoi, setSrcLoi] = useState<string | null>(null);
+  const loi = src !== null && srcLoi === src;
   const anhRef = useRef<HTMLImageElement>(null);
 
   // Ảnh có thể đã lỗi trước khi React gắn onError (trang dựng sẵn từ máy chủ): kiểm lại sau khi gắn.
   useEffect(() => {
     const el = anhRef.current;
-    if (el && el.complete && el.naturalWidth === 0) setLoi(true);
+    if (el && el.complete && el.naturalWidth === 0) setSrcLoi(src);
   }, [src]);
 
   if (!src || loi) {
@@ -47,6 +49,6 @@ export function AnhSanPhamO({
   }
   return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img ref={anhRef} src={src} alt={alt} loading={loading} onError={() => setLoi(true)} className={lopAnh} />
+    <img ref={anhRef} src={src} alt={alt} loading={loading} onError={() => setSrcLoi(src)} className={lopAnh} />
   );
 }
