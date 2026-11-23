@@ -5,6 +5,7 @@ import { KhoiTaoSupabase } from "@/components/KhoiTaoSupabase";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
 
+// #131: cả 4 độ đậm đều đang dùng (font-normal/medium/semibold/bold, tests/font-icon.test.ts kiểm). Bỏ độ đậm nào là đổi giao diện.
 const beVietnamPro = Be_Vietnam_Pro({
   subsets: ["vietnamese", "latin"],
   weight: ["400", "500", "600", "700"],
