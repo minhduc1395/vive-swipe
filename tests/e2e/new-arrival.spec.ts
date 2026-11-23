@@ -28,7 +28,7 @@ test.describe("W027 · Landing chiến dịch /new-arrival", () => {
     // Trang chủ "Tìm hiểu thêm" về /new-arrival; ở đây đổi thành "Xem combo" xuống khối combo
     await expect(moDau.getByRole("link", { name: "Xem combo" })).toHaveAttribute("href", "#ke-ra-mat");
 
-    await expect(page.getByText(/BETTER BALANCE · NỘI ĐỊA HÀN/).first()).toBeVisible();
+    await expect(page.getByText(/BETTER BALANCE · THƯƠNG HIỆU HÀN/).first()).toBeVisible();
 
     await expect(page.getByRole("heading", { name: "Đủ bộ, đỡ tốn." })).toBeVisible();
     const keRaMat = page.locator("#ke-ra-mat");
