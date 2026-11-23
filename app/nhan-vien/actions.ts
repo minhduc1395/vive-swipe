@@ -5,7 +5,7 @@ import {
   capNhatTrangThaiDon,
 } from "@/lib/giu-hang/kho-giu-hang";
 import { xacThucNhanVien } from "@/lib/nhan-vien/xac-thuc-server";
-import { cheSdt } from "@/lib/nhan-vien/che-sdt";
+import { boEmailKhach, cheSdt } from "@/lib/nhan-vien/che-sdt";
 import type { DonGiuHangChiTiet, TrangThaiGiuHang } from "@/lib/giu-hang/types";
 
 const TRANG_THAI_NHAN_VIEN_DUOC_DAT: TrangThaiGiuHang[] = [
@@ -20,8 +20,9 @@ export async function actionLayDanhSachDon(
 ): Promise<DonGiuHangChiTiet[]> {
   await xacThucNhanVien(token);
   // SĐT đầy đủ không được rời server: chỉ trả 4 số cuối (LEG L1).
+  // Email khách không rời server: bỏ trường email (job #140).
   const ds = await layDanhSachDonGiuHangHomNay();
-  return ds.map((d) => ({ ...d, sdt: cheSdt(d.sdt) }));
+  return ds.map((d) => ({ ...boEmailKhach(d), sdt: cheSdt(d.sdt) }));
 }
 
 export async function actionCapNhatTrangThai(
