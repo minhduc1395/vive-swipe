@@ -9,6 +9,7 @@ import { KhungChiTiet } from "@/components/ui/KhungChiTiet";
 import { lopChip } from "@/components/ui/Nhan";
 import { ChonXep } from "./ChonXep";
 import { BangChiTiet } from "@/components/deck/BangChiTiet";
+import { AnhSanPhamO } from "@/components/deck/AnhSanPhamO";
 import { laySanPhamHienThi, duongDanAnh } from "@/lib/data";
 import { useDuLieu } from "@/lib/du-lieu-context";
 import type { SanPham } from "@/lib/data/types";
@@ -532,18 +533,15 @@ function DanhMucNoiDung() {
                         <div
                           className={`relative h-[150px] rounded-[18px] ${bgClass} flex items-center justify-center overflow-hidden`}
                         >
-                          {anhSrc ? (
-                            /* eslint-disable-next-line @next/next/no-img-element */
-                            <img
-                              src={anhSrc}
-                              alt={tenSp}
-                              className="w-[126px] h-[126px] object-contain group-hover:scale-105 transition-transform"
-                            />
-                          ) : (
-                            <span className="text-[11px] font-semibold tracking-[1.4px] text-xam uppercase">
-                              {sp.thuong_hieu}
-                            </span>
-                          )}
+                          <AnhSanPhamO
+                            key={sp.id}
+                            src={anhSrc}
+                            alt={tenSp}
+                            thuongHieu={sp.thuong_hieu}
+                            loading={i >= 6 ? "lazy" : undefined}
+                            lopAnh="w-[126px] h-[126px] object-contain group-hover:scale-105 transition-transform"
+                            lopChu="text-[11px] font-semibold tracking-[1.4px] text-xam uppercase"
+                          />
 
                           {/* Tag giảm giá */}
                           {sp.giam_tren_tag && (

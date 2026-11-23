@@ -5,6 +5,7 @@ import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { BangChiTiet } from "@/components/deck/BangChiTiet";
+import { AnhSanPhamO } from "@/components/deck/AnhSanPhamO";
 import { useDuLieu } from "@/lib/du-lieu-context";
 import type { SanPham } from "@/lib/data/types";
 import { duongDanAnh } from "@/lib/anh";
@@ -230,23 +231,16 @@ export default function TrangDaThich() {
                   <div
                     className={`relative h-[150px] rounded-[18px] ${bgMoi} flex items-center justify-center overflow-hidden transition-transform group-active:scale-[0.98]`}
                   >
-                    {anhSrc ? (
-                      /* eslint-disable-next-line @next/next/no-img-element */
-                      <img
-                        src={anhSrc}
-                        alt={tenSp}
-                        className="w-[128px] h-[128px] object-contain"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <span
-                        role="img"
-                        aria-label={t("anhCho")}
-                        className="text-[11px] font-semibold tracking-wider uppercase text-xam-dam"
-                      >
-                        {sp.thuong_hieu}
-                      </span>
-                    )}
+                    <AnhSanPhamO
+                      key={sp.id}
+                      src={anhSrc}
+                      alt={tenSp}
+                      thuongHieu={sp.thuong_hieu}
+                      loading="lazy"
+                      lopAnh="w-[128px] h-[128px] object-contain"
+                      lopChu="text-[11px] font-semibold tracking-wider uppercase text-xam-dam"
+                      nhanChu={t("anhCho")}
+                    />
 
                     {/* Nút bỏ thích */}
                     <button
