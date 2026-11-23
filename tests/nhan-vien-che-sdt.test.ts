@@ -29,4 +29,18 @@ describe("Job #136 · che SĐT ở /nhan-vien", () => {
     for (const so of sdtDayDu) expect(json).not.toContain(so);
     for (const d of ds) expect(d.sdt).toMatch(/^\**\d{0,4}$/);
   });
+
+  it("Job #140 · actionLayDanhSachDon không trả email khách", async () => {
+    const goc = await layDanhSachDonGiuHangHomNay();
+    const emails = goc.map((d) => d.email).filter((e): e is string => !!e);
+    expect(emails.length).toBeGreaterThan(0);
+
+    const ds = await actionLayDanhSachDon("thu:nhan_vien");
+    expect(ds.length).toBe(goc.length);
+    const json = JSON.stringify(ds);
+    for (const e of emails) expect(json).not.toContain(e);
+    for (const d of ds) expect("email" in d).toBe(false);
+    // SĐT vẫn che 4 số cuối như #136.
+    for (const d of ds) expect(d.sdt).toMatch(/^\**\d{0,4}$/);
+  });
 });

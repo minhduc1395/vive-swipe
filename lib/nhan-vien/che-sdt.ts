@@ -13,3 +13,15 @@ export function cheSdt(sdt: string | null | undefined): string {
 export function duoiSdtDaChe(sdtDaChe: string): string {
   return sdtDaChe.replace(/\*/g, "");
 }
+
+/**
+ * Bỏ email khách khỏi đơn trước khi trả về trình duyệt nhân viên (job #140).
+ * Trang `/nhan-vien` không cần email; không trả `email` để giảm dữ liệu cá nhân lộ ra máy booth.
+ */
+export function boEmailKhach<T extends { email?: string | null }>(
+  don: T,
+): Omit<T, "email"> {
+  const { email: _email, ...conLai } = don;
+  void _email;
+  return conLai;
+}
