@@ -28,6 +28,10 @@
     "cookie": {
       "nhan": "Cookies & browser storage:",
       "noiDung": "Used only to remember your language, cart, and liked items; not used for advertising."
+    },
+    "treEm": {
+      "nhan": "Age:",
+      "noiDung": "Customers under 16 need consent from a parent or guardian before reserving products."
     }
   },
   "giuHang": {

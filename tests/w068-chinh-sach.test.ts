@@ -38,6 +38,15 @@ describe("W068 · /chinh-sach theo rà pháp lý LEG-002", () => {
     expect(nguon).not.toMatch(/nội địa Hàn/i);
   });
 
+  it("job #137: có câu khách dưới 16 tuổi ở mục 1 (VI & EN)", () => {
+    expect(viChinhSach.baoMat.treEm.noiDung).toBe(
+      "Khách dưới 16 tuổi cần cha mẹ hoặc người giám hộ đồng ý trước khi giữ hàng.",
+    );
+    expect(enChinhSach.baoMat.treEm.noiDung).toBe(
+      "Customers under 16 need consent from a parent or guardian before reserving products.",
+    );
+  });
+
   it("đủ nội dung P2 bảo mật dữ liệu cá nhân (VI & EN)", () => {
     const viBaoMat = JSON.stringify(viChinhSach.baoMat);
     const enBaoMat = JSON.stringify(enChinhSach.baoMat);
