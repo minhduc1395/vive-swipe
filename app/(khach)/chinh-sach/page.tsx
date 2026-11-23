@@ -87,6 +87,10 @@ export default async function TrangChinhSach() {
                 <strong>{t("baoMat.cookie.nhan")}</strong>{" "}
                 {t("baoMat.cookie.noiDung")}
               </li>
+              <li>
+                <strong>{t("baoMat.treEm.nhan")}</strong>{" "}
+                {t("baoMat.treEm.noiDung")}
+              </li>
             </ul>
           </section>
 

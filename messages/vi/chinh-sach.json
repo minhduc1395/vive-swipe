@@ -28,6 +28,10 @@
     "cookie": {
       "nhan": "Cookie & bộ nhớ trình duyệt:",
       "noiDung": "Chỉ dùng để nhớ ngôn ngữ, giỏ hàng và danh sách đã thích; không dùng cho mục đích quảng cáo."
+    },
+    "treEm": {
+      "nhan": "Độ tuổi:",
+      "noiDung": "Khách dưới 16 tuổi cần cha mẹ hoặc người giám hộ đồng ý trước khi giữ hàng."
     }
   },
   "giuHang": {
