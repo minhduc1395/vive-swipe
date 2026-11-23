@@ -47,7 +47,7 @@ Claude và Antigravity nói chuyện qua `handoff/` (lịch sử chung). Chủ d
 - Giá trong giỏ luôn tính lại ở server khi giữ hàng; không tin giá từ trình duyệt.
 - Deal may rủi chưa đăng ký không bao giờ được hiện (có unit test).
 - Không commit khóa bí mật (`.env*` đã bị bỏ qua). Khóa do Claude hoặc chủ dự án đưa vào hosting.
-- Chữ giao diện: tiếng Việt, "nội địa Hàn" (không "local"), không nhắc cửa hàng chính, tài khoản mạng xã hội đúng docs/03.
+- Chữ giao diện: tiếng Việt, "thương hiệu Hàn Quốc" (không "local", không "nội địa Hàn" theo LEG-003), không nhắc cửa hàng chính, tài khoản mạng xã hội đúng docs/03.
 - Logo: chỉ dùng file trong `public/brand/`, không gõ lại bằng font.
 - Không tự thêm thư viện lớn hoặc dịch vụ trả phí; hỏi trước.
 

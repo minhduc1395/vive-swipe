@@ -36,7 +36,7 @@ Không thêm màu ngoài bảng này (kể cả đỏ cho giảm giá). Nhãn gi
 ## 5. Quy tắc chữ trên web
 - Personal color: viết **"tone"** (từ quen với khách), không viết "tông". Tiêu đề khối Pawlette: "Tone bạn màu nào?" (chủ dự án chốt 18/11).
 - Viết tiếng Việt, câu ngắn, ít chữ, sản phẩm là trung tâm. Hạn chế tiếng Anh, trừ từ quen hoặc chuyên ngành (PDRN, Cica, serum, toner pad, K-pop, check-in) và tên sản phẩm gốc.
-- Viết "nội địa Hàn", không viết "local".
+- Viết "thương hiệu Hàn Quốc", không viết "local", không viết "nội địa Hàn" (LEG-003).
 - Thông điệp: trải nghiệm mua sắm độc đáo; thương hiệu Hàn Quốc bán ngay tại Việt Nam (không dùng chữ "nội địa Hàn", LEG-003); chất lượng và phù hợp làn da châu Á.
 - Không nhắc tới cửa hàng chính sẽ mở sau này.
 - Tên thương hiệu công khai: Rep!el (không viết Repiel). Các tên khác theo cột `thuong_hieu`.
