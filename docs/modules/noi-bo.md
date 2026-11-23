@@ -14,7 +14,7 @@ Trang nhân viên (tra mã giữ hàng tại booth) và trang quản trị; cron
 - Nhân viên booth dùng điện thoại: nút to, ít chữ.
 
 ## Lịch sử ngắn
-- (chưa có)
+- #136 (23/11) SĐT khách che ở server (`lib/nhan-vien/che-sdt.ts`): `/nhan-vien` chỉ nhận và hiện 4 số cuối; ô tìm khớp 4 số cuối còn thấy.
 
 ## Đang khóa
 - 23/11: job #136 (che SĐT /nhan-vien, LEG L1) đang chạy. Không giao job hay task W khác vào `app/nhan-vien/` tới khi #136 đóng.
