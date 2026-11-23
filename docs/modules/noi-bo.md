@@ -17,5 +17,4 @@ Trang nhân viên (tra mã giữ hàng tại booth) và trang quản trị; cron
 - #136 (23/11) SĐT khách che ở server (`lib/nhan-vien/che-sdt.ts`): `/nhan-vien` chỉ nhận và hiện 4 số cuối; ô tìm khớp 4 số cuối còn thấy.
 
 ## Đang khóa
-- 23/11: job #136 (che SĐT /nhan-vien, LEG L1) đang chạy. Không giao job hay task W khác vào `app/nhan-vien/` tới khi #136 đóng.
-- 21/11: W045, W046 Done. Antigravity làm W066 (thưởng giữ hàng ở trang nhân viên). Không giao job đội coder vào noi-bo cho tới khi W066 Done.
+- (không có). #136 gộp PR #138 (23/11), W066 Done.
