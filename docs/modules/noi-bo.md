@@ -17,4 +17,5 @@ Trang nhân viên (tra mã giữ hàng tại booth) và trang quản trị; cron
 - (chưa có)
 
 ## Đang khóa
+- 23/11: job #136 (che SĐT /nhan-vien, LEG L1) đang chạy. Không giao job hay task W khác vào `app/nhan-vien/` tới khi #136 đóng.
 - 21/11: W045, W046 Done. Antigravity làm W066 (thưởng giữ hàng ở trang nhân viên). Không giao job đội coder vào noi-bo cho tới khi W066 Done.
