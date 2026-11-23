@@ -18,4 +18,4 @@ Trang nhân viên (tra mã giữ hàng tại booth) và trang quản trị; cron
 - #140 (23/11) `/nhan-vien` không nhận email khách: `actionLayDanhSachDon` bỏ trường `email` ở server (`boEmailKhach` trong `lib/nhan-vien/che-sdt.ts`).
 
 ## Đang khóa
-- 23/11: job #140 (bỏ email khỏi dữ liệu /nhan-vien) đang chạy. Không giao job hay task W khác vào `app/nhan-vien/` tới khi #140 đóng.
+- Không khóa (job #140 gộp PR #141, 23/11).
