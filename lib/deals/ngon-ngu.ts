@@ -30,6 +30,30 @@ export const hookDeal = (d: Deal, nn: string): string | undefined => (en(nn) && 
 export const dieuKienDeal = (d: Deal, nn: string): string | undefined => (en(nn) && (d as DealEn).dieu_kien_en) || d.dieu_kien;
 export const quaDeal = (d: Deal, nn: string): string | null | undefined => (en(nn) && (d as DealEn).qua_en) || d.qua;
 export const quaMoc = (m: { qua: string; qua_en?: string }, nn: string): string => (en(nn) && m.qua_en) || m.qua;
+/**
+ * Dịch chuỗi quà (bản vi do tinhGio trả) sang bản en để HIỂN THỊ.
+ * Tìm trong moc[].qua, qua, thuong_giu_hang.qua, khi_het_qua.qua, bang_qua[].qua;
+ * khớp và có qua_en thì trả qua_en, còn lại trả nguyên chuỗi.
+ */
+type QuaDich = { qua?: string | null; qua_en?: string | null };
+export function dichQua(qua: string, deals: Deal[], nn: string): string;
+export function dichQua(qua: string | null | undefined, deals: Deal[], nn: string): string | null | undefined;
+export function dichQua(qua: string | null | undefined, deals: Deal[], nn: string): string | null | undefined {
+  if (!qua || !en(nn)) return qua;
+  for (const d of deals) {
+    const ung: QuaDich[] = [
+      ...(d.moc ?? []),
+      d as DealEn,
+      ...(d.thuong_giu_hang ? [d.thuong_giu_hang] : []),
+      ...(d.khi_het_qua ? [d.khi_het_qua] : []),
+      ...(d.bang_qua ?? []),
+    ];
+    const t = ung.find((u) => u.qua === qua && u.qua_en);
+    if (t?.qua_en) return t.qua_en;
+  }
+  return qua;
+}
+
 export const tenBoGoiY = (b: { ten: string; ten_en?: string }, nn: string): string => (en(nn) && b.ten_en) || b.ten;
 
 /** Số tiền trên thẻ: vi giữ dạng cũ (349.000, không "đ"), en: 349,000 VND. */

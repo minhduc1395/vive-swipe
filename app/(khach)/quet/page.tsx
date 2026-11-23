@@ -37,6 +37,7 @@ import { duongDanAnh } from "@/lib/anh";
 import { taiSomChoQuet } from "./tai-som";
 import { layDanhSachDealChoBan } from "@/lib/deals/diem-deal";
 import { tinhGio, type MucGioInput } from "@/lib/deals/gio-hang";
+import { dichQua } from "@/lib/deals/ngon-ngu";
 import { chuanHoaNgay } from "@/lib/deals/hien-thi";
 import { ghiLuotQuet } from "@/lib/supabase/luot-quet";
 import { danhDauCanDongBoHoSo } from "@/lib/supabase/auth";
@@ -1098,7 +1099,7 @@ export default function TrangQuet() {
 
               {ketQuaGioAside.qua_du_kien && (
                 <div className="rounded-xl bg-kem px-3 py-2 text-[12px] text-den">
-                  {t("quaDuKien", { qua: ketQuaGioAside.qua_du_kien })}
+                  {t("quaDuKien", { qua: dichQua(ketQuaGioAside.qua_du_kien, danhSachDeals, ngonNgu) })}
                 </div>
               )}
 

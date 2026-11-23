@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { useDuLieu } from "@/lib/du-lieu-context";
 import { dinhDangGia } from "@/lib/dinh-dang";
-import { dieuKienDeal, tenDeal } from "@/lib/deals/ngon-ngu";
+import { dichQua, dieuKienDeal, tenDeal } from "@/lib/deals/ngon-ngu";
 import { tenSanPham, thieuBanEn } from "@/components/deck/ngon-ngu-quet";
 import { duongDanAnh } from "@/lib/anh";
 import { chuanHoaNgay } from "@/lib/deals/hien-thi";
@@ -217,7 +217,7 @@ export default function TrangGio() {
                     </div>
                     <div className="flex flex-col gap-0.5">
                       <strong className="text-[15px] font-semibold text-den">
-                        {t("gio.quaDuKienDai", { qua: ketQua.qua_du_kien })}
+                        {t("gio.quaDuKienDai", { qua: dichQua(ketQua.qua_du_kien, deals, nn) })}
                       </strong>
                       <span className="text-[13px] text-xam-dam">
                         {t("gio.moiHoaDon")}
@@ -234,7 +234,7 @@ export default function TrangGio() {
                         key={qua}
                         className="text-[15px] font-semibold text-den"
                       >
-                        {t("gio.them", { qua })}
+                        {t("gio.them", { qua: dichQua(qua, deals, nn) })}
                       </strong>
                     ))}
                     {dieuKienCongThem && (
@@ -255,7 +255,7 @@ export default function TrangGio() {
                       {t.rich(ketQua.moc_tiep_theo.nhan_ap_dung ? "gio.mocTiepNhan" : "gio.mocTiep", {
                         tien: g(ketQua.moc_tiep_theo.con_thieu),
                         nhan: ketQua.moc_tiep_theo.nhan_ap_dung?.join(", ") ?? "",
-                        qua: ketQua.moc_tiep_theo.qua,
+                        qua: dichQua(ketQua.moc_tiep_theo.qua, deals, nn),
                         b: (chunks) => <strong className="font-bold text-den">{chunks}</strong>,
                       })}
                     </p>
@@ -552,7 +552,7 @@ export default function TrangGio() {
                 <div className="flex justify-between text-xam">
                   <span>{t("gio.quaDuKien")}</span>
                   <span className="text-den font-semibold">
-                    {ketQua.qua_du_kien}
+                    {dichQua(ketQua.qua_du_kien, deals, nn)}
                   </span>
                 </div>
               )}

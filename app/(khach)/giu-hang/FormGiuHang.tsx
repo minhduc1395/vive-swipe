@@ -8,7 +8,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useDuLieu } from "@/lib/du-lieu-context";
 import { dinhDangGia, dinhDangNgayNgan, dinhDangTien } from "@/lib/dinh-dang";
 import { tinhGio } from "@/lib/deals/gio-hang";
-import { tenDeal } from "@/lib/deals/ngon-ngu";
+import { dichQua, tenDeal } from "@/lib/deals/ngon-ngu";
 import { tenSanPham, thieuBanEn } from "@/components/deck/ngon-ngu-quet";
 import { chuanHoaNgay } from "@/lib/deals/hien-thi";
 import { layThuongGiuHang } from "@/lib/giu-hang/thuong";
@@ -355,7 +355,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
           <div className="flex flex-col gap-0.5">
             <span className="text-xam-dam">{t("tomTat.quaDuKien")}</span>
             <strong className="font-semibold text-den line-clamp-1 max-w-[180px]">
-              {ketQua.qua_du_kien || t("tomTat.khong")}
+              {dichQua(ketQua.qua_du_kien, deals, ngonNgu) || t("tomTat.khong")}
             </strong>
           </div>
         </div>
@@ -388,7 +388,7 @@ export function FormGiuHang({ gioBanDau }: Props) {
         </ul>
         {ketQua.qua_du_kien && (
           <div className="hidden lg:block rounded-xl bg-trang p-3 text-[13px] text-den">
-            {t("tomTat.quaDuKienDong")} <strong>{ketQua.qua_du_kien}</strong>
+            {t("tomTat.quaDuKienDong")} <strong>{dichQua(ketQua.qua_du_kien, deals, ngonNgu)}</strong>
           </div>
         )}
         <div className="lg:border-t lg:border-vien lg:pt-3 flex justify-between items-baseline">
