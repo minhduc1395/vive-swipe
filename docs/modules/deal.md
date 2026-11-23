@@ -20,3 +20,4 @@ Hiển thị deal và tính giỏ hàng theo luật giá, quà.
 - 2026-11-21 #63 (W064): trang /deal và /gio theo bảng nội thất: `hong-nhat`→`kem`, `bac-ha`→`be`, `bac-ha-nhat`→`oliu-nhat`; nhãn loại thẻ deal `be`/`oliu-nhat`/`cat`; khối tổng tiền `/gio` nền `kem`.
 - 2026-11-21 #82 (W044): /deal, /gio, ngăn kéo deal song ngữ VI | EN (`messages/*/deal.json`, `lib/deals/ngon-ngu.ts`). Chữ trong lib nhận `t` (mặc định bản vi). Tên/điều kiện/hook/quà en đọc qua trường `*_en`, cần schema deal (WEB) cho qua trường này.
 - 2026-11-23 #144 (QA-007 A): bản EN hiện tên quà tiếng Anh ở /gio, giữ hàng, /quet qua `dichQua` (lib/deals/ngon-ngu.ts); tinhGio và đơn giữ hàng vẫn chuỗi vi.
+- 2026-11-23 #147: /gio ảnh sản phẩm lỗi (404) hiện chữ thương hiệu (`AnhHoacChu`, trạng thái lỗi reset theo `src` để ảnh từ Supabase đến sau vẫn hiện).
