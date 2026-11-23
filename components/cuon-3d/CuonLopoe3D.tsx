@@ -22,7 +22,7 @@ function NutMacDinh({ n, i }: { n: Nut3D; i: number }) {
 }
 const veNutMacDinh: VeNut3D = (n, i) => <NutMacDinh key={n.chu} n={n} i={i} />;
 import type { Canh, LoaiHat } from "./canh";
-import { buocBam, khungTuP, MOC_CANH_AMP, pCanh, pTuCanh, pTuKhung, type TrangThaiPhat } from "./phat-khung";
+import { buocBam, CHAI_KHUNG, chaiDienThoai, duongBay, khungTuP, MOC_CANH_AMP, pCanh, pTuCanh, pTuKhung, tienTrinhBot, type Diem, type TrangThaiPhat } from "./phat-khung";
 
 const kep = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const muot = (t: number) => t * t * (3 - 2 * t);
@@ -263,7 +263,53 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
     const aAmp = kAmp?.a ?? MOC_CANH_AMP.a, bAmp = kAmp?.b ?? MOC_CANH_AMP.b;
     const giu = !!kd && botNuoc;
     const sangCanh = (q: number) => pCanh(q, aAmp, bAmp, giu);
-    const bot = [...elLop.querySelectorAll<HTMLElement>("[data-bot]")];
+    const bot = [...elLop.querySelectorAll<HTMLElement>("[data-bot]")].map((el) => ({
+      el, anh: el.querySelector<HTMLElement>("[data-bot-anh]"), chu: el.querySelector<HTMLElement>("[data-bot-chu]"),
+    }));
+    // W072 phần B: chỗ đứng cuối của từng bọt (tâm ảnh, px trong lớp chữ = px màn hình khi khối đang dính), đo khi cần
+    let dichBot: Diem[] | null = null;
+    let vungChai: { x: number; tren: number; duoi: number } | null = null; // điện thoại: vùng trống giữa 2 nút và lưới bọt
+    let mieng: Diem | null = null; // miệng chai trên màn hình (3D: chiếu từ cảnh; điện thoại: từ chai trong ảnh khung)
+    const ghiChai = (h: { x: number; y: number; w: number; h: number }) => { if (bot.length) (window as unknown as { __chaiBotNuoc?: unknown }).__chaiBotNuoc = h; };
+    const doBot = () => {
+      const goc = elLop.getBoundingClientRect();
+      dichBot = bot.map(({ el, anh }) => {
+        const r = el.getBoundingClientRect();
+        return anh ? { x: r.left - goc.left + anh.offsetLeft + anh.offsetWidth / 2, y: r.top - goc.top + anh.offsetTop + anh.offsetHeight / 2 } : { x: r.left - goc.left + r.width / 2, y: r.top - goc.top + r.height / 2 };
+      });
+      const kc = elLop.querySelector<HTMLElement>('[data-khoi="amp-thanh-phan"]'), nutKhoi = kc?.querySelector<HTMLElement>("[data-nut-khoi]");
+      if (kc && nutKhoi) {
+        const rk = kc.getBoundingClientRect();
+        const tren = rk.top - goc.top + nutKhoi.offsetTop + nutKhoi.offsetHeight + 14;
+        const duoi = Math.min(...bot.map(({ el }) => el.getBoundingClientRect().top - goc.top)) - 12;
+        vungChai = { x: goc.width / 2, tren, duoi };
+      }
+      if (dichBot.some((d) => !Number.isFinite(d.x)) || goc.width === 0) dichBot = null;
+    };
+    /** Bọt bay từ miệng chai theo đường cong, nảy 1 lần rồi đứng đúng chỗ phần A; chữ bọt hiện khi bọt tới nơi. */
+    const capNhatBot = (p: number) => {
+      if (!bot.length || !kAmp) return;
+      if (!dichBot) doBot();
+      const q = (p - aAmp) / (bAmp - aAmp);
+      const ra = 1 - seg(p, bAmp - 0.014, bAmp + 0.006);
+      bot.forEach(({ el, anh, chu }, i) => {
+        const t = tienTrinhBot(q, i);
+        const o = t > 0 ? ra : 0;
+        el.style.opacity = String(o);
+        el.style.visibility = o < 0.01 ? "hidden" : "visible";
+        if (o < 0.01 || !dichBot) return;
+        const dich = dichBot[i];
+        if (anh) {
+          if (t >= 1) { anh.style.transform = "none"; anh.style.opacity = "1"; }
+          else {
+            const d = duongBay(t, mieng ?? dich, dich);
+            anh.style.transform = `translate(${(d.x - dich.x).toFixed(1)}px,${(d.y - dich.y).toFixed(1)}px) scale(${d.s.toFixed(3)})`;
+            anh.style.opacity = d.o.toFixed(3);
+          }
+        }
+        if (chu) chu.style.opacity = String(seg(t, 0.75, 1));
+      });
+    };
 
     const moDau = elLop.querySelector<HTMLElement>("[data-mo-dau]");
     const khoi = cfg.khoi.map((k) => {
@@ -294,15 +340,8 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
         tus.forEach((w, i) => { const e = muot(kep(t * 1.6 - i * 0.18)) * ra; w.style.opacity = String(e); w.style.transform = `translate(${dx * (1 - e) * 0.5}px,${(dy || 18) * (1 - e)}px)`; });
         con.forEach((c, i) => { const e = muot(kep(t * 1.4 - 0.1 - i * 0.09)) * ra; c.style.opacity = String(e); c.style.transform = `translate(${dx * (1 - e)}px,${dy * (1 - e)}px)`; });
       }
-      // Bọt nước: hiện mờ dần lần lượt đầu đoạn, mờ cùng khối chữ cuối đoạn (chưa bay, job sau)
-      if (bot.length && kAmp) {
-        const ra = 1 - seg(p, bAmp - 0.014, bAmp + 0.006);
-        bot.forEach((el, i) => {
-          const e = seg(p, aAmp + 0.008 + i * 0.01, aAmp + 0.03 + i * 0.01) * ra;
-          el.style.opacity = String(e);
-          el.style.visibility = e < 0.01 ? "hidden" : "visible";
-        });
-      }
+      // Bọt nước (W072 phần B): bay từ miệng chai, mờ cùng khối chữ cuối đoạn
+      capNhatBot(p);
       // thanh tiến trình bên phải theo mốc cảnh
       const khoang = [[0.045, 0.37], [0.37, 0.72], [0.72, 0.87]];
       const tt = elLop.querySelector<HTMLElement>("[data-tien-trinh]");
@@ -341,7 +380,8 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
           // đang đứng khung ở đoạn bọt nước: chữ theo vị trí cuộn
           p = giu && pc >= MOC_CANH_AMP.a && pc <= MOC_CANH_AMP.het ? kep(dich, aAmp, bAmp) : pTuCanh(pc, aAmp, bAmp, giu);
         }
-        veAnh(pc);
+        // đang đứng ở khung đoạn bọt nước: vẽ ghép (nền sạch + chai dời/thu nhỏ), q = tiến trình trong đoạn
+        veAnh(pc, giu && pc >= MOC_CANH_AMP.a && pc <= MOC_CANH_AMP.het ? (p - aAmp) / (bAmp - aAmp) : -1);
         capNhatChu(p, pc);
         if (hien) raf = requestAnimationFrame(khung);
         return;
@@ -360,6 +400,8 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
       if (canh) {
         const vt = canh.ve(pc, time);
         if (chupKhung) (window as unknown as { __vt?: unknown }).__vt = vt;
+        mieng = vt.mieng;
+        ghiChai(vt.chai);
         const dienThoai = innerWidth < 768;
         datNhan(nhanSrm, vt.srm, 0, dienThoai ? 40 : 72, true);
         // Điện thoại: nhãn nằm dưới từng hạt, canh giữa; máy tính: nhãn bên phải hạt
@@ -377,7 +419,85 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
       const dpr = 2; // canvas đúng cỡ ảnh gốc (780 = 390×2): vẽ không phải co giãn ảnh, rẻ nhất
       elCanvas.width = Math.round(elCanvas.clientWidth * dpr);
       elCanvas.height = Math.round(elCanvas.clientHeight * dpr);
-      khoaVe = -1; anhDaVe = null;
+      khoaVe = -1; anhDaVe = null; ghep = null; khoaGhep = "";
+    };
+    // W072 phần B, điện thoại: ảnh khung đoạn bọt nước tách 2 lớp (dựng 1 lần cho mỗi ảnh / cỡ canvas):
+    // nền sạch (nửa phải lật sang trái, nền cảnh đối xứng) và mảng chai cắt từ ảnh, mép mờ dần để ghép không lộ đường cắt.
+    let ghep: { i: number; W: number; H: number; nen: HTMLCanvasElement; chai: HTMLCanvasElement } | null = null;
+    let khoaGhep = "";
+    const dungGhep = (i: number, a: ImageBitmap, W: number, H: number, s: number) => {
+      const w = kd!.rong * s, h = kd!.cao * s, ox = (W - w) / 2, oy = (H - h) / 2;
+      const nen = document.createElement("canvas");
+      nen.width = W; nen.height = H;
+      const g = nen.getContext("2d")!;
+      g.drawImage(a, ox, oy, w, h);
+      g.save(); g.beginPath(); g.rect(0, 0, W / 2, H); g.clip(); g.translate(W, 0); g.scale(-1, 1); g.drawImage(a, ox, oy, w, h); g.restore();
+      // Mảng chai (độ phân giải ảnh gốc): tách khỏi nền bằng độ lệch với nền sạch (ảnh lật), điểm giống nền → trong suốt,
+      // rồi bù màu theo độ trong (khử viền nền cũ). Kính trong vẫn thấy nền mới phía sau như thật.
+      const kAnh = kd!.rong / kd!.vp_rong, c = CHAI_KHUNG.cat;
+      const sx = Math.round(c.x0 * kAnh), sy = Math.round(c.y0 * kAnh), pw = Math.round((c.x1 - c.x0) * kAnh), ph = Math.round((c.y1 - c.y0) * kAnh);
+      const chai = document.createElement("canvas");
+      chai.width = pw; chai.height = ph;
+      const g2 = chai.getContext("2d", { willReadFrequently: true })!;
+      g2.save(); g2.translate(pw, 0); g2.scale(-1, 1); g2.drawImage(a, kd!.rong - sx - pw, sy, pw, ph, 0, 0, pw, ph); g2.restore();
+      const nenCu = g2.getImageData(0, 0, pw, ph).data;
+      g2.clearRect(0, 0, pw, ph);
+      g2.drawImage(a, sx, sy, pw, ph, 0, 0, pw, ph);
+      const im = g2.getImageData(0, 0, pw, ph), d = im.data;
+      for (let i = 0; i < d.length; i += 4) {
+        const lech = Math.abs(d[i] - nenCu[i]) + Math.abs(d[i + 1] - nenCu[i + 1]) + Math.abs(d[i + 2] - nenCu[i + 2]);
+        const al = Math.min(1, Math.max(0, (lech - 6) / 34));
+        if (al > 0 && al < 1) for (let k = 0; k < 3; k++) d[i + k] = Math.max(0, Math.min(255, (d[i + k] - (1 - al) * nenCu[i + k]) / al));
+        d[i + 3] = Math.round(al * 255);
+      }
+      g2.putImageData(im, 0, 0);
+      g2.globalCompositeOperation = "destination-in";
+      const mo = (x0: number, y0: number, x1: number, y1: number, f: number) => {
+        const gr = g2.createLinearGradient(x0, y0, x1, y1);
+        gr.addColorStop(0, "rgba(0,0,0,0)"); gr.addColorStop(f, "rgba(0,0,0,1)"); gr.addColorStop(1 - f, "rgba(0,0,0,1)"); gr.addColorStop(1, "rgba(0,0,0,0)");
+        g2.fillStyle = gr; g2.fillRect(0, 0, pw, ph);
+      };
+      mo(0, 0, pw, 0, CHAI_KHUNG.mo.x / (c.x1 - c.x0));
+      mo(0, 0, 0, ph, CHAI_KHUNG.mo.y / (c.y1 - c.y0));
+      ghep = { i, W, H, nen, chai };
+      return ghep;
+    };
+    const coGhep = (i: number) => !!ghep && ghep.i === i && ghep.W === elCanvas.width && ghep.H === elCanvas.height;
+    // dựng sẵn lớp ghép lúc rảnh (khi ảnh khung đứng của đoạn đã giải mã), để lần vẽ đầu trong đoạn không bị khựng
+    let henGhep = 0;
+    const dungGhepKhiRanh = () => {
+      if (!giu || !kd || henGhep || pKhung.length < 2) return;
+      const i = khungTuP(pKhung, MOC_CANH_AMP.a), iGan = Math.round(i);
+      const a = anhKhung[iGan];
+      if (!a || coGhep(iGan)) return;
+      const chay = () => { henGhep = 0; const b = anhKhung[iGan]; if (!huy && b && !coGhep(iGan)) dungGhep(iGan, b, elCanvas.width, elCanvas.height, Math.max(elCanvas.width / kd.rong, elCanvas.height / kd.cao)); };
+      henGhep = typeof requestIdleCallback === "function" ? requestIdleCallback(chay, { timeout: 2000 }) : window.setTimeout(chay, 200);
+    };
+    /** Vẽ ghép khung đoạn bọt nước tại q; trả false nếu chai đang ở chỗ gốc (vẽ ảnh khung như thường). */
+    const veGhep = (iKhung: number, a: ImageBitmap, q: number) => {
+      if (!kd || !ctx2d) return false;
+      const W = elCanvas.width, H = elCanvas.height, cw = elCanvas.clientWidth, ch = elCanvas.clientHeight;
+      const sc = Math.max(cw / kd.vp_rong, ch / kd.vp_cao), cx = (cw - kd.vp_rong * sc) / 2, cy = (ch - kd.vp_cao * sc) / 2;
+      const goc = { x: cx + CHAI_KHUNG.x * sc, tren: cy + CHAI_KHUNG.tren * sc, day: cy + CHAI_KHUNG.day * sc };
+      if (!vungChai) doBot();
+      const c = vungChai ? chaiDienThoai(q, goc, vungChai) : { x: goc.x, y: goc.day, k: 1, e: 0 };
+      // tâm đáy chai dời (x, y), tỉ lệ k: điểm P của ảnh gốc → c + (P − đáy gốc)·k
+      const doi = (px: number, py: number) => ({ x: c.x + (cx + px * sc - goc.x) * c.k, y: c.y + (cy + py * sc - goc.day) * c.k });
+      mieng = doi(CHAI_KHUNG.x, CHAI_KHUNG.mieng);
+      const dinh = doi(CHAI_KHUNG.x, CHAI_KHUNG.tren), rong = 44 * sc * c.k;
+      ghiChai({ x: dinh.x - rong, y: dinh.y, w: rong * 2, h: c.y - dinh.y });
+      if (c.e <= 0) return false;
+      const khoa = `${c.x.toFixed(1)},${c.y.toFixed(1)},${c.k.toFixed(4)}`;
+      if (khoa === khoaGhep && ghep?.i === iKhung) return true;
+      const r = W / cw;
+      const gh = coGhep(iKhung) ? ghep! : dungGhep(iKhung, a, W, H, Math.max(W / kd.rong, H / kd.cao));
+      ctx2d.drawImage(gh.nen, 0, 0);
+      const tl = doi(CHAI_KHUNG.cat.x0, CHAI_KHUNG.cat.y0);
+      const sAnh = Math.max(W / kd.rong, H / kd.cao) * c.k; // điểm ảnh gốc → điểm canvas
+      ctx2d.drawImage(gh.chai, tl.x * r, tl.y * r, gh.chai.width * sAnh, gh.chai.height * sAnh);
+      khoaGhep = khoa; anhDaVe = null; khoaVe = -1;
+      if (!daVeDau) { daVeDau = true; setDaTai(true); }
+      return true;
     };
     /** Khung có p ≤ pp (tìm nhị phân) */
     const timKhung = (pp: number) => {
@@ -385,12 +505,17 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
       while (lo < hi) { const m = (lo + hi + 1) >> 1; if (pKhung[m] <= pp) lo = m; else hi = m - 1; }
       return lo;
     };
-    const veAnh = (pp: number) => {
+    const veAnh = (pp: number, qBot = -1) => {
       if (!kd || !ctx2d || pKhung.length < 2) return;
       const i = timKhung(pp), j = Math.min(pKhung.length - 1, i + 1);
       const t = j > i ? kep((pp - pKhung[i]) / (pKhung[j] - pKhung[i])) : 0;
       const gan1 = t < 0.5 ? i : j; // khung gần nhất, không hoà trộn (hoà trộn tạo bóng mờ khi dừng giữa 2 khung)
       if (gan1 !== tamCuaSo) { huongCuon = gan1 > tamCuaSo ? 1 : -1; tamCuaSo = gan1; capNhatCuaSo(); }
+      if (qBot >= 0) {
+        const a = anhKhung[gan1];
+        if (a && veGhep(gan1, a, qBot)) return;
+        khoaGhep = "";
+      } else if (bot.length) { mieng = null; dungGhepKhiRanh(); }
       const khoa = gan1 * 1000 + Math.round(t * 20); // nhãn vẫn nội suy mượt giữa 2 khung
       if (khoa === khoaVe) return;
       const a = gan(gan1);
@@ -426,7 +551,7 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
       dangGiai.add(i);
       createImageBitmap(bl).then((bm) => {
         dangGiai.delete(i);
-        if (huy || ngoaiCuaSo(i)) { bm.close(); } else { anhKhung[i] = bm; khoaVe = -1; }
+        if (huy || ngoaiCuaSo(i)) { bm.close(); } else { anhKhung[i] = bm; khoaVe = -1; dungGhepKhiRanh(); }
         capNhatCuaSo();
       }, () => dangGiai.delete(i));
     };
@@ -510,6 +635,7 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
       // Thanh địa chỉ điện thoại ẩn/hiện làm innerHeight đổi vài chục px: bỏ qua để canvas không vẽ lại, tránh giật
       if (innerWidth === wTruoc && Math.abs(innerHeight - hTruoc) < 140) return;
       wTruoc = innerWidth; hTruoc = innerHeight;
+      dichBot = null; vungChai = null;
       if (kd) doiCoKhung(); else canh?.doiCo();
     };
     addEventListener("resize", doiCo);

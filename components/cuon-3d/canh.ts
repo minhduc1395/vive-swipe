@@ -65,6 +65,18 @@ export const KHOA: Record<"srm" | "amp" | "kem", Khoa[]> = {
   ],
 };
 
+/**
+ * W072 phần B (#127): tư thế chai ampoule khi bật bọt nước. Trong đoạn 4 hoạt chất (cảnh 0,53–0,62) chai đứng giữa,
+ * rồi dời sang 1/3 trái (x = 29% bề rộng) và thu còn 70% (1,3 → 0,91), hạ xuống dưới cột chữ; không xoay (ry = rz = 0).
+ * Điện thoại (three.js khi ép ?ba-chieu): giữ chỗ cũ, chỉ bỏ xoay.
+ */
+const AMP_BOT_DAU = T(0, -0.02, 1.3, 0, 0), AMP_BOT_CUOI = T(-0.42, -0.27, 0.91, 0, 0), AMP_BOT_DT = T(-0.38, 0.26, 0.8, 0, 0);
+export const KHOA_AMP_BOT_NUOC: Khoa[] = KHOA.amp.flatMap((k): Khoa[] => {
+  if (k[0] === 0.53) return [K(0.53, AMP_BOT_DAU, AMP_BOT_DT), K(0.557, AMP_BOT_CUOI, AMP_BOT_DT)];
+  if (k[0] === 0.62) return [K(0.62, AMP_BOT_CUOI, AMP_BOT_DT)];
+  return [k];
+});
+
 export function noiSuy(keys: Khoa[], p: number, dt: boolean): TuThe {
   const lay = (k: Khoa) => (dt ? k[2] ?? tuDong(k[1]) : k[1]);
   if (p <= keys[0][0]) return lay(keys[0]);
@@ -80,12 +92,16 @@ export function noiSuy(keys: Khoa[], p: number, dt: boolean): TuThe {
   return lay(keys[keys.length - 1]);
 }
 
+/** Tư thế chai ampoule tại tiến trình cảnh p (botNuoc: kịch bản đoạn bọt nước). */
+export const tuTheAmp = (p: number, botNuoc: boolean, dienThoai: boolean): TuThe => noiSuy(botNuoc ? KHOA_AMP_BOT_NUOC : KHOA.amp, p, dienThoai);
+
 export type LoaiHat = "thua" | "sen" | "phan-tu" | "rau-ma" | "xoan";
 export interface TaiSan { ampoule_than: string; ampoule_nap: string; ampoule_co: string; giot: string; sua_rua_mat: string; kem_duong: string }
 export interface ViTriNhan { x: number; y: number; o: number }
 
 export interface Canh {
-  ve: (p: number, time: number) => { srm: ViTriNhan[]; amp: ViTriNhan[] };
+  /** mieng: miệng chai ampoule trên màn hình (px); chai: hộp bao chai ampoule (px), cho đoạn bọt nước (W072). */
+  ve: (p: number, time: number) => { srm: ViTriNhan[]; amp: ViTriNhan[]; mieng: { x: number; y: number }; chai: { x: number; y: number; w: number; h: number } };
   doiCo: () => void;
   huy: () => void;
 }
@@ -404,7 +420,7 @@ export function taoCanh(
     // Chụp chuỗi ảnh khung: chuyển động theo thời gian (bọt lắc, vòng xoay) tính theo p để khung liền nhau không giật
     if (opts.thoiGianTheoP) time = p * 60000;
     for (const k of ["srm", "amp", "kem"] as const) {
-      const s = noiSuy(KHOA[k], p, dienThoai), g = SP[k].g;
+      const s = k === "amp" ? tuTheAmp(p, !!opts.anHatAmp, dienThoai) : noiSuy(KHOA[k], p, dienThoai), g = SP[k].g;
       const tho = opts.giamChuyenDong || dienThoai ? 0 : Math.sin(time * 0.0011 + (k === "amp" ? 1 : k === "kem" ? 2 : 0)) * 0.035;
       g.position.set(s.x * nuaW, s.y * nuaH + tho, s.z);
       g.scale.setScalar(s.s);
@@ -542,7 +558,12 @@ export function taoCanh(
     }
 
     renderer.render(scene, camera);
-    return { srm: nhanSrm, amp: nhanAmp };
+    // W072: miệng chai (đỉnh thân, chỗ cổ nắp) và hộp bao chai (thân + nắp) chiếu ra màn hình
+    const chieuDiem = (x: number, y: number) => { v.set(x, y, 0); amp.localToWorld(v).project(camera); return { x: (v.x * 0.5 + 0.5) * canvas.clientWidth, y: (-v.y * 0.5 + 0.5) * canvas.clientHeight }; };
+    const mieng = chieuDiem(0, -CAO / 2 + caoThanAmp);
+    const nuaRong = (CAO / 989) * 147, d1 = chieuDiem(-nuaRong, -CAO / 2), d2 = chieuDiem(nuaRong, -CAO / 2 + caoThanAmp + (CAO / 989) * 350);
+    const chai = { x: Math.min(d1.x, d2.x), y: Math.min(d1.y, d2.y), w: Math.abs(d2.x - d1.x), h: Math.abs(d2.y - d1.y) };
+    return { srm: nhanSrm, amp: nhanAmp, mieng, chai };
   };
 
   const huy = () => {

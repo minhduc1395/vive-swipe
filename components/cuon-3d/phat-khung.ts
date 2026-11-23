@@ -91,3 +91,72 @@ export function pTuCanh(pc: number, a: number, b: number, giu = false): number {
   if (pc < B) return a + ((pc - A) * (b - a)) / (B - A);
   return Math.min(1, b + ((pc - C) * (1 - b)) / (1 - C));
 }
+
+// ───────────── W072 phần B (#127): bọt bay từ miệng chai, nảy 1 lần; chai trong ảnh khung điện thoại dời + thu nhỏ ─────────────
+
+export type Diem = { x: number; y: number };
+const kep01 = (v: number) => Math.max(0, Math.min(1, v));
+const muot = (t: number) => t * t * (3 - 2 * t);
+
+/**
+ * Nhịp bay trong đoạn 4 hoạt chất, theo q = tiến trình trong đoạn (0 → 1, mốc yaml a → b).
+ * Bọt i rời miệng chai ở q = batDau + i·cach, bay trong `bay`; bọt cuối tới chỗ ở q = 0,6 (chữ còn đứng tới ~0,9).
+ */
+export const NHIP_BOT = { batDau: 0.22, cach: 0.07, bay: 0.17 } as const;
+
+/** Tiến trình bay (0 → 1) của bọt thứ i tại q. */
+export const tienTrinhBot = (q: number, i: number) => kep01((q - NHIP_BOT.batDau - i * NHIP_BOT.cach) / NHIP_BOT.bay);
+
+/** Phần thời gian bay tới lúc vượt đích xa nhất; phần còn lại là nhịp nảy về. */
+const T_VUOT = 0.72;
+
+/**
+ * Đường bay của 1 bọt tại t (0 → 1): cong Bezier bậc 2 từ `dau` (miệng chai) tới `cuoi` (chỗ đứng phần A), đỉnh cong
+ * nhô lên trên. Tới cuối, bọt trượt quá đích theo hướng đang bay tối đa `vuot` px (≤ 8% quãng bay) rồi lùi về đúng đích,
+ * dừng hẳn: đúng 1 lần nảy, không dao động thêm. Trả về vị trí tâm, tỉ lệ cỡ (s) và độ đục (o).
+ */
+export function duongBay(t: number, dau: Diem, cuoi: Diem, vuot = 14): Diem & { s: number; o: number } {
+  t = kep01(t);
+  const L = Math.hypot(cuoi.x - dau.x, cuoi.y - dau.y);
+  const A = L > 0 ? Math.min(0.08, vuot / L) : 0;
+  // rời miệng chậm, tăng tốc giữa đường, chậm lại tới đỉnh vượt (vận tốc 0), rồi lùi êm về đích
+  const k = t < T_VUOT ? (1 + A) * muot(t / T_VUOT) : 1 + A * (1 - muot((t - T_VUOT) / (1 - T_VUOT)));
+  const c = { x: (dau.x + cuoi.x) / 2, y: Math.min(dau.y, cuoi.y) - 0.25 * L };
+  let x: number, y: number;
+  if (k <= 1) {
+    const u = 1 - k;
+    x = u * u * dau.x + 2 * u * k * c.x + k * k * cuoi.x;
+    y = u * u * dau.y + 2 * u * k * c.y + k * k * cuoi.y;
+  } else {
+    // quá đích: đi tiếp theo tiếp tuyến cuối đường cong
+    const tx = cuoi.x - c.x, ty = cuoi.y - c.y, d = Math.hypot(tx, ty) || 1;
+    x = cuoi.x + (tx / d) * (k - 1) * L;
+    y = cuoi.y + (ty / d) * (k - 1) * L;
+  }
+  return { x, y, s: 0.3 + 0.7 * muot(kep01(t / T_VUOT)), o: muot(kep01(t / 0.12)) };
+}
+
+/**
+ * Chai ampoule trong ảnh khung điện thoại đứng ở cảnh 0,53 (khung 426, khung nhìn chụp 390×844): toạ độ đo trên ảnh.
+ * x: tâm chai; tren: đỉnh nắp; mieng: miệng chai (cổ nắp); day: đáy thân. `cat`: vùng cắt chai (gồm bóng đổ) để vẽ lại.
+ * Nền khung đối xứng trái-phải (cảnh đặt nền giữa), nên nền sạch = nửa phải lật sang trái.
+ */
+export const CHAI_KHUNG = { x: 121, tren: 144, mieng: 260, day: 475, cat: { x0: 40, x1: 200, y0: 125, y1: 500 }, mo: { x: 16, y: 14 } } as const;
+
+/**
+ * Chai trong ảnh khung điện thoại (đơn vị px màn hình): dời từ chỗ gốc vào giữa vùng trống [tren, duoi] (dưới 2 nút,
+ * trên lưới bọt), thu còn tối đa `coToiDa` (70%); q 0 → 0,2 đi tới (xong trước khi bọt đầu rời chai), đứng yên tới 0,93, rồi về chỗ gốc khi chữ đã mờ
+ * (nối liền với chuỗi ảnh sau đoạn). Trả về tâm đáy chai mới (x, y) và tỉ lệ k (1 = như ảnh gốc).
+ */
+export function chaiDienThoai(
+  q: number,
+  goc: { x: number; tren: number; day: number },
+  vung: { x: number; tren: number; duoi: number },
+  coToiDa = 0.7,
+): Diem & { k: number; e: number } {
+  const h = goc.day - goc.tren, cao = Math.max(0, vung.duoi - vung.tren);
+  const k1 = Math.min(coToiDa, cao / h);
+  const y1 = vung.duoi - (cao - k1 * h) / 2;
+  const e = muot(kep01(q / 0.2)) * (1 - muot(kep01((q - 0.93) / 0.07)));
+  return { x: goc.x + (vung.x - goc.x) * e, y: goc.day + (y1 - goc.day) * e, k: 1 + (k1 - 1) * e, e };
+}

@@ -167,7 +167,7 @@ bot_nuoc:
     xoan: /thanh-phan/bot-nuoc-hyaluronic-acid.webp
     phan-tu: /thanh-phan/bot-nuoc-panthenol-niacinamide.webp
   may_tinh:
-    tam: [29, 50]          # % khung nhìn: chỗ chai ampoule đứng cuối đoạn (x = (1 - 0.42) / 2)
+    tam: [29, 56]          # % khung nhìn: chỗ chai ampoule đứng cuối đoạn (x = (1 - 0.42) / 2; y: giữa chai đã hạ dưới cột chữ, #127)
     ban_kinh: [34, 42]     # min(34vw, 42vh)
     goc: [-50, -16.7, 16.7, 50]
     co: [13, 20]           # min(13vw, 20vh)
