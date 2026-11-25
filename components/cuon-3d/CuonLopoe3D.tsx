@@ -226,6 +226,8 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
   // W072: bố cục bọt nước cho đoạn 4 hoạt chất: bật bằng yaml (bot_nuoc.bat) hoặc ?bot-nuoc=1 (xem trước, đọc phía client)
   const [botNuoc, setBotNuoc] = useState(!!cfg.bot_nuoc?.bat);
   const bn = botNuoc && cfg.bot_nuoc ? cfg.bot_nuoc : null;
+  // W073: chai ampoule 3D GLB (cảnh three.js, máy tính): bật bằng yaml (glb.bat) hoặc ?glb=1 (xem trước, đọc phía client)
+  const [glb, setGlb] = useState(!!cfg.glb?.bat);
 
   useEffect(() => {
     const giam = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -238,7 +240,8 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setCheDo(giam ? "tinh" : dungKhung ? "khung" : coWebGL ? "3d" : "tinh");
     if (cfg.bot_nuoc && (cfg.bot_nuoc.bat || thamSo.get("bot-nuoc") === "1")) setBotNuoc(true);
-  }, [cfg.khung_dien_thoai, cfg.bot_nuoc]);
+    if (cfg.glb && (cfg.glb.bat || thamSo.get("glb") === "1")) setGlb(true);
+  }, [cfg.khung_dien_thoai, cfg.bot_nuoc, cfg.glb]);
 
   useEffect(() => {
     if ((cheDo !== "3d" && cheDo !== "khung") || !canvas.current || !doan.current || !lop.current) return;
@@ -605,11 +608,25 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
           giamChuyenDong: false,
           thoiGianTheoP: chupKhung,
           anHatAmp: botNuoc,
+          // W073: chỉ cảnh three.js (máy tính, hoặc ?ba-chieu) dùng GLB; điện thoại chạy chuỗi ảnh khung nên không tải GLB
+          glb: glb && cfg.glb ? { ampoule: cfg.glb.ampoule, srm: cfg.glb.srm, kem: cfg.glb.kem } : undefined,
           onSanSang: () => { sanSangVe = true; setDaTai(true); },
         });
         p = tienTrinh();
+        thuNapGlb();
       });
     };
+    // W073: GLB + Draco chỉ tải khi khách đã cuộn (scrollY > 0) và khối cách khung nhìn ≤ 1 màn; mở trang mà chưa cuộn thì không tải
+    let ganGlb = false, daNapGlb = !glb;
+    const thuNapGlb = () => {
+      if (daNapGlb || !canh || !ganGlb || scrollY <= 0) return;
+      daNapGlb = true;
+      canh.napGlb();
+      ioGlb?.disconnect();
+      removeEventListener("scroll", thuNapGlb);
+    };
+    const ioGlb = daNapGlb ? null : new IntersectionObserver(([e]) => { ganGlb = e.isIntersecting; thuNapGlb(); }, { rootMargin: "100% 0px" });
+    if (ioGlb) { ioGlb.observe(elDoan); addEventListener("scroll", thuNapGlb, { passive: true }); }
     // Điều kiện: khối đã gần khung nhìn VÀ (người dùng đã tương tác hoặc trang rảnh 3s sau khi tải xong)
     let ganKhung = false, sanSang = false;
     const thu = () => { if (!ganKhung || !sanSang) return; if (kd) taiAnhKhung(); else taiCanh(); };
@@ -646,13 +663,15 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
       cancelAnimationFrame(raf);
       io.disconnect();
       ioTai.disconnect();
+      ioGlb?.disconnect();
+      removeEventListener("scroll", thuNapGlb);
       suKien.forEach((t) => removeEventListener(t, kichHoat));
       removeEventListener("load", khiTaiXong);
       clearTimeout(henRanh);
       removeEventListener("resize", doiCo);
       canh?.huy();
     };
-  }, [cheDo, cfg, botNuoc]);
+  }, [cheDo, cfg, botNuoc, glb]);
 
   if (cheDo === "tinh") return <BanTinh cfg={cfg} id={id} botNuoc={bn} veNut={veNut} />;
   const nutKet = cfg.khoi.find((k) => k.id === "ket")?.nut ?? [];

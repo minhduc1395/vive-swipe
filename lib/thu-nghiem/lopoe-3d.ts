@@ -49,6 +49,18 @@ export const BotNuocSchema = z.object({
   dien_thoai: z.object({ tren: z.number().min(0).max(100), duoi: z.number().min(0), co: Cap }),
 });
 export type BotNuoc = z.infer<typeof BotNuocSchema>;
+/**
+ * W073 (#150): chai ampoule là mô hình 3D GLB (máy tính, cảnh three.js), sau công tắc. Bật khi `bat: true` hoặc URL có `?glb=1`.
+ * `srm` / `kem`: GLB tuýp sữa rửa mặt / kem dưỡng (GD-003); null thì giữ ảnh phẳng. Đổi file GLB chỉ cần đổi các đường dẫn này.
+ */
+const DuongDanGlb = z.string().min(1).nullable().default(null);
+export const GlbSchema = z.object({
+  bat: z.boolean().default(false),
+  ampoule: DuongDanGlb,
+  srm: DuongDanGlb,
+  kem: DuongDanGlb,
+});
+export type CauHinhGlb = z.infer<typeof GlbSchema>;
 export const CauHinhLopoe3DSchema = z.object({
   hien_cho_duyet: z.boolean().default(false),
   tai_san: z.object({ ampoule_than: z.string(), ampoule_nap: z.string(), ampoule_co: z.string(), giot: z.string(), sua_rua_mat: z.string(), kem_duong: z.string() }),
@@ -60,6 +72,7 @@ export const CauHinhLopoe3DSchema = z.object({
   so_1: z.string().default("No.1"),
   so_1_en: z.string().optional(),
   bot_nuoc: BotNuocSchema.optional(),
+  glb: GlbSchema.optional(),
   /** W063: điện thoại dùng chuỗi ảnh dựng sẵn thay three.js (mượt, không nóng máy). Ảnh chỉ có sản phẩm + nền; chữ và nhãn vẫn là DOM. */
   khung_dien_thoai: z.object({
     thu_muc: z.string(), so: z.number().int().min(2), rong: z.number(), cao: z.number(),
