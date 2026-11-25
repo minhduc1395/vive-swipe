@@ -45,7 +45,8 @@ steps:
       - "--concurrency"
       - "80"
       - "--min-instances"
-      - "0"
+      # W023: 1 máy chạy sẵn cho chạy thử 26/11 và pop-up tới 29/11 (docs/05 mục 2.3). Sau 29/11 đổi về "0".
+      - "1"
       - "--max-instances"
       - "10"
       - "--set-secrets"
