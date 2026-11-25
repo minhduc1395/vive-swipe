@@ -22,7 +22,7 @@ function NutMacDinh({ n, i }: { n: Nut3D; i: number }) {
 }
 const veNutMacDinh: VeNut3D = (n, i) => <NutMacDinh key={n.chu} n={n} i={i} />;
 import type { Canh, LoaiHat } from "./canh";
-import { buocBam, CHAI_KHUNG, chaiDienThoai, duongBay, khungTuP, MOC_CANH_AMP, pCanh, pTuCanh, pTuKhung, tienTrinhBot, type Diem, type TrangThaiPhat } from "./phat-khung";
+import { buocBam, CHAI_KHUNG, CHAI_KHUNG_GLB, chaiDienThoai, duongBay, khungTuP, MOC_CANH_AMP, pCanh, pTuCanh, pTuKhung, tienTrinhBot, type Diem, type TrangThaiPhat } from "./phat-khung";
 
 const kep = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const muot = (t: number) => t * t * (3 - 2 * t);
@@ -228,6 +228,9 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
   const bn = botNuoc && cfg.bot_nuoc ? cfg.bot_nuoc : null;
   // W073: chai ampoule 3D GLB (cảnh three.js, máy tính): bật bằng yaml (glb.bat) hoặc ?glb=1 (xem trước, đọc phía client)
   const [glb, setGlb] = useState(!!cfg.glb?.bat);
+  // W073 phần B: ?fps=1 hiện số khung/giây ở góc (đo hiệu năng); chữ ghi bằng textContent, không phải chữ cho khách
+  const oFps = useRef<HTMLDivElement>(null);
+  const [hienFps, setHienFps] = useState(false);
 
   useEffect(() => {
     const giam = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -241,12 +244,36 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
     setCheDo(giam ? "tinh" : dungKhung ? "khung" : coWebGL ? "3d" : "tinh");
     if (cfg.bot_nuoc && (cfg.bot_nuoc.bat || thamSo.get("bot-nuoc") === "1")) setBotNuoc(true);
     if (cfg.glb && (cfg.glb.bat || thamSo.get("glb") === "1")) setGlb(true);
+    if (thamSo.has("fps")) setHienFps(true);
   }, [cfg.khung_dien_thoai, cfg.bot_nuoc, cfg.glb]);
+
+  // W073 phần B: đếm khung trình duyệt thật vẽ (rAF), số trung bình mỗi 0,5 giây + khung lâu nhất; ghi window.__lopoeFps cho e2e
+  useEffect(() => {
+    if (!hienFps) return;
+    let raf = 0, truoc = 0, dem = 0, moc = 0, lauNhat = 0;
+    const lich: number[] = [];
+    (window as unknown as { __lopoeFps?: number[] }).__lopoeFps = lich;
+    const buoc = (t: number) => {
+      if (truoc) { const d = t - truoc; lich.push(d); dem++; lauNhat = Math.max(lauNhat, d); }
+      else moc = t;
+      truoc = t;
+      if (t - moc >= 500 && oFps.current) {
+        oFps.current.textContent = `${((dem * 1000) / (t - moc)).toFixed(0)} fps · max ${lauNhat.toFixed(0)} ms`;
+        dem = 0; moc = t; lauNhat = 0;
+      }
+      raf = requestAnimationFrame(buoc);
+    };
+    raf = requestAnimationFrame(buoc);
+    return () => cancelAnimationFrame(raf);
+  }, [hienFps]);
 
   useEffect(() => {
     if ((cheDo !== "3d" && cheDo !== "khung") || !canvas.current || !doan.current || !lop.current) return;
     let canh: Canh | null = null;
-    const kd = cheDo === "khung" ? cfg.khung_dien_thoai! : null;
+    // W073 phần B: bật GLB và yaml có chuỗi khung GLB (glb.khung_dien_thoai) thì điện thoại dùng chuỗi đó; tắt thì chuỗi cũ
+    const khungGlb = glb && !!cfg.glb?.khung_dien_thoai;
+    const kd = cheDo === "khung" ? (khungGlb ? cfg.glb!.khung_dien_thoai! : cfg.khung_dien_thoai!) : null;
+    const CK = khungGlb ? CHAI_KHUNG_GLB : CHAI_KHUNG; // chai trong khung đứng của đoạn bọt nước (đo theo từng chuỗi)
     // Ảnh nén (blob) giữ hết (~3 MB); ảnh đã giải mã (ImageBitmap) chỉ giữ một cửa sổ quanh vị trí cuộn:
     // trình duyệt tự bỏ ảnh đã giải mã của <img> nên vẽ lại phải giải mã lại (~30ms/khung trên máy chậm) → giật.
     const blobKhung: (Blob | null)[] = kd ? new Array(kd.so).fill(null) : [];
@@ -260,6 +287,8 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
     let phat: TrangThaiPhat | null = null; // null = nhảy thẳng tới đích ở lần vẽ tới
     const elDoan = doan.current, elLop = lop.current, elCanvas = canvas.current;
     const chupKhung = new URLSearchParams(location.search).has("ba-chieu"); // ?ba-chieu=1: chế độ chụp lại chuỗi ảnh khung
+    // W073 phần B: ?chup=1 (kèm ?ba-chieu=1): cảnh vẽ đủ tỉ lệ điểm ảnh của máy (390×844 @2x → 780×1688) để chụp chuỗi khung
+    const chupDuDiem = chupKhung && new URLSearchParams(location.search).has("chup");
     // W072: mốc yaml của đoạn 4 hoạt chất đã nới; cảnh 3D và ảnh khung vẫn theo mốc gốc → đổi p sang pc (tiến trình cảnh).
     // Bọt nước trên điện thoại: ảnh khung đứng ở khung chưa có hạt + đường kẻ cũ suốt đoạn (giu).
     const kAmp = cfg.khoi.find((k) => k.id === "amp-thanh-phan");
@@ -437,7 +466,7 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
       g.save(); g.beginPath(); g.rect(0, 0, W / 2, H); g.clip(); g.translate(W, 0); g.scale(-1, 1); g.drawImage(a, ox, oy, w, h); g.restore();
       // Mảng chai (độ phân giải ảnh gốc): tách khỏi nền bằng độ lệch với nền sạch (ảnh lật), điểm giống nền → trong suốt,
       // rồi bù màu theo độ trong (khử viền nền cũ). Kính trong vẫn thấy nền mới phía sau như thật.
-      const kAnh = kd!.rong / kd!.vp_rong, c = CHAI_KHUNG.cat;
+      const kAnh = kd!.rong / kd!.vp_rong, c = CK.cat;
       const sx = Math.round(c.x0 * kAnh), sy = Math.round(c.y0 * kAnh), pw = Math.round((c.x1 - c.x0) * kAnh), ph = Math.round((c.y1 - c.y0) * kAnh);
       const chai = document.createElement("canvas");
       chai.width = pw; chai.height = ph;
@@ -460,8 +489,8 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
         gr.addColorStop(0, "rgba(0,0,0,0)"); gr.addColorStop(f, "rgba(0,0,0,1)"); gr.addColorStop(1 - f, "rgba(0,0,0,1)"); gr.addColorStop(1, "rgba(0,0,0,0)");
         g2.fillStyle = gr; g2.fillRect(0, 0, pw, ph);
       };
-      mo(0, 0, pw, 0, CHAI_KHUNG.mo.x / (c.x1 - c.x0));
-      mo(0, 0, 0, ph, CHAI_KHUNG.mo.y / (c.y1 - c.y0));
+      mo(0, 0, pw, 0, CK.mo.x / (c.x1 - c.x0));
+      mo(0, 0, 0, ph, CK.mo.y / (c.y1 - c.y0));
       ghep = { i, W, H, nen, chai };
       return ghep;
     };
@@ -481,13 +510,13 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
       if (!kd || !ctx2d) return false;
       const W = elCanvas.width, H = elCanvas.height, cw = elCanvas.clientWidth, ch = elCanvas.clientHeight;
       const sc = Math.max(cw / kd.vp_rong, ch / kd.vp_cao), cx = (cw - kd.vp_rong * sc) / 2, cy = (ch - kd.vp_cao * sc) / 2;
-      const goc = { x: cx + CHAI_KHUNG.x * sc, tren: cy + CHAI_KHUNG.tren * sc, day: cy + CHAI_KHUNG.day * sc };
+      const goc = { x: cx + CK.x * sc, tren: cy + CK.tren * sc, day: cy + CK.day * sc };
       if (!vungChai) doBot();
       const c = vungChai ? chaiDienThoai(q, goc, vungChai) : { x: goc.x, y: goc.day, k: 1, e: 0 };
       // tâm đáy chai dời (x, y), tỉ lệ k: điểm P của ảnh gốc → c + (P − đáy gốc)·k
       const doi = (px: number, py: number) => ({ x: c.x + (cx + px * sc - goc.x) * c.k, y: c.y + (cy + py * sc - goc.day) * c.k });
-      mieng = doi(CHAI_KHUNG.x, CHAI_KHUNG.mieng);
-      const dinh = doi(CHAI_KHUNG.x, CHAI_KHUNG.tren), rong = 44 * sc * c.k;
+      mieng = doi(CK.x, CK.mieng);
+      const dinh = doi(CK.x, CK.tren), rong = CK.nua * sc * c.k;
       ghiChai({ x: dinh.x - rong, y: dinh.y, w: rong * 2, h: c.y - dinh.y });
       if (c.e <= 0) return false;
       const khoa = `${c.x.toFixed(1)},${c.y.toFixed(1)},${c.k.toFixed(4)}`;
@@ -495,7 +524,7 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
       const r = W / cw;
       const gh = coGhep(iKhung) ? ghep! : dungGhep(iKhung, a, W, H, Math.max(W / kd.rong, H / kd.cao));
       ctx2d.drawImage(gh.nen, 0, 0);
-      const tl = doi(CHAI_KHUNG.cat.x0, CHAI_KHUNG.cat.y0);
+      const tl = doi(CK.cat.x0, CK.cat.y0);
       const sAnh = Math.max(W / kd.rong, H / kd.cao) * c.k; // điểm ảnh gốc → điểm canvas
       ctx2d.drawImage(gh.chai, tl.x * r, tl.y * r, gh.chai.width * sAnh, gh.chai.height * sAnh);
       khoaGhep = khoa; anhDaVe = null; khoaVe = -1;
@@ -513,6 +542,7 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
       const i = timKhung(pp), j = Math.min(pKhung.length - 1, i + 1);
       const t = j > i ? kep((pp - pKhung[i]) / (pKhung[j] - pKhung[i])) : 0;
       const gan1 = t < 0.5 ? i : j; // khung gần nhất, không hoà trộn (hoà trộn tạo bóng mờ khi dừng giữa 2 khung)
+      if (khungGlb) (window as unknown as { __lopoeKhung?: unknown }).__lopoeKhung = { thuMuc: kd.thu_muc, i: gan1 }; // W073 phần B, cho e2e: khung GLB đang hiện
       if (gan1 !== tamCuaSo) { huongCuon = gan1 > tamCuaSo ? 1 : -1; tamCuaSo = gan1; capNhatCuaSo(); }
       if (qBot >= 0) {
         const a = anhKhung[gan1];
@@ -607,8 +637,9 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
           hienSo1: cfg.khoi.some((k) => k.id === "amp-giai-thuong"),
           giamChuyenDong: false,
           thoiGianTheoP: chupKhung,
+          tiLeDiemAnh: chupDuDiem ? devicePixelRatio : undefined,
           anHatAmp: botNuoc,
-          // W073: chỉ cảnh three.js (máy tính, hoặc ?ba-chieu) dùng GLB; điện thoại chạy chuỗi ảnh khung nên không tải GLB
+          // W073: chỉ cảnh three.js (máy tính, hoặc ?ba-chieu) dùng GLB; điện thoại chạy chuỗi ảnh khung (chuỗi GLB chụp sẵn) nên không tải GLB
           glb: glb && cfg.glb ? { ampoule: cfg.glb.ampoule, srm: cfg.glb.srm, kem: cfg.glb.kem } : undefined,
           onSanSang: () => { sanSangVe = true; setDaTai(true); },
         });
@@ -694,6 +725,7 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
           <img src={cfg.tai_san.kem_duong} alt="" width={368} height={980} loading="lazy" decoding="async" className="h-[33vh] md:h-[47vh] w-auto" />
           {/* eslint-enable @next/next/no-img-element */}
         </div>
+        {hienFps && <div ref={oFps} data-fps aria-hidden="true" className="absolute left-2 top-2 z-10 rounded bg-den/70 px-2 py-1 font-mono text-[11px] text-trang pointer-events-none" />}
         <div ref={lop} className="absolute inset-0 pointer-events-none">
           <div data-mo-dau className="absolute left-0 right-0 top-[8vh] md:top-[9vh] text-center px-6">
             <p className="m-0 mb-1.5 text-[15px] md:text-[17px] text-xam font-medium">{cfg.mo_dau.nho}</p>

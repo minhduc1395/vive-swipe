@@ -54,11 +54,22 @@ export type BotNuoc = z.infer<typeof BotNuocSchema>;
  * `srm` / `kem`: GLB tuýp sữa rửa mặt / kem dưỡng (GD-003); null thì giữ ảnh phẳng. Đổi file GLB chỉ cần đổi các đường dẫn này.
  */
 const DuongDanGlb = z.string().min(1).nullable().default(null);
+/** W063: điện thoại dùng chuỗi ảnh dựng sẵn thay three.js (mượt, không nóng máy). Ảnh chỉ có sản phẩm + nền; chữ và nhãn vẫn là DOM. */
+const KhungDienThoaiSchema = z.object({
+  thu_muc: z.string(), so: z.number().int().min(2), rong: z.number(), cao: z.number(),
+  vp_rong: z.number(), vp_cao: z.number(), nhan: z.string(),
+});
+export type KhungDienThoai = z.infer<typeof KhungDienThoaiSchema>;
+/**
+ * W073 phần B (#152): `khung_dien_thoai`: chuỗi ảnh khung chụp từ cảnh 3D có GLB, điện thoại dùng khi công tắc bật
+ * (cùng số khung, cỡ ảnh, bảng p như chuỗi cũ). Không có thì điện thoại giữ chuỗi cũ.
+ */
 export const GlbSchema = z.object({
   bat: z.boolean().default(false),
   ampoule: DuongDanGlb,
   srm: DuongDanGlb,
   kem: DuongDanGlb,
+  khung_dien_thoai: KhungDienThoaiSchema.optional(),
 });
 export type CauHinhGlb = z.infer<typeof GlbSchema>;
 export const CauHinhLopoe3DSchema = z.object({
@@ -73,11 +84,7 @@ export const CauHinhLopoe3DSchema = z.object({
   so_1_en: z.string().optional(),
   bot_nuoc: BotNuocSchema.optional(),
   glb: GlbSchema.optional(),
-  /** W063: điện thoại dùng chuỗi ảnh dựng sẵn thay three.js (mượt, không nóng máy). Ảnh chỉ có sản phẩm + nền; chữ và nhãn vẫn là DOM. */
-  khung_dien_thoai: z.object({
-    thu_muc: z.string(), so: z.number().int().min(2), rong: z.number(), cao: z.number(),
-    vp_rong: z.number(), vp_cao: z.number(), nhan: z.string(),
-  }).optional(),
+  khung_dien_thoai: KhungDienThoaiSchema.optional(),
 });
 export type KhoiChu3D = z.infer<typeof KhoiChu3DSchema>;
 export type CauHinhLopoe3D = z.infer<typeof CauHinhLopoe3DSchema>;

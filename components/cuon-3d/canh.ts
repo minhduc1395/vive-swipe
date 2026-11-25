@@ -113,11 +113,12 @@ export interface Canh {
 
 export function taoCanh(
   canvas: HTMLCanvasElement,
-  opts: { taiSan: TaiSan; hatSrm: LoaiHat[]; hatAmp: LoaiHat[]; anhHat?: Partial<Record<LoaiHat, string>>; so1: string; hienSo1?: boolean; giamChuyenDong: boolean; thoiGianTheoP?: boolean; anHatAmp?: boolean; glb?: TaiSanGlb; onSanSang?: () => void },
+  opts: { taiSan: TaiSan; hatSrm: LoaiHat[]; hatAmp: LoaiHat[]; anhHat?: Partial<Record<LoaiHat, string>>; so1: string; hienSo1?: boolean; giamChuyenDong: boolean; thoiGianTheoP?: boolean; tiLeDiemAnh?: number; anHatAmp?: boolean; glb?: TaiSanGlb; onSanSang?: () => void },
 ): Canh {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   const dt0 = window.innerWidth < 768;
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, dt0 ? 1.5 : 2));
+  // W073 phần B: tiLeDiemAnh (chỉ khi chụp chuỗi khung, ?ba-chieu=1&chup=1) vẽ đủ điểm ảnh; thường thì điện thoại tối đa 1,5
+  renderer.setPixelRatio(opts.tiLeDiemAnh ?? Math.min(window.devicePixelRatio, dt0 ? 1.5 : 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -530,8 +531,9 @@ export function taoCanh(
       NAP.nhom.position.set(lech * LECH, nhac * LIFT, cg ? 0 : 0.01);
       if (cg && nhac > 0) {
         // GLB: chai + nắp đang nhấc phải nằm trọn khung (đỉnh dưới thanh trên ~10% chiều cao, đáy cách mép dưới 5%):
-        // thu nhỏ và hạ chai liền theo độ nhấc (nhac = 0 thì như tư thế gốc)
-        const s0 = amp.scale.x, day = -CAO / 2, dinh = cg.dinh + nhac * LIFT, TREN = 0.8, DUOI = 0.9;
+        // thu nhỏ và hạ chai liền theo độ nhấc (nhac = 0 thì như tư thế gốc).
+        // W073 phần B, điện thoại (chụp chuỗi khung GLB): chữ khối amp-cong-dung chiếm ~30% dưới màn → đáy chai ở trên 68% chiều cao
+        const s0 = amp.scale.x, day = -CAO / 2, dinh = cg.dinh + nhac * LIFT, TREN = 0.8, DUOI = dienThoai ? 0.36 : 0.9;
         const k = Math.min(1, ((TREN + DUOI) * nuaH) / (s0 * (dinh - day)));
         amp.scale.setScalar(s0 * k);
         amp.position.y = Math.min(amp.position.y, TREN * nuaH - s0 * k * dinh);
