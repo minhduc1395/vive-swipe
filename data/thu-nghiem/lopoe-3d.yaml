@@ -175,3 +175,10 @@ bot_nuoc:
     tren: 57               # % chiều cao: lưới 2×2 bắt đầu dưới đáy chai
     duoi: 72               # px chừa cho thanh tab dưới (64px)
     co: [22, 8.5]          # min(22vw, 8.5vh)
+# W073 (#150): chai ampoule 3D GLB trên máy tính (công tắc, mặc định TẮT; xem trước bằng ?glb=1).
+# srm / kem: GLB tuýp (GD-003) khi có, null = giữ ảnh. Đổi bản GLB (v3, tuýp) chỉ cần đổi đường dẫn ở đây.
+glb:
+  bat: false
+  ampoule: /lopoe-3d-glb/LOPOE_ampoule_web_v2.glb
+  srm: null
+  kem: null

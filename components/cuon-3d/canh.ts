@@ -5,6 +5,7 @@
  */
 import * as THREE from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
+import type { ChaiGlb } from "./glb";
 
 type TuThe = { x: number; y: number; s: number; ry: number; rz: number; z: number; o: number };
 type Khoa = [number, TuThe, TuThe | null];
@@ -97,6 +98,8 @@ export const tuTheAmp = (p: number, botNuoc: boolean, dienThoai: boolean): TuThe
 
 export type LoaiHat = "thua" | "sen" | "phan-tu" | "rau-ma" | "xoan";
 export interface TaiSan { ampoule_than: string; ampoule_nap: string; ampoule_co: string; giot: string; sua_rua_mat: string; kem_duong: string }
+/** W073: đường dẫn GLB (null = giữ ảnh phẳng). Chỉ nạp khi gọi canh.napGlb() (CuonLopoe3D gọi khi khách đã cuộn tới gần khối). */
+export interface TaiSanGlb { ampoule: string | null; srm: string | null; kem: string | null }
 export interface ViTriNhan { x: number; y: number; o: number }
 
 export interface Canh {
@@ -104,11 +107,13 @@ export interface Canh {
   ve: (p: number, time: number) => { srm: ViTriNhan[]; amp: ViTriNhan[]; mieng: { x: number; y: number }; chai: { x: number; y: number; w: number; h: number } };
   doiCo: () => void;
   huy: () => void;
+  /** W073: bắt đầu nạp GLB (gọi nhiều lần chỉ nạp 1 lần; không có opts.glb thì không làm gì). */
+  napGlb: () => void;
 }
 
 export function taoCanh(
   canvas: HTMLCanvasElement,
-  opts: { taiSan: TaiSan; hatSrm: LoaiHat[]; hatAmp: LoaiHat[]; anhHat?: Partial<Record<LoaiHat, string>>; so1: string; hienSo1?: boolean; giamChuyenDong: boolean; thoiGianTheoP?: boolean; anHatAmp?: boolean; onSanSang?: () => void },
+  opts: { taiSan: TaiSan; hatSrm: LoaiHat[]; hatAmp: LoaiHat[]; anhHat?: Partial<Record<LoaiHat, string>>; so1: string; hienSo1?: boolean; giamChuyenDong: boolean; thoiGianTheoP?: boolean; anHatAmp?: boolean; glb?: TaiSanGlb; onSanSang?: () => void },
 ): Canh {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   const dt0 = window.innerWidth < 768;
@@ -143,6 +148,14 @@ export function taoCanh(
     obj.traverse((m: any) => {
       if (!m.material) return;
       for (const mt of Array.isArray(m.material) ? m.material : [m.material]) {
+        if (mt.userData.glb) {
+          // W073: vật liệu mô hình GLB giữ depthWrite (thủy tinh, ống, nhãn tự che nhau đúng); chỉ bật trong suốt khi đang mờ
+          if (mt.userData.goc === undefined) { mt.userData.goc = mt.opacity; mt.userData.trongGoc = mt.transparent; }
+          const trong = mt.userData.trongGoc || o < 0.999;
+          if (mt.transparent !== trong) { mt.transparent = trong; mt.needsUpdate = true; }
+          mt.opacity = mt.userData.goc * o;
+          continue;
+        }
         if (mt.userData.goc === undefined) { mt.userData.goc = mt.opacity; mt.transparent = true; mt.depthWrite = false; } // vật mờ không ghi depth: tránh đục lỗ thân chai vẽ sau
         mt.opacity = mt.userData.goc * o;
       }
@@ -165,20 +178,21 @@ export function taoCanh(
   };
 
   const CAO = 2.55;
-  const SP: Record<string, { g: THREE.Group; bong?: THREE.Mesh }> = {};
+  const SP: Record<string, { g: THREE.Group; bong?: THREE.Mesh; anh?: THREE.Mesh }> = {};
   const tai = new THREE.TextureLoader();
   const taoTuyp = (ten: string, url: string, tiLe: number) => {
     const g = new THREE.Group();
     const tex = tai.load(url);
     tex.colorSpace = THREE.SRGBColorSpace;
     tex.anisotropy = 8;
-    g.add(new THREE.Mesh(new THREE.PlaneGeometry(CAO * tiLe, CAO), new THREE.MeshBasicMaterial({ map: tex, transparent: true, toneMapped: false })));
+    const anh = new THREE.Mesh(new THREE.PlaneGeometry(CAO * tiLe, CAO), new THREE.MeshBasicMaterial({ map: tex, transparent: true, toneMapped: false }));
+    g.add(anh);
     const bong = taoBong();
     bong.scale.set(CAO * tiLe * 1.5, 0.5, 1);
     bong.position.y = -CAO / 2 - 0.02;
     g.add(bong);
     scene.add(g);
-    SP[ten] = { g, bong };
+    SP[ten] = { g, bong, anh };
   };
   taoTuyp("srm", opts.taiSan.sua_rua_mat, 366 / 989);
   taoTuyp("kem", opts.taiSan.kem_duong, 368 / 980);
@@ -189,6 +203,9 @@ export function taoCanh(
   SP.amp = { g: ampG };
   const NAP: { nhom: THREE.Group | null; giot: THREE.Sprite | null; gon: THREE.Mesh | null } = { nhom: null, giot: null, gon: null };
   let caoThanAmp = CAO * 0.66;
+  let caoAmpDong = CAO; // chiều cao chai ảnh khi đóng nắp (thân + phần nắp trên miệng): mô hình GLB chia tỷ lệ theo số này
+  const anhAmp: THREE.Mesh[] = []; // 3 ảnh phẳng của chai (thân, cổ, nắp): bỏ khi mô hình GLB nạp xong
+  let chaiGlb: ChaiGlb | null = null;
   const caoCoChai = (CAO / 989) * 92; // cổ chai nhô lên (ảnh ampoule-co: 92px), cùng đơn vị DV
   const longMat = () => new THREE.MeshPhysicalMaterial({ color: 0x86afe6, roughness: 0.15, clearcoat: 0.8, envMapIntensity: 1.1, transparent: true, opacity: 0.85, depthWrite: false });
   {
@@ -197,6 +214,7 @@ export function taoCanh(
     const DV = CAO / 989; // đơn vị cảnh trên mỗi điểm ảnh (chuẩn theo chiều cao tuýp 989px)
     const rong = 294 * DV, caoThan = 654 * DV, caoNap = 975 * DV, dayCoNap = 365 * DV;
     caoThanAmp = caoThan;
+    caoAmpDong = caoThan + dayCoNap;
     const taiAnh = (url: string) => { const t = tai.load(url); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t; };
     const than = new THREE.Mesh(new THREE.PlaneGeometry(rong, caoThan), new THREE.MeshBasicMaterial({ map: taiAnh(opts.taiSan.ampoule_than), transparent: true, toneMapped: false, depthWrite: false }));
     than.position.y = -CAO / 2 + caoThan / 2;
@@ -229,6 +247,7 @@ export function taoCanh(
     bong.scale.set(rong * 1.5, 0.5, 1);
     bong.position.y = -CAO / 2 - 0.02;
     ampG.add(bong);
+    anhAmp.push(than, co, anhNap);
     Object.assign(NAP, { nhom: nap, giot, gon });
     SP.amp.bong = bong;
     // Báo sẵn sàng khi ảnh thân đã tải (fallback 1,5s nếu ảnh lỗi)
@@ -236,6 +255,42 @@ export function taoCanh(
     const xong = () => opts.onSanSang?.();
     if (tx.image && (tx.image as HTMLImageElement).complete) xong(); else { const t = setTimeout(xong, 1500); tai.manager.onLoad = () => { clearTimeout(t); xong(); }; }
   }
+
+  // W073: mô hình 3D GLB thay ảnh phẳng (sau công tắc). Trong lúc nạp hoặc nạp lỗi: giữ ảnh phẳng như cũ.
+  let daHuy = false, daGoiNap = false;
+  const napGlb = () => {
+    const glb = opts.glb;
+    if (daGoiNap || daHuy || !glb || !(glb.ampoule || glb.srm || glb.kem)) return;
+    daGoiNap = true;
+    (window as unknown as { __lopoeGlb?: string }).__lopoeGlb = "dang-nap";
+    import("./glb").then(async (m) => {
+      const viec: Promise<void>[] = [];
+      if (glb.ampoule) viec.push(m.napGlb(glb.ampoule).then((goc) => {
+        if (daHuy) return;
+        const c = m.dungChaiAmpoule(goc, caoAmpDong, -CAO / 2);
+        for (const a of anhAmp) { ampG.remove(a); a.geometry.dispose(); (a.material as THREE.MeshBasicMaterial).dispose(); }
+        ampG.add(c.than, c.nap);
+        NAP.nhom = c.nap;
+        const tenNap: string[] = [];
+        c.nap.traverse((o) => { if ((o as THREE.Mesh).isMesh) tenNap.push(o.name); });
+        (window as unknown as { __lopoeGlbNap?: string[] }).__lopoeGlbNap = tenNap; // cho e2e: các mesh đi cùng nắp
+        if (SP.amp.bong) SP.amp.bong.scale.x = c.nuaRong * 3;
+        chaiGlb = c;
+      }));
+      for (const [ten, url] of [["srm", glb.srm], ["kem", glb.kem]] as const) {
+        if (!url) continue;
+        viec.push(m.napGlb(url).then((goc) => {
+          if (daHuy) return;
+          const sp = SP[ten];
+          if (sp.anh) { sp.g.remove(sp.anh); sp.anh.geometry.dispose(); (sp.anh.material as THREE.MeshBasicMaterial).dispose(); sp.anh = undefined; }
+          sp.g.add(m.dungTuyp(goc, CAO));
+        }));
+      }
+      const kq = await Promise.allSettled(viec);
+      if (!daHuy) m.ghiTrangThai(kq.every((k) => k.status === "fulfilled") ? "da-nap" : "loi");
+      for (const k of kq) if (k.status === "rejected") console.warn("[lopoe-3d] GLB load failed, keeping flat images", k.reason);
+    }, (e) => { (window as unknown as { __lopoeGlb?: string }).__lopoeGlb = "loi"; console.warn("[lopoe-3d] GLB loader chunk failed", e); });
+  };
 
   // Hạt thành phần: biểu tượng 3D trừu tượng (W053 sẽ thay bằng ảnh thật / phân tử đúng cấu trúc)
   const vatLieu = (c: number) => new THREE.MeshPhysicalMaterial({ color: c, roughness: 0.35, clearcoat: 0.6, envMapIntensity: 1.2 });
@@ -408,6 +463,7 @@ export function taoCanh(
     return { x: (tam.x * 0.5 + 0.5) * canvas.clientWidth, y: (-tam.y * 0.5 + 0.5) * canvas.clientHeight, o };
   };
   const mauNen = { a: new THREE.Color(), b: new THREE.Color() };
+  const hopGlb = new THREE.Box3(), hopNap = new THREE.Box3();
   const MAU_NEN: [number, string, string][] = [
     [0, "#F7EEEB", "#F3DED8"],
     [0.37, "#F4F7FB", "#D8E7F6"],
@@ -468,11 +524,22 @@ export function taoCanh(
     // 4) Nắp nhỏ giọt (đơn vị cảnh; đáy chai ở y = -CAO/2, miệng chai ở y = -CAO/2 + caoThan)
     if (NAP.nhom && NAP.giot && NAP.gon) {
       const nhac = seg(p, 0.43, 0.455) - seg(p, 0.5, 0.525), lech = seg(p, 0.452, 0.468) - seg(p, 0.495, 0.51);
-      const LIFT = 1.58, LECH = 0.06; // ống gần như thẳng trên cổ chai để giọt rơi đúng miệng // nhấc đủ cao để đầu ống (dài 400px = 1.03) vượt khỏi cổ chai (92px)
-      NAP.nhom.position.set(lech * LECH, nhac * LIFT, 0.01);
-      amp.position.y -= nhac * 0.5; // chai lún nhẹ khi rút nắp để nắp không vượt mép trên màn hình
+      const cg = chaiGlb;
+      // Ảnh: nhấc đủ cao để đầu ống (dài 400px = 1.03) vượt khỏi cổ chai (92px). GLB: ống dài hơn, nhấc tới khi đầu ống cao hơn miệng 0,45.
+      const LIFT = cg ? cg.mieng - cg.dauOng + 0.45 : 1.58, LECH = 0.06; // ống gần như thẳng trên cổ chai để giọt rơi đúng miệng
+      NAP.nhom.position.set(lech * LECH, nhac * LIFT, cg ? 0 : 0.01);
+      if (cg && nhac > 0) {
+        // GLB: chai + nắp đang nhấc phải nằm trọn khung (đỉnh dưới thanh trên ~10% chiều cao, đáy cách mép dưới 5%):
+        // thu nhỏ và hạ chai liền theo độ nhấc (nhac = 0 thì như tư thế gốc)
+        const s0 = amp.scale.x, day = -CAO / 2, dinh = cg.dinh + nhac * LIFT, TREN = 0.8, DUOI = 0.9;
+        const k = Math.min(1, ((TREN + DUOI) * nuaH) / (s0 * (dinh - day)));
+        amp.scale.setScalar(s0 * k);
+        amp.position.y = Math.min(amp.position.y, TREN * nuaH - s0 * k * dinh);
+        amp.updateMatrixWorld();
+      } else if (!cg) amp.position.y -= nhac * 0.5; // chai lún nhẹ khi rút nắp để nắp không vượt mép trên màn hình
       NAP.nhom.rotation.z = -lech * 0.02;
-      const f = seg(p, 0.466, 0.492), tx = lech * LECH, dayChai = -CAO / 2, mieng = dayChai + caoThanAmp, ty = mieng - 0.02 + nhac * LIFT - 1.03; // giọt rơi từ đầu ống (đầu ống cách đáy nắp 400px ≈ 1.03)
+      const f = seg(p, 0.466, 0.492), tx = lech * LECH, dayChai = -CAO / 2, mieng = cg ? cg.mieng : dayChai + caoThanAmp;
+      const ty = cg ? cg.dauOng + nhac * LIFT : mieng - 0.02 + nhac * LIFT - 1.03; // giọt rơi từ đầu ống (ảnh: đầu ống cách đáy nắp 400px ≈ 1.03)
       NAP.giot.visible = f > 0 && f < 1 && nhac > 0.5;
       if (NAP.giot.visible) {
         // 0–0.45: giọt phình ra và kéo dài ở đầu ống; 0.45–1: rơi (gia tốc) vào miệng chai rồi biến mất
@@ -481,14 +548,14 @@ export function taoCanh(
         const keo = 1 + 0.35 * tao * (1 - roi); // kéo dài khi còn bám đầu ống
         NAP.giot.scale.set(W0 * (0.25 + 0.75 * tao) * (1 - 0.12 * roi), H0 * (0.25 + 0.75 * tao) * keo, 1);
         const yDau = ty - H0 * 0.5 * (0.25 + 0.75 * tao) * keo + 0.02;
-        const yDich = mieng + caoCoChai * 0.5;
+        const yDich = cg ? mieng - 0.08 : mieng + caoCoChai * 0.5; // GLB: miệng là đỉnh thân thủy tinh (đã gồm cổ chai)
         NAP.giot.position.set(tx, yDau - roi * roi * (yDau - yDich), 0.05);
       }
       // Gợn nhỏ trên mặt cổ chai khi giọt chạm
       const gg = seg(p, 0.488, 0.503);
       NAP.gon.visible = gg > 0 && gg < 1;
       if (NAP.gon.visible) {
-        NAP.gon.position.set(tx, mieng + caoCoChai * 0.95, 0.05);
+        NAP.gon.position.set(tx, cg ? mieng : mieng + caoCoChai * 0.95, 0.05);
         NAP.gon.scale.setScalar(0.03 + gg * 0.22);
         (NAP.gon.material as THREE.MeshBasicMaterial).opacity = 0.45 * (1 - gg);
       }
@@ -560,13 +627,27 @@ export function taoCanh(
     renderer.render(scene, camera);
     // W072: miệng chai (đỉnh thân, chỗ cổ nắp) và hộp bao chai (thân + nắp) chiếu ra màn hình
     const chieuDiem = (x: number, y: number) => { v.set(x, y, 0); amp.localToWorld(v).project(camera); return { x: (v.x * 0.5 + 0.5) * canvas.clientWidth, y: (-v.y * 0.5 + 0.5) * canvas.clientHeight }; };
-    const mieng = chieuDiem(0, -CAO / 2 + caoThanAmp);
-    const nuaRong = (CAO / 989) * 147, d1 = chieuDiem(-nuaRong, -CAO / 2), d2 = chieuDiem(nuaRong, -CAO / 2 + caoThanAmp + (CAO / 989) * 350);
+    const cg = chaiGlb;
+    const mieng = chieuDiem(0, cg ? cg.mieng : -CAO / 2 + caoThanAmp);
+    const nuaRong = cg ? cg.nuaRong : (CAO / 989) * 147, d1 = chieuDiem(-nuaRong, -CAO / 2), d2 = chieuDiem(nuaRong, cg ? cg.dinh : -CAO / 2 + caoThanAmp + (CAO / 989) * 350);
     const chai = { x: Math.min(d1.x, d2.x), y: Math.min(d1.y, d2.y), w: Math.abs(d2.x - d1.x), h: Math.abs(d2.y - d1.y) };
+    if (cg) {
+      // W073, cho e2e: hộp mô hình trên màn hình (thân + nắp, kể cả khi nhấc), miệng chai và giọt (px)
+      hopGlb.setFromObject(cg.than).union(hopNap.setFromObject(cg.nap));
+      let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+      for (let i = 0; i < 8; i++) {
+        v.set(i & 1 ? hopGlb.max.x : hopGlb.min.x, i & 2 ? hopGlb.max.y : hopGlb.min.y, i & 4 ? hopGlb.max.z : hopGlb.min.z).project(camera);
+        const sx = (v.x * 0.5 + 0.5) * canvas.clientWidth, sy = (-v.y * 0.5 + 0.5) * canvas.clientHeight;
+        x0 = Math.min(x0, sx); x1 = Math.max(x1, sx); y0 = Math.min(y0, sy); y1 = Math.max(y1, sy);
+      }
+      const giot = NAP.giot?.visible ? chieu(NAP.giot, 1) : null;
+      (window as unknown as { __lopoeGlbKhung?: unknown }).__lopoeGlbKhung = { p, o: amp.visible ? 1 : 0, mieng, giot, hop: { x: x0, y: y0, w: x1 - x0, h: y1 - y0 } };
+    }
     return { srm: nhanSrm, amp: nhanAmp, mieng, chai };
   };
 
   const huy = () => {
+    daHuy = true;
     scene.traverse((o: any) => {
       o.geometry?.dispose?.();
       for (const m of Array.isArray(o.material) ? o.material : o.material ? [o.material] : []) { m.map?.dispose?.(); m.dispose?.(); }
@@ -575,5 +656,5 @@ export function taoCanh(
     renderer.dispose();
   };
 
-  return { ve, doiCo, huy };
+  return { ve, doiCo, huy, napGlb };
 }
