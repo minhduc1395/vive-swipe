@@ -139,9 +139,15 @@ export function duongBay(t: number, dau: Diem, cuoi: Diem, vuot = 14): Diem & { 
 /**
  * Chai ampoule trong ảnh khung điện thoại đứng ở cảnh 0,53 (khung 426, khung nhìn chụp 390×844): toạ độ đo trên ảnh.
  * x: tâm chai; tren: đỉnh nắp; mieng: miệng chai (cổ nắp); day: đáy thân. `cat`: vùng cắt chai (gồm bóng đổ) để vẽ lại.
- * Nền khung đối xứng trái-phải (cảnh đặt nền giữa), nên nền sạch = nửa phải lật sang trái.
+ * Nền khung đối xứng trái-phải (cảnh đặt nền giữa), nên nền sạch = nửa phải lật sang trái. nua: nửa bề rộng thân chai.
  */
-export const CHAI_KHUNG = { x: 121, tren: 144, mieng: 260, day: 475, cat: { x0: 40, x1: 200, y0: 125, y1: 500 }, mo: { x: 16, y: 14 } } as const;
+export const CHAI_KHUNG = { x: 121, tren: 144, mieng: 260, day: 475, nua: 44, cat: { x0: 40, x1: 200, y0: 125, y1: 500 }, mo: { x: 16, y: 14 } } as const;
+
+/**
+ * W073 phần B (#152): cùng các số đo trên chuỗi khung GLB (public/thu-nghiem/lopoe-khung-glb/, khung 426). Đo bằng độ lệch ảnh với
+ * ảnh lật trái-phải (thân 67–175, đỉnh nắp 143, đáy 476) và miệng chiếu từ cảnh. Mô hình to ngang hơn ảnh cũ nên `nua`, `cat` rộng hơn.
+ */
+export const CHAI_KHUNG_GLB = { x: 121, tren: 143, mieng: 201, day: 476, nua: 54, cat: { x0: 30, x1: 212, y0: 125, y1: 500 }, mo: { x: 16, y: 14 } } as const;
 
 /**
  * Chai trong ảnh khung điện thoại (đơn vị px màn hình): dời từ chỗ gốc vào giữa vùng trống [tren, duoi] (dưới 2 nút,

@@ -182,3 +182,13 @@ glb:
   ampoule: /lopoe-3d-glb/LOPOE_ampoule_web_v2.glb
   srm: null
   kem: null
+  # W073 phần B (#152): điện thoại bật GLB thì dùng chuỗi khung chụp từ cảnh 3D có GLB (scripts/chup-khung-glb.mjs),
+  # cùng số khung, cỡ ảnh, bảng p với khung_dien_thoai ở trên; tắt GLB thì điện thoại giữ chuỗi cũ. Đổi GLB thì chụp lại chuỗi này.
+  khung_dien_thoai:
+    thu_muc: /thu-nghiem/lopoe-khung-glb
+    so: 799
+    rong: 780
+    cao: 1688
+    vp_rong: 390
+    vp_cao: 844
+    nhan: /thu-nghiem/lopoe-khung-glb/nhan.json
