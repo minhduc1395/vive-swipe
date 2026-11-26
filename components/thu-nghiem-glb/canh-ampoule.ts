@@ -1,6 +1,12 @@
 import * as THREE from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { buocBam, type TrangThaiPhat } from "@/components/cuon-3d/phat-khung";
+
+const DUONG_DAN_GLB = "/thu-nghiem/ampoule-3d/LOPOE_ampoule_web_v2.glb";
+const DUONG_DAN_DRACO = "/thu-nghiem/ampoule-3d/draco/";
+const TEN_NAP_V2 = ["collar", "bulb", "pipette"];
 
 export interface TrangThaiCanh {
   canh: 1 | 2 | 3;
@@ -231,9 +237,66 @@ export function khoiTaoCanhAmpoule(opts: TuyChonCanh): () => void {
     dpr: dprThuc,
     canh: 1,
     tienTrinh: 0,
-    trangThai: "da-nap",
+    trangThai: "dang-nap",
   };
   window.__w071Ampoule = thongTin;
+
+  let yDauOng = 0.58;
+  const draco = new DRACOLoader();
+  draco.setDecoderPath(DUONG_DAN_DRACO);
+  const loader = new GLTFLoader();
+  loader.setDRACOLoader(draco);
+
+  void loader
+    .loadAsync(DUONG_DAN_GLB)
+    .then((gltf) => {
+      if (daHuy) return;
+      const goc = gltf.scene;
+      const tl = new THREE.Group();
+      tl.add(goc);
+      tl.updateMatrixWorld(true);
+
+      const h0 = new THREE.Box3().setFromObject(goc);
+      const c0 = h0.getCenter(new THREE.Vector3());
+      const chieuCao = Math.max(1e-6, h0.max.y - h0.min.y);
+      const tiLeChuan = 2.25 / chieuCao;
+      tl.scale.setScalar(tiLeChuan);
+      tl.position.set(-c0.x * tiLeChuan, -c0.y * tiLeChuan, -c0.z * tiLeChuan);
+      tl.updateMatrixWorld(true);
+
+      const dropper = goc.getObjectByName("Dropper");
+      const phanNap = dropper
+        ? [dropper]
+        : TEN_NAP_V2.map((ten) => goc.getObjectByName(ten)).filter(
+            (o): o is THREE.Object3D => !!o,
+          );
+      const napGlb = new THREE.Group();
+      napGlb.name = "nap-glb";
+      for (const node of phanNap) {
+        napGlb.attach(node);
+      }
+      napGlb.updateMatrixWorld(true);
+
+      const ong = goc.getObjectByName("pipette");
+      if (ong) {
+        yDauOng = new THREE.Box3().setFromObject(ong).min.y;
+      }
+
+      thanGroup.clear();
+      napGroup.clear();
+      thanGroup.add(tl);
+      napGroup.add(napGlb);
+      thongTin.trangThai = "da-nap";
+      veKhung(bam.f / 1000);
+    })
+    .catch(() => {
+      if (!daHuy) {
+        thongTin.trangThai = "loi";
+      }
+    })
+    .finally(() => {
+      draco.dispose();
+    });
 
   const veKhung = (p: number) => {
     const st = tinhTrangThaiCanh(p);
@@ -245,7 +308,7 @@ export function khoiTaoCanhAmpoule(opts: TuyChonCanh): () => void {
 
     napGroup.position.y = st.nhacNap * 0.55;
     giotMesh.visible = st.giotHien > 0.02;
-    giotMesh.position.set(0, 0.58 - st.giotRoi * 0.65, 0);
+    giotMesh.position.set(0, yDauOng + st.nhacNap * 0.55 - st.giotRoi * 0.7, 0);
 
     if (st.canh !== canhCu) {
       canhCu = st.canh;
