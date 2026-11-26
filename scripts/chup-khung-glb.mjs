@@ -81,7 +81,9 @@ for (let i = TU; i <= DEN; i++) {
   // cảnh vẽ xong ở đúng pc: cảnh ghi __vt mỗi lần vẽ; với GLB còn ghi __lopoeGlbKhung.p = pc
   await page.waitForFunction(([pc, glb]) => !!window.__vt && (!glb || Math.abs((window.__lopoeGlbKhung?.p ?? -1) - pc) < 1e-7), [pc, !KHONG_GLB], { timeout: 60_000, polling: "raf" });
   await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
-  const vt = await page.evaluate(() => ({ vt: window.__vt, k: window.__lopoeGlbKhung ?? null }));
+  const vt = await page.evaluate(() => ({ vt: window.__vt, k: window.__lopoeGlbKhung ?? null, conLai: window.__lopoeAnhAmpConLai }));
+  // #154: có GLB thì cảnh không được còn ảnh phẳng ampoule (nắp cũ); còn thì dừng, không chụp chuỗi lỗi
+  if (!KHONG_GLB && vt.conLai !== 0) throw new Error(`khung ${i}: còn ${vt.conLai} mesh ảnh phẳng ampoule trong cảnh`);
   nhan[i] = { srm: doiNhan(vt.vt.srm), amp: doiNhan(vt.vt.amp) };
   // chai GLB trên khung (px khung nhìn): [x, y, rộng, cao của hộp mô hình, miệng x, y, giọt x, y | 0]: cho e2e kiểm không chồng chữ, giọt đúng miệng
   if (vt.k) { const k = vt.k; nhan[i].chai = [k.hop.x, k.hop.y, k.hop.w, k.hop.h, k.mieng.x, k.mieng.y].map(r1).concat(k.giot ? [r1(k.giot.x), r1(k.giot.y)] : [0]); }

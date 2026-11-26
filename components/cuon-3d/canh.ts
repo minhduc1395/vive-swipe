@@ -249,6 +249,7 @@ export function taoCanh(
     bong.position.y = -CAO / 2 - 0.02;
     ampG.add(bong);
     anhAmp.push(than, co, anhNap);
+    for (const a of anhAmp) a.userData.anhAmp = true; // #154: đánh dấu để đếm ảnh phẳng còn sót trong cảnh sau khi GLB nạp
     Object.assign(NAP, { nhom: nap, giot, gon });
     SP.amp.bong = bong;
     // Báo sẵn sàng khi ảnh thân đã tải (fallback 1,5s nếu ảnh lỗi)
@@ -269,7 +270,17 @@ export function taoCanh(
       if (glb.ampoule) viec.push(m.napGlb(glb.ampoule).then((goc) => {
         if (daHuy) return;
         const c = m.dungChaiAmpoule(goc, caoAmpDong, -CAO / 2);
-        for (const a of anhAmp) { ampG.remove(a); a.geometry.dispose(); (a.material as THREE.MeshBasicMaterial).dispose(); }
+        // #154: anhNap nằm trong nhóm nắp cũ (không phải con trực tiếp của ampG) nên phải gỡ khỏi cha của chính nó,
+        // và gỡ luôn nhóm nắp cũ. Tư thế nắp GLB tính lại từ p ở mỗi lần vẽ, nên nạp lúc đang nhấc dở cũng không nhảy.
+        for (const a of anhAmp) {
+          a.removeFromParent();
+          const mat = a.material as THREE.MeshBasicMaterial;
+          mat.map?.dispose();
+          mat.dispose();
+          a.geometry.dispose();
+        }
+        anhAmp.length = 0;
+        NAP.nhom?.removeFromParent();
         ampG.add(c.than, c.nap);
         NAP.nhom = c.nap;
         const tenNap: string[] = [];
@@ -643,6 +654,10 @@ export function taoCanh(
         x0 = Math.min(x0, sx); x1 = Math.max(x1, sx); y0 = Math.min(y0, sy); y1 = Math.max(y1, sy);
       }
       const giot = NAP.giot?.visible ? chieu(NAP.giot, 1) : null;
+      // #154, cho e2e và script chụp khung: số mesh ảnh phẳng của ampoule còn trong cảnh (kỳ vọng 0 khi đã có GLB)
+      let conLai = 0;
+      scene.traverse((o) => { if (o.userData.anhAmp) conLai++; });
+      (window as unknown as { __lopoeAnhAmpConLai?: number }).__lopoeAnhAmpConLai = conLai;
       (window as unknown as { __lopoeGlbKhung?: unknown }).__lopoeGlbKhung = { p, o: amp.visible ? 1 : 0, mieng, giot, hop: { x: x0, y: y0, w: x1 - x0, h: y1 - y0 } };
     }
     return { srm: nhanSrm, amp: nhanAmp, mieng, chai };
