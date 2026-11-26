@@ -1,3 +1,4 @@
+/* eslint-disable */ // chép nguyên từ three/examples/jsm/libs/draco/gltf (three 0.170), W073
 
 var DracoDecoderModule = (() => {
   var _scriptDir = typeof document !== 'undefined' && document.currentScript ? document.currentScript.src : undefined;

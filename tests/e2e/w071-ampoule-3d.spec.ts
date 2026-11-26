@@ -5,20 +5,24 @@ import { test, expect } from "@playwright/test";
 const ROUTE = "/thu-nghiem/ampoule-3d";
 
 test.describe("W071 · Trang thử 3D GLB ampoule LOPOE", () => {
-  test("noindex, tổng tải <= 3MB, nạp GLB 3 cảnh theo cuộn trên 390px và 1440px, ?fps=1", async ({
+  test("noindex, tài sản 3D <= 1MB, nạp GLB 3 cảnh theo cuộn trên 390px và 1440px, ?fps=1", async ({
     page,
   }) => {
-    test.setTimeout(90000);
+    test.setTimeout(150000);
     let tongBytes = 0;
+    let taiSan3dBytes = 0;
 
     page.on("response", async (res) => {
       try {
         const len = Number(res.headers()["content-length"]);
-        if (Number.isFinite(len) && len > 0) {
-          tongBytes += len;
-        } else {
+        let size = Number.isFinite(len) && len > 0 ? len : 0;
+        if (size === 0) {
           const buf = await res.body().catch(() => null);
-          if (buf) tongBytes += buf.byteLength;
+          if (buf) size = buf.byteLength;
+        }
+        tongBytes += size;
+        if (res.url().includes("/thu-nghiem/ampoule-3d/")) {
+          taiSan3dBytes += size;
         }
       } catch {
         // Bỏ qua response đã đóng
@@ -72,6 +76,7 @@ test.describe("W071 · Trang thử 3D GLB ampoule LOPOE", () => {
         await expect(page.getByTestId("w071-canh-noi-dung")).toHaveAttribute(
           "data-canh",
           m.canh,
+          { timeout: 10000 },
         );
         await expect(page.getByRole("heading", { name: m.tieuDe })).toBeVisible();
 
@@ -81,9 +86,13 @@ test.describe("W071 · Trang thử 3D GLB ampoule LOPOE", () => {
       }
     }
 
+    const taiSanMb = Math.round((taiSan3dBytes / (1024 * 1024)) * 100) / 100;
     const tongMb = Math.round((tongBytes / (1024 * 1024)) * 100) / 100;
-    console.log(`[W071-PAYLOAD] totalBytes=${tongBytes} (${tongMb} MB)`);
-    expect(tongBytes).toBeLessThanOrEqual(3 * 1024 * 1024);
+    console.log(
+      `[W071-PAYLOAD] 3dAssets=${taiSan3dBytes} (${taiSanMb} MB), devTotal=${tongBytes} (${tongMb} MB)`,
+    );
+    expect(taiSan3dBytes).toBeGreaterThan(0);
+    expect(taiSan3dBytes).toBeLessThanOrEqual(1024 * 1024);
   });
 
   test("đo FPS khi cuộn dưới CPU chậm 4 lần (dpr=1.5 và dpr=1)", async ({

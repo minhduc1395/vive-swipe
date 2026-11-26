@@ -199,12 +199,15 @@ export function khoiTaoCanhAmpoule(opts: TuyChonCanh): () => void {
   giotMesh.visible = false;
   root.add(giotMesh);
 
+  let canVeLai = true;
+
   const capNhatKichThuoc = () => {
     const w = Math.max(1, khung.clientWidth);
     const h = Math.max(1, khung.clientHeight);
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
+    canVeLai = true;
   };
   capNhatKichThuoc();
 
@@ -230,6 +233,7 @@ export function khoiTaoCanhAmpoule(opts: TuyChonCanh): () => void {
   let maxFrameMs = 0;
   let fpsHienTai = 0;
   let daHuy = false;
+  let pVeCu = -1;
 
   const thongTin: ThongSoDoFps = {
     fps: 0,
@@ -287,6 +291,7 @@ export function khoiTaoCanhAmpoule(opts: TuyChonCanh): () => void {
       thanGroup.add(tl);
       napGroup.add(napGlb);
       thongTin.trangThai = "da-nap";
+      canVeLai = true;
       veKhung(bam.f / 1000);
     })
     .catch(() => {
@@ -302,9 +307,9 @@ export function khoiTaoCanhAmpoule(opts: TuyChonCanh): () => void {
     const st = tinhTrangThaiCanh(p);
     root.rotation.y = st.gocY;
     const isDesktop = window.innerWidth >= 768;
-    root.position.x = isDesktop ? st.dichX * 0.72 : 0;
-    root.position.y = isDesktop ? 0 : 0.28;
-    root.scale.setScalar(st.tiLe * (isDesktop ? 1 : 0.82));
+    root.position.x = isDesktop ? (st.canh === 2 ? -0.45 : st.dichX * 0.72) : 0;
+    root.position.y = isDesktop ? -0.12 : 0.16;
+    root.scale.setScalar(st.tiLe * (isDesktop ? 0.88 : 0.76));
 
     napGroup.position.y = st.nhacNap * 0.55;
     giotMesh.visible = st.giotHien > 0.02;
@@ -324,7 +329,7 @@ export function khoiTaoCanhAmpoule(opts: TuyChonCanh): () => void {
   const vongLap = (now: number) => {
     if (daHuy) return;
     const dtMs = now - lastTs;
-    const dt = Math.min(0.05, Math.max(0.001, dtMs / 1000));
+    const dt = Math.min(0.25, Math.max(0.001, dtMs / 1000));
     lastTs = now;
 
     if (dangHien) {
@@ -332,21 +337,31 @@ export function khoiTaoCanhAmpoule(opts: TuyChonCanh): () => void {
       if (giamChuyenDong) {
         bam = { f: dich, v: 0 };
       } else {
-        bam = buocBam(bam, dich, dt);
+        bam = buocBam(bam, dich, dt, { thoiGian: 0.1, toiDa: 3000 });
       }
-      const t0 = performance.now();
-      veKhung(bam.f / 1000);
-      const frameCost = performance.now() - t0;
-      if (frameCost > maxFrameMs) maxFrameMs = Math.round(frameCost * 10) / 10;
+      const pMoi = bam.f / 1000;
+      if (canVeLai || Math.abs(pMoi - pVeCu) > 1e-5) {
+        canVeLai = false;
+        pVeCu = pMoi;
+        const t0 = performance.now();
+        veKhung(pMoi);
+        const frameCost = performance.now() - t0;
+        if (frameCost > maxFrameMs) maxFrameMs = Math.round(frameCost * 10) / 10;
 
-      soKhung++;
-      if (now - cuaSoBatDau >= 500) {
-        fpsHienTai = Math.round((soKhung * 1000) / (now - cuaSoBatDau));
-        soKhung = 0;
-        cuaSoBatDau = now;
-        thongTin.fps = fpsHienTai;
-        thongTin.maxFrameMs = maxFrameMs;
-        onThongSo?.({ ...thongTin });
+        soKhung++;
+        if (fpsHienTai === 0 && dtMs > 0) {
+          fpsHienTai = Math.max(1, Math.round(1000 / dtMs));
+          thongTin.fps = fpsHienTai;
+          thongTin.maxFrameMs = maxFrameMs;
+          onThongSo?.({ ...thongTin });
+        } else if (now - cuaSoBatDau >= 500) {
+          fpsHienTai = Math.max(1, Math.round((soKhung * 1000) / (now - cuaSoBatDau)));
+          soKhung = 0;
+          cuaSoBatDau = now;
+          thongTin.fps = fpsHienTai;
+          thongTin.maxFrameMs = maxFrameMs;
+          onThongSo?.({ ...thongTin });
+        }
       }
     }
 
