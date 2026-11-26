@@ -22,7 +22,7 @@ function NutMacDinh({ n, i }: { n: Nut3D; i: number }) {
 }
 const veNutMacDinh: VeNut3D = (n, i) => <NutMacDinh key={n.chu} n={n} i={i} />;
 import type { Canh, LoaiHat } from "./canh";
-import { buocBam, CHAI_KHUNG, CHAI_KHUNG_GLB, chaiDienThoai, duongBay, khungTuP, MOC_CANH_AMP, pCanh, pTuCanh, pTuKhung, tienTrinhBot, type Diem, type TrangThaiPhat } from "./phat-khung";
+import { buocBam, buocGiaiMa, CHAI_KHUNG, CHAI_KHUNG_GLB, chaiDienThoai, chonKhungTaiTiep, duongBay, khungTuP, MOC_CANH_AMP, pCanh, pTuCanh, pTuKhung, tienTrinhBot, type Diem, type TrangThaiPhat } from "./phat-khung";
 
 const kep = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const muot = (t: number) => t * t * (3 - 2 * t);
@@ -279,7 +279,10 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
     const blobKhung: (Blob | null)[] = kd ? new Array(kd.so).fill(null) : [];
     const anhKhung: (ImageBitmap | null)[] = kd ? new Array(kd.so).fill(null) : [];
     const dangGiai = new Set<number>();
-    let tamCuaSo = 0, huongCuon = 1;
+    const dangTaiBlob = new Set<number>();
+    const daGiai = new Set<number>();
+    let tamCuaSo = 0, huongCuon = 1, canCapNhatCuaSo = false, iDaVe = -1;
+    let scrollYCu = -1, dichCu = -1, pChuCu = -1, pcChuCu = -1;
     let nhanKhung: ({ srm: (number[] | 0)[]; amp: (number[] | 0)[] })[] = [];
     let pKhung: number[] = []; // tiến trình p của từng khung (khung dày ở đoạn hình đổi nhiều, thưa ở đoạn đứng yên)
     let ctx2d: CanvasRenderingContext2D | null = null, khoaVe = -1;
@@ -352,9 +355,12 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
     const nhanAmp = [...elLop.querySelectorAll<HTMLElement>("[data-nhom-nhan=amp] [data-nhan]")];
     const vach = [...elLop.querySelectorAll<HTMLElement>("[data-vach]")];
     const dong = [...elLop.querySelectorAll<HTMLElement>("[data-dong]")];
+    const tt = elLop.querySelector<HTMLElement>("[data-tien-trinh]");
 
     const tienTrinh = () => { const r = elDoan.getBoundingClientRect(); return kep(-r.top / (r.height - innerHeight)); };
     const capNhatChu = (p: number, pc: number) => {
+      if (Math.abs(p - pChuCu) < 1e-4 && Math.abs(pc - pcChuCu) < 1e-4) return;
+      pChuCu = p; pcChuCu = pc;
       if (moDau) {
         const o = 1 - seg(pc, 0.025, 0.045);
         moDau.style.opacity = String(o);
@@ -376,7 +382,6 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
       capNhatBot(p);
       // thanh tiến trình bên phải theo mốc cảnh
       const khoang = [[0.045, 0.37], [0.37, 0.72], [0.72, 0.87]];
-      const tt = elLop.querySelector<HTMLElement>("[data-tien-trinh]");
       if (tt) tt.style.opacity = String(seg(pc, 0.05, 0.08) * (1 - seg(pc, 0.87, 0.9)));
       khoang.forEach(([a, b], i) => { if (vach[i]) vach[i].style.transform = `scaleY(${kep((pc - a) / (b - a))})`; dong[i]?.classList.toggle("font-semibold", pc >= a && pc < b); });
     };
@@ -393,31 +398,40 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
     let soKhungRanh = 0, sanSangVe = false;
     const khung = (time: number) => {
       if (huy) return;
-      const dich = tienTrinh();
       // Đứng yên (không cuộn): vẽ 1/4 số khung để máy đỡ nóng và không giật
       if (kd) {
         // Chế độ khung ảnh: khung bám vị trí cuộn bằng lò xo giảm chấn (~0,1 giây): theo tay ngay, dừng khi trang dừng,
         // tốc độ hình đổi liền mạch nên đổi nhịp tay hay nhấc tay không làm hình giật cục
         const dt = Math.min(0.1, (time - truoc) / 1000);
         truoc = time;
+        const dich = scrollY === scrollYCu && dichCu >= 0 ? dichCu : (scrollYCu = scrollY, dichCu = tienTrinh());
         const dichCanh = sangCanh(dich);
+        if (canCapNhatCuaSo) { canCapNhatCuaSo = false; capNhatCuaSo(); }
+        let daDung = false;
         if (pKhung.length < 2 || !phat) {
           // lần đầu hoặc vừa quay lại khối: hiện đúng chỗ đang cuộn
           if (pKhung.length >= 2) phat = { f: khungTuP(pKhung, dichCanh), v: 0 };
           pc = dichCanh;
           p = dich;
         } else {
-          phat = buocBam(phat, khungTuP(pKhung, dichCanh), dt);
-          pc = pTuKhung(pKhung, phat.f);
-          // đang đứng khung ở đoạn bọt nước: chữ theo vị trí cuộn
-          p = giu && pc >= MOC_CANH_AMP.a && pc <= MOC_CANH_AMP.het ? kep(dich, aAmp, bAmp) : pTuCanh(pc, aAmp, bAmp, giu);
+          const dichKhung = khungTuP(pKhung, dichCanh);
+          daDung = Math.abs(dichKhung - phat.f) < 0.01 && Math.abs(phat.v) < 0.5;
+          if (!daDung) {
+            phat = buocBam(phat, dichKhung, dt);
+            pc = pTuKhung(pKhung, phat.f);
+            // đang đứng khung ở đoạn bọt nước: chữ theo vị trí cuộn
+            p = giu && pc >= MOC_CANH_AMP.a && pc <= MOC_CANH_AMP.het ? kep(dich, aAmp, bAmp) : pTuCanh(pc, aAmp, bAmp, giu);
+          }
         }
-        // đang đứng ở khung đoạn bọt nước: vẽ ghép (nền sạch + chai dời/thu nhỏ), q = tiến trình trong đoạn
-        veAnh(pc, giu && pc >= MOC_CANH_AMP.a && pc <= MOC_CANH_AMP.het ? (p - aAmp) / (bAmp - aAmp) : -1);
-        capNhatChu(p, pc);
+        if (!daDung || khoaVe === -1 || Math.abs(p - pChuCu) >= 1e-4) {
+          // đang đứng ở khung đoạn bọt nước: vẽ ghép (nền sạch + chai dời/thu nhỏ), q = tiến trình trong đoạn
+          veAnh(pc, giu && pc >= MOC_CANH_AMP.a && pc <= MOC_CANH_AMP.het ? (p - aAmp) / (bAmp - aAmp) : -1);
+          capNhatChu(p, pc);
+        }
         if (hien) raf = requestAnimationFrame(khung);
         return;
       }
+      const dich = tienTrinh();
       if (Math.abs(dich - p) < 1e-5 && sanSangVe) {
         soKhungRanh += 1;
         if (soKhungRanh % 4 !== 0) { if (hien) raf = requestAnimationFrame(khung); return; }
@@ -543,10 +557,10 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
       const t = j > i ? kep((pp - pKhung[i]) / (pKhung[j] - pKhung[i])) : 0;
       const gan1 = t < 0.5 ? i : j; // khung gần nhất, không hoà trộn (hoà trộn tạo bóng mờ khi dừng giữa 2 khung)
       if (khungGlb) (window as unknown as { __lopoeKhung?: unknown }).__lopoeKhung = { thuMuc: kd.thu_muc, i: gan1 }; // W073 phần B, cho e2e: khung GLB đang hiện
-      if (gan1 !== tamCuaSo) { huongCuon = gan1 > tamCuaSo ? 1 : -1; tamCuaSo = gan1; capNhatCuaSo(); }
+      if (gan1 !== tamCuaSo) { huongCuon = gan1 > tamCuaSo ? 1 : -1; tamCuaSo = gan1; canCapNhatCuaSo = true; }
       if (qBot >= 0) {
         const a = anhKhung[gan1];
-        if (a && veGhep(gan1, a, qBot)) return;
+        if (a && veGhep(gan1, a, qBot)) { iDaVe = gan1; return; }
         khoaGhep = "";
       } else if (bot.length) { mieng = null; dungGhepKhiRanh(); }
       const khoa = gan1 * 1000 + Math.round(t * 20); // nhãn vẫn nội suy mượt giữa 2 khung
@@ -557,6 +571,7 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
         const s = Math.max(W / kd.rong, H / kd.cao), w = kd.rong * s, h = kd.cao * s;
         ctx2d.drawImage(a, (W - w) / 2, (H - h) / 2, w, h);
         anhDaVe = a;
+        iDaVe = gan1;
         if (!daVeDau) { daVeDau = true; setDaTai(true); }
       }
       khoaVe = khoa;
@@ -576,29 +591,39 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
     };
     let anhDaVe: ImageBitmap | null = null;
     let daVeDau = false;
-    const TRUOC = 14, SAU = 5; // giải mã trước 14 khung theo hướng cuộn, 5 khung phía sau; còn lại bỏ (mỗi khung ~5 MB khi giải mã, giữ ~20 khung ≈ 100 MB)
-    const ngoaiCuaSo = (i: number) => (i - tamCuaSo) * huongCuon > TRUOC + 2 || (tamCuaSo - i) * huongCuon > SAU + 2;
+    const TRUOC = 18, SAU = 8; // W074: nới cửa sổ giải mã + vùng trễ ±8 tránh giải mã lặp lúc quán tính
+    const ngoaiCuaSo = (i: number) => (i - tamCuaSo) * huongCuon > TRUOC + 8 || (tamCuaSo - i) * huongCuon > SAU + 8;
     const giaiMa = (i: number) => {
       const bl = blobKhung[i];
-      if (!bl || anhKhung[i] || dangGiai.has(i) || huy || dangGiai.size >= 4) return;
+      const gioiHan = Math.abs(phat?.v ?? 0) > 100 ? 2 : 4;
+      if (!bl || anhKhung[i] || dangGiai.has(i) || huy || dangGiai.size >= gioiHan) return;
       dangGiai.add(i);
       createImageBitmap(bl).then((bm) => {
         dangGiai.delete(i);
-        if (huy || ngoaiCuaSo(i)) { bm.close(); } else { anhKhung[i] = bm; khoaVe = -1; dungGhepKhiRanh(); }
-        capNhatCuaSo();
+        if (huy || ngoaiCuaSo(i)) { bm.close(); } else {
+          anhKhung[i] = bm;
+          daGiai.add(i);
+          if (i === tamCuaSo || iDaVe < 0 || Math.abs(i - tamCuaSo) < Math.abs(iDaVe - tamCuaSo)) khoaVe = -1;
+          dungGhepKhiRanh();
+        }
+        canCapNhatCuaSo = true;
       }, () => dangGiai.delete(i));
     };
     const capNhatCuaSo = () => {
       if (!kd) return;
       const c = tamCuaSo;
-      for (let i = 0; i < kd.so; i++) {
-        if (anhKhung[i] && ngoaiCuaSo(i) && i !== 0) { anhKhung[i]!.close(); anhKhung[i] = null; }
+      for (const i of daGiai) {
+        if (anhKhung[i] && ngoaiCuaSo(i) && i !== 0) { anhKhung[i]!.close(); anhKhung[i] = null; daGiai.delete(i); }
       }
-      // gần trước, rồi xa dần, ưu tiên hướng đang cuộn
-      for (let d = 0; d <= TRUOC; d++) {
-        const a = c + d * huongCuon, b = c - d * huongCuon;
+      const buoc = buocGiaiMa(phat?.v ?? 0);
+      // gần trước, rồi xa dần theo bước nhảy vận tốc, ưu tiên hướng đang cuộn
+      for (let d = 0; d <= TRUOC; d += d === 0 ? 1 : buoc) {
+        const a = c + d * huongCuon;
         if (a >= 0 && a < kd.so) giaiMa(a);
-        if (d <= SAU && b >= 0 && b < kd.so) giaiMa(b);
+        if (d <= SAU && d > 0) {
+          const b = c - d * huongCuon;
+          if (b >= 0 && b < kd.so) giaiMa(b);
+        }
       }
     };
     const taiAnhKhung = () => {
@@ -607,17 +632,26 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
       ctx2d = elCanvas.getContext("2d", { alpha: false });
       doiCoKhung();
       const url = (i: number) => `${kd.thu_muc}/${String(i).padStart(3, "0")}.webp`;
-      const tai = (i: number) =>
-        blobKhung[i] || huy ? Promise.resolve() :
-        fetch(url(i)).then((r) => r.blob()).then((bl) => { blobKhung[i] = bl; capNhatCuaSo(); }, () => {});
+      const tai = (i: number) => {
+        if (blobKhung[i] || dangTaiBlob.has(i) || huy) return Promise.resolve();
+        dangTaiBlob.add(i);
+        return fetch(url(i))
+          .then((r) => r.blob())
+          .then((bl) => { blobKhung[i] = bl; canCapNhatCuaSo = true; }, () => {})
+          .finally(() => dangTaiBlob.delete(i));
+      };
       (async () => {
         try { const j = await (await fetch(kd.nhan)).json(); pKhung = j.p; nhanKhung = j.nhan; khoaVe = -1; } catch { return; }
         tamCuaSo = timKhung(pc);
         await tai(0);
-        // tải các khung gần vị trí hiện tại trước, sau đó lấp hết (song song 4 luồng)
-        const thuTu = Array.from({ length: kd.so }, (_, i) => i).sort((a, b) => Math.abs(a - tamCuaSo) - Math.abs(b - tamCuaSo));
-        let k = 0;
-        const luong = async () => { while (k < thuTu.length && !huy) await tai(thuTu[k++]); };
+        // W074: chọn động khung chưa tải gần tamCuaSo nhất theo hướng cuộn (4 luồng)
+        const luong = async () => {
+          while (!huy) {
+            const tiep = chonKhungTaiTiep(blobKhung, dangTaiBlob, tamCuaSo, huongCuon);
+            if (tiep < 0) break;
+            await tai(tiep);
+          }
+        };
         await Promise.all([luong(), luong(), luong(), luong()]);
       })();
     };
@@ -674,7 +708,7 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
     const io = new IntersectionObserver(([e]) => {
       const truocDo = hien;
       hien = e.isIntersecting;
-      if (hien && !truocDo) { truoc = performance.now(); phat = null; raf = requestAnimationFrame(khung); }
+      if (hien && !truocDo) { truoc = performance.now(); phat = null; scrollYCu = -1; dichCu = -1; raf = requestAnimationFrame(khung); }
     });
     io.observe(elDoan);
 
@@ -683,7 +717,7 @@ export function CuonLopoe3D({ cfg, id, veNut = veNutMacDinh }: { cfg: CauHinhLop
       // Thanh địa chỉ điện thoại ẩn/hiện làm innerHeight đổi vài chục px: bỏ qua để canvas không vẽ lại, tránh giật
       if (innerWidth === wTruoc && Math.abs(innerHeight - hTruoc) < 140) return;
       wTruoc = innerWidth; hTruoc = innerHeight;
-      dichBot = null; vungChai = null;
+      scrollYCu = -1; dichCu = -1; dichBot = null; vungChai = null;
       if (kd) doiCoKhung(); else canh?.doiCo();
     };
     addEventListener("resize", doiCo);
