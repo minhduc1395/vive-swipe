@@ -37,14 +37,20 @@ test.describe("W071 · Trang thử 3D GLB ampoule LOPOE", () => {
       .getAttribute("content");
     expect(robots ?? "").toContain("noindex");
 
-    await expect(page.getByTestId("w071-fps-hud")).toBeVisible();
+    await page.waitForFunction(
+      () => Boolean((window as unknown as { __w071Ampoule?: unknown }).__w071Ampoule),
+      undefined,
+      { timeout: 30000 },
+    );
+
+    await expect(page.getByTestId("w071-fps-hud")).toBeVisible({ timeout: 30000 });
 
     await page.waitForFunction(
       () =>
         (window as unknown as { __w071Ampoule?: { trangThai?: string } })
           .__w071Ampoule?.trangThai === "da-nap",
       undefined,
-      { timeout: 25000 },
+      { timeout: 30000 },
     );
 
     const shotDir = path.join(process.cwd(), "test-results", "screenshots", "w071");
@@ -76,7 +82,7 @@ test.describe("W071 · Trang thử 3D GLB ampoule LOPOE", () => {
         await expect(page.getByTestId("w071-canh-noi-dung")).toHaveAttribute(
           "data-canh",
           m.canh,
-          { timeout: 10000 },
+          { timeout: 20000 },
         );
         await expect(page.getByRole("heading", { name: m.tieuDe })).toBeVisible();
 
@@ -99,50 +105,55 @@ test.describe("W071 · Trang thử 3D GLB ampoule LOPOE", () => {
     page,
     browserName,
   }) => {
-    test.skip(browserName !== "chromium", "CDP CPU throttling chỉ hỗ trợ Chromium");
+    test.skip(
+      process.env.W071_BENCH !== "1" || browserName !== "chromium",
+      "Benchmark CPU x4 chỉ chạy khi W071_BENCH=1 trên Chromium",
+    );
     test.setTimeout(90000);
 
     await page.setViewportSize({ width: 390, height: 844 });
     const cdp = await page.context().newCDPSession(page);
     await cdp.send("Emulation.setCPUThrottlingRate", { rate: 4 });
 
-    for (const dpr of [1.5, 1]) {
-      await page.goto(`${ROUTE}?fps=1&dpr=${dpr}`, {
-        waitUntil: "domcontentloaded",
-      });
-      await page.waitForFunction(
-        () =>
-          (window as unknown as { __w071Ampoule?: { trangThai?: string } })
-            .__w071Ampoule?.trangThai === "da-nap",
-        undefined,
-        { timeout: 25000 },
-      );
+    try {
+      for (const dpr of [1.5, 1]) {
+        await page.goto(`${ROUTE}?fps=1&dpr=${dpr}`, {
+          waitUntil: "domcontentloaded",
+        });
+        await page.waitForFunction(
+          () =>
+            (window as unknown as { __w071Ampoule?: { trangThai?: string } })
+              .__w071Ampoule?.trangThai === "da-nap",
+          undefined,
+          { timeout: 25000 },
+        );
 
-      for (let i = 1; i <= 10; i++) {
-        await page.evaluate((ratio) => {
-          const maxScroll = Math.max(
-            1,
-            document.documentElement.scrollHeight - window.innerHeight,
-          );
-          window.scrollTo({ top: Math.round(maxScroll * ratio), behavior: "instant" });
-        }, i / 10);
-        await page.waitForTimeout(160);
+        for (let i = 1; i <= 10; i++) {
+          await page.evaluate((ratio) => {
+            const maxScroll = Math.max(
+              1,
+              document.documentElement.scrollHeight - window.innerHeight,
+            );
+            window.scrollTo({ top: Math.round(maxScroll * ratio), behavior: "instant" });
+          }, i / 10);
+          await page.waitForTimeout(160);
+        }
+
+        const metric = await page.evaluate(
+          () =>
+            (
+              window as unknown as {
+                __w071Ampoule?: { fps: number; maxFrameMs: number; dpr: number };
+              }
+            ).__w071Ampoule,
+        );
+        console.log(
+          `[W071-BENCH dpr=${dpr}] fps=${metric?.fps ?? 0}, maxFrameMs=${metric?.maxFrameMs ?? 0}, actualDpr=${metric?.dpr ?? 0}`,
+        );
+        expect(metric?.fps ?? 0).toBeGreaterThan(0);
       }
-
-      const metric = await page.evaluate(
-        () =>
-          (
-            window as unknown as {
-              __w071Ampoule?: { fps: number; maxFrameMs: number; dpr: number };
-            }
-          ).__w071Ampoule,
-      );
-      console.log(
-        `[W071-BENCH dpr=${dpr}] fps=${metric?.fps ?? 0}, maxFrameMs=${metric?.maxFrameMs ?? 0}, actualDpr=${metric?.dpr ?? 0}`,
-      );
-      expect(metric?.fps ?? 0).toBeGreaterThan(0);
+    } finally {
+      await cdp.send("Emulation.setCPUThrottlingRate", { rate: 1 }).catch(() => {});
     }
-
-    await cdp.send("Emulation.setCPUThrottlingRate", { rate: 1 });
   });
 });

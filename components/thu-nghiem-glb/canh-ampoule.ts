@@ -329,7 +329,7 @@ export function khoiTaoCanhAmpoule(opts: TuyChonCanh): () => void {
   const vongLap = (now: number) => {
     if (daHuy) return;
     const dtMs = now - lastTs;
-    const dt = Math.min(0.25, Math.max(0.001, dtMs / 1000));
+    const dt = Math.min(0.5, Math.max(0.001, dtMs / 1000));
     lastTs = now;
 
     if (dangHien) {
@@ -337,7 +337,7 @@ export function khoiTaoCanhAmpoule(opts: TuyChonCanh): () => void {
       if (giamChuyenDong) {
         bam = { f: dich, v: 0 };
       } else {
-        bam = buocBam(bam, dich, dt, { thoiGian: 0.1, toiDa: 3000 });
+        bam = buocBam(bam, dich, dt, { thoiGian: 0.1, toiDa: 5000 });
       }
       const pMoi = bam.f / 1000;
       if (canVeLai || Math.abs(pMoi - pVeCu) > 1e-5) {
