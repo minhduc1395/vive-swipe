@@ -166,3 +166,36 @@ export function chaiDienThoai(
   const e = muot(kep01(q / 0.2)) * (1 - muot(kep01((q - 0.93) / 0.07)));
   return { x: goc.x + (vung.x - goc.x) * e, y: goc.day + (y1 - goc.day) * e, k: 1 + (k1 - 1) * e, e };
 }
+
+/**
+ * W074: Bước nhảy giải mã khi quán tính cuộn nhanh: giảm tải decode lúc đang trượt nhanh, giữ bước 1 khi chậm/dừng.
+ */
+export function buocGiaiMa(vanTocKhung: number): number {
+  const v = Math.abs(vanTocKhung);
+  if (v > 220) return 3;
+  if (v > 100) return 2;
+  return 1;
+}
+
+/**
+ * W074: Chọn khung chưa tải gần tâm hiện tại nhất, ưu tiên hướng đang cuộn (tránh kẹt theo thứ tự khởi đầu khi vuốt xa).
+ */
+export function chonKhungTaiTiep(
+  daCo: readonly (unknown | null)[],
+  dangTai: ReadonlySet<number>,
+  tam: number,
+  huong: number,
+): number {
+  const n = daCo.length;
+  if (n === 0) return -1;
+  const h = huong < 0 ? -1 : 1;
+  const c = Math.max(0, Math.min(n - 1, Math.round(tam)));
+  if (!daCo[c] && !dangTai.has(c)) return c;
+  for (let d = 1; d < n; d++) {
+    const truoc = c + d * h;
+    if (truoc >= 0 && truoc < n && !daCo[truoc] && !dangTai.has(truoc)) return truoc;
+    const sau = c - d * h;
+    if (sau >= 0 && sau < n && !daCo[sau] && !dangTai.has(sau)) return sau;
+  }
+  return -1;
+}
